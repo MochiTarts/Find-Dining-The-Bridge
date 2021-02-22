@@ -1,0 +1,4 @@
+Django<3
+djongo==1.2.38
+sqlparse==0.2.4
+dnspython==2.0.0
