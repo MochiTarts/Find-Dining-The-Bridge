@@ -131,6 +131,9 @@ STATIC_URL = '/static/'
 # Override default user model
 AUTH_USER_MODEL = 'sduser.SDUser'
 
+# Override default auth backend
+AUTHENTICATION_BACKENDS = ['sduser.backends.EmailBackend']
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
