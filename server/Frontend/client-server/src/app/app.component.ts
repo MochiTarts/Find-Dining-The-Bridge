@@ -1,39 +1,35 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from './user.service';
-import {throwError} from 'rxjs';
- 
+import { Component, OnInit } from '@angular/core';
+import { TokenStorageService } from './_services/token-storage.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
- 
-  title = 'client-server';
-  /**
-   * An object representing the user for the login form
-   */
-  public user: any;
- 
-  constructor(public userService: UserService) { }
- 
-  ngOnInit() {
-    this.user = {
-      username: '',
-      password: ''
-    };
+  private role: string = 'BU';
+  isLoggedIn = false;
+  showROBoard = false;
+  username?: string;
+
+  constructor(private tokenStorageService: TokenStorageService) { }
+
+  ngOnInit(): void {
+    this.isLoggedIn = !!this.tokenStorageService.getToken();
+
+    if (this.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      console.log(user)
+      this.role = user.role;
+
+      this.showROBoard = this.role == 'BU';
+
+      this.username = user.name;
+    }
   }
- 
-  login() {
-    this.userService.login({'username': this.user.username, 'password': this.user.password});
+
+  logout(): void {
+    this.tokenStorageService.signOut();
+    window.location.reload();
   }
- 
-  refreshToken() {
-    this.userService.refreshToken();
-  }
- 
-  logout() {
-    this.userService.logout();
-  }
- 
 }

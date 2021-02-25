@@ -148,6 +148,7 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=365),
+    'JWT_PAYLOAD_HANDLER': 'sduser.backends.jwt_payload_handler',
 }
 
 SESSION_COOKIE_SECURE = False
