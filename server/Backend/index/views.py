@@ -1,11 +1,12 @@
 from django.shortcuts import render
+#from rest_framework_jwt.views import verify_jwt_token
+#rom rest_framework_simplejwt.backends import TokenBackend
 
 # Create your views here.
 from django.http import HttpResponse
 
 def index(request, path=''):
     path = request.path
-    print(path)
     if path == '/api/all':
         content = "public content"
     elif path == '/api/user':

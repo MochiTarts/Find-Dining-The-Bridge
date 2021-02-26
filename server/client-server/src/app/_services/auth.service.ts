@@ -32,4 +32,10 @@ export class AuthService {
       role,
     }), httpOptions);
   }
+
+  verify(token: string): Observable<any> {
+    return this.http.post(AUTH_API + 'verify/', JSON.stringify({
+      token,
+    }), httpOptions);
+  }
 }

@@ -168,9 +168,9 @@ CORS_ALLOWED_ORIGINS = [
 
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
 
-GMAIL_API_CLIENT_ID = '739217804766-v3cb4u8mpih38ogl9k8trmv9c9b9bvvm.apps.googleusercontent.com'
-GMAIL_API_CLIENT_SECRET = 'UJPfyBRqhn705t5lgY6zaVgJ'
-GMAIL_API_REFRESH_TOKEN = '1//0e-BeSgCZZUzzCgYIARAAGA4SNwF-L9Ir-jyM3szIaVZYcJ2giH9_Qu0N-v7ym4zmoxD2e25-Ofo1SCb424Ctt-A3DiQgwUn55ZE'
+GMAIL_API_CLIENT_ID = os.environ.get('GMAIL_API_CLIENT_ID')
+GMAIL_API_CLIENT_SECRET = os.environ.get('GMAIL_API_CLIENT_SECRET')
+GMAIL_API_REFRESH_TOKEN = os.environ.get('GMAIL_API_REFRESH_TOKEN')
 
 # for email verification
 LOGIN_URL = '/login'

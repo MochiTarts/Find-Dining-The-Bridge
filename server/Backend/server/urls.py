@@ -20,7 +20,7 @@ import sduser
 import verify_email
 
 from django.contrib.auth import views as auth_views
-
+from rest_framework_jwt.views import verify_jwt_token
 
 
 urlpatterns = [
@@ -41,7 +41,8 @@ urlpatterns = [
     #path('api-token-auth/', obtain_jwt_token),
     path('auth/signin/', obtain_jwt_token),
     path('auth/signup/', sduser.backends.signup),
-    path('aith/refresh/', refresh_jwt_token),
+    path('auth/refresh/', refresh_jwt_token),
+    path('auth/verify/', verify_jwt_token),
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
