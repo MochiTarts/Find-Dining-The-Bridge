@@ -38,7 +38,6 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete',),
     path('admin/', admin.site.urls),
-    path('verification/', include('verify_email.urls')),
     #path('api-token-auth/', obtain_jwt_token),
     path('auth/signin/', obtain_jwt_token),
     path('auth/signup/', sduser.backends.signup),
@@ -46,7 +45,9 @@ urlpatterns = [
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
-urlpatterns = [path('api/', include(urlpatterns))]
+urlpatterns = [
+    path('verification/', include('verify_email.urls')),
+    path('api/', include(urlpatterns))]
 
 '''
 # prefix all URLpatterns with api/ i.e. api/urlpattern
