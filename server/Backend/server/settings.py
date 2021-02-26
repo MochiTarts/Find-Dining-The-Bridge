@@ -166,6 +166,18 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:4200",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+]
+
+#CSRF_COOKIE_NAME = 'XSRF-TOKEN'
+#CSRF_HEADER_NAME = 'HTTP_X_XSRF_TOKEN'
+
+#CORS_ALLOW_CREDENTIALS = True
+#CSRF_COOKIE_DOMAIN = ".localhost"
+SESSION_COOKIE_SAMESITE = None
+
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
 
 GMAIL_API_CLIENT_ID = os.environ.get('GMAIL_API_CLIENT_ID')
@@ -192,3 +204,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),
 ]
 '''
+
+#SESSION_COOKIE_DOMAIN = '.localhost'
