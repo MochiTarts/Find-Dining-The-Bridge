@@ -12,6 +12,10 @@ const API_URL = '/api/';
 export class UserService {
   constructor(private http: HttpClient) { }
 
+  getCSRFToken(): Observable<any> {
+    return this.http.get(API_URL + 'admin', { responseType: 'text' });
+  }
+
   getPublicContent(): Observable<any> {
     return this.http.get(API_URL + 'all', { responseType: 'text' });
   }

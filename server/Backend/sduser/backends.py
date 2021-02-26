@@ -71,4 +71,4 @@ def signup(request):
             
         return JsonResponse({'invalid': invalid, 'message': 'Please make sure all fields are valid!'}, status=400)
     else:
-        return JsonResponse({'Error': 'Invalid Request'}, status=404)
+        return JsonResponse({'Error': 'Invalid Request 2'}, status=404)
