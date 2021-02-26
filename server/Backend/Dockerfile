@@ -20,6 +20,9 @@ ENV DB_NAME=scdining
 ENV DB_HOST='mongodb+srv://user:X7FHovuCvNroNlCZ@scdining.vgvie.mongodb.net/scdining?retryWrites=true&w=majority'
 ENV DB_USER=user
 ENV DB_PASS=X7FHovuCvNroNlCZ
+ENV GMAIL_API_CLIENT_ID='739217804766-v3cb4u8mpih38ogl9k8trmv9c9b9bvvm.apps.googleusercontent.com'
+ENV GMAIL_API_CLIENT_SECRET='UJPfyBRqhn705t5lgY6zaVgJ'
+ENV GMAIL_API_REFRESH_TOKEN='1//0e-BeSgCZZUzzCgYIARAAGA4SNwF-L9Ir-jyM3szIaVZYcJ2giH9_Qu0N-v7ym4zmoxD2e25-Ofo1SCb424Ctt-A3DiQgwUn55ZE'
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \

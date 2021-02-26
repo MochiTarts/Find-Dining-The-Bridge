@@ -185,7 +185,7 @@ GMAIL_API_CLIENT_SECRET = os.environ.get('GMAIL_API_CLIENT_SECRET')
 GMAIL_API_REFRESH_TOKEN = os.environ.get('GMAIL_API_REFRESH_TOKEN')
 
 # for email verification
-LOGIN_URL = '/login'
+LOGIN_URL = '/'
 HTML_MESSAGE_TEMPLATE = "verify_email/verification.html"
 # set below to None to instantly redirect to login page
 #VERIFICATION_SUCCESS_TEMPLATE = "path/to/success.html"
