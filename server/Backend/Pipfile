@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+djongo = "==1.2.38"
+sqlparse = "==0.2.4"
+dnspython = "*"
+djangorestframework = "*"
+djangorestframework-jwt = "*"
+django-cors-headers = "*"
+django-gmailapi-backend = "*"
+django-spa = "*"
+whitenoise = "*"
+Django = "<3"
+Django-Verify-Email = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
