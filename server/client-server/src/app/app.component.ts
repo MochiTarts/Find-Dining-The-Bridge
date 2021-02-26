@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 
       this.showROBoard = this.role == 'RO';
 
-      this.username = user.name;
+      this.username = user.username;
     }
   }
 
