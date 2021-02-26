@@ -22,10 +22,10 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const { username, email, password1, password2 } = this.form;
+    const { username, email, password1, password2, role } = this.form;
 
     if (password1 == password2){
-      this.authService.register(username, email, password1).subscribe(
+      this.authService.register(username, email, password1, role).subscribe(
         data => {
           console.log(data);
           this.isSuccessful = true;

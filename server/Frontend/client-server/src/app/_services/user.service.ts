@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 //const API_URL = 'http://localhost:8080/api/test/';
 const API_URL = '/api/';
+//const API_URL = '/';
 
 @Injectable({
   providedIn: 'root'

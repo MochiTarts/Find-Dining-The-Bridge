@@ -48,6 +48,23 @@
           </div>
         </div>
         <div class="form-group">
+          <label for="role">Role</label>
+          <select
+            class="form-control"
+            name="role"
+            [(ngModel)]="form.role"
+            required
+            role
+            #role="ngModel"
+          >
+            <option value="BU">Basic User</option>
+            <option value="RO">Restaurant Owner</option>
+          </select>
+          <div class="alert-danger" *ngIf="role.errors && f.submitted">
+            <div *ngIf="role.errors.required">Role is required</div>
+          </div>
+        </div>
+        <div class="form-group">
           <label for="password">Password</label>
           <input
             type="password"

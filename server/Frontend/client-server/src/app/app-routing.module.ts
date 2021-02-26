@@ -15,6 +15,14 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'user', component: BoardUserComponent },
   { path: 'ro', component: BoardROComponent },
+  /*
+  { path: 'verification', component: EmptyComponent, children: [
+    {
+      path: '**',
+      component: EmptyComponent,
+    }
+  ]},
+  */
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
       console.log(user)
       this.role = user.role;
 
-      this.showROBoard = this.role == 'BU';
+      this.showROBoard = this.role == 'RO';
 
       this.username = user.name;
     }

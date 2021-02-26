@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    #'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,11 +42,16 @@ INSTALLED_APPS = [
     'index',
     'rest_framework',
     'corsheaders',
+    'gmailapi_backend',
+    'verify_email',
+    
     #'user.apps.SDUserConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #'whitenoise.middleware.WhiteNoiseMiddleware',
+    #'spa.middleware.SPAMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware', # this should be above common middleware
     'django.middleware.common.CommonMiddleware',
@@ -159,3 +165,30 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
     "http://127.0.0.1:4200",
 ]
+
+EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
+
+GMAIL_API_CLIENT_ID = '739217804766-v3cb4u8mpih38ogl9k8trmv9c9b9bvvm.apps.googleusercontent.com'
+GMAIL_API_CLIENT_SECRET = 'UJPfyBRqhn705t5lgY6zaVgJ'
+GMAIL_API_REFRESH_TOKEN = '1//0e-BeSgCZZUzzCgYIARAAGA4SNwF-L9Ir-jyM3szIaVZYcJ2giH9_Qu0N-v7ym4zmoxD2e25-Ofo1SCb424Ctt-A3DiQgwUn55ZE'
+
+# for email verification
+LOGIN_URL = '/login'
+HTML_MESSAGE_TEMPLATE = "../templates/verification.html"
+# set below to None to instantly redirect to login page
+#VERIFICATION_SUCCESS_TEMPLATE = "path/to/success.html"
+#VERIFICATION_FAILED_TEMPLATE = "path/to/failed.html"
+SUBJECT = 'Verify Your Email for Find Dining'
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+'''
+STATIC_URL = '/static/'
+import sys
+if sys.argv[1] != 'runserver':
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static/"),
+]
+'''

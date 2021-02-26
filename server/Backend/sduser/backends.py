@@ -5,6 +5,10 @@ from django.core.exceptions import MultipleObjectsReturned
 from rest_framework_jwt import utils
 from django.http import HttpResponse, JsonResponse
 from .validators import validate_signup_user
+from .forms import SDUserCreateForm
+from verify_email.email_handler import send_verification_email
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
 import json
 
 UserModel = get_user_model()
@@ -40,6 +44,7 @@ def jwt_payload_handler(user):
 
     return payload
 
+
 def signup(request):
     if request.method == 'POST':
         user = json.loads(request.body)
@@ -53,8 +58,14 @@ def signup(request):
                 elif UserModel.objects.filter(email=email).exists():
                     return JsonResponse({'message': 'email already exists'}, status=400)
                 else:
-                    UserModel.objects.create_user(username, email, user['password'])
-                    return HttpResponse()
+                    form = SDUserCreateForm(data=user)
+                    if form.is_valid():
+                        # note that send_verification_email would create an inactive user so we no longer need to create user object ourselves
+                        # user = UserModel.objects.create_user(username=username, email=email, password=user['password'], role=user['role'])
+                        inactive_user = send_verification_email(request, form)
+                        return HttpResponse()
+                    else:
+                        return JsonResponse({'message': 'unable to create user'}, status=400)
             except Exception:
                 return JsonResponse({'message': 'unable to create user'}, status=400)
             
