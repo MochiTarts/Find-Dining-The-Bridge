@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 import sduser
 import verify_email
+import index
 
 from django.contrib.auth import views as auth_views
 from rest_framework_jwt.views import verify_jwt_token
@@ -48,6 +49,7 @@ urlpatterns = [
 # prefix all URLpatterns with api/ i.e. api/urlpattern
 urlpatterns = [
     path('verification/', include('verify_email.urls')),
+    path('login/', index.views.angularLogIn, name="login"),
     path('api/', include(urlpatterns))]
 
 '''

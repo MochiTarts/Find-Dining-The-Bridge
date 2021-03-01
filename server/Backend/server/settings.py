@@ -26,6 +26,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
+# Custom URL for Django views to redirect requests to Angular Routing
+VIEW_REDIRECT_URL = 'https://finddining.ca'
+
+if DEBUG:
+    VIEW_REDIRECT_URL = 'http://localhost:4200'
+
+
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -185,7 +192,7 @@ GMAIL_API_CLIENT_SECRET = os.environ.get('GMAIL_API_CLIENT_SECRET')
 GMAIL_API_REFRESH_TOKEN = os.environ.get('GMAIL_API_REFRESH_TOKEN')
 
 # for email verification
-LOGIN_URL = '/'
+LOGIN_URL = 'login'
 HTML_MESSAGE_TEMPLATE = "verify_email/verification.html"
 # set below to None to instantly redirect to login page
 #VERIFICATION_SUCCESS_TEMPLATE = "path/to/success.html"

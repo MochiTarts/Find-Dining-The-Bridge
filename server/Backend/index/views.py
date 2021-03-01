@@ -1,6 +1,8 @@
 from django.shortcuts import render
 #from rest_framework_jwt.views import verify_jwt_token
 #rom rest_framework_simplejwt.backends import TokenBackend
+from django.shortcuts import redirect
+from django.conf import settings
 
 # Create your views here.
 from django.http import HttpResponse
@@ -20,3 +22,5 @@ def index(request, path=''):
 def angularIndex(request, path=''):
     return render(request, 'index/landing-page.html')
 
+def angularLogIn(request, path=''):
+    return redirect(settings.VIEW_REDIRECT_URL + '/login')

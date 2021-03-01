@@ -4,5 +4,10 @@
       "secure": false,
       "pathRewrite": {"^/api" : ""}
     },
+    "/verification": {
+      "target": "http://localhost:8000/verification",
+      "secure": false,
+      "pathRewrite": {"^/verification" : ""}
+    },
     "changeOrigin": false
   }

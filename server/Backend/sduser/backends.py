@@ -51,6 +51,7 @@ def signup(request):
         invalid = validate_signup_user(user)
         username = user['username']
         email = user['email']
+        password = user['password']
         if (len(invalid)==0):
             try:
                 if UserModel.objects.filter(username=username).exists():
@@ -63,6 +64,10 @@ def signup(request):
                         # note that send_verification_email would create an inactive user so we no longer need to create user object ourselves
                         # user = UserModel.objects.create_user(username=username, email=email, password=user['password'], role=user['role'])
                         inactive_user = send_verification_email(request, form)
+                        # need to set password manually to have it properly hashed
+                        inactive_user.set_password(password)
+                        inactive_user.save()
+
                         return HttpResponse()
                     else:
                         return JsonResponse({'message': 'unable to create user'}, status=400)
