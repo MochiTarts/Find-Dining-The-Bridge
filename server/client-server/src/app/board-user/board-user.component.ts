@@ -15,26 +15,21 @@ export class BoardUserComponent implements OnInit {
 
   ngOnInit(): void {
     const token = this.tokenStorage.getToken();
+    //console.log(token);
     if (token) {
-      this.authService.verify(token).subscribe(
+
+      this.userService.getUserBoard().subscribe(
         data => {
-          this.userService.getUserBoard().subscribe(
-            data => {
-              this.content = data;
-              console.log(data);
-            },
-            err => {
-              this.content = JSON.parse(err.error).message;
-            }
-          );
+          this.content = data;
+          console.log(data);
         },
         err => {
           this.content = JSON.parse(err.error).message;
         }
       );
-    } else{
+    } else {
       this.router.navigateByUrl('/');
     }
-    
+
   }
 }

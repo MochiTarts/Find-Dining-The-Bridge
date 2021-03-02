@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+#from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 import sduser
 import verify_email
 import index
-
 from django.contrib.auth import views as auth_views
-from rest_framework_jwt.views import verify_jwt_token
+from sduser.backends import SDUserTokenObtainPairView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 
 urlpatterns = [
@@ -39,11 +43,14 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete',),
     path('admin/', admin.site.urls),
-    #path('api-token-auth/', obtain_jwt_token),
-    path('auth/signin/', obtain_jwt_token),
-    path('auth/signup/', sduser.backends.signup),
-    path('auth/refresh/', refresh_jwt_token),
-    path('auth/verify/', verify_jwt_token),
+    #path('auth/signin/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/signin/', SDUserTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    #path('auth/signin/', obtain_jwt_token),
+    #path('auth/signup/', sduser.backends.signup),
+    #path('auth/refresh/', refresh_jwt_token),
+    #path('auth/verify/', verify_jwt_token),
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern

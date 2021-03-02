@@ -17,24 +17,17 @@ export class BoardROComponent implements OnInit {
 
   ngOnInit(): void {
     const token = this.tokenStorage.getToken();
-    if (token && this.tokenStorage.getUser().roles == 'RO') {
-      this.authService.verify(token).subscribe(
+    //console.log(token);
+    if (token && this.tokenStorage.getUser().role == 'RO') {
+      this.userService.getROBoard().subscribe(
         data => {
-          //this.content = data;
-          this.userService.getROBoard().subscribe(
-            data => {
-              this.content = data;
-            },
-            err => {
-              this.content = JSON.parse(err.error).message;
-            }
-          );
+          this.content = data;
         },
         err => {
           this.content = JSON.parse(err.error).message;
         }
       );
-    } else{
+    } else {
       this.router.navigateByUrl('/');
     }
   }

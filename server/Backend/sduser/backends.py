@@ -2,7 +2,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.core.exceptions import MultipleObjectsReturned
-from rest_framework_jwt import utils
+#from rest_framework_jwt import utils
 from django.http import HttpResponse, JsonResponse
 from .validators import validate_signup_user
 from .forms import SDUserCreateForm
@@ -10,6 +10,8 @@ from verify_email.email_handler import send_verification_email
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 import json
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 UserModel = get_user_model()
 
@@ -35,7 +37,7 @@ class EmailBackend(ModelBackend):
 
         return user if self.user_can_authenticate(user) else None
 
-
+'''
 # add role to the payload
 def jwt_payload_handler(user):
     payload = utils.jwt_payload_handler(user)
@@ -43,6 +45,22 @@ def jwt_payload_handler(user):
     payload['email_verified'] = user.email_verified
 
     return payload
+'''
+
+
+class SDUserTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # custom claims
+        token['role'] = user.role
+        token['username'] = user.username
+
+        return token
+
+class SDUserTokenObtainPairView(TokenObtainPairView):
+    serializer_class = SDUserTokenObtainPairSerializer
 
 
 def signup(request):
