@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenStorageService } from './token-storage.service';
 
 //const AUTH_API = 'http://localhost:8000/api/auth/';
 const AUTH_API = '/api/auth/';
@@ -13,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) { }
 
   // email can be used as alternative to username (backend accepts both)
   login(username: string, password: string): Observable<any> {
@@ -38,4 +39,13 @@ export class AuthService {
       token,
     }), httpOptions);
   }
+
+  
+  refreshToken(): Observable<any> {
+    var refreshToken = this.tokenStorage.getRefreshToken();
+    return this.http.post(AUTH_API + 'refresh/', JSON.stringify({
+      'refresh': refreshToken,
+    }), httpOptions);
+  }
+  
 }

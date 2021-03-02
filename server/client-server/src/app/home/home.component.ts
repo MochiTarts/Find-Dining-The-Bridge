@@ -12,14 +12,6 @@ export class HomeComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-    this.userService.getCSRFToken().subscribe(
-      data => {
-          this.content = "public content";
-      },
-      err => {
-        this.content = JSON.parse(err.error).message;
-      }
-    )
-
+    this.content = "public content";
   }
 }

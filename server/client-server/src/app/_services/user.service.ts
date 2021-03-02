@@ -11,8 +11,9 @@ const API_URL = '/api/';
 })
 export class UserService {
   constructor(private http: HttpClient) { }
-
-  getCSRFToken(): Observable<any> {
+  // a get request to Django that has a template containing csrf token will set the token in the cookie
+  // this is needed for Django to handle api calls from the browser
+  setCSRFToken(): Observable<any> {
     return this.http.get(API_URL + 'admin', { responseType: 'text' });
   }
 

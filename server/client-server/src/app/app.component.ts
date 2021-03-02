@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenStorageService } from './_services/token-storage.service';
+import { UserService } from './_services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +13,19 @@ export class AppComponent implements OnInit {
   showROBoard = false;
   username?: string;
 
-  constructor(private tokenStorageService: TokenStorageService) { }
+  constructor(private userService: UserService, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit(): void {
+    if (!document.cookie.split('; ').find(row => row.startsWith('csrftoken'))) {
+      this.userService.setCSRFToken().subscribe(
+        data => {
+        },
+        err => {
+        }
+      )
+    }
+
+
     this.isLoggedIn = !!this.tokenStorageService.getToken();
 
     if (this.isLoggedIn) {
