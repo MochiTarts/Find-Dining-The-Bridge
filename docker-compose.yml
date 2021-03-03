@@ -6,7 +6,7 @@ services:
     build:
       context: ./server
       args: 
-        - DEBUG=${DEBUG}
+        - DEBUG=True
         - SECRET_KEY=${SECRET_KEY}
         - DB_ENGINE=${DB_ENGINE}
         - DB_NAME=${DB_NAME}
