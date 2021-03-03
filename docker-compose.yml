@@ -4,7 +4,7 @@ services:
   server:
     container_name: server
     build:
-      context: ./server
+      context: ./backend
       args: 
         - DEBUG=True
         - SECRET_KEY=${SECRET_KEY}
