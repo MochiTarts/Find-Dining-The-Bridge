@@ -5,16 +5,17 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, switchMap, filter, take, } from 'rxjs/operators';
 import { AuthService } from '../_services/auth.service';
+import { Router } from '@angular/router';
 
 const TOKEN_HEADER_KEY = 'Authorization';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
+  private isCheckingRefreshToken = false;
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authReq = req;
@@ -25,7 +26,18 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     return next.handle(authReq).pipe(catchError(error => {
-      if (error instanceof HttpErrorResponse && error.status === 401) {
+      if (error instanceof HttpErrorResponse && [401, 403].includes(error.status)) {
+        console.log(error.error);
+        if (!this.isCheckingRefreshToken && error.status === 401 && error.error && error.error.code == "token_not_valid"){
+          this.isCheckingRefreshToken = true;
+        }
+        // auto logout if refresh token expired or 403 response returned from api
+        if (this.isCheckingRefreshToken || error.status === 403 && this.tokenStorage.getUser()) {
+          this.isCheckingRefreshToken = false;
+          this.tokenStorage.signOut();
+          this.router.navigate(['login']);
+        }
+        // otherwise refresh the access token using refresh token
         return this.handle401Error(req, next);
       } else {
         return throwError(error);
