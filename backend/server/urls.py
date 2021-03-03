@@ -20,7 +20,7 @@ import sduser
 import verify_email
 import index
 from django.contrib.auth import views as auth_views
-from sduser.backends import SDUserTokenObtainPairView
+from sduser.backends import SDUserCookieTokenObtainPairView, SDUserCookieTokenRefreshView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -44,8 +44,9 @@ urlpatterns = [
         name='password_reset_complete',),
     path('admin/', admin.site.urls),
     #path('auth/signin/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/signin/', SDUserTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    #path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/signin/', SDUserCookieTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/refresh/', SDUserCookieTokenRefreshView.as_view(), name='token_refresh'),
     path('auth/verify/', TokenVerifyView.as_view(), name='token_verify'),
     #path('auth/signin/', obtain_jwt_token),
     #path('auth/signup/', sduser.backends.signup),

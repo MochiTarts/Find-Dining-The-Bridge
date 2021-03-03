@@ -184,7 +184,7 @@ CSRF_TRUSTED_ORIGINS = [
 #CSRF_COOKIE_NAME = 'XSRF-TOKEN'
 #CSRF_HEADER_NAME = 'HTTP_X_XSRF_TOKEN'
 
-#CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
 #CSRF_COOKIE_DOMAIN = ".localhost"
 SESSION_COOKIE_SAMESITE = None
 
@@ -206,9 +206,12 @@ SUBJECT = 'Verify Your Email for Find Dining'
 
 # JWT settings
 SIMPLE_JWT = {
+    # for testing
+    #'ACCESS_TOKEN_LIFETIME': timedelta(seconds=15),
+    #'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 

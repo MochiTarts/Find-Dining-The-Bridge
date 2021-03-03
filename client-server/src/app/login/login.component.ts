@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
       data => {
         console.log(data);
         this.tokenStorage.saveToken(data.access);
-        this.tokenStorage.saveRefreshToken(data.refresh);
+        //this.tokenStorage.saveRefreshToken(data.refresh);
 
         var token = data.access;
         var errors = [];

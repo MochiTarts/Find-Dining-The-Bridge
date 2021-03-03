@@ -35,7 +35,8 @@ export class AuthInterceptor implements HttpInterceptor {
         if (this.isCheckingRefreshToken || error.status === 403 && this.tokenStorage.getUser()) {
           this.isCheckingRefreshToken = false;
           this.tokenStorage.signOut();
-          this.router.navigate(['login']);
+          window.location.reload();
+          //this.router.navigate(['login']);
         }
         // otherwise refresh the access token using refresh token
         return this.handle401Error(req, next);

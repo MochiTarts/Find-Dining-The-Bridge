@@ -10,8 +10,10 @@ from verify_email.email_handler import send_verification_email
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 import json
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+from rest_framework_simplejwt.exceptions import InvalidToken
+
 
 UserModel = get_user_model()
 
@@ -47,22 +49,6 @@ def jwt_payload_handler(user):
     return payload
 '''
 
-
-class SDUserTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # custom claims
-        token['role'] = user.role
-        token['username'] = user.username
-
-        return token
-
-class SDUserTokenObtainPairView(TokenObtainPairView):
-    serializer_class = SDUserTokenObtainPairSerializer
-
-
 def signup(request):
     if request.method == 'POST':
         user = json.loads(request.body)
@@ -95,3 +81,53 @@ def signup(request):
         return JsonResponse({'invalid': invalid, 'message': 'Please make sure all fields are valid!'}, status=400)
     else:
         return JsonResponse({'Error': 'Invalid Request 2'}, status=404)
+
+
+class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # custom claims
+        token['role'] = user.role
+        token['username'] = user.username
+
+        return token
+
+class SDUserCookieTokenObtainPairView(TokenObtainPairView):
+
+    def finalize_response(self, request, response, *args, **kwargs):
+
+        if response.data.get('refresh'):
+            # 1 day
+            cookie_max_age = 3600 * 24
+            response.set_cookie('refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True )
+            del response.data['refresh']
+        return super().finalize_response(request, response, *args, **kwargs)
+
+    serializer_class = SDUserCookieTokenObtainPairSerializer
+
+
+class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = None
+    def validate(self, attrs):
+        attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+        print('validating refresh token')
+        print(attrs['refresh'])
+        if attrs['refresh']:
+            return super().validate(attrs)
+        else:
+            raise InvalidToken('No valid token found in cookie \'refresh_token\'')
+
+
+class SDUserCookieTokenRefreshView(TokenRefreshView):
+    def finalize_response(self, request, response, *args, **kwargs):
+
+        if response.data.get('refresh'):
+            # 1 day
+            cookie_max_age = 3600 * 24
+            response.set_cookie('refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True )
+            del response.data['refresh']
+        return super().finalize_response(request, response, *args, **kwargs)
+    
+    serializer_class = SDUserCookieTokenRefreshSerializer
