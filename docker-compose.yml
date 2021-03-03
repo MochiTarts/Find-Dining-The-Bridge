@@ -21,7 +21,7 @@ services:
     ports: 
       - "8000:8000"
   client-test:
-    container_name: client-test
+    container_name: client
     build:
       context: ./client-server
       dockerfile: Dockerfile
