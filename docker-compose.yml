@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  server-test:
+  server:
     container_name: server
     build:
       context: ./server
@@ -20,7 +20,7 @@ services:
     image: finddiningutsc/revamp:latest-server
     ports: 
       - "8000:8000"
-  client-test:
+  client:
     container_name: client
     build:
       context: ./client-server
