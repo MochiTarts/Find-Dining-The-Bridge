@@ -41,5 +41,5 @@ jobs:
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
           
           # Build docker files and push to github container
-          docker build --file ./backend/Dockerfile --tag finddiningutsc/revamp:latest-server . && docker push finddiningutsc/revamp:latest-server
-          docker build --file ./client-server/Dockerfile --tag finddiningutsc/revamp:latest-client . && docker push finddiningutsc/revamp:latest-client
+          docker-compose build server && docker-compose push server
+          docker-compose build client && docker-compose push client
