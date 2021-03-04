@@ -29,7 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log(error);
       if (error instanceof HttpErrorResponse && [401, 403].includes(error.status)) {
         console.log(error.error);
-        if (!this.isCheckingRefreshToken && error.status === 401 && error.error && error.error.code == "token_not_valid"){
+        if (!this.isCheckingRefreshToken && error.status === 401 && error.error && error.error.code == "token_not_valid") {
           this.isCheckingRefreshToken = true;
         }
         // auto logout if refresh token expired or 403 response returned from api
@@ -41,7 +41,7 @@ export class AuthInterceptor implements HttpInterceptor {
         // otherwise refresh the access token using refresh token
         return this.handle401Error(req, next);
       } else if (error instanceof HttpErrorResponse && error.status === 400) {
-        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled'].includes(error.error.code)){
+        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled'].includes(error.error.code)) {
           console.log(error.error);
           this.logout();
           return throwError(error);
@@ -52,7 +52,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }));
   }
 
-  private logout(): void{
+  private logout(): void {
     this.tokenStorage.signOut();
     window.location.reload();
   }
@@ -71,14 +71,14 @@ export class AuthInterceptor implements HttpInterceptor {
           console.log(token);
           this.isRefreshing = false;
           this.refreshTokenSubject.next(token.access);
-          this.tokenStorage.saveToken(token.access);
+          this.tokenStorage.updateTokenAndUser(token.access);
           return next.handle(this.addToken(request, token.access));
         }),
         catchError(error => {
           console.log(error.error);
           return throwError(error);
         }),
-        );
+      );
 
     } else {
       return this.refreshTokenSubject.pipe(

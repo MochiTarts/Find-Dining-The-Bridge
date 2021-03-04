@@ -31,22 +31,11 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(username, password).subscribe(
       data => {
-        console.log(data);
-        this.tokenStorage.saveToken(data.access);
-        //this.tokenStorage.saveRefreshToken(data.refresh);
 
         var token = data.access;
         var errors = [];
-    
-        // decode the token to get the user object
-        const token_parts = token.split(/\./);
-        const token_decoded = JSON.parse(window.atob(token_parts[1]));
-        //var token_expires = new Date(token_decoded.exp * 1000);
-        //var username = token_decoded.username;
-        token_decoded['token'] = token;
-        console.log(token);
         
-        this.tokenStorage.saveUser(token_decoded);
+        this.tokenStorage.updateTokenAndUser(token);
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;
