@@ -7,6 +7,7 @@ class SDUser(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     email_verified = models.BooleanField(default=False)
     role = models.CharField(max_length=5, choices=Roles.choices(), default="BU")
+    refreshToken = models.CharField(max_length=1023, default='')
 
     class Meta:
         #db_table = 'auth_user'

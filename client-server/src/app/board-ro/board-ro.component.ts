@@ -24,7 +24,8 @@ export class BoardROComponent implements OnInit {
           this.content = data;
         },
         err => {
-          this.content = JSON.parse(err.error).message;
+          console.log(err);
+          this.content = err.error.message;
         }
       );
     } else {

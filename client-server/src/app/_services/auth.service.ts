@@ -43,7 +43,13 @@ export class AuthService {
   
   refreshToken(): Observable<any> {
     //var refreshToken = this.tokenStorage.getRefreshToken();
-    return this.http.post(AUTH_API + 'refresh/', JSON.stringify({}), httpOptions);
+    var user = this.tokenStorage.getUser();
+    var user_id = null
+    if (user) {
+      user_id = user.user_id
+    }
+    
+    return this.http.post(AUTH_API + 'refresh/', JSON.stringify({'user_id': user_id}), httpOptions);
   }
   
 }

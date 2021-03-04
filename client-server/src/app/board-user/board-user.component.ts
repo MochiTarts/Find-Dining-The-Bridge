@@ -24,7 +24,8 @@ export class BoardUserComponent implements OnInit {
           console.log(data);
         },
         err => {
-          this.content = JSON.parse(err.error).message;
+          console.log(err.error);
+          this.content = err.error.message;
         }
       );
     } else {
