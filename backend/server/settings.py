@@ -98,8 +98,8 @@ DATABASES = {
         'ENGINE': os.environ.get('DB_ENGINE'),
         'NAME': os.environ.get('DB_NAME'),
         'HOST': os.environ.get('DB_HOST'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS')
+        #'USER': os.environ.get('DB_USER'),
+        #'PASSWORD': os.environ.get('DB_PASS')
     }
 }
 
@@ -161,8 +161,20 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    )
+    ),
 }
+# doesn't work right now because Djongo can't translate aggregation functions in sql
+'''
+'DEFAULT_THROTTLE_CLASSES': [
+    'rest_framework.throttling.AnonRateThrottle',
+    'rest_framework.throttling.UserRateThrottle'
+],
+'DEFAULT_THROTTLE_RATES': {
+    'anon': '100/hour',
+    'user': '100/hour'
+},
+'''
+
 '''
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
@@ -255,3 +267,28 @@ STATICFILES_DIRS = [
 '''
 
 #SESSION_COOKIE_DOMAIN = '.localhost'
+
+# for development only, this is a “dummy” cache that doesn’t actually cache
+# it just implements the cache interface without doing anything
+'''
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+'''
+# cache in db
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache_table',
+    }
+}
+'''
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+    }
+}
+'''
