@@ -12,4 +12,4 @@ Django-Verify-Email==0.0.5
 djangorestframework-simplejwt==4.6.0
 #django-ratelimit==3.0.1
 #social_auth_app_django==4.0.0
-requests
+requests==2.25.1

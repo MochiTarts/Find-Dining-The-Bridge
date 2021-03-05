@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService, ) { }
 
   // email can be used as alternative to username (backend accepts both)
   login(username: string, password: string): Observable<any> {
@@ -34,6 +34,7 @@ export class AuthService {
     }), httpOptions);
   }
 
+  // only used to verify token, not validate
   verify(token: string): Observable<any> {
     return this.http.post(AUTH_API + 'verify/', JSON.stringify({
       token,

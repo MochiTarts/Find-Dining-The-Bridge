@@ -14,7 +14,14 @@ import { ProfileComponent } from './profile/profile.component';
 import { BoardROComponent } from './board-ro/board-ro.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angularx-social-login';
+
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+
 
 
 @NgModule({
@@ -33,8 +40,26 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     HttpClientModule,
     HttpClientXsrfModule.withOptions({ cookieName: 'csrftoken', headerName: 'X-CSRFToken' }),
     FormsModule,
+    SocialLoginModule,
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, {
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+      autoLogin: false,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider(
+            '739217804766-54cq902bdq8s7qcghtu7a6b43qel9984.apps.googleusercontent.com'
+          )
+        },
+        {
+          id: FacebookLoginProvider.PROVIDER_ID,
+          provider: new FacebookLoginProvider('874417486731218')
+        }
+      ]
+    } as SocialAuthServiceConfig,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

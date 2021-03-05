@@ -160,7 +160,7 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
             new_refresh_token = response.data['refresh']
 
             #try:
-            user_id = request.data['user_id']
+            user_id = request.data.get('user_id')
 
             # prevent anonymous user or disabled user to obtain new access and refresh token 
             if user_id is None:
