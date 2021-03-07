@@ -19,7 +19,7 @@ services:
       dockerfile: Dockerfile
     image: finddiningutsc/revamp:latest-server-test
     ports: 
-      - "8001:8001"
+      - "8000:8000"
   client:
     container_name: client-test
     build:
@@ -27,5 +27,5 @@ services:
       dockerfile: Dockerfile
     image: finddiningutsc/revamp:latest-client-test
     ports:
-      - "8443:8443"
-      - "8080:8080"
+      - "443:443"
+      - "80:80"
