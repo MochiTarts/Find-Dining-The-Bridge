@@ -120,8 +120,13 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = SDUserCookieTokenObtainPairSerializer
 
 def jwt_decode(token):
-    return jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=['HS256'])
+    return jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
     # except jwt.ExpiredSignatureError or jwt.exceptions.DecodeError
+
+def jwt_decode_no_sig(token):
+    return jwt.decode(jwt=token, options={"verify_signature": False})
+    # except jwt.ExpiredSignatureError or jwt.exceptions.DecodeError
+
 
 class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
     refresh = None

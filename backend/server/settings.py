@@ -218,7 +218,7 @@ HTML_MESSAGE_TEMPLATE = "verify_email/verification.html"
 #VERIFICATION_FAILED_TEMPLATE = "path/to/failed.html"
 SUBJECT = 'Verify Your Email for Find Dining'
 
-
+JWT_ALGORITHM = 'HS256'
 
 # JWT settings
 SIMPLE_JWT = {
@@ -231,7 +231,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
-    'ALGORITHM': 'HS256',
+    'ALGORITHM': JWT_ALGORITHM,
     'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
