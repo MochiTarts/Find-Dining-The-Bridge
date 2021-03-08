@@ -2,7 +2,6 @@ version: "3.8"
 
 services:
   server:
-    container_name: server-test
     build:
       context: ./backend
       args: 
@@ -21,7 +20,6 @@ services:
     ports: 
       - "8000:8000"
   client:
-    container_name: client-test
     build:
       context: ./client-server
       dockerfile: Dockerfile
