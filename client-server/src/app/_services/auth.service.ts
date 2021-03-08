@@ -34,7 +34,7 @@ export class AuthService {
     }), httpOptions);
   }
 
-  // only used to verify token, not validate
+  // only used (for user) to verify token, not validate
   verify(token: string): Observable<any> {
     return this.http.post(AUTH_API + 'verify/', JSON.stringify({
       token,
@@ -51,6 +51,11 @@ export class AuthService {
     }
     
     return this.http.post(AUTH_API + 'refresh/', JSON.stringify({'user_id': user_id}), httpOptions);
+  }
+
+  // handle authentication with google oauth2 on the backend
+  googleAuth(idToken: string, authToken: string): Observable<any> {
+    return this.http.post(AUTH_API + 'google/', JSON.stringify({'idToken': idToken, 'authToken': authToken}), httpOptions);
   }
   
 }
