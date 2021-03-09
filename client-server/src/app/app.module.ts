@@ -20,6 +20,8 @@ import {
   FacebookLoginProvider
 } from 'angularx-social-login';
 
+import { NgHttpLoaderModule } from 'ng-http-loader';
+
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 
 
@@ -41,6 +43,7 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     HttpClientXsrfModule.withOptions({ cookieName: 'csrftoken', headerName: 'X-CSRFToken' }),
     FormsModule,
     SocialLoginModule,
+    NgHttpLoaderModule.forRoot(),
   ],
   providers: [authInterceptorProviders, {
     provide: 'SocialAuthServiceConfig',

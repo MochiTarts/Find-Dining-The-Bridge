@@ -36,8 +36,6 @@
       Logged in as {{ role }}.
     </div>
   </div>
-  <button class="btn btn-primary btn-block" type="button" (click)="signInWithFB()" *ngIf="!isLoggedIn&&false">Sign In With Facebook</button>
-    <button class="btn btn-primary btn-block" type="button" (click)="signOut()" *ngIf="isLoggedIn&&false">Sign Out From Facebook</button>
+  <button class="btn btn-primary btn-block" type="button" (click)="signInWithFB()" *ngIf="!isLoggedIn">Sign In With Facebook</button>
     <button class="btn btn-primary btn-block" type="button" (click)="signInWithGoogle()" *ngIf="!isLoggedIn" >Sign In With Google</button>
-    <button class="btn btn-primary btn-block" type="button" (click)="signOut()" *ngIf="isLoggedIn" >Sign Out From Google</button>
 </div>

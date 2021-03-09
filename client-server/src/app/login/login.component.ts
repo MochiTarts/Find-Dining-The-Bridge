@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
           // send the token to backend to process
           this.authService.googleAuth(user.idToken, user.authToken).subscribe((data) => {
             this.tokenStorage.updateTokenAndUser(data.access_token);
+            this.reloadPage();
           }, err => {
             console.log(err);
           })
