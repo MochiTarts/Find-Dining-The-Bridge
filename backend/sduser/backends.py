@@ -94,6 +94,7 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
         # custom claims
         token['role'] = user.role
         token['username'] = user.username
+        token['email'] = user.email
 
         return token
 

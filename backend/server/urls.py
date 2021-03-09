@@ -26,7 +26,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from google.views import GoogleView
+from oauth2 import views as external_auth_view
 
 
 urlpatterns = [
@@ -50,7 +50,8 @@ urlpatterns = [
     path('auth/refresh/', SDUserCookieTokenRefreshView.as_view(), name='token_refresh'),
     path('auth/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('auth/signup/', sduser.backends.signup),
-    path('auth/google/', GoogleView.as_view(), name='google'),
+    path('auth/google/', external_auth_view.GoogleView.as_view(), name='google'),
+    path('auth/facebook/', external_auth_view.FacebookView.as_view(), name='google'),
     #path('auth/signin/', obtain_jwt_token),
     #path('auth/refresh/', refresh_jwt_token),
     #path('auth/verify/', verify_jwt_token),

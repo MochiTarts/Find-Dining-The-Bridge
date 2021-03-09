@@ -57,5 +57,10 @@ export class AuthService {
   googleAuth(idToken: string, authToken: string): Observable<any> {
     return this.http.post(AUTH_API + 'google/', JSON.stringify({'idToken': idToken, 'authToken': authToken}), httpOptions);
   }
+
+  // handle authentication with facebook oauth2 on the backend
+  facebookAuth(id: string, authToken: string): Observable<any> {
+    return this.http.post(AUTH_API + 'facebook/', JSON.stringify({'id': id, 'authToken': authToken}), httpOptions);
+  }
   
 }
