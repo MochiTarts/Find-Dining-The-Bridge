@@ -10,8 +10,11 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import get_user_model
 from verify_email.email_handler import send_verification_email
 from sduser.forms import SDUserCreateForm
-from sduser.backends import jwt_decode_no_sig, SDUserCookieTokenObtainPairSerializer
+from sduser.backends import SDUserCookieTokenObtainPairSerializer
 from django.db.models import Q
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+from django.conf import settings
 
 User = get_user_model()
 
@@ -35,12 +38,12 @@ class GoogleView(APIView):
             content = {'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
 
-        googleJWT = jwt_decode_no_sig(request.data.get('idToken'))
-
-        auth_id = data['id']
-        email = googleJWT['email']
         # create user if not exist
         try:
+            googleJWT = id_token.verify_oauth2_token(request.data.get('idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
+            print(googleJWT)
+            auth_id = data['id']
+            email = googleJWT['email']
             #user = User.objects.get(email=data['email'])
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
@@ -49,6 +52,8 @@ class GoogleView(APIView):
                 user.email = email
                 user.save()
 
+        except ValueError:
+            return JsonResponse({'message': 'idToken is invalid'}, status=400)
         except User.DoesNotExist:
             user = User()
             user.username = email
