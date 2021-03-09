@@ -1,16 +1,33 @@
 import { Injectable } from '@angular/core';
+import { SocialAuthService } from 'angularx-social-login';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
+const AUTH_KEY = 'auth-external';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenStorageService {
-  constructor() { }
+  constructor(private socialAuth: SocialAuthService) { }
+
+  setProvider(provider: string) {
+    window.sessionStorage.removeItem(AUTH_KEY);
+    if (provider){
+      window.sessionStorage.setItem(AUTH_KEY, provider);
+    }
+  }
+
+  getProvider() {
+    return window.sessionStorage.getItem(AUTH_KEY);
+  }
 
   signOut(): void {
     window.sessionStorage.clear();
+    if (this.getProvider()){
+      this.socialAuth.signOut();
+      this.setProvider('');
+    }
   }
 
   public updateTokenAndUser(token: string): void {

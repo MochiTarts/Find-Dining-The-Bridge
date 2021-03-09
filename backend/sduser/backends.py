@@ -94,6 +94,7 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
         # custom claims
         token['role'] = user.role
         token['username'] = user.username
+        token['email'] = user.email
 
         return token
 
@@ -131,6 +132,8 @@ def jwt_decode_no_sig(token):
 class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
     refresh = None
     def validate(self, attrs):
+
+        print('refresh validate')
 
         user_id = self.context['request'].data.get('user_id')
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
@@ -171,6 +174,7 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
             if user_id is None:
                 return JsonResponse({'message':'No user found', 'code': 'no_user_found'},status=400)
             user = UserModel.objects.get(id=user_id)
+            print(user)
 
             if not user.is_active:
                 return JsonResponse({'message':'User has been disabled', 'code': 'user_disabled'},status=401)
@@ -182,6 +186,8 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
             # store the refresh token inside user object
             user.refreshToken = new_refresh_token
             user.save()
+
+            print('final')
 
 
         return super().finalize_response(request, response, *args, **kwargs)

@@ -21,7 +21,7 @@ export class BoardUserComponent implements OnInit {
       this.userService.getUserBoard().subscribe(
         data => {
           this.content = data;
-          console.log(data);
+
         },
         err => {
           console.log(err.error);

@@ -5,3 +5,5 @@
 **/.DS_Store
 venv/
 **/.env
+**.key
+**.crt

@@ -36,13 +36,31 @@ export class LoginComponent implements OnInit {
         // we'll get a SocialUser object with the following properties:
         // id, idToken, authToken, email, firstName, lastName, name, photoUrl, provider
         this.isLoggedIn = (user != null);
-        if (user != null){
-          // send the token to backend to process
-          this.authService.googleAuth(user.idToken, user.authToken).subscribe((data) => {
-            this.tokenStorage.updateTokenAndUser(data.access_token);
-          }, err => {
-            console.log(err);
-          })
+        if (user != null) {
+          this.tokenStorage.setProvider(user.provider);
+          switch (user.provider) {
+            case 'GOOGLE':
+              // send the token to backend to process
+              this.authService.googleAuth(user.idToken, user.authToken).subscribe((data) => {
+                this.tokenStorage.updateTokenAndUser(data.access_token);
+                this.reloadPage();
+              }, err => {
+                console.log(err);
+              })
+              break;
+            case 'FACEBOOK':
+              // send the token to backend to process
+              this.authService.facebookAuth(user.id, user.authToken).subscribe((data) => {
+                this.tokenStorage.updateTokenAndUser(data.access_token);
+                this.reloadPage();
+              }, err => {
+                console.log(err);
+              })
+              break;
+            default:
+              console.log('unrecognized provider: ' + this.provider);
+          }
+
           // not sure if we want to redirect before or after google login...
           // redirect to a role selection page to confirm the role
         }
@@ -58,14 +76,14 @@ export class LoginComponent implements OnInit {
 
         var token = data.access;
         var errors = [];
-        
+
         this.tokenStorage.updateTokenAndUser(token);
 
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.role = this.tokenStorage.getUser().role;
         this.reloadPage();
-        
+
       },
       err => {
         this.errorMessage = err.error.message;
@@ -85,11 +103,5 @@ export class LoginComponent implements OnInit {
 
   signInWithFB(): void {
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
-
-  signOut(): void {
-    this.isLoggedIn = false;
-    window.sessionStorage.clear();
-    this.socialAuth.signOut();
   }
 }
