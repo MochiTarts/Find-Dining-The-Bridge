@@ -278,12 +278,14 @@ CACHES = {
 }
 '''
 # cache in db
+'''
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
         'LOCATION': 'cache_table',
     }
 }
+'''
 '''
 CACHES = {
     'default': {
@@ -292,3 +294,5 @@ CACHES = {
     }
 }
 '''
+
+GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
