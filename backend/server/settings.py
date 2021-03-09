@@ -34,7 +34,7 @@ if DEBUG:
     VIEW_REDIRECT_URL = 'http://localhost:4200'
 
 
-ALLOWED_HOSTS = ["uat.finddining.ca:8443"]
+ALLOWED_HOSTS = ["uat.finddining.ca"]
 
 # Application definition
 
