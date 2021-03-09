@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import get_user_model
 from verify_email.email_handler import send_verification_email
 from sduser.forms import SDUserCreateForm
-from sduser.backends import jwt_decode_no_sig
+from sduser.backends import jwt_decode_no_sig, SDUserCookieTokenObtainPairSerializer
 from django.db.models import Q
 
 User = get_user_model()
@@ -58,7 +58,7 @@ class GoogleView(APIView):
             user.email = email
             #user.role = data['role']
             user.role = 'BU'
-            
+
             # if email is verified with 3rd party
             if googleJWT['email_verified']:
                 user.authId = auth_id
@@ -76,7 +76,11 @@ class GoogleView(APIView):
                 else:
                     return JsonResponse({'message': 'invalid form'}, status=400)
 
-        token = RefreshToken.for_user(user)  # generate token without username & password
+        # generate token without username & password
+        # need to use customized one to have all the information we need
+        #token = RefreshToken.for_user(user)
+        token = SDUserCookieTokenObtainPairSerializer.get_token(user)
+
         response = {}
         #response['username'] = user.username
         response['access_token'] = str(token.access_token)
@@ -89,4 +93,4 @@ class GoogleView(APIView):
         res = Response(response)
         res.set_cookie('refresh_token', refresh_token, max_age=cookie_max_age, httponly=True )
         
-        return Response(response)
+        return res

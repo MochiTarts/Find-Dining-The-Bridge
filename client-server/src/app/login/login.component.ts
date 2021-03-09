@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   role: string = 'BU';
   user = {};
+  provider = '';
 
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService,) { }
 
@@ -37,13 +38,18 @@ export class LoginComponent implements OnInit {
         // id, idToken, authToken, email, firstName, lastName, name, photoUrl, provider
         this.isLoggedIn = (user != null);
         if (user != null){
-          // send the token to backend to process
-          this.authService.googleAuth(user.idToken, user.authToken).subscribe((data) => {
-            this.tokenStorage.updateTokenAndUser(data.access_token);
-            this.reloadPage();
-          }, err => {
-            console.log(err);
-          })
+          if (this.provider == 'google'){
+            // send the token to backend to process
+            this.authService.googleAuth(user.idToken, user.authToken).subscribe((data) => {
+              this.tokenStorage.setProvider(this.provider);
+
+              this.tokenStorage.updateTokenAndUser(data.access_token);
+              this.reloadPage();
+            }, err => {
+              console.log(err);
+            })
+          }
+          
           // not sure if we want to redirect before or after google login...
           // redirect to a role selection page to confirm the role
         }
@@ -82,15 +88,11 @@ export class LoginComponent implements OnInit {
 
   signInWithGoogle(): void {
     this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
+    this.provider = 'google';
   }
 
   signInWithFB(): void {
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
-
-  signOut(): void {
-    this.isLoggedIn = false;
-    window.sessionStorage.clear();
-    this.socialAuth.signOut();
+    this.provider = 'facebook';
   }
 }
