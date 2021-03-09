@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
               })
               break;
             default:
-              console.log('unrecognized provider: ' + this.provider);
+              console.log('unrecognized provider: ' + user.provider);
           }
 
           // not sure if we want to redirect before or after google login...
