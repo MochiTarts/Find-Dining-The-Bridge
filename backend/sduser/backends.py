@@ -121,8 +121,16 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = SDUserCookieTokenObtainPairSerializer
 
 def jwt_decode(token):
-    return jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
-    # except jwt.ExpiredSignatureError or jwt.exceptions.DecodeError
+    try:
+        return jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
+    except jwt.InvalidTokenError:
+        return False  # Invalid token
+    except jwt.ExpiredSignatureError:
+        return False  # Token has expired
+    except jwt.InvalidIssuerError:
+        return False  # Token is not issued by Google
+    except jwt.InvalidAudienceError:
+        return False  # Token is not valid for this endpoint
 
 def jwt_decode_no_sig(token):
     return jwt.decode(jwt=token, options={"verify_signature": False})
