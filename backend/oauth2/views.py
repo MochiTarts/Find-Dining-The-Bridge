@@ -37,7 +37,12 @@ class GoogleView(APIView):
         if 'error' in data:
             content = {'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
-
+        
+        print('client id:')
+        print(settings.GOOGLE_OAUTH2_CLIENT_ID)
+        googleJWT = id_token.verify_oauth2_token(request.data.get('idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
+        print(googleJWT)
+        print('verified')
         # create user if not exist
         try:
             googleJWT = id_token.verify_oauth2_token(request.data.get('idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)

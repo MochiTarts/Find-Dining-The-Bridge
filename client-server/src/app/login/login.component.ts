@@ -64,6 +64,8 @@ export class LoginComponent implements OnInit {
           // not sure if we want to redirect before or after google login...
           // redirect to a role selection page to confirm the role
         }
+      }, (err) => {
+        console.log(err);
       });
     }
   }
