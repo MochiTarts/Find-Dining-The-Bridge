@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny
 
 from verify_email.email_handler import send_verification_email
 
-from sduser.backends import SDUserCookieTokenObtainPairSerializer
+from sduser.backends import SDUserCookieTokenObtainPairSerializer, create_disable_user_and_send_verification_email
 from sduser.forms import SDUserCreateForm
 
 from google.oauth2 import id_token
@@ -86,7 +86,7 @@ class GoogleView(APIView):
                 user.save()
             # otherwise we create a disabled user and send an email for verification
             else:
-                return create_disable_user_and_send_verification_email()
+                return create_disable_user_and_send_verification_email(user, password, request)
 
         response = construct_response_for_3rd_party_auth(user)
 
@@ -152,27 +152,6 @@ class FacebookView(APIView):
         response = construct_response_for_3rd_party_auth(user)
 
         return response
-
-
-def create_disable_user_and_send_verification_email(user, request):
-    """
-    creates a disabled SDUser and send email verification
-
-    returns a response indicating whether the operation is successful
-    """
-    form = SDUserCreateForm(data=user)
-    if form.is_valid():
-        # note that send_verification_email would create an inactive user so we no longer need to create user object ourselves
-        # user = User.objects.create_user(username=username, email=email, password=user['password'], role=user['role'])
-        inactive_user = send_verification_email(request, form)
-        # need to set password manually to have it properly hashed
-        inactive_user.set_password(password)
-        inactive_user.save()
-        # send a signal to frontend to ask them to verify email before log in
-        return JsonResponse({'message': 'A verification email has been sent. Please verify your email and sign in again.'})
-    # this should never happen
-    else:
-        return JsonResponse({'message': 'invalid form'}, status=400)
 
 
 def construct_response_for_3rd_party_auth(user):

@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = os.environ.get('DEBUG') == 'True'
 
 # Custom URL for Django views to redirect requests to Angular Routing
-VIEW_REDIRECT_URL = 'https://finddining.ca'
+VIEW_REDIRECT_URL = os.environ.get('VIEW_REDIRECT_URL')
 
 if DEBUG:
     VIEW_REDIRECT_URL = 'http://localhost:4200'
@@ -247,6 +247,7 @@ SIMPLE_JWT = {
 
     'JTI_CLAIM': 'jti',
 
+    # sliding tokens are not being used
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),

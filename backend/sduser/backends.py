@@ -1,27 +1,34 @@
 from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from django.db.models import Q
 from django.core.exceptions import MultipleObjectsReturned
-#from rest_framework_jwt import utils
 from django.http import HttpResponse, JsonResponse
+from django.conf import settings
+from django.db.models import Q
+from django import forms
+
 from .validators import validate_signup_user
 from .forms import SDUserCreateForm
+
 from verify_email.email_handler import send_verification_email
-from django.contrib.auth.forms import UserCreationForm
-from django import forms
-import json
+
+from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken
+
+import json
 import jwt
-from django.conf import settings
-from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
+
 
 UserModel = get_user_model()
 
 
 class EmailBackend(ModelBackend):
+    """
+    authentication backend that authenticate user with username (or email) and password
+    """
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = UserModel.objects.get(
@@ -42,17 +49,11 @@ class EmailBackend(ModelBackend):
 
         return user if self.user_can_authenticate(user) else None
 
-'''
-# add role to the payload
-def jwt_payload_handler(user):
-    payload = utils.jwt_payload_handler(user)
-    payload['role'] = user.role
-    payload['email_verified'] = user.email_verified
-
-    return payload
-'''
 
 def signup(request):
+    """
+    validate registration form and create a disabled SDUser from the form (and sends verifiication email)
+    """
     if request.method == 'POST':
         user = json.loads(request.body)
         invalid = validate_signup_user(user)
@@ -66,18 +67,7 @@ def signup(request):
                 elif UserModel.objects.filter(email=email).exists():
                     return JsonResponse({'message': 'email already exists'}, status=400)
                 else:
-                    form = SDUserCreateForm(data=user)
-                    if form.is_valid():
-                        # note that send_verification_email would create an inactive user so we no longer need to create user object ourselves
-                        # user = UserModel.objects.create_user(username=username, email=email, password=user['password'], role=user['role'])
-                        inactive_user = send_verification_email(request, form)
-                        # need to set password manually to have it properly hashed
-                        inactive_user.set_password(password)
-                        inactive_user.save()
-
-                        return HttpResponse()
-                    else:
-                        return JsonResponse({'message': 'invalid form'}, status=400)
+                    return create_disable_user_and_send_verification_email(user, password, request)
             except Exception:
                 return JsonResponse({'message': 'unable to create user'}, status=400)
             
@@ -86,7 +76,32 @@ def signup(request):
         return JsonResponse({'Error': 'invalid request'}, status=404)
 
 
+
+def create_disable_user_and_send_verification_email(user, password, request):
+    """
+    creates a disabled SDUser and send email verification
+
+    returns a response indicating whether the operation is successful
+    """
+    form = SDUserCreateForm(data=user)
+    if form.is_valid():
+        # note that send_verification_email would create an inactive user so we no longer need to create user object ourselves
+        # user = User.objects.create_user(username=username, email=email, password=user['password'], role=user['role'])
+        inactive_user = send_verification_email(request, form)
+        # need to set password manually to have it properly hashed
+        inactive_user.set_password(password)
+        inactive_user.save()
+        # send a signal to frontend to ask them to verify email before log in
+        return JsonResponse({'message': 'A verification email has been sent. Please verify your email and sign in again.'})
+    # this should never happen
+    else:
+        return JsonResponse({'message': 'invalid form'}, status=400)
+
+
 class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Token Obtain Pair Serializer
+    """
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -99,7 +114,9 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 class SDUserCookieTokenObtainPairView(TokenObtainPairView):
-
+    """
+    Token Obtain Pair View with refresh token stored in the cookie
+    """
     def finalize_response(self, request, response, *args, **kwargs):
 
         if response.data.get('refresh'):
@@ -121,6 +138,9 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
     serializer_class = SDUserCookieTokenObtainPairSerializer
 
 def jwt_decode(token):
+    """
+    decode a JWT issued from backend (our own auth)
+    """
     try:
         return jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
     except jwt.InvalidTokenError:
@@ -132,16 +152,16 @@ def jwt_decode(token):
     except jwt.InvalidAudienceError:
         return False  # Token is not valid for this endpoint
 
-def jwt_decode_no_sig(token):
-    return jwt.decode(jwt=token, options={"verify_signature": False})
-    # except jwt.ExpiredSignatureError or jwt.exceptions.DecodeError
-
 
 class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
+    """
+    Token Refresh Serializer
+    """
     refresh = None
     def validate(self, attrs):
-
-        print('refresh validate')
+        """
+        validate refresh token against db and its integrity
+        """
 
         user_id = self.context['request'].data.get('user_id')
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
@@ -155,7 +175,9 @@ class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
             raise InvalidToken('No valid token found in cookie \'refresh_token\'')
 
 def checkUserRefreshToken(user_id, refresh_token):
-
+    """
+    check refresh token against the one stored in the db
+    """
     if user_id is None:
         return InvalidToken('No user found who would have possessed this token')
 
@@ -167,6 +189,9 @@ def checkUserRefreshToken(user_id, refresh_token):
 
 
 class SDUserCookieTokenRefreshView(TokenRefreshView):
+    """
+    Token Refresh View
+    """
     def finalize_response(self, request, response, *args, **kwargs):
 
         if response.data.get('refresh'):
@@ -194,9 +219,6 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
             # store the refresh token inside user object
             user.refreshToken = new_refresh_token
             user.save()
-
-            print('final')
-
 
         return super().finalize_response(request, response, *args, **kwargs)
     

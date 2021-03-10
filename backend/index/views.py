@@ -33,4 +33,7 @@ def angularIndex(request, path=''):
     return render(request, 'index/landing-page.html')
 
 def angularLogIn(request, path=''):
+    """
+    redirect to angular login page
+    """
     return redirect(settings.VIEW_REDIRECT_URL + '/login')
