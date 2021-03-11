@@ -21,10 +21,11 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // registration form on submit
   onSubmit(): void {
     const { username, email, password1, password2, role } = this.form;
 
-    if (password1 == password2){
+    if (password1 == password2) {
       this.authService.register(username, email, password1, role).subscribe(
         data => {
           console.log(data);
@@ -39,6 +40,6 @@ export class RegisterComponent implements OnInit {
       );
     }
 
-    
+
   }
 }

@@ -3,9 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenStorageService } from './token-storage.service';
 
-//const AUTH_API = 'http://localhost:8000/api/auth/';
 const AUTH_API = '/api/auth/';
-//const AUTH_API = '/auth/'
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -14,7 +12,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient, private tokenStorage: TokenStorageService, ) { }
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) { }
 
   // email can be used as alternative to username (backend accepts both)
   login(username: string, password: string): Observable<any> {
@@ -24,6 +22,7 @@ export class AuthService {
     }), httpOptions);
   }
 
+  // for user signup
   register(username: string, email: string, password: string, role: string): Observable<any> {
 
     return this.http.post(AUTH_API + 'signup/', JSON.stringify({
@@ -41,26 +40,25 @@ export class AuthService {
     }), httpOptions);
   }
 
-  
+  // refresh the access token as well as the refresh token
   refreshToken(): Observable<any> {
-    //var refreshToken = this.tokenStorage.getRefreshToken();
     var user = this.tokenStorage.getUser();
     var user_id = null
     if (user) {
       user_id = user.user_id
     }
-    
-    return this.http.post(AUTH_API + 'refresh/', JSON.stringify({'user_id': user_id}), httpOptions);
+
+    return this.http.post(AUTH_API + 'refresh/', JSON.stringify({ 'user_id': user_id }), httpOptions);
   }
 
   // handle authentication with google oauth2 on the backend
   googleAuth(idToken: string, authToken: string): Observable<any> {
-    return this.http.post(AUTH_API + 'google/', JSON.stringify({'idToken': idToken, 'authToken': authToken}), httpOptions);
+    return this.http.post(AUTH_API + 'google/', JSON.stringify({ 'idToken': idToken, 'authToken': authToken }), httpOptions);
   }
 
   // handle authentication with facebook oauth2 on the backend
   facebookAuth(id: string, authToken: string): Observable<any> {
-    return this.http.post(AUTH_API + 'facebook/', JSON.stringify({'id': id, 'authToken': authToken}), httpOptions);
+    return this.http.post(AUTH_API + 'facebook/', JSON.stringify({ 'id': id, 'authToken': authToken }), httpOptions);
   }
-  
+
 }
