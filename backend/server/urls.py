@@ -15,12 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-#from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
-import verify_email
 import index
 import auth
 from django.contrib.auth import views as auth_views
-
+from sduser.backends import verify_email
 
 urlpatterns = [
     path('', include('index.urls')),
@@ -43,7 +41,8 @@ urlpatterns = [
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
 urlpatterns = [
-    path('verification/', include('verify_email.urls')),
+    #path('verification/', include('verify_email.urls')),
+    path('verification/<uidb64>/<token>/',verify_email, name='verify_email'), 
     path('login/', index.views.angularLogIn, name="login"),
     path('api/', include(urlpatterns))]
 

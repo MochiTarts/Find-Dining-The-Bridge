@@ -1,6 +1,8 @@
-<p>Hello,</p>
+<p>Hello {{ user.username }},</p>
 <p>Follow this link to verify your email address.</p>
-<p><a href="{{link}}" class="verification" >Verify my email address with Find Dining</a></p>
+<p><a href="https://{{ domain }}{% url 'verify_email' uidb64=uid token=token %}" class="verification" >Verify My Email Address with Find Dining</a></p>
 <p>If you didn't ask to verify this address, you can ignore this email.</p>
 <p>Thanks,</p>
 <p>Your SCDining team</p>
+{% autoescape off %}
+{% endautoescape %}

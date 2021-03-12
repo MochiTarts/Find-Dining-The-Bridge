@@ -7,3 +7,4 @@ venv/
 **/.env
 **.key
 **.crt
+**/django_cache

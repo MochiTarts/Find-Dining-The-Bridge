@@ -162,18 +162,19 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/hour',
+        'user': '100/hour'
+    },
 }
 # doesn't work right now because Djongo can't translate aggregation functions in sql
-'''
-'DEFAULT_THROTTLE_CLASSES': [
-    'rest_framework.throttling.AnonRateThrottle',
-    'rest_framework.throttling.UserRateThrottle'
-],
-'DEFAULT_THROTTLE_RATES': {
-    'anon': '100/hour',
-    'user': '100/hour'
-},
-'''
+
+
 
 '''
 JWT_AUTH = {
@@ -210,13 +211,6 @@ GMAIL_API_CLIENT_ID = os.environ.get('GMAIL_API_CLIENT_ID')
 GMAIL_API_CLIENT_SECRET = os.environ.get('GMAIL_API_CLIENT_SECRET')
 GMAIL_API_REFRESH_TOKEN = os.environ.get('GMAIL_API_REFRESH_TOKEN')
 
-# for email verification
-LOGIN_URL = 'login'
-HTML_MESSAGE_TEMPLATE = "verify_email/verification.html"
-# set below to None to instantly redirect to login page
-#VERIFICATION_SUCCESS_TEMPLATE = "path/to/success.html"
-#VERIFICATION_FAILED_TEMPLATE = "path/to/failed.html"
-SUBJECT = 'Verify Your Email for Find Dining'
 
 JWT_ALGORITHM = 'HS256'
 
@@ -287,13 +281,13 @@ CACHES = {
     }
 }
 '''
-'''
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
+        'LOCATION': 'django_cache',
     }
 }
-'''
+
 
 GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')

@@ -44,7 +44,7 @@ export class AuthInterceptor implements HttpInterceptor {
         return this.handle401Error(req, next);
         // log user out if 400 and error code indicates a need to reject the request
       } else if (error instanceof HttpErrorResponse && error.status === 400) {
-        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled'].includes(error.error.code)) {
+        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
           console.log(error.error);
           this.logout();
           return throwError(error);
