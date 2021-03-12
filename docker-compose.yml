@@ -2,7 +2,6 @@ version: "3.8"
 
 services:
   server:
-    container_name: server-prod
     build:
       context: ./backend
       args: 
@@ -18,13 +17,12 @@ services:
         - GMAIL_API_REFRESH_TOKEN=${GMAIL_API_REFRESH_TOKEN}
         - GOOGLE_OAUTH2_CLIENT_ID=${GOOGLE_OAUTH2_CLIENT_ID}
         - GOOGLE_OAUTH2_CLIENT_SECRET=${GOOGLE_OAUTH2_CLIENT_SECRET}
-        - VIEW_REDIRECT_URL=${ARG VIEW_REDIRECT_URL}
+        - VIEW_REDIRECT_URL=${VIEW_REDIRECT_URL}
       dockerfile: Dockerfile
     image: finddiningutsc/revamp:latest-server-prod
     ports: 
       - "8000:8000"
   client:
-    container_name: client-prod
     build:
       context: ./client-server
       dockerfile: Dockerfile
