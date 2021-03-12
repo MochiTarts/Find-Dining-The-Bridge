@@ -16,11 +16,12 @@ export class AuthInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
-
+  // intercepts all http request to attach access token to the header and handle error response flows
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authReq = req;
     const token = this.tokenStorage.getToken();
     //console.log(token);
+    // add access token to the header
     if (token != null) {
       authReq = this.addToken(req, token);
     }
@@ -29,6 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log(error);
       if (error instanceof HttpErrorResponse && [401, 403].includes(error.status)) {
         console.log(error.error);
+        // confirm whether the current request is for refreshing tokens (and not to log user out)
         if (!this.isCheckingRefreshToken && error.status === 401 && error.error && error.error.code == "token_not_valid") {
           this.isCheckingRefreshToken = true;
         }
@@ -40,8 +42,9 @@ export class AuthInterceptor implements HttpInterceptor {
         }
         // otherwise refresh the access token using refresh token
         return this.handle401Error(req, next);
+        // log user out if 400 and error code indicates a need to reject the request
       } else if (error instanceof HttpErrorResponse && error.status === 400) {
-        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled'].includes(error.error.code)) {
+        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
           console.log(error.error);
           this.logout();
           return throwError(error);
@@ -57,11 +60,19 @@ export class AuthInterceptor implements HttpInterceptor {
     window.location.reload();
   }
 
+  // add access token to the header
   private addToken(req: HttpRequest<any>, token: string) {
     return req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
   }
 
+  /*
+  Handles 401 error by attempting to refresh the tokens (assuming the old token expired)
+  while blocking all requests in between and retry after refresh returns
+
+  BehaviorSubject is used as a semaphore (to block and release requests during the refreshing) 
+  */
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+    // haven't start refreshing yet. Start refreshing
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
@@ -79,13 +90,17 @@ export class AuthInterceptor implements HttpInterceptor {
           return throwError(error);
         }),
       );
-
+      // refreshing, block the request until token is not null (refreshTokenSubject contains a not null value)
     } else {
       return this.refreshTokenSubject.pipe(
         filter(token => token != null),
         take(1),
         switchMap(JWT => {
           return next.handle(this.addToken(request, JWT));
+        }),
+        catchError(error => {
+          console.log(error.error);
+          return throwError(error);
         }));
     }
   }

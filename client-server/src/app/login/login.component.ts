@@ -26,9 +26,11 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService,) { }
 
   ngOnInit(): void {
+    // if token is already present then the user is logged in using basic credentials
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.role = this.tokenStorage.getUser().role;
+      // otherwise the user is logged in with third party and need to handle authentication on the backend
     } else {
       this.socialAuth.authState.subscribe((user) => {
         this.user = user;
@@ -38,6 +40,7 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = (user != null);
         if (user != null) {
           this.tokenStorage.setProvider(user.provider);
+          // direct authentication to the appropriate view depending on the provider
           switch (user.provider) {
             case 'GOOGLE':
               // send the token to backend to process
@@ -59,6 +62,8 @@ export class LoginComponent implements OnInit {
               break;
             default:
               console.log('unrecognized provider: ' + user.provider);
+              this.tokenStorage.signOut();
+              this.reloadPage();
           }
 
           // not sure if we want to redirect before or after google login...
@@ -70,6 +75,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // login form on submit
   onSubmit(): void {
     const { username, password } = this.form;
 

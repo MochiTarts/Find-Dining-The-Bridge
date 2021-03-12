@@ -15,19 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-#from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
-import sduser
-import verify_email
 import index
+import auth
 from django.contrib.auth import views as auth_views
-from sduser.backends import SDUserCookieTokenObtainPairView, SDUserCookieTokenRefreshView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
-from oauth2 import views as external_auth_view
-
+from sduser.backends import verify_email
 
 urlpatterns = [
     path('', include('index.urls')),
@@ -44,22 +35,14 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete',),
     path('admin/', admin.site.urls),
-    #path('auth/signin/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    #path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/signin/', SDUserCookieTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/refresh/', SDUserCookieTokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('auth/signup/', sduser.backends.signup),
-    path('auth/google/', external_auth_view.GoogleView.as_view(), name='google'),
-    path('auth/facebook/', external_auth_view.FacebookView.as_view(), name='google'),
-    #path('auth/signin/', obtain_jwt_token),
-    #path('auth/refresh/', refresh_jwt_token),
-    #path('auth/verify/', verify_jwt_token),
+    path('auth/', include('auth.urls')),
+
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
 urlpatterns = [
-    path('verification/', include('verify_email.urls')),
+    #path('verification/', include('verify_email.urls')),
+    path('verification/<uidb64>/<token>/',verify_email, name='verify_email'), 
     path('login/', index.views.angularLogIn, name="login"),
     path('api/', include(urlpatterns))]
 

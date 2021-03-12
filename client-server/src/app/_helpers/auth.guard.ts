@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
         private router: Router,
         private tokenStorage: TokenStorageService
     ) { }
-
+    // this is the basic guard that just checks for any user (both BU and RO)
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user = this.tokenStorage.getUser();
 

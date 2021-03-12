@@ -11,7 +11,7 @@ export class ROGuard implements CanActivate {
         private tokenStorage: TokenStorageService,
         private _location: Location,
     ) { }
-
+    // this is a simple guard that just checks for RO rule
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user = this.tokenStorage.getUser();
         if (user && user.role == 'RO') {

@@ -8,6 +8,7 @@ class SDUser(AbstractUser):
     role = models.CharField(max_length=5, choices=Roles.choices(), default="BU")
     refreshToken = models.CharField(max_length=1023, default='')
     authId = models.CharField(max_length=255, default='')
+    is_blocked = models.BooleanField(default=False)
 
     class Meta:
         #db_table = 'auth_user'
