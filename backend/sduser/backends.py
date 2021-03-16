@@ -27,7 +27,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
-from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 
 import json
 import jwt
@@ -48,7 +48,7 @@ class EmailBackend(ModelBackend):
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
-            return UserModel.objects.filter(email=username).order_by('id').first()
+            return UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
@@ -155,10 +155,48 @@ def verify_email(request, uidb64, token):
         )
 
 
+def check_user_status(user):
+    """
+    check on user is_disabled and is_blocked status and
+    raise appropriate error with detail messages for login to display
+    """
+    if user.is_blocked:
+        raise AuthenticationFailed(
+            'This user has been blocked. If you think this is a mistake, please contact find dining team to resolve it',
+            'user_blocked',
+        )
+    elif not user.is_active:
+        raise AuthenticationFailed(
+            'This user is disabled.',
+            'user_disabled',
+        )
+
 class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Token Obtain Pair Serializer
     """
+    def validate(self, attrs):
+        """
+        simple check on user status before authenticate
+        """
+        username = attrs['username']
+        
+        try:
+            user = UserModel.objects.get(
+                Q(username__iexact=username) | Q(email__iexact=username))
+            check_user_status(user)
+        except UserModel.DoesNotExist:
+            raise AuthenticationFailed(
+                'User does not exist',
+                'user_not_found',
+            )
+        except MultipleObjectsReturned:
+            user = UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            check_user_status(user)
+
+        return super().validate(attrs)
+
+    
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
