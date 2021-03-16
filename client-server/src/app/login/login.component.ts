@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { TokenStorageService } from '../_services/token-storage.service';
-
 
 import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider, SocialUser } from "angularx-social-login";
@@ -22,7 +21,8 @@ export class LoginComponent implements OnInit {
   };
   isLoggedIn = false;
   isLoginFailed = false;
-  errorMessage = '';
+  loginErrorMessage: string = '';
+  signupErrorMessage: string = '';
   infoMessage = '';
   role: string = 'BU';
   user = {};
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
-  constructor(public authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService,) { }
+  constructor(public authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService, private ref: ChangeDetectorRef) { }
 
   ngAfterViewInit(): void {
     let curTab = document.getElementsByClassName("tab-header")[0];
@@ -101,9 +101,7 @@ export class LoginComponent implements OnInit {
               this.tokenStorage.signOut();
               this.reloadPage();
           }
-
-          // not sure if we want to redirect before or after google login...
-          // redirect to a role selection page to confirm the role
+          // redirect to or show profile page if first logged in
         }
       }, (err) => {
         console.log(err);
@@ -140,10 +138,12 @@ export class LoginComponent implements OnInit {
                 this.infoMessage = verifyEmailInfoMessage;
                 break;
               default:
-                this.errorMessage = error.error.detail;
+                this.loginErrorMessage = error.error.detail;
             }
           }
           this.isLoginFailed = true;
+          // manually trigger change detection to have error messages render
+          this.ref.detectChanges();
         }
       );
     } else if (type == 'signup') {
@@ -155,16 +155,25 @@ export class LoginComponent implements OnInit {
             console.log(data);
             this.isSignupSuccessful = true;
             this.isSignUpFailed = false;
+            this.ref.detectChanges();
+            //let curTab = document.getElementsByClassName("tab-header")[0];
+            //let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
+            // switch to login tab
+            //tabPanes[1].click();
+
           },
           // signup failed
           err => {
             console.log(err)
-            this.errorMessage = err.error.message;
             this.isSignUpFailed = true;
+            this.signupErrorMessage = err.error.message;
+            // manually trigger change detection to have error messages render
+            this.ref.detectChanges();
           }
         );
       } else {
-        this.errorMessage = "password did not match!";
+        this.signupErrorMessage = "password did not match!";
+        this.isSignUpFailed = true;
       }
     }
 
@@ -196,5 +205,12 @@ export class LoginComponent implements OnInit {
 
   onStrengthChanged(strength: number) {
     this.strength = strength;
+  }
+
+  // just in case
+  onError(event: any) {
+    this.signupErrorMessage = "We're sorry, something went wrong with authentication. If this keeps up, please contact info@finddining.ca for more inquiries.";
+    // manually trigger change detection to have error messages render
+    this.ref.detectChanges();
   }
 }

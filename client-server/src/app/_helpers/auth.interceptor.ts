@@ -55,6 +55,9 @@ export class AuthInterceptor implements HttpInterceptor {
           console.log(error.error);
           this.logout();
           return throwError(error);
+          // 400 example: duplicate username/email on signup
+        } else {
+          return throwError(error);
         }
       } else {
         return throwError(error);

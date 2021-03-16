@@ -59,14 +59,18 @@ class GoogleView(APIView):
             content = {
                 'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
+        
+        auth_id = data['id']
+        # this should be the same as the one obtained from google idToken
+        email = data['email']
+        role = request.data.get('role')
 
         try:
             googleJWT = id_token.verify_oauth2_token(request.data.get(
                 'idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
             print('user info from google idToken:')
             print(googleJWT)
-            auth_id = data['id']
-            role = data['role']
+            # this is definitive as it is not modifiable
             email = googleJWT['email']
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
@@ -135,7 +139,7 @@ class FacebookView(APIView):
 
         auth_id = data['id']
         email = data['email']
-        role = data['role']
+        role = request.data.get('role')
 
         try:
             # get user by auth Id (3rd party id) Or email

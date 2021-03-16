@@ -1,6 +1,4 @@
 <div class="container">
-
-
   <div class="form" *ngIf="!isLoggedIn">
     <img src="assets/images/find_dining_logo_small.png" />
     <div class="tab-header">
@@ -10,12 +8,14 @@
     <div class="tab-content">
       <div class="tab-body active">
 
-
+        <div class="alert alert-success" *ngIf="isSignupSuccessful">
+          A verification email has been sent. Please activate your account before sign in.
+        </div>
         <form *ngIf="!isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('signup')" #f="ngForm"
           novalidate>
           <div class="form-element">
-            <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
-              {{ errorMessage }}
+            <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed && signupErrorMessage">
+              {{ signupErrorMessage }}
             </div>
           </div>
           <div class="form-element">
@@ -55,14 +55,14 @@
             <mat-form-field style="width: 100%" floatLabel='always'>
               <mat-label>Password</mat-label>
               <div class="input-group">
-              <input matInput #password [type]="hide ? 'password' : 'text'" class="form-control mat-password"
-                name="password1" [(ngModel)]="signupForm.password1" minlength="8" #password1="ngModel"
-                placeholder="Password" />
-                <button class="mat-password mat-password-button" type="button" mat-icon-button matSuffix (click)="hide = !hide"
-                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-            </div>
+                <input matInput #password [type]="hide ? 'password' : 'text'" class="form-control mat-password"
+                  name="password1" [(ngModel)]="signupForm.password1" minlength="8" #password1="ngModel"
+                  placeholder="Password" />
+                <button class="mat-password mat-password-button" type="button" mat-icon-button matSuffix
+                  (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </div>
               <mat-hint align="end" aria-live="polite" *ngIf="password1.value">
                 {{password1.value.length}} / {{passwordComponent.max}}
               </mat-hint>
@@ -95,8 +95,8 @@
             <button class="btn btn-primary btn-block">Sign Up</button>
           </div>
         </form>
-        <p>OR</p>
-        <div>
+        <div *ngIf="!isSignupSuccessful">
+          <p>OR</p>
           <div id="facebookPopup" class="facebookPopup btn btn-primary btn-block" (click)="facebookRoleSelectPopup()">
             Sign Up With Facebook
             <div class="facebookPopupPanel">
@@ -127,14 +127,9 @@
             </div>
           </div>
         </div>
-
-        <div class="alert alert-success" *ngIf="isSignupSuccessful">
-          A verification email has been sent. Please activate your account before sign in.
-        </div>
       </div>
 
       <div class="tab-body">
-
         <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit('login')" #f="ngForm" novalidate>
           <div class="form-element">
             <div class="alert alert-primary" role="alert" *ngIf="f.submitted && isLoginFailed && infoMessage">
@@ -142,8 +137,8 @@
             </div>
           </div>
           <div class="form-element">
-            <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed && errorMessage">
-              {{ errorMessage }}
+            <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed && loginErrorMessage">
+              {{ loginErrorMessage }}
             </div>
           </div>
           <div class="form-element">
@@ -162,10 +157,6 @@
                 Password must be at least 8 characters
               </div>
             </div>
-          </div>
-          <div class="form-element">
-            <input type="checkbox" id="remember_me">
-            <label for="remember_me">Remember me</label>
           </div>
           <div class="form-element">
             <button class="btn btn-primary btn-block">

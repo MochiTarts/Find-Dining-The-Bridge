@@ -24,7 +24,6 @@ import { MatInputModule } from '@angular/material/input';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { BoardROComponent } from './board-ro/board-ro.component';
@@ -45,7 +44,6 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent,
     HomeComponent,
     ProfileComponent,
     BoardROComponent,
