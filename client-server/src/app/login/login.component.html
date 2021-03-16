@@ -51,15 +51,35 @@
               <div *ngIf="role.errors.required">Role is required</div>
             </div>
           </div>
-          <div class="form-element">
-            <input type="password" class="form-control" name="password" [(ngModel)]="signupForm.password1" required
-              minlength="8" #password1="ngModel" placeholder="Password" />
+          <div class="form-element mat-password">
+            <mat-form-field style="width: 100%" floatLabel='always'>
+              <mat-label>Password</mat-label>
+              <div class="input-group">
+              <input matInput #password [type]="hide ? 'password' : 'text'" class="form-control mat-password"
+                name="password1" [(ngModel)]="signupForm.password1" minlength="8" #password1="ngModel"
+                placeholder="Password" />
+                <button class="mat-password mat-password-button" type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </div>
+              <mat-hint align="end" aria-live="polite" *ngIf="password1.value">
+                {{password1.value.length}} / {{passwordComponent.max}}
+              </mat-hint>
+              <!--@angular-material-extensions/password-strength's main component-->
+              <mat-password-strength #passwordComponent (onStrengthChanged)="onStrengthChanged($event)"
+                [password]="password1.value">
+              </mat-password-strength>
+            </mat-form-field>
             <div class="alert-danger" *ngIf="password1.errors && f.submitted">
               <div *ngIf="password1.errors.required">Password is required</div>
               <div *ngIf="password1.errors.minlength">
                 Password must be at least 8 characters
               </div>
             </div>
+            <!--Password's strength info-->
+            <mat-password-strength-info *ngIf="showDetails && strength < 100" [passwordComponent]="passwordComponent">
+            </mat-password-strength-info>
           </div>
           <div class="form-element">
             <input type="password" class="form-control" name="password-confirm" [(ngModel)]="signupForm.password2"
@@ -77,28 +97,33 @@
         </form>
         <p>OR</p>
         <div>
-          <div class="facebookPopup btn btn-primary btn-block" (click)="facebookRoleSelectPopup()">Sign Up With Facebook
-            <div class="btn-group facebookPopupPanel" role="group">
-              <button class="btn btn-primary btn-block" type="button" (click)="signInWithFB('BU')"
-                *ngIf="!isLoggedIn">
-                Basic User
-              </button>
-              <button class="btn btn-primary btn-block" type="button" (click)="signInWithFB('RO')"
-                *ngIf="!isLoggedIn">
-                Restaurant Owner
-              </button>
+          <div id="facebookPopup" class="facebookPopup btn btn-primary btn-block" (click)="facebookRoleSelectPopup()">
+            Sign Up With Facebook
+            <div class="facebookPopupPanel">
+              <p>I want to sign up for...</p>
+              <div class="close">×</div>
+              <div class="btn-group" role="group">
+                <button class="btn btn-primary" type="button" (click)="signInWithFB('BU')" *ngIf="!isLoggedIn">
+                  Basic User
+                </button>
+                <button class="btn btn-secondary" type="button" (click)="signInWithFB('RO')" *ngIf="!isLoggedIn">
+                  Restaurant Owner
+                </button>
+              </div>
             </div>
           </div>
           <div class="googlePopup btn btn-primary btn-block" (click)="googleRoleSelectPopup()">Sign Up With Google
-            <div class="btn-group googlePopupPanel" role="group">
-              <button class="btn btn-primary btn-block" type="button" (click)="signInWithGoogle('BU')"
-                *ngIf="!isLoggedIn">
-                Basic User
-              </button>
-              <button class="btn btn-primary btn-block" type="button" (click)="signInWithGoogle('RO')"
-                *ngIf="!isLoggedIn">
-                Restaurant Owner
-              </button>
+            <div class="googlePopupPanel">
+              <p>I want to sign up for...</p>
+              <div class="close">×</div>
+              <div class="btn-group" role="group">
+                <button class="btn btn-primary" type="button" (click)="signInWithGoogle('BU')" *ngIf="!isLoggedIn">
+                  Basic User
+                </button>
+                <button class="btn btn-secondary" type="button" (click)="signInWithGoogle('RO')" *ngIf="!isLoggedIn">
+                  Restaurant Owner
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -160,15 +185,4 @@
       </div>
     </div>
   </div>
-
-
-  <ngb-alert *ngIf="mode == 1" [dismissible]="false" class="password-alert">
-    Password should:<br>
-    Be at least 8 characters in length<br>
-    Contain following 4 types of characters:<br>
-    • Lower case letters (a-z)<br>
-    • Upper case letters (A-Z)<br>
-    • Numbers (i.e. 0-9)<br>
-    {{"• Special characters (e.g. +–~!@#%&().<>?;[]{}_^=|/)"}}
-  </ngb-alert>
 </div>

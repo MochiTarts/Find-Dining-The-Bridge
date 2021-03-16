@@ -20,6 +20,8 @@ import { GalleryModule } from 'ng-gallery';
 import { LightboxModule } from 'ng-gallery/lightbox';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+import { MatInputModule } from '@angular/material/input';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -37,7 +39,6 @@ import {
 import { NgHttpLoaderModule } from 'ng-http-loader';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
-
 
 
 @NgModule({
@@ -62,16 +63,18 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     ReactiveFormsModule,
     FontAwesomeModule,
     NgbModule,
+    MatIconModule,
     MatTabsModule,
+    MatInputModule,
+    MatProgressBarModule,
     NgxCaptchaModule,
     NgMultiSelectDropDownModule.forRoot(),
     YouTubePlayerModule,
-    MatIconModule,
     FlexLayoutModule,
     GalleryModule,
     LightboxModule,
     ScrollingModule,
-    MatPasswordStrengthModule
+    MatPasswordStrengthModule.forRoot(),
   ],
   providers: [authInterceptorProviders, {
     provide: 'SocialAuthServiceConfig',

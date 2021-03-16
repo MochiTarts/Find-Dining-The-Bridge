@@ -64,7 +64,7 @@
   .form .tab-content {
     padding:20px;
   }
-  .form .tab-content .form-element {
+  .form .tab-content .form-element:not(.mat-password) {
     margin:10px 0px;
   }
   .form .tab-content .form-element input,
@@ -85,7 +85,7 @@
   .form .tab-content .form-element label {
     color:#111;
   }
-  .form .tab-content .form-element button {
+  .form .tab-content .form-element button:not(.mat-password) {
     margin-top:5px;
     width:100%;
     padding:10px;
@@ -105,6 +105,16 @@
     display:none;
   }
 
+  .mat-password-button {
+    display: inline-block;
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    border: none;
+    z-index: 5;
+    background-color: Transparent;
+  }
+
   .googlePopup, .facebookPopup {
     position: relative;
     display: block;
@@ -114,17 +124,17 @@
   .facebookPopup .facebookPopupPanel {
     visibility: hidden;
     width: 400px;
-    height: 60px;
     background-color: #555;
+    background-clip: padding-box;
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 8px 2px;
+    padding: 10px;
     position: absolute;
     z-index: 1000;
     bottom: 125%;
     left: 0%;
-    margin: 10px;
+    margin: 0 auto;
   }
 
   .googlePopup .show, .facebookPopup .show {
@@ -142,3 +152,18 @@
     from {opacity: 0;}
     to {opacity:1 ;}
   }
+
+  .close {
+    font-size: 30px;
+    padding: 10px;
+    color: rgb(255, 0, 0);
+    text-decoration: none;
+    cursor: pointer;
+    top: -10px;
+    right: 0px;
+    position: absolute;
+  }
+  .close:hover {
+    color: rgb(189, 52, 52);
+  }
+ 

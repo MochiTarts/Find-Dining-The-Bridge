@@ -6,11 +6,14 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider, SocialUser } from "angularx-social-login";
 
+import { ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
   loginForm: any = {
@@ -34,6 +37,12 @@ export class LoginComponent implements OnInit {
   };
   isSignupSuccessful = false;
   isSignUpFailed = false;
+
+  showDetails: boolean = true;
+  hide: boolean = true;
+  strength: number = 0;
+
+  //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
   constructor(public authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService,) { }
 
@@ -154,6 +163,8 @@ export class LoginComponent implements OnInit {
             this.isSignUpFailed = true;
           }
         );
+      } else {
+        this.errorMessage = "password did not match!";
       }
     }
 
@@ -181,5 +192,9 @@ export class LoginComponent implements OnInit {
   facebookRoleSelectPopup(): void {
     var facebookPopupPanel = document.getElementsByClassName("facebookPopupPanel")[0];
     facebookPopupPanel.classList.toggle("show");
+  }
+
+  onStrengthChanged(strength: number) {
+    this.strength = strength;
   }
 }
