@@ -30,9 +30,16 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log(error);
       if (error instanceof HttpErrorResponse && [401, 403].includes(error.status)) {
         console.log(error.error);
-        // confirm whether the current request is for refreshing tokens (and not to log user out)
-        if (!this.isCheckingRefreshToken && error.status === 401 && error.error && error.error.code == "token_not_valid") {
-          this.isCheckingRefreshToken = true;
+        // determine the source of 401 error
+        if (!this.isCheckingRefreshToken && error.status === 401) {
+          // the current request is for refreshing tokens (and not to log user out)
+          if (error.error && error.error.code == "token_not_valid"){
+            this.isCheckingRefreshToken = true;
+            // the current request is due to a fail login
+          } else if (!this.tokenStorage.getUser().role){
+            // propogate error for error catching and displays
+            return throwError(error);
+          }
         }
         // auto logout if refresh token expired or 403 response returned from api
         if (this.isCheckingRefreshToken || error.status === 403 && this.tokenStorage.getUser()) {
@@ -47,6 +54,9 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
           console.log(error.error);
           this.logout();
+          return throwError(error);
+          // 400 example: duplicate username/email on signup
+        } else {
           return throwError(error);
         }
       } else {

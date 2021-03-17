@@ -59,13 +59,18 @@ class GoogleView(APIView):
             content = {
                 'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
+        
+        auth_id = data['id']
+        # this should be the same as the one obtained from google idToken
+        email = data['email']
+        role = request.data.get('role')
 
         try:
             googleJWT = id_token.verify_oauth2_token(request.data.get(
                 'idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
             print('user info from google idToken:')
             print(googleJWT)
-            auth_id = data['id']
+            # this is definitive as it is not modifiable
             email = googleJWT['email']
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
@@ -78,7 +83,7 @@ class GoogleView(APIView):
             return JsonResponse({'message': 'idToken is invalid'}, status=400)
         # if user not in db, create one with random password
         except User.DoesNotExist:
-            user = create_default_user_for_3rd_party(email, auth_id)
+            user = create_default_user_for_3rd_party(email, auth_id, role)
 
             # if email is verified with 3rd party we can simply save the user with an 3rd party id
             if googleJWT['email_verified']:
@@ -134,6 +139,7 @@ class FacebookView(APIView):
 
         auth_id = data['id']
         email = data['email']
+        role = request.data.get('role')
 
         try:
             # get user by auth Id (3rd party id) Or email
@@ -147,7 +153,7 @@ class FacebookView(APIView):
 
         # if user not in db, create one with random password
         except User.DoesNotExist:
-            user = create_default_user_for_3rd_party(email, auth_id)
+            user = create_default_user_for_3rd_party(email, auth_id, role)
 
         response = construct_response_for_3rd_party_auth(user)
 
@@ -183,7 +189,7 @@ def construct_response_for_3rd_party_auth(user):
     return res
 
 
-def create_default_user_for_3rd_party(email, auth_id):
+def create_default_user_for_3rd_party(email, auth_id, role):
     """
     create a default SDUser for 3rd party
 
@@ -198,10 +204,7 @@ def create_default_user_for_3rd_party(email, auth_id):
     password = make_password(BaseUserManager().make_random_password())
     user.password = password
     user.email = email
-    # once we separate the sign up view for BU and RO we can set it here
-    # otherwise we keep BU as default
-    #user.role = data['role']
-    user.role = 'BU'
+    user.role = role
 
     # note that facebook users have their email verified so we do not need to check it
     user.authId = auth_id
