@@ -38,6 +38,15 @@ import {
 import { NgHttpLoaderModule } from 'ng-http-loader';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
+import { AllRestaurantsComponent } from './all-restaurants/all-restaurants.component';
+import { FavouritesComponent } from './favourites/favourites.component';
+import { FilterlistCardComponent } from './filterlist-card/filterlist-card.component';
+import { MapComponent } from './map/map.component';
+import { RestaurantCardComponent } from './restaurant-card/restaurant-card.component';
+import { RestaurantFavsCardComponent } from './restaurant-favs-card/restaurant-favs-card.component';
+import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaurant-nearby-card.component';
 
 
 @NgModule({
@@ -48,6 +57,15 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     ProfileComponent,
     BoardROComponent,
     BoardUserComponent,
+    NavbarComponent,
+    FooterComponent,
+    AllRestaurantsComponent,
+    FavouritesComponent,
+    FilterlistCardComponent,
+    MapComponent,
+    RestaurantCardComponent,
+    RestaurantFavsCardComponent,
+    RestaurantNearbyCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,7 +109,8 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
         }
       ]
     } as SocialAuthServiceConfig,
-  }],
+  },
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

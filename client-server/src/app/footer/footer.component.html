@@ -1,0 +1,55 @@
+<footer role="contentinfo">
+    <div class="footer-content">
+      <div id="footer-main-links" class="row">
+        <div class="col">
+          <a class="footer-links" href="/" target="_blank" tabindex="0" >About Us </a><br />
+          <a class="footer-links" href="/" target="_blank" tabindex="0">FAQ</a>
+        </div>
+        <div class="col">
+          <a
+            class="footer-links"
+            routerLink="all-owners"
+            routerLinkActive="active"
+            target="_blank"
+            tabindex="0"
+            >Restaurant Owners</a
+          >
+          <br />
+          <a class="footer-links" (click)="onBecomePartnerClicked()" tabindex="0">Become a Partner</a>
+        </div>
+        <div class="col">
+          <a class="footer-links" href="https://www.facebook.com/finddiningscarborough/" target="_blank" aria-label="Facebook" >
+            <fa-icon class="footer-icons" [icon]="faFacebook"></fa-icon>
+          </a>
+          <a class="footer-links" href="https://twitter.com/FDscarborough" target="_blank" aria-label="Twitter" >
+            <fa-icon class="footer-icons" [icon]="faTwitter"></fa-icon>
+          </a>
+          <a class="footer-links" href="https://www.instagram.com/finddiningscarborough/" target="_blank" aria-label="Instagram" >
+            <fa-icon class="footer-icons" [icon]="faInstagram"></fa-icon>
+          </a>
+        </div>
+      </div>
+      <br />
+      <hr style="background-color: grey;" />
+      <div class="footer-bottom-content">
+        <div class="row">
+          <div class="col">
+            <img
+              src="assets/images/find_dining_sponsers.png"
+              class="footer-logo"
+              alt="Sponsers: University of Toronto Scarborough, City of Toronto, Centennial College"
+            />
+            <p>
+              <br />
+              &copy; 2021 Find Dining
+            </p>
+          </div>
+          <div class="col">
+            <a class="footer-links" href="/" target="_blank">Terms of Service</a>
+            <a class="footer-links" href="/" target="_blank">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  

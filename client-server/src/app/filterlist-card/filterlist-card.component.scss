@@ -1,0 +1,21 @@
+@import "src/styles";
+
+.cardBox {
+  width: 200px;
+  height: auto;
+  flex: 0 0 auto;
+  margin: 20px;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.cardBox::-webkit-scrollbar {
+  display: none;
+}
+
+.card-body {
+  padding: 15px 5px;
+  text-align: left;
+  width: 160px;
+}

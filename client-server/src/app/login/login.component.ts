@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
     // if token is already present then the user is logged in using basic credentials
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
+      this.authService.updateLoginStatus(true);
       this.role = this.tokenStorage.getUser().role;
       // otherwise the user is logged in with third party and need to handle authentication on the backend
     } else {
@@ -82,8 +83,10 @@ export class LoginComponent implements OnInit {
               // send the token to backend to process
               this.authService.googleAuth(user.idToken, user.authToken, this.role).subscribe((data) => {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
+                this.authService.updateLoginStatus(true);
                 this.reloadPage();
               }, err => {
+                this.authService.updateLoginStatus(false);
                 console.log(err);
               })
               break;
@@ -91,19 +94,23 @@ export class LoginComponent implements OnInit {
               // send the token to backend to process
               this.authService.facebookAuth(user.id, user.authToken, this.role).subscribe((data) => {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
+                this.authService.updateLoginStatus(true);
                 this.reloadPage();
               }, err => {
+                this.authService.updateLoginStatus(false);
                 console.log(err);
               })
               break;
             default:
               console.log('unrecognized provider: ' + user.provider);
+              this.authService.updateLoginStatus(false);
               this.tokenStorage.signOut();
               this.reloadPage();
           }
           // redirect to or show profile page if first logged in
         }
       }, (err) => {
+        this.authService.updateLoginStatus(false);
         console.log(err);
       });
     }
@@ -122,7 +129,7 @@ export class LoginComponent implements OnInit {
           var errors = [];
 
           this.tokenStorage.updateTokenAndUser(token);
-
+          this.authService.updateLoginStatus(true);
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.role = this.tokenStorage.getUser().role;
@@ -131,6 +138,7 @@ export class LoginComponent implements OnInit {
         },
         // login failed
         error => {
+          this.authService.updateLoginStatus(false);
           var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
           if (error.error) {
             switch (error.error.code) {

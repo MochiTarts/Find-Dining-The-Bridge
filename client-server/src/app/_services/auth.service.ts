@@ -14,9 +14,19 @@ const httpOptions = {
 })
 export class AuthService {
 
+  loginStatus:boolean = false;
+
   ip:any;
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) {}
+
+  updateLoginStatus(status:boolean){
+    this.loginStatus = status;
+  }
+
+  isLoggedIn(){
+    return this.loginStatus;
+  }
 
   // email can be used as alternative to username (backend accepts both)
   login(username: string, password: string): Observable<any> {

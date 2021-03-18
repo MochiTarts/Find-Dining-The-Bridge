@@ -1,0 +1,49 @@
+@import "src/styles";
+
+footer {
+  font-size: 15px;
+  padding: 50px;
+  color: white;
+  background-color: $dark-color;
+}
+
+.footer-content {
+  margin: 50px 20%;
+  color: $footer-text-color;
+
+  @media screen and (max-width: 700px) {
+    margin: 20px;
+  }
+}
+
+.footer-bottom-content {
+  font-size: 12px;
+}
+
+.footer-links {
+  color: $footer-text-color;
+  margin: 10px 10px 0 10px;
+  display: inline-block;
+}
+
+.footer-links:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-icons {
+  color: $footer-text-color;
+}
+
+.footer-icons:hover {
+  color: white;
+}
+
+.footer-logo {
+  width: 250px;
+  height: auto;
+
+  @media screen and (max-width: 700px) {
+    width: 100px;
+  }
+}

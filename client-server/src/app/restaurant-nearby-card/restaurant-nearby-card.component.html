@@ -1,0 +1,23 @@
+<a
+  class="card cardBox" 
+  [routerLink]="['/restaurant']"
+  [queryParams]="{restaurantId: restaurant._id}"
+  target="_blank"
+  placement="bottom" 
+  ngbTooltip="Visit Restaurant Page"
+>
+  <div class="img-container">
+    <img
+        src="{{ restaurant.imgUrl }}"
+        class="card-img-top"
+        alt="restaurant logo"
+      />
+      <div class="overlay">
+        <div class="text">
+          {{ restaurant.name }}
+          <br><br> 
+          {{ restaurant.cuisinePrice }}
+        </div>
+      </div>
+  </div>
+</a>

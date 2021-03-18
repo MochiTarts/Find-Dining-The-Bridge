@@ -1,0 +1,81 @@
+<div *ngIf="restaurants != undefined" class="map">
+    <app-map
+      [restaurants]="restaurants"
+      [userId]="userId"
+      [role]="role"
+    ></app-map>
+  </div>
+  
+  <div class="center" style="margin-top: 40px;" id="favourites-label">
+    <h2>Favourites</h2>
+  </div>
+  
+  <div *ngIf="emptyFavourites" role="main" aria-labelledby="favourites-label">
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab label="Restaurants">
+        <div class="center">
+          <img src="assets/images/undraw_with_love_ajy1.png" class="image" />
+          <p>Currently no favourite restaurants saved!</p>
+        </div>
+      </mat-tab>
+      <!--<mat-tab label="Dishes">
+        <div class="center">
+          <img src="assets/images/undraw_with_love_ajy1.png" class="image" />
+          <p>Currently no favourite dishes saved!</p>
+        </div>
+      </mat-tab>-->
+    </mat-tab-group>
+  </div>
+  
+  <div *ngIf="!emptyFavourites" role="main" aria-labelledby="favourites-label">
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab label="Restaurants">
+        <div class="input-group">
+          <div class="input-group-prepend input-group-lg">
+            <span class="input-group-text input-addon" id="basic-addon1">
+              <fa-icon class="search-icons" [icon]="faSearch"></fa-icon>
+            </span>
+          </div>
+          <input
+            type="text"
+            class="form-control my-0 py-1 search"
+            placeholder="Search"
+            [(ngModel)]="inputRestaurant"
+            (ngModelChange)="searchRestaurants()"
+          />
+        </div>
+        <div class="restaruant-listings-box">
+          <div class="row">
+            <div class="col-md-4">
+              <app-filterlist-card
+                [category]="'Price'"
+                [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']"
+                [length]="4"
+                (keyup.enter)="filterEnter($event)"
+                (events)="filterPricepoint($event)"
+              ></app-filterlist-card>
+              <!-- <app-filterlist-card
+                [category]="'Delivery Charges'"
+                [subcategories]="['$ ($1 - $2)', '$$ ($2 - $4)', '$$$ ($5+)']"
+                [length]="3"
+                (events)="filterDeliveryCharges($event)"
+              ></app-filterlist-card> -->
+              <app-filterlist-card
+                [category]="'Type of Cuisine'"
+                [subcategories]="allCuisines"
+                [length]="allCuisines.length"
+                (keyup.enter)="filterEnter($event)"
+                (events)="filterCuisine($event)"
+              ></app-filterlist-card>
+            </div>
+            <div class="col-md-8">
+              <app-restaurant-favs-card
+                *ngFor="let restaurant of restaurants"
+                [restaurant]="restaurant"
+              ></app-restaurant-favs-card>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
