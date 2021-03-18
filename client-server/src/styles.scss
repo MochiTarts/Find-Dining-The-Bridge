@@ -7,19 +7,94 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue.
-$candy-app-primary: mat-palette($mat-green);
-$candy-app-accent:  mat-palette($mat-deep-purple, A200, A100, A400);
-
+$client-theme-primary: mat-palette($mat-blue);
+$client-theme-accent: mat-palette($mat-blue, A200, A100, A400);
 // The warn palette is optional (defaults to red).
-$candy-app-warn:    mat-palette($mat-red);
+$client-theme-warn: mat-palette($mat-red);
+$client-theme-theme: mat-light-theme(
+  $client-theme-primary,
+  $client-theme-accent,
+  $client-theme-warn
+);
+@include angular-material-theme($client-theme-theme);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+// $primary-color: rgb(22, 87, 136);
+$primary-color: white;
+$secondary-color: #007faa;
+$dark-color: rgb(7, 27, 48);
+$grey-color: #dddddd;
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($candy-app-theme);
+$background-color1: white;
+$background-color2: rgb(240, 240, 240);
+
+// $navigation-color: white;
+$navigation-color: rgb(77, 77, 77);
+$navigation-accent-color: #ccc;
+
+$footer-text-color: rgb(192, 192, 192);
+
+$error-red: rgb(255, 26, 26);
+
+:root {
+  --unit-1: 4px;
+  --elevation-1: 1;
+  --min-height-carousel: calc(var(--unit-1) * 50);
+  --color-brand-1: black;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h2 {
+  font-family: "Alegreya Sans SC", sans-serif;
+  font-size: 35px;
+}
+
+h5 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+p {
+  font-size: 17px;
+}
+
+fa-icon {
+  color: white;
+  font-size: 25px;
+  margin: 0 10px;
+}
+
+.btn {
+  height: 35px;
+  margin: 20px;
+  background-color: $secondary-color;
+  color: white;
+}
+
+.btn:hover {
+  border-color: $secondary-color;
+  color: $secondary-color;
+  background-color: white;
+}
+
+.bottom-left {
+  width: 300px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.error-label{
+    width: auto;
+    color: $error-red;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
