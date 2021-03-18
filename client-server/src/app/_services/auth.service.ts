@@ -4,6 +4,8 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap, finalize } from 'rxjs/operators';
 import { TokenStorageService } from './token-storage.service';
 
+const TOKEN_KEY = 'auth-token';
+const USER_KEY = 'auth-user';
 const AUTH_API = '/api/auth/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,7 +20,12 @@ export class AuthService {
 
   ip:any;
 
-  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) {}
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) {
+    // Sets loginStatus to true if auth-token and auth-user keys are set and present
+    if (window.sessionStorage.getItem(TOKEN_KEY) && window.sessionStorage.getItem(USER_KEY)) {
+      this.loginStatus = true;
+    }
+  }
 
   updateLoginStatus(status:boolean){
     this.loginStatus = status;

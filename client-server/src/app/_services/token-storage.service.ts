@@ -9,9 +9,14 @@ const AUTH_KEY = 'auth-external';
   providedIn: 'root'
 })
 export class TokenStorageService {
-  constructor(private socialAuth: SocialAuthService) { }
-
   RO: boolean = false;
+
+  constructor(private socialAuth: SocialAuthService) {
+    // Sets RO boolean if user is logged in with role of RO
+    if (this.getUser() != {} && this.getUser()['role'] == 'RO') {
+      this.RO = true;
+    }
+  }
 
   // set third party provider
   setProvider(provider: string) {
@@ -70,6 +75,7 @@ export class TokenStorageService {
     const user = window.sessionStorage.getItem(USER_KEY);
 
     if (user) {
+      console.log(user)
       return JSON.parse(user);
     }
 
