@@ -10,7 +10,7 @@ User = get_user_model()
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'first_name', 'last_name', 'email', 'activated', 'role', 'is_blocked', 'is_staff', 'is_superuser', 'last_login', 'pwd_update_time')
-    list_filter = (EmailFilter, UsernameFilter, 'is_staff', 'is_superuser')
+    list_filter = (EmailFilter, UsernameFilter, 'is_staff', 'is_superuser', 'is_blocked',)
 
     class Meta:
         # for some reason setting this is not enough, need to override get_form as well

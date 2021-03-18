@@ -146,7 +146,11 @@ export class LoginComponent implements OnInit {
                 this.infoMessage = verifyEmailInfoMessage;
                 break;
               default:
-                this.loginErrorMessage = error.error.detail;
+                if (error.error.detail == "No active account found with the given credentials"){
+                  this.loginErrorMessage = "Incorrect username or password";
+                } else {
+                  this.loginErrorMessage = error.error.detail;
+                }
             }
           }
           this.isLoginFailed = true;

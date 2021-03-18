@@ -26,7 +26,7 @@
           </a>
         </li>
   
-        <li class="nav-item" *ngIf="!authService.isLoggedIn() && !RO">
+        <li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">
           <div ngbDropdown class="d-inline-block">
             <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle tabindex="0">
               User Info
@@ -44,14 +44,20 @@
             </div>
           </div>
         </li>
+
+        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
+          <a (click)="accountSetting()" routerLink="/account-setting" routerLinkActive="active" class="nav-link">
+            Account Settings
+          </a>
+        </li>
   
-        <li class="nav-item" *ngIf="!authService.isLoggedIn() && RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
+        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
           <a (click)="restaurant()" routerLink="/restaurant" routerLinkActive="active" class="nav-link">
             Restaurant Page
           </a>
         </li>
         
-        <!-- li class="nav-item" *ngIf="!authService.isLoggedIn() && !RO">
+        <!-- li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">
           <div ngbDropdown class="d-inline-block">
             <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle>
               Go Find Dining
@@ -75,12 +81,12 @@
             Go Find Dining
           </a>
         </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="RO">
+        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="tokenStorageService.RO">
           <a class="nav-link" (click)="favourites()">
             Favourites
           </a>
         </li>
-        <!-- <li class="nav-item nav-link" *ngIf="authService.isLoggedIn() || RO">
+        <!-- <li class="nav-item nav-link" *ngIf="authService.isLoggedIn() || tokenStorageService.RO">
           <a routerLinkActive="active" class="nav-link" (click)="timeline()">
             Timeline
           </a>
@@ -91,7 +97,7 @@
           </a>
         </li> -->
   
-        <li *ngIf="!RO && !authService.isLoggedIn()" class="nav-item">
+        <li *ngIf="!tokenStorageService.RO && authService.isLoggedIn()" class="nav-item">
           <p class="nav-link address nav-link" *ngIf="this.userAddress" tabindex="0">
             <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>
             {{ this.userAddress }}

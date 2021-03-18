@@ -4,7 +4,8 @@ from django.forms import model_to_dict
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
-from rest_framework.decorators import api_view
+#from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 import json
 
 User = get_user_model()
@@ -14,17 +15,16 @@ class AdminPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email_admin.html'
 
 
-
-def deactivate_user(request):
+class deactivateView(APIView):
     """ Deactivate user """
+    #authentication_classes = [JWTAuthentication]
 
-    if request.method == 'POST':
+    def post(self, request):
 
-        body = json.loads(request.body)
         refresh_token = request.COOKIES.get('refresh_token')
 
         try:
-            user = User.objects.get(id=body['id'])
+            user = User.objects.get(id=request.data.get('id'))
             if refresh_token == user.refresh_token:
                 user.is_active = False
                 user.save()

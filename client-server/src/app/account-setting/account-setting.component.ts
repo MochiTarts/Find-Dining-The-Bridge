@@ -20,7 +20,7 @@ export class AccountSettingComponent implements OnInit {
     private modalService: NgbModal,
     private userService: UserService,
     private tokenStorage: TokenStorageService,
-    public auth: AuthService,
+    public authService: AuthService,
     public router: Router,
     private titleService: Title 
   ) { }
@@ -39,6 +39,7 @@ export class AccountSettingComponent implements OnInit {
       this.modalRef.close();
       this.reload()
       this.tokenStorage.signOut();
+      this.authService.updateLoginStatus(false);
       this.router.navigate(['/'])
     }, err => {
       console.log(err);

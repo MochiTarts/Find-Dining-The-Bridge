@@ -25,7 +25,6 @@ export class NavbarComponent implements OnInit {
   faUserCircle = faUserCircle;
   faMapMarkerAlt = faMapMarkerAlt;
 
-  RO: boolean = false;
   private role: string = 'BU';
   username?: string;
 
@@ -40,15 +39,9 @@ export class NavbarComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    //this.isLoggedIn = !!this.tokenStorageService.getToken();
-
     if (this.authService.isLoggedIn()) {
       const user = this.tokenStorageService.getUser();
-      console.log(user)
       this.role = user.role;
-      this.RO = this.role == 'RO';
-
       this.username = user.username;
     }
   }

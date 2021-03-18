@@ -11,6 +11,8 @@ const AUTH_KEY = 'auth-external';
 export class TokenStorageService {
   constructor(private socialAuth: SocialAuthService) { }
 
+  RO: boolean = false;
+
   // set third party provider
   setProvider(provider: string) {
     window.sessionStorage.removeItem(AUTH_KEY);
@@ -57,6 +59,8 @@ export class TokenStorageService {
 
   // save user to session storage
   public saveUser(user: any): void {
+    this.RO = user.role == "RO";
+    console.log(this.RO);
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }

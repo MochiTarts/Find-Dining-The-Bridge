@@ -202,7 +202,7 @@ export class UserService {
   /*
   @Input: None
   @Output: None
-  Deactivate user account
+  Deactivate the user account
   */
   deactivateUser(id:string): Observable<any> {
     const endpoint = API_URL + 'user/deactivate/';
