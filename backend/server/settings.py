@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'gmailapi_backend',
-    'verify_email',
     'login_audit',
     'snowpenguin.django.recaptcha2',
     

@@ -11,8 +11,6 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 
-from verify_email.email_handler import send_verification_email
-
 from sduser.backends import SDUserCookieTokenObtainPairSerializer, create_disable_user_and_send_verification_email
 from sduser.forms import SDUserCreateForm
 

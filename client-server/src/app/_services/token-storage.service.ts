@@ -59,6 +59,7 @@ export class TokenStorageService {
 
   // save user to session storage
   public saveUser(user: any): void {
+    console.log(user);
     this.RO = user.role == "RO";
     console.log(this.RO);
     window.sessionStorage.removeItem(USER_KEY);
