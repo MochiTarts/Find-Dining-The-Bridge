@@ -3,10 +3,12 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 from django.contrib.auth import get_user_model
 from django.utils.encoding import force_bytes
 from django.utils.html import strip_tags
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils import timezone
 from django.core.exceptions import MultipleObjectsReturned
 from django.core.mail import BadHeaderError, send_mail
 from django.template.loader import render_to_string
@@ -28,6 +30,9 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
+
+from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
+
 
 import json
 import jwt
@@ -171,16 +176,18 @@ def check_user_status(user):
             'user_disabled',
         )
 
+
 class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Token Obtain Pair Serializer
     """
+
     def validate(self, attrs):
         """
         simple check on user status before authenticate
         """
         username = attrs['username']
-        
+
         try:
             user = UserModel.objects.get(
                 Q(username__iexact=username) | Q(email__iexact=username))
@@ -191,12 +198,12 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
                 'user_not_found',
             )
         except MultipleObjectsReturned:
-            user = UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            user = UserModel.objects.filter(Q(username__iexact=username) | Q(
+                email__iexact=username)).order_by('id').first()
             check_user_status(user)
 
         return super().validate(attrs)
 
-    
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
@@ -205,6 +212,7 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
         token['username'] = user.username
         token['email'] = user.email
+        #token['id'] = user.id
 
         return token
 
@@ -229,8 +237,23 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
             # try:
             # store the refresh token inside user object
             user = UserModel.objects.get(id=payload['user_id'])
-            user.refreshToken = refresh_token
+            user.refresh_token = refresh_token
             user.save()
+
+            # this is how we can trigger the logged in signal but we wouldn't be able to get client ip
+            #user_logged_in.send(sender=user.__class__, request=request, user=user)
+
+            # so we need to create the log entry manually
+            AuditEntry.objects.create(
+                action='logged in',
+                username=user.username,
+                attempt_time=timezone.now(),
+                user_agent=get_client_user_agent(request),
+                ip_address=request.data.get('ip'),
+                path_info=get_client_path_info(request),
+                http_accept=get_client_http_accept(request)
+            )
+
         return super().finalize_response(request, response, *args, **kwargs)
 
     serializer_class = SDUserCookieTokenObtainPairSerializer
@@ -285,7 +308,7 @@ def checkUserRefreshToken(user_id, refresh_token):
 
     user = UserModel.objects.get(id=user_id)
     # validate the token against the one stored in the db (user object)
-    if not refresh_token or refresh_token != user.refreshToken:
+    if not refresh_token or refresh_token != user.refresh_token:
         raise InvalidToken(
             'Token mismatch: the token stored in cookie does not match the token in database')
 
@@ -323,7 +346,7 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
             del response.data['refresh']
 
             # store the refresh token inside user object
-            user.refreshToken = new_refresh_token
+            user.refresh_token = new_refresh_token
             user.save()
 
         return super().finalize_response(request, response, *args, **kwargs)

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, switchMap, finalize } from 'rxjs/operators';
 import { TokenStorageService } from './token-storage.service';
 
 const AUTH_API = '/api/auth/';
@@ -12,14 +13,35 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) { }
+
+  ip:any;
+
+  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) {}
 
   // email can be used as alternative to username (backend accepts both)
   login(username: string, password: string): Observable<any> {
-    return this.http.post(AUTH_API + 'signin/', JSON.stringify({
-      username,
-      password
-    }), httpOptions);
+
+    // get client ip address and pass it to backend (along with the credentials)
+    return this.http.get<{ip:string}>('https://jsonip.com').pipe(
+      switchMap(data => {
+        console.log('ip address', data.ip);
+        this.ip = data.ip;
+        return this.http.post(AUTH_API + 'signin/', JSON.stringify({
+          username,
+          password,
+          'ip': this.ip,
+        }), httpOptions);
+      }),
+      catchError(error => {
+        this.ip = '';
+        console.log(error);
+        return this.http.post(AUTH_API + 'signin/', JSON.stringify({
+          username,
+          password,
+          'ip': this.ip,
+        }), httpOptions);
+      }),
+    );
   }
 
   // for user signup

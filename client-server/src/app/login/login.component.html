@@ -2,11 +2,11 @@
   <div class="form" *ngIf="!isLoggedIn">
     <img src="assets/images/find_dining_logo_small.png" />
     <div class="tab-header">
-      <div class="active">Sign Up</div>
-      <div>Sign In</div>
+      <div>Sign Up</div>
+      <div class="active">Sign In</div>
     </div>
     <div class="tab-content">
-      <div class="tab-body active">
+      <div class="tab-body">
 
         <div class="alert alert-success" *ngIf="isSignupSuccessful">
           A verification email has been sent. Please activate your account before sign in.
@@ -129,7 +129,7 @@
         </div>
       </div>
 
-      <div class="tab-body">
+      <div class="tab-body active">
         <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit('login')" #f="ngForm" novalidate>
           <div class="form-element">
             <div class="alert alert-primary" role="alert" *ngIf="f.submitted && isLoginFailed && infoMessage">

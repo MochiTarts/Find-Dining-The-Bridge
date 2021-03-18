@@ -9,6 +9,7 @@ import { BoardROComponent } from './board-ro/board-ro.component';
 import { AuthGuard } from './_helpers/auth.guard';
 import { SecureGuard } from './_helpers/secure.guard';
 import { ROGuard } from './_helpers/ro.guard';
+import {AccountSettingComponent} from './account-setting/account-setting.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [SecureGuard] },
   { path: 'user', component: BoardUserComponent, canActivate: [AuthGuard] },
   { path: 'ro', component: BoardROComponent, canActivate: [ROGuard] },
+  { path: 'account-setting', component: AccountSettingComponent, canActivate: [AuthGuard]},
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {

@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'server', # This is added for my admin.py to take effect first (which replaces admin site with my custom one)
     #'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,6 +53,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'gmailapi_backend',
     'verify_email',
+    'login_audit',
+    'snowpenguin.django.recaptcha2',
     
     #'user.apps.SDUserConfig',
 ]
@@ -191,6 +194,7 @@ SECURE_SSL_REDIRECT = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
     "http://127.0.0.1:4200",
+    "https://jsonip.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -291,3 +295,7 @@ CACHES = {
 
 
 GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
+
+# reCaptcha v2 for admin portal (still need to add the ip on recaptcha settings)
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAP_PRIV_KEY')
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAP_PUB_KEY')

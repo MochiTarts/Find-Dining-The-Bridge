@@ -14,3 +14,5 @@ djangorestframework-simplejwt==4.6.0
 #social_auth_app_django==4.0.0
 requests==2.25.1
 google-auth==1.11.3
+django-recaptcha2==1.4.1
+django-ipware==3.0.2
