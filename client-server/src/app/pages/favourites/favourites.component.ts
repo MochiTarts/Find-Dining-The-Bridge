@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RestaurantService } from '../_services/restaurant.service';
+import { RestaurantService } from '../../_services/restaurant.service';
 import { SpinnerVisibilityService } from 'ng-http-loader';
-import { cuisinesStr } from '../constants/cuisines';
+import { cuisinesStr } from '../../_constants/cuisines';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Title } from '@angular/platform-browser';
-import { UserService } from '../_services/user.service';
-import { TokenStorageService } from '../_services/token-storage.service';
+import { UserService } from '../../_services/user.service';
+import { TokenStorageService } from '../../_services/token-storage.service';
 
 @Component({
   selector: 'app-favourites',

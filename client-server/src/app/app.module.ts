@@ -36,19 +36,17 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
-import { BoardROComponent } from './board-ro/board-ro.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-import { NewsletterComponent } from './newsletter/newsletter.component';
+import { NewsletterComponent } from './pages/newsletter/newsletter.component';
 
-import { NavbarComponent } from './navbar/navbar.component';
-import { FooterComponent } from './footer/footer.component';
-import { AllRestaurantsComponent } from './all-restaurants/all-restaurants.component';
-import { FavouritesComponent } from './favourites/favourites.component';
-import { FilterlistCardComponent } from './filterlist-card/filterlist-card.component';
-import { MapComponent } from './map/map.component';
-import { RestaurantCardComponent } from './restaurant-card/restaurant-card.component';
-import { RestaurantFavsCardComponent } from './restaurant-favs-card/restaurant-favs-card.component';
-import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaurant-nearby-card.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants.component';
+import { FavouritesComponent } from './pages/favourites/favourites.component';
+import { FilterlistCardComponent } from './components/filterlist-card/filterlist-card.component';
+import { MapComponent } from './components/map/map.component';
+import { RestaurantCardComponent } from './components/restaurant-card/restaurant-card.component';
+import { RestaurantFavsCardComponent } from './components/restaurant-favs-card/restaurant-favs-card.component';
+import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-card/restaurant-nearby-card.component';
 
 
 @NgModule({
@@ -57,8 +55,6 @@ import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaura
     LoginComponent,
     HomeComponent,
     ProfileComponent,
-    BoardROComponent,
-    BoardUserComponent,
     NewsletterComponent,
     NavbarComponent,
     FooterComponent,

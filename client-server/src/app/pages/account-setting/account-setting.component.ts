@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserService } from '../_services/user.service';
-import { AuthService } from '../_services/auth.service';
+import { UserService } from '../../_services/user.service';
+import { AuthService } from '../../_services/auth.service';
 import { Router } from "@angular/router";
 import { Title } from '@angular/platform-browser';
-import { TokenStorageService } from '../_services/token-storage.service';
+import { TokenStorageService } from '../../_services/token-storage.service';
 
 @Component({
   selector: 'app-account-setting',

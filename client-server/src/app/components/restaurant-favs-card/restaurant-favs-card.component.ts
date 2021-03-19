@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TokenStorageService } from '../_services/token-storage.service';
-import { UserService } from '../_services/user.service';
+import { TokenStorageService } from '../../_services/token-storage.service';
+import { UserService } from '../../_services/user.service';
 
 @Component({
   selector: 'app-restaurant-favs-card',

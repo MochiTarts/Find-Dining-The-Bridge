@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { RestaurantService } from '../_services/restaurant.service';
-import { geolocation } from '../utils/geolocation';
-import { cuisinesStr } from '../constants/cuisines';
+import { RestaurantService } from '../../_services/restaurant.service';
+import { geolocation } from '../../utils/geolocation';
+import { cuisinesStr } from '../../_constants/cuisines';
 import { Title } from '@angular/platform-browser';
 
 

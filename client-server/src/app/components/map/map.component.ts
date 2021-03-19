@@ -1,4 +1,4 @@
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
