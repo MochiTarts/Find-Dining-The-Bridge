@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -9,12 +10,9 @@
 
 $client-theme-primary: mat-palette($mat-blue);
 $client-theme-accent: mat-palette($mat-blue, A200, A100, A400);
-// The warn palette is optional (defaults to red).
-$client-theme-warn: mat-palette($mat-red);
 $client-theme-theme: mat-light-theme(
   $client-theme-primary,
-  $client-theme-accent,
-  $client-theme-warn
+  $client-theme-accent
 );
 @include angular-material-theme($client-theme-theme);
 
@@ -62,7 +60,7 @@ h5 {
 }
 
 p {
-  font-size: 17px;
+  font-size: 16px;
 }
 
 fa-icon {
@@ -98,3 +96,7 @@ fa-icon {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+[tabindex] {
+  outline: none !important;
+}

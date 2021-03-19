@@ -1,0 +1,75 @@
+<div *ngIf="dish">
+  <div class="card cardBox">
+    <div *ngIf="dish.picture" class="img-container">
+      <img
+        src="{{ dish.picture }}"
+        class="card-img-top"
+        alt="{{ dish.name }}"
+      />
+      <div class="overlay">
+        <div class="text">{{ dish.description }}</div>
+      </div>
+    </div>
+    <div *ngIf="!dish.picture">
+      <img
+        src="../../../assets/images/find_dining_logo.png"
+        class="card-img-top"
+        alt="{{ dish.name }}"
+      />
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h5 class="card-title">{{ dish.name | titlecase }}</h5>
+          <p class="card-text">${{ dish.price }}</p>
+        </div>
+        <button
+          class="btn"
+          (click)="openDish(content)"
+          placement="top"
+          ngbTooltip="View Dish Details"
+        >
+          View dish
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #content let-modal>
+    <h2></h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-body">
+      <div class="row" id="row-modal">
+        <div *ngIf="dish.picture">
+          <div class="col-md-4" id="col-img">
+            <img class="dish-img" src="{{ dish.picture }}" alt="{{ dish.name }}" />
+          </div>
+        </div>
+        <div *ngIf="!dish.picture">
+          <div class="col-md-4" id="col-img">
+            <img
+              class="dish-img"
+              src="../../../assets/images/find_dining_logo.png"
+              alt="{{ dish.name }}"
+            />
+          </div>
+        </div>
+        <div class="col-md-8" id="col-body">
+          <div class="info-body">
+            <h2>{{ dish.name | titlecase }}</h2>
+            <h5>${{ dish.price }}</h5>
+            <p>{{ dish.description }}</p>
+            <!-- <p><b>Allergy Warning: </b>{{ dish.allergy }}</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
