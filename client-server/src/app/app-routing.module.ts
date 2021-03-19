@@ -1,25 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-import { BoardROComponent } from './board-ro/board-ro.component';
 import { AuthGuard } from './_helpers/auth.guard';
 import { SecureGuard } from './_helpers/secure.guard';
 import { ROGuard } from './_helpers/ro.guard';
-import {AccountSettingComponent} from './account-setting/account-setting.component';
-import { FavouritesComponent } from './favourites/favourites.component';
-import { AllRestaurantsComponent } from './all-restaurants/all-restaurants.component';
+
+import { LoginComponent } from './pages/login/login.component'
+import { HomeComponent } from './pages/home/home.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
+import { NewsletterComponent } from './pages/newsletter/newsletter.component';
+import { FavouritesComponent } from './pages/favourites/favourites.component';
+import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'user', component: BoardUserComponent, canActivate: [AuthGuard] },
-  { path: 'ro', component: BoardROComponent, canActivate: [ROGuard] },
-  { path: 'account-setting', component: AccountSettingComponent, canActivate: [AuthGuard]},
+  { path: 'account-setting', component: AccountSettingComponent, canActivate: [AuthGuard] },
+  { path: 'newsletter', component: NewsletterComponent },
   { path: 'all-listings', component: AllRestaurantsComponent, canActivate: [AuthGuard] },
   { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuard] },
   /*

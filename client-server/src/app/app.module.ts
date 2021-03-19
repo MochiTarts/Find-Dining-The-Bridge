@@ -2,6 +2,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angularx-social-login';
+
+import { NgHttpLoaderModule } from 'ng-http-loader';
+
+import { authInterceptorProviders } from './_helpers/auth.interceptor';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -28,34 +38,24 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { BoardROComponent } from './board-ro/board-ro.component';
-import { BoardUserComponent } from './board-user/board-user.component';
+import { LoginComponent } from './pages/login/login.component';
+import { HomeComponent } from './pages/home/home.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { NewsletterComponent } from './pages/newsletter/newsletter.component';
 
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-import {
-  GoogleLoginProvider,
-  FacebookLoginProvider
-} from 'angularx-social-login';
-
-import { NgHttpLoaderModule } from 'ng-http-loader';
-
-import { authInterceptorProviders } from './_helpers/auth.interceptor';
-import { IvyCarouselComponent } from './carousel/carousel.component';
-import { CarouselWithThumbnailComponent } from './carousel-with-thumbnail/carousel-with-thumbnail.component';
-import { DishCardComponent } from './dish-card/dish-card.component';
-import { OwnerCardComponent } from './owner-card/owner-card.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { FooterComponent } from './footer/footer.component';
-import { AllRestaurantsComponent } from './all-restaurants/all-restaurants.component';
-import { FavouritesComponent } from './favourites/favourites.component';
-import { FilterlistCardComponent } from './filterlist-card/filterlist-card.component';
-import { MapComponent } from './map/map.component';
-import { RestaurantCardComponent } from './restaurant-card/restaurant-card.component';
-import { RestaurantFavsCardComponent } from './restaurant-favs-card/restaurant-favs-card.component';
-import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaurant-nearby-card.component';
+import { IvyCarouselComponent } from './components/carousel/carousel.component';
+import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
+import { DishCardComponent } from './components/dish-card/dish-card.component';
+import { OwnerCardComponent } from './components/owner-card/owner-card.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants.component';
+import { FavouritesComponent } from './pages/favourites/favourites.component';
+import { FilterlistCardComponent } from './components/filterlist-card/filterlist-card.component';
+import { MapComponent } from './components/map/map.component';
+import { RestaurantCardComponent } from './components/restaurant-card/restaurant-card.component';
+import { RestaurantFavsCardComponent } from './components/restaurant-favs-card/restaurant-favs-card.component';
+import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-card/restaurant-nearby-card.component';
 
 
 @NgModule({
@@ -68,8 +68,7 @@ import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaura
     LoginComponent,
     HomeComponent,
     ProfileComponent,
-    BoardROComponent,
-    BoardUserComponent,
+    NewsletterComponent,
     NavbarComponent,
     FooterComponent,
     AllRestaurantsComponent,
@@ -128,7 +127,7 @@ import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaura
       ]
     } as SocialAuthServiceConfig,
   },
-],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

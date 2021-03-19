@@ -1,0 +1,20 @@
+<div class="setting-page">
+    <h2>Subscribe/Unsubscribe to our notifications</h2>
+
+    <button class="btn btn-primary" (click)="subscribeNewsletter()">
+        Subscribe
+    </button>
+    <button class="btn btn-primary" (click)="unsubscribeNewsletter()">
+        Unsubscribe
+    </button>
+
+    <div *ngIf="subscribed">
+        <p>You have successfully subscribed! You will now receive emails regarding important about Find Dining or
+            Restaurant promotions.</p>
+    </div>
+
+    <div *ngIf="unsubscribed">
+        <p>You have successfully unsubscribed!</p>
+    </div>
+
+</div>
