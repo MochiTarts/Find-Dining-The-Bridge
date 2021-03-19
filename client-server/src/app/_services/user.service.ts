@@ -40,6 +40,53 @@ export class UserService {
     return this.http.get(API_URL + 'ro', { responseType: 'text' });
   }
 
+  
+  /* The below two are what I'm using for subscriber-profile-form.component.ts */
+  /*
+  @Input: JSON object containing fields to be modified for an sduser
+  @Ouput: JSON object representing the updated sduser
+  Modified an sduser
+  */
+  editAccountUser(userData): Observable<any> {
+    const endpoint = API_URL + 'user/sduser/edit/'
+    return this.http.post<any>(endpoint, userData);
+  }
+
+  /*
+  @Input: JSON object containing required fields for making a subscriber profile
+  @Output: JSON object representing the created subscriber profile
+  Makes a new subscriber profile
+  */
+  createSubscriberProfile(userData): Observable<any> {
+    const endpoint = API_URL + 'profile/subscriber/create/'
+    return this.http.post<any>(endpoint, userData);
+  }
+  /* The above two are what I'm using for subscriber-profile-form.component.ts */
+
+
+  /*
+  @Input: JSON object containing user email
+  @Output: Return all fields of a sduser
+  Get all fields of a sduser
+  */
+  getAccountUser(userData): Observable<any> {
+    const endpoint = API_URL + 'user/sduser/get/'
+    const userObject = {
+      email: userData.email
+    };
+    return this.http.get(endpoint, { params: userObject })
+  }
+
+  /*
+  @Input: JSON object containing user email
+  @Output: Return all fields of a subscriber
+  Get all fields of subscriber
+  */
+  getSubscriberProfile(userData): Observable<any> {
+    const endpoint = API_URL + 'profile/subscriber/get/'
+    return this.http.get(endpoint, { params: userData });
+  }
+
   /*
   @Input: JSON object from auth
   @Output: Return all fields of a user
@@ -198,11 +245,6 @@ export class UserService {
       email: userData.email
     };
     return this.http.get(endpoint, { params: userObject });
-  }
-
-  getSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'profile/subscriber'
-    return this.http.get(endpoint, { params: userData });
   }
 
 }

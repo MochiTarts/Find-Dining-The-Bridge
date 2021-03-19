@@ -1,0 +1,23 @@
+<ng-template #restaurantInfo let-modal role="form">
+    <div class="modal-header">
+        <h2 class="modal-title" id="modal-profile-title">Restaurant Information</h2>
+    </div>
+    <div class="modal-body">
+        <p style="font-style:italic; color: gray;">
+        All required fields are marked with an asterisk (<app-required-star></app-required-star>)
+        </p>
+        <form [formGroup]="aFormGroup">
+        <div class="form-group">
+            <label for="name">Restaurant Name <app-required-star></app-required-star></label>
+            <div class="input-group">
+            <input
+                id="restaurantName"
+                class="form-control"
+                placeholder="Ex: Scarborough Diner"
+                aria-required="true"
+            />
+            </div>
+        </div>
+        </form>
+    </div>
+</ng-template>

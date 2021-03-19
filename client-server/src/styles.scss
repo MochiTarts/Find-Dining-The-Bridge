@@ -100,3 +100,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 [tabindex] {
   outline: none !important;
 }
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}

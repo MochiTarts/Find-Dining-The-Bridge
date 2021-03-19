@@ -56,6 +56,10 @@ import { MapComponent } from './components/map/map.component';
 import { RestaurantCardComponent } from './components/restaurant-card/restaurant-card.component';
 import { RestaurantFavsCardComponent } from './components/restaurant-favs-card/restaurant-favs-card.component';
 import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-card/restaurant-nearby-card.component';
+import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.component';
+import { RequiredStarComponent } from './components/required-star/required-star.component';
+import { SubscriberProfileFormComponent } from './components/subscriber-profile-form/subscriber-profile-form.component';
+import { RestaurantProfileFormComponent } from './components/restaurant-profile-form/restaurant-profile-form.component';
 
 
 @NgModule({
@@ -78,6 +82,10 @@ import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-ca
     RestaurantCardComponent,
     RestaurantFavsCardComponent,
     RestaurantNearbyCardComponent,
+    DynamicLabelComponent,
+    RequiredStarComponent,
+    SubscriberProfileFormComponent,
+    RestaurantProfileFormComponent
   ],
   imports: [
     BrowserModule,
