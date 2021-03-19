@@ -86,7 +86,8 @@ def signup(request):
                     return JsonResponse({'message': 'email already exists'}, status=400)
                 else:
                     return create_disable_user_and_send_verification_email(user, password, request)
-            except Exception:
+            except Exception as e:
+                print(str(e))
                 return JsonResponse({'message': 'unable to create user'}, status=400)
 
         return JsonResponse({'invalid': invalid, 'message': 'Please make sure all fields are valid!'}, status=400)

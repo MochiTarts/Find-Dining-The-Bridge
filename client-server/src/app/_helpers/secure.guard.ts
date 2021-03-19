@@ -14,30 +14,37 @@ export class SecureGuard implements CanActivate {
     ) { }
     // this is the most secured guard that will verify the refresh token on the backend against the database
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return new Observable<boolean>(obs => {
 
-        this.authService.refreshToken().subscribe(
-            token => {
-                this.tokenStorage.updateTokenAndUser(token.access);
-                //console.log(token.access);
-                var user = this.tokenStorage.getUser();
-                if (user && ['BU', 'RO'].includes(user.role)) {
-                    obs.next(true);
-                } else{
-                    // not logged in so redirect to login page with the return url
-                    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-                    obs.next(false);
-                }
-            },
-            // refresh failed
-            err => {
-                console.log(err.error)
-                // not logged in so redirect to login page with the return url
-                this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-                obs.next(false);
-            }
-        );
-        });
+        if (this.authService.isLoggedIn()){
+            return new Observable<boolean>(obs => {
+
+                this.authService.refreshToken().subscribe(
+                    token => {
+                        this.tokenStorage.updateTokenAndUser(token.access);
+                        //console.log(token.access);
+                        var user = this.tokenStorage.getUser();
+                        if (user && ['BU', 'RO'].includes(user.role)) {
+                            obs.next(true);
+                        } else{
+                            // not logged in so redirect to login page with the return url
+                            this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+                            obs.next(false);
+                        }
+                    },
+                    // refresh failed
+                    err => {
+                        console.log(err.error)
+                        // not logged in so redirect to login page with the return url
+                        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+                        obs.next(false);
+                    }
+                );
+                });
+        } else {
+            return false;
+        }
+
+
 
         
 

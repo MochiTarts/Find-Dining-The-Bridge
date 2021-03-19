@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private userService: UserService,
     public authService: AuthService,
-    private tokenStorageService: TokenStorageService,
+    public tokenStorageService: TokenStorageService,
     private router: Router,
     private modalService: NgbModal
   ) { }

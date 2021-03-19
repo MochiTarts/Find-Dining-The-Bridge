@@ -18,7 +18,7 @@ import { AllRestaurantsComponent } from './all-restaurants/all-restaurants.compo
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [SecureGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'user', component: BoardUserComponent, canActivate: [AuthGuard] },
   { path: 'ro', component: BoardROComponent, canActivate: [ROGuard] },
   { path: 'account-setting', component: AccountSettingComponent, canActivate: [AuthGuard] },
