@@ -166,3 +166,37 @@
     color: rgb(189, 52, 52);
   }
  
+
+/* Updated Login Screen */
+.card-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.login-register-container {
+  margin: 0px 10px;
+  width: 600px;
+  max-width: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-card {
+  margin: 25px;
+}
+
+.space-top {
+  margin-top: .5rem;
+}
+
+.icons {
+  font-size: 30px;
+  color: black;
+}
+
+.mat-button {
+  text-align: center;
+}

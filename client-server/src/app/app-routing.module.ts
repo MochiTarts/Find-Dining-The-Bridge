@@ -14,7 +14,7 @@ import { FavouritesComponent } from './favourites/favourites.component';
 import { AllRestaurantsComponent } from './all-restaurants/all-restaurants.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'user', component: BoardUserComponent, canActivate: [AuthGuard] },
@@ -30,7 +30,7 @@ const routes: Routes = [
     }
   ]},
   */
-  { path: '', redirectTo: 'home', pathMatch: 'full' }
+  { path: '', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({

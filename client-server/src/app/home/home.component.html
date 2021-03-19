@@ -1,5 +1,209 @@
-<div class="container">
-  <header class="jumbotron">
-    <p>{{ content }}</p>
-  </header>
+<!-- <img src="assets/images/food/background.jpg" alt="header" class="header-img" /> -->
+<div class="header-img">
+  <div class="header">
+    Celebrating Amazing People and Food in Scarborough
+  </div>
 </div>
+
+<button class="scroll-down-btn" (click)="scrollDown()" aria-label="scroll down" >
+  <fa-icon class="header-down-icon icon" [icon]="faArrowCircleDown"></fa-icon>
+</button>
+
+<div id="scroll"></div>
+
+<div class="overview-section row" data-aos="fade-right">
+  <div class="col overview-grid">
+    <img
+      src="assets/images/undraw_chef.png"
+      class="overview-icons"
+      alt="chef"
+    />
+    <h2>Local Businesses</h2>
+    <p>
+      Support local Scarborough businesses in times of need. Let them tell you
+      their history and story through their foods!
+    </p>
+  </div>
+  <div class="col overview-grid">
+    <img
+      src="assets/images/undraw_cooking.png"
+      class="overview-icons"
+      alt="cooking"
+    />
+    <h2>Family Recipes</h2>
+    <p>
+      Learn from professional chefs and their best selling recipes from the
+      comfort of your home!
+    </p>
+  </div>
+  <div class="col overview-grid" *ngIf="loggedOut">
+    <img
+      src="assets/images/undraw_shopping.png"
+      class="overview-icons"
+      alt="shopping"
+    />
+    <h2>Order Today</h2>
+    <p>
+      What are you waiting for? Sign up and get your food right to your
+      doorstep!
+    </p>
+    <button
+      (click)="onLoginRegisterClicked()"
+      class="btn"
+      placement="top"
+      ngbTooltip="Create An Account"
+      tabindex="0"
+    >
+      Sign Up →
+    </button>
+  </div>
+</div>
+
+<carousel [isAnimated]="true" [interval]="5000">
+  <slide>
+    <img
+      src="assets/images/food/dim-sum.jpg"
+      alt="first slide"
+      class="carousel-images"
+    />
+    <div class="carousel-caption d-none d-md-block">
+      <h2>Taste the Streets of China</h2>
+      <p>
+        Enjoy some of the freshest and tastiest Chinese cuisine that Scarborough
+        has to offer
+      </p>
+    </div>
+  </slide>
+  <slide>
+    <img
+      src="assets/images/food/indian.jpg"
+      alt="second slide"
+      class="carousel-images"
+    />
+    <div class="carousel-caption d-none d-md-block">
+      <h2>Taste the Spices of India</h2>
+      <p>
+        Let Scarborough restaurants transport you taste buds to the spice
+        markets of India
+      </p>
+    </div>
+  </slide>
+  <slide>
+    <img
+      src="assets/images/food/vegetarian.jpg"
+      alt="third slide"
+      class="carousel-images"
+    />
+    <div class="carousel-caption d-none d-md-block">
+      <h2>Something for Everyone</h2>
+      <p>
+        Find Dining Scarborough has a wide variety of cuisines to cater for all
+        dietrary restrictions
+      </p>
+    </div>
+  </slide>
+</carousel>
+
+<div class="bg2">
+  <div class="cuisine-carousel" data-aos="fade-right">
+    <h2 class="heading">Specials</h2>
+    <ivy-carousel
+      *ngIf="dishes.length >= 5"
+      [images]="dishes"
+      [margin]="30"
+      [arrowsOutside]="arrowsOutside"
+      [borderRadius]="20"
+      [cellWidth]="300"
+      [height]="400"
+    >
+    </ivy-carousel>
+  </div>
+</div>
+
+<div class="overview-section row" data-aos="fade-left">
+  <div class="col overview-grid">
+    <img
+      src="assets/images/undraw_book.png"
+      class="overview-icons"
+      alt="chef"
+    />
+    <h2>Learn</h2>
+    <p>
+      Learn the local history and foods, and the adventures of the Scarborough
+      restuarant owners in their lifetime.
+    </p>
+  </div>
+  <div class="col overview-grid">
+    <img
+      src="assets/images/undraw_business.png"
+      class="overview-icons"
+      alt="cooking"
+    />
+    <h2>Connect</h2>
+    <p>
+        Become a partner of Find Dining Scarborough to help spread awareness of
+        great cuisines in Scarborough.
+    </p>
+  </div>
+  <div class="col overview-grid">
+    <img
+      src="assets/images/undraw_search.png"
+      class="overview-icons"
+      alt="shopping"
+    />
+    <h2>Search</h2>
+    <p>
+      Dynamic and easy searching to help you search for desired dishes,
+      cuisines, restaurants, you name it!
+    </p>
+  </div>
+</div>
+
+<div class="bg2">
+  <div class="cuisine-carousel" data-aos="fade-right">
+    <h2 class="heading">Cuisines</h2>
+    <ivy-carousel
+      [images]="cuisines"
+      [margin]="20"
+      [arrowsOutside]="arrowsOutside"
+      [borderRadius]="20"
+      [cellWidth]="300"
+    >
+    </ivy-carousel>
+  </div>
+</div>
+
+<div class="bg1" style="text-align: center;">
+  <h2 class="heading">Ready to explore?</h2>
+  <br />
+  <button
+    (click)="onLoginRegisterClicked()"
+    class="btn get-started-btn"
+    placement="top"
+    ngbTooltip="Create/Login to An Account"
+    *ngIf="loggedOut"
+  >
+    LOGIN/SIGNUP
+  </button>
+  <button
+    (click)="browseListings()"
+    class="btn get-started-btn"
+    placement="top"
+    ngbTooltip="Explore Available Restaurants"
+  >
+    GO FIND DINING
+  </button>
+  <button
+    (click)="restaurant()"
+    class="btn get-started-btn"
+    placement="top"
+    ngbTooltip="Explore Available Restaurants"
+    *ngIf="!loggedOut && role == 'RO'"
+  >
+    RESTAURANT PAGE
+  </button>
+</div>
+
+<button *ngIf="isShow" class="scroll-top-btn" (click)="gotoTop()" aria-label="Go to top" >
+  <fa-icon class="top-icon icon" [icon]="faArrowCircleUp"></fa-icon>
+</button>

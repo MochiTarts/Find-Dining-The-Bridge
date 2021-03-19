@@ -177,3 +177,131 @@
     </div>
   </div>
 </div>
+
+<div class="card-container">
+  <mat-card class="login-register-container mat-elevation-z8">
+    <mat-tab-group class="login-register-tabs">
+      <mat-tab label="Sign In">
+        <mat-card class="login-card mat-elevation-z8">
+          <mat-card-title>Signing In</mat-card-title>
+          <mat-card-content>
+            <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit('login')" #f="ngForm" novalidate>
+              <div fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field>
+                  <mat-label>Email/Username</mat-label>
+                  <input matInput type="text" name="username" [(ngModel)]="loginForm.username" required #username="ngModel" autocomplete="Email / Username">
+                  <mat-icon matSuffix>email</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Password</mat-label>
+                  <input matInput type="password" name="password" [(ngModel)]="loginForm.password" required minlength="8" #password="ngModel" autocomplete="Password" >
+                  <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+
+                <button
+                  class="space-top"
+                  color="primary"
+                  mat-raised-button
+                  type="submit">
+                  Login
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <div
+          fxLayoutAlign="center"
+          fxLayout="row"
+          style="margin-top: 10px;">
+          <button mat-button (click)="signInWithGoogle()" *ngIf="!isLoggedIn">
+            <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
+            Google
+          </button>
+          <button mat-button (click)="signInWithFB()" *ngIf="!isLoggedIn">
+            <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
+            Facebook
+          </button>
+  
+        </div>
+
+      </mat-tab>
+      <mat-tab label="Sign Up">
+        <mat-card class="login-card mat-elevation-z8">
+          <mat-card-title>Signing Up</mat-card-title>
+          <mat-card-content>
+            <form *ngIf="!isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('signup')" #f="ngForm"
+            novalidate>
+              <div fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field>
+                  <mat-label>Username</mat-label>
+                  <input matInput required type="text" name="username" [(ngModel)]="signupForm.username" minlength="3" maxlength="20" #username="ngModel" autocomplete="Username" >
+                  <mat-icon matSuffix>person</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Email</mat-label>
+                  <input matInput name="email" [(ngModel)]="signupForm.email" required email #email="ngModel" autocomplete="email" />
+                  <mat-icon matSuffix>email</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Password</mat-label>
+                  <input matInput required #password [type]="hide ? 'password' : 'text'" name="password1" [(ngModel)]="signupForm.password1" minlength="8" #password1="ngModel"
+                  autocomplete="Password">
+                  <button type="button" mat-icon-button matSuffix
+                  (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                  <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Confirm Password</mat-label>
+                  <input matInput type="password" name="password-confirm" [(ngModel)]="signupForm.password2" required minlength="8" #password2="ngModel" autocomplete="Confirm Password" />
+                </mat-form-field>
+
+                <div class="form-element" style="margin: 10px;">
+                  <mat-label>* Type of Account</mat-label>
+                  <select class="form-control" name="role" [(ngModel)]="signupForm.role" required role #role="ngModel">
+                    <option value="role" selected disabled>Role</option>
+                    <option value="BU">Basic User</option>
+                    <option value="RO">Restaurant Owner</option>
+                  </select>
+                  <div class="alert-danger" *ngIf="role.errors && f.submitted">
+                    <div *ngIf="role.errors.required">Role is required</div>
+                  </div>
+                </div>
+
+                <button
+                    class="space-top"
+                    color="primary"
+                    mat-raised-button
+                    type="submit">
+                  Register
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <div
+          fxLayoutAlign="center"
+          fxLayout="row"
+          style="margin-top: 10px;">
+          <button mat-button (click)="signInWithGoogle()" *ngIf="!isLoggedIn">
+            <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
+            Google
+          </button>
+          <button mat-button (click)="signInWithFB()" *ngIf="!isLoggedIn">
+            <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
+            Facebook
+          </button>
+  
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </mat-card>
+</div>

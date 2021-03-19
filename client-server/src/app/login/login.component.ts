@@ -6,6 +6,11 @@ import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider, SocialUser } from "angularx-social-login";
 
 import { ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import {
+  faGoogle,
+  faFacebook
+} from '@fortawesome/free-brands-svg-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +20,10 @@ import { ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
+  faGoogle = faGoogle;
+  faFacebook = faFacebook;
+  selectedValue: string;
+
   loginForm: any = {
     username: null,
     password: null
@@ -44,7 +53,10 @@ export class LoginComponent implements OnInit {
 
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
-  constructor(public authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService, private ref: ChangeDetectorRef) { }
+  constructor(
+    public authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService, private ref: ChangeDetectorRef,
+    private router: Router
+  ) { }
 
   ngAfterViewInit(): void {
     let curTab = document.getElementsByClassName("tab-header")[0];
@@ -133,7 +145,7 @@ export class LoginComponent implements OnInit {
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.role = this.tokenStorage.getUser().role;
-          this.reloadPage();
+          this.router.navigate([''])
 
         },
         // login failed

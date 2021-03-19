@@ -1,0 +1,64 @@
+<div class="carousel-counter" *ngIf="isCounter">{{ counter }}</div>
+
+<div class="carousel-container" [class.carousel-moving]="isMoving">
+  <div
+    class="carousel-cells"
+    (transitionend)="handleTransitionendCellContainer($event)"
+  >
+    <ng-template ngFor let-image [ngForOf]="images" let-i="index">
+      <div
+        class="carousel-cell"
+        *ngIf="
+          i < cellLimit && getFile(i) && getFile(i)['image']['type'] === 'image'
+        "
+        [style.width]="getCellWidth() + 'px'"
+        [style.border-radius]="borderRadius + 'px'"
+      >
+        <img
+          *ngIf="getFile(i) && getFile(i)['image']"
+          [src]="getFile(i)['image']['path']"
+          [style.object-fit]="objectFit"
+          draggable="false"
+        />
+        <div *ngIf="getFile(i)['image']['caption']" class="bottomleft">
+          {{ getFile(i)["image"]["caption"] }}
+        </div>
+      </div>
+      <div
+        class="carousel-cell carousel-cell-cards"
+        *ngIf="getFile(i) && getFile(i)['image']['type'] === 'dish'"
+        [style.width]="getCellWidth() + 'px'"
+        [style.border-radius]="borderRadius + 'px'"
+      >
+        <app-dish-card [dish]="getFile(i)['image']"></app-dish-card>
+      </div>
+
+      <div
+        class="carousel-cell carousel-cell-cards"
+        *ngIf="getFile(i) && getFile(i)['image']['type'] === 'story'"
+        [style.width]="getCellWidth() + 'px'"
+        [style.border-radius]="borderRadius + 'px'"
+      >
+        <app-owner-card [story]="getFile(i)['image']"></app-owner-card>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<div
+  class="carousel-arrows"
+  [class.carousel-arrows-outside]="arrowsOutside"
+  [class.carousel-dark-arrows]="arrowsTheme === 'dark'"
+  *ngIf="arrows"
+>
+  <div
+    class="carousel-arrow carousel-arrow-prev"
+    [class.carousel-arrow-disabled]="isPrevArrowDisabled()"
+    (click)="prev()"
+  ></div>
+  <div
+    class="carousel-arrow carousel-arrow-next"
+    [class.carousel-arrow-disabled]="isNextArrowDisabled()"
+    (click)="next()"
+  ></div>
+</div>

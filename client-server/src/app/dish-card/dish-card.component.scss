@@ -1,0 +1,114 @@
+@import "src/styles";
+
+.cardBox {
+  max-width: 300px;
+  height: 310px;
+  flex: 0 0 auto;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: white;
+  overflow-wrap: normal;
+  word-wrap: break-word;
+}
+
+.cardBox::-webkit-scrollbar {
+  display: none;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px 10px 0 0;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  width: 100%;
+  transition: 0.7s ease;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.text {
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  padding: 0px 20px;
+  text-align: center;
+  transition: 0.7s ease;
+  opacity: 0;
+}
+
+.img-container:hover .overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.img-container:hover .text {
+  opacity: 1;
+}
+
+.card-body {
+  width: 300px;
+  overflow-wrap: normal;
+  word-wrap: break-word;
+}
+
+.btn {
+  height: 35px;
+  margin: 20px;
+  background-color: $secondary-color;
+  color: white;
+}
+
+.modal-box {
+  width: 1100px;
+  height: auto;
+  padding: 30px;
+}
+
+.dish-img {
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 20px;
+
+  @media screen and (max-width: 1300px) {
+    width: 100%;
+  }
+}
+
+.info-body {
+  height: 225px;
+}
+
+.picker-wrapper {
+  width: 120px;
+  position: absolute;
+  bottom: 0;
+  right: 250px;
+}
+
+.order-btn {
+  width: 200px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
