@@ -48,8 +48,7 @@ export class UserService {
   getConsumer(userData): Observable<any> {
     const endpoint = API_URL + 'consumer_subscriber_data/';
     const userObject = {
-      email: userData.email,
-      idToken: userData.idToken
+      email: userData.email
     };
     return this.http.get(endpoint, { params: userObject });
   }
@@ -62,8 +61,7 @@ export class UserService {
   getOwner(userData): Observable<any> {
     const endpoint = API_URL + 'restaurant_owner_data/';
     const userObject = {
-      email: userData.email,
-      idToken: userData.idToken
+      email: userData.email
     };
     return this.http.get(endpoint, { params: userObject });
   }
@@ -71,21 +69,13 @@ export class UserService {
 
   editConsumer(userData): Observable<any> {
     const endpoint = API_URL + 'consumer_subscriber_edit/';
-    const userToken = {
-      idToken: userData.idToken,
-    };
-    delete userData.idToken;
-    return this.http.post<any>(endpoint, userData, { params: userToken });
+    return this.http.post<any>(endpoint, userData);
   }
 
 
   editOwner(userData): Observable<any> {
     const endpoint = API_URL + 'restaurant_owner_edit/';
-    const userToken = {
-      idToken: userData.idToken,
-    };
-    delete userData.idToken;
-    return this.http.post<any>(endpoint, userData, { params: userToken });
+    return this.http.post<any>(endpoint, userData);
   }
 
   getNearbyRestaurantsConsumer(userData): Observable<any> {
@@ -145,11 +135,8 @@ export class UserService {
   */
   editUser(userData): Observable<any> {
     const endpoint = API_URL + 'edit/';
-    const userToken = {
-      idToken: userData.idToken,
-    };
-    delete userData.idToken;
-    return this.http.post<any>(endpoint, userData, { params: userToken });
+
+    return this.http.post<any>(endpoint, userData);
   }
 
   /*
@@ -192,11 +179,7 @@ export class UserService {
   */
   editConsentStatus(userData): void {
     const endpoint = API_URL + 'user/consent_status/';
-    const userToken = {
-      idToken: userData.idToken,
-    };
-    delete userData.idToken;
-    this.http.post<any>(endpoint, userData, { params: userToken }).subscribe((data) => { });
+    this.http.post(endpoint, userData).subscribe((data) => { });
   }
 
   /*
@@ -216,4 +199,10 @@ export class UserService {
     };
     return this.http.get(endpoint, { params: userObject });
   }
+
+  getSubscriberProfile(userData): Observable<any> {
+    const endpoint = API_URL + 'profile/subscriber'
+    return this.http.get(endpoint, { params: userData });
+  }
+
 }

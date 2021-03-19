@@ -2,6 +2,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angularx-social-login';
+
+import { NgHttpLoaderModule } from 'ng-http-loader';
+
+import { authInterceptorProviders } from './_helpers/auth.interceptor';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -21,23 +31,15 @@ import { LightboxModule } from 'ng-gallery/lightbox';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 import { MatInputModule } from '@angular/material/input';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { BoardROComponent } from './board-ro/board-ro.component';
 import { BoardUserComponent } from './board-user/board-user.component';
+import { NewsletterComponent } from './newsletter/newsletter.component';
 
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-import {
-  GoogleLoginProvider,
-  FacebookLoginProvider
-} from 'angularx-social-login';
-
-import { NgHttpLoaderModule } from 'ng-http-loader';
-
-import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { AllRestaurantsComponent } from './all-restaurants/all-restaurants.component';
@@ -57,6 +59,7 @@ import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaura
     ProfileComponent,
     BoardROComponent,
     BoardUserComponent,
+    NewsletterComponent,
     NavbarComponent,
     FooterComponent,
     AllRestaurantsComponent,
@@ -110,7 +113,7 @@ import { RestaurantNearbyCardComponent } from './restaurant-nearby-card/restaura
       ]
     } as SocialAuthServiceConfig,
   },
-],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
