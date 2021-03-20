@@ -1,4 +1,3 @@
-<!-- <img src="assets/images/food/background.jpg" alt="header" class="header-img" /> -->
 <div class="header-img">
   <div class="header">
     Celebrating Amazing People and Food in Scarborough
@@ -207,3 +206,9 @@
 <button *ngIf="isShow" class="scroll-top-btn" (click)="gotoTop()" aria-label="Go to top" >
   <fa-icon class="top-icon icon" [icon]="faArrowCircleUp"></fa-icon>
 </button>
+
+<!-- Restaurant Profile Form -->
+<app-restaurant-profile-form #restaurantInfo role="form"></app-restaurant-profile-form>
+
+<!-- Subscriber Profile Form -->
+<app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form>

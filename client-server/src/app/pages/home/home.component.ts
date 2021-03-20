@@ -7,13 +7,20 @@ import {
 } from '@angular/core';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { faArrowCircleDown, faArrowCircleUp, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import { formValidator } from '../../_validation/formValidator'
 import { userValidator } from '../../_validation/userValidator';
 import { UserService } from '../../_services/user.service';
 import { HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from 'src/environments/environment';
+import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
+import { RestaurantCardComponent } from 'src/app/components/restaurant-card/restaurant-card.component';
+import { AuthService } from 'src/app/_services/auth.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { RestaurantProfileFormComponent } from 'src/app/components/restaurant-profile-form/restaurant-profile-form.component';
 
 @Component({
   selector: 'app-home',
@@ -25,13 +32,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   role: string = '';
   userId: string = '';
+  username: string = '';
   idToken: string = '';
   userData: any;
   siteKey: string;
   loggedOut: boolean = true;
 
-  aFormGroup: FormGroup;
-  validator: formValidator = new userValidator();
+  @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
+  @ViewChild('restaurantInfo') restaurantInfo: RestaurantProfileFormComponent;
 
   isShow: boolean;
   topPosToStartShowing = 100;
@@ -39,8 +47,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   faArrowCircleDown = faArrowCircleDown;
   arrowsOutside = true;
   faCalendar = faCalendar;
-
-  @ViewChild('userInfo', { static: true }) content: TemplateRef<any>;
+  
   modalRef: any;
 
   totalStars: number = 5;
@@ -80,8 +87,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       caption: 'Vietnamese',
     },
   ];
+  formBuilder: any;
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService,
+    private userService: UserService,
+    private modalService: NgbModal,
+    private router: Router
+    ) { }
 
   ngOnInit(): void {
     AOS.init({
@@ -91,9 +105,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
       anchorPlacement: 'top-bottom',
     });
     this.publicContent = "public content";
+    if (this.authService.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.role = user.role;
+      this.username = user.username;
+      this.userId = user.email;
+    }
   }
 
   ngAfterViewInit(): void {
+    // Add one more '&&' statement to see if profile_id is null
+    if (this.role && this.role == 'BU') {
+      this.userInfo.open();
+    } else if (this.role && this.role == 'RO') {
+      this.restaurantInfo.open();
+    }
   }
 
   @HostListener('window:scroll')
