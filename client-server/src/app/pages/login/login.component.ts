@@ -11,6 +11,7 @@ import {
   faFacebook
 } from '@fortawesome/free-brands-svg-icons';
 import { Router } from '@angular/router';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login',
@@ -54,8 +55,12 @@ export class LoginComponent implements OnInit {
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
   constructor(
-    public authService: AuthService, private tokenStorage: TokenStorageService, private socialAuth: SocialAuthService, private ref: ChangeDetectorRef,
-    private router: Router
+    public authService: AuthService,
+    private tokenStorage: TokenStorageService,
+    private socialAuth: SocialAuthService,
+    private ref: ChangeDetectorRef,
+    private router: Router,
+    private modalService: NgbModal
   ) { }
 
   ngAfterViewInit(): void {
@@ -210,23 +215,35 @@ export class LoginComponent implements OnInit {
 
   signInWithGoogle(role: string = ''): void {
     this.role = role;
-    this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
+    this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => {
+      this.modalService.dismissAll();
+      this.router.navigate(['']);
+    });
   }
 
   signInWithFB(role: string = ''): void {
     this.role = role;
-    this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
+    this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID).then(() => {
+      this.modalService.dismissAll();
+      this.router.navigate(['']);
+    });
   }
 
-  googleRoleSelectPopup(): void {
-    var googlePopupPanel = document.getElementsByClassName("googlePopupPanel")[0];
-    googlePopupPanel.classList.toggle("show");
+  googleRoleSelectPopup(googleSignUp): void {
+    this.modalService.open(googleSignUp, {ariaLabelledBy: 'modal-basic-title', size: 'sm'});
   }
-  facebookRoleSelectPopup(): void {
-    var facebookPopupPanel = document.getElementsByClassName("facebookPopupPanel")[0];
-    facebookPopupPanel.classList.toggle("show");
-    var popup = document.getElementsByClassName("popup")[0];
-    popup.classList.toggle("show");
+  facebookRoleSelectPopup(facebookSignUp): void {
+    this.modalService.open(facebookSignUp, {ariaLabelledBy: 'modal-basic-title', size: 'sm'});
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   onStrengthChanged(strength: number) {
