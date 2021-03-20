@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'gmailapi_backend',
     'login_audit',
     'snowpenguin.django.recaptcha2',
+    'restaurant_owner',
+    'restaurant',
     
     #'user.apps.SDUserConfig',
 ]
@@ -226,7 +228,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
+    'UPDATE_LAST_LOGIN': True,
 
     'ALGORITHM': JWT_ALGORITHM,
     'SIGNING_KEY': SECRET_KEY,
@@ -298,3 +300,5 @@ GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
 # reCaptcha v2 for admin portal (still need to add the ip on recaptcha settings)
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAP_PRIV_KEY')
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAP_PUB_KEY')
+
+GEOCODE_API_KEY = os.environ.get('GEOCODE_API_KEY')
