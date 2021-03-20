@@ -1,7 +1,7 @@
 import { AfterViewInit, TemplateRef } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './restaurant-profile-form.component.html',
   styleUrls: ['./restaurant-profile-form.component.scss']
 })
-export class RestaurantProfileFormComponent implements OnInit, AfterViewInit {
+export class RestaurantProfileFormComponent implements OnInit {
 
   @ViewChild('restaurantInfo', { static: true }) roContent: TemplateRef<any>;
   role: string = '';
@@ -25,7 +25,6 @@ export class RestaurantProfileFormComponent implements OnInit, AfterViewInit {
   userData: any;
   siteKey: string;
   loggedOut: boolean = true;
-  formBuilder: any;
 
   aFormGroup: FormGroup;
   validator: formValidator = new userValidator();
@@ -36,10 +35,13 @@ export class RestaurantProfileFormComponent implements OnInit, AfterViewInit {
     private router: Router,
     private authService: AuthService,
     private tokenStorageService: TokenStorageService,
-    private userService: UserService
+    private userService: UserService,
+    private formBuilder: FormBuilder
     ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  open(): void {
     if (this.authService.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
@@ -55,15 +57,8 @@ export class RestaurantProfileFormComponent implements OnInit, AfterViewInit {
         phone: ['', Validators.required],
         terms: ['', Validators.requiredTrue],
       });
-    }
-  }
 
-  ngAfterViewInit(): void {
-    if (this.role == 'RO') {
       this.modalRef = this.modalService.open(this.roContent, { backdrop: 'static', keyboard: false });
-      /*this.userService.getConsumer({'email': this.userId}).subscribe((data) => {
-        this.modalRef = this.modalService.open(this.buContent, { backdrop: 'static', keyboard: false });
-      })*/
     }
   }
 

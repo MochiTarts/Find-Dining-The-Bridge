@@ -17,6 +17,10 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
+import { RestaurantCardComponent } from 'src/app/components/restaurant-card/restaurant-card.component';
+import { AuthService } from 'src/app/_services/auth.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { RestaurantProfileFormComponent } from 'src/app/components/restaurant-profile-form/restaurant-profile-form.component';
 
 @Component({
   selector: 'app-home',
@@ -28,13 +32,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   role: string = '';
   userId: string = '';
+  username: string = '';
   idToken: string = '';
   userData: any;
   siteKey: string;
   loggedOut: boolean = true;
 
-  aFormGroup: FormGroup;
-  validator: formValidator = new userValidator();
+  @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
+  @ViewChild('restaurantInfo') restaurantInfo: RestaurantProfileFormComponent;
 
   isShow: boolean;
   topPosToStartShowing = 100;
@@ -85,6 +90,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   formBuilder: any;
 
   constructor(
+    private authService: AuthService,
+    private tokenStorageService: TokenStorageService,
     private userService: UserService,
     private modalService: NgbModal,
     private router: Router
@@ -98,30 +105,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
       anchorPlacement: 'top-bottom',
     });
     this.publicContent = "public content";
+    if (this.authService.isLoggedIn) {
+      const user = this.tokenStorageService.getUser();
+      this.role = user.role;
+      this.username = user.username;
+      this.userId = user.email;
+    }
   }
 
   ngAfterViewInit(): void {
-  }
-
-  updateProfile(): void {
-    var userInfo = {
-      email: this.userId,
-      first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
-      last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
-      postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
-      phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
-      consent_status: (<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED",
-      idToken: this.idToken,
-    };
-
-    // clear formErrors
-    this.validator.clearAllErrors();
-    //validate all formfields, the callback will throw appropriate errors, return true if any validation failed
-    let failFlag = this.validator.validateAll(userInfo, (key) => this.validator.setError(key));
-    //if any validation failed, do not POST
-    if (!failFlag) {
-      userInfo.phone = Number(userInfo.phone);
-      alert("Updating subscriber profile")
+    // Add one more '&&' statement to see if profile_id is null
+    if (this.role && this.role == 'BU') {
+      this.userInfo.open();
+    } else if (this.role && this.role == 'RO') {
+      this.restaurantInfo.open();
     }
   }
 

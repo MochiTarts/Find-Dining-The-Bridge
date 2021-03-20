@@ -104,3 +104,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .modal-backdrop.show {
   opacity: 0.5;
 }
+
+.modal {
+	z-index: 100001 !important;
+	animation: fadeIn 0.5s;
+	opacity: 1;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		top: -10%;
+	}
+	to {
+		opacity: 1;
+	}
+}

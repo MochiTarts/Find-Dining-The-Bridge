@@ -1,7 +1,7 @@
 import { AfterViewInit, TemplateRef } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/_services/auth.service';
@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./subscriber-profile-form.component.scss'],
   exportAs: 'subscriberForm'
 })
-export class SubscriberProfileFormComponent implements OnInit, AfterViewInit {
+export class SubscriberProfileFormComponent implements OnInit {
 
   @ViewChild('userInfo', { static: true }) buContent: TemplateRef<any>;
   role: string = '';
@@ -26,7 +26,6 @@ export class SubscriberProfileFormComponent implements OnInit, AfterViewInit {
   userData: any;
   siteKey: string;
   loggedOut: boolean = true;
-  formBuilder: any;
 
   aFormGroup: FormGroup;
   validator: formValidator = new userValidator();
@@ -37,10 +36,13 @@ export class SubscriberProfileFormComponent implements OnInit, AfterViewInit {
     private router: Router,
     private authService: AuthService,
     private tokenStorageService: TokenStorageService,
-    private userService: UserService
+    private userService: UserService,
+    private formBuilder: FormBuilder
     ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
+
+  open(): void {
     if (this.authService.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
@@ -56,15 +58,7 @@ export class SubscriberProfileFormComponent implements OnInit, AfterViewInit {
         phone: ['', Validators.required],
         terms: ['', Validators.requiredTrue],
       });
-    }
-  }
 
-  ngAfterViewInit(): void {
-    /*
-    And check if profile_id from user's token is null.
-    If so, then this is the first time they're logging in. Open the form
-    */
-    if (this.role == 'BU') {
       this.modalRef = this.modalService.open(this.buContent, { backdrop: 'static', keyboard: false });
     }
   }
