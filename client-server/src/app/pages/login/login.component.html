@@ -182,6 +182,72 @@
   <mat-card class="login-register-container mat-elevation-z8">
     <img src="assets/images/find_dining_logo_small.png" class="login-image"/>
     <mat-tab-group class="login-register-tabs">
+      <mat-tab label="Sign In">
+        <mat-card class="login-card mat-elevation-z8">
+          <mat-card-title>Signing In</mat-card-title>
+          <mat-card-content>
+            <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit('login')" #f="ngForm" novalidate>
+              <div class="form-element">
+                <div class="alert alert-primary" role="alert" *ngIf="f.submitted && isLoginFailed && infoMessage">
+                  {{ infoMessage }}
+                </div>
+              </div>
+              <div class="form-element">
+                <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed && loginErrorMessage">
+                  {{ loginErrorMessage }}
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field>
+                  <mat-label>Email/Username</mat-label>
+                  <input matInput type="text" name="username" [(ngModel)]="loginForm.username" required #username="ngModel" autocomplete="Email / Username">
+                  <mat-icon matSuffix>email</mat-icon>
+                  <div class="alert alert-danger" role="alert" *ngIf="username.errors && f.submitted">
+                    Username/Email is required!
+                  </div>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Password</mat-label>
+                  <input matInput type="password" name="password" [(ngModel)]="loginForm.password" required minlength="8" #password="ngModel" autocomplete="Password" >
+                  <mat-icon matSuffix>lock</mat-icon>
+                  <div class="alert alert-danger" role="alert" *ngIf="password.errors && f.submitted">
+                    <div *ngIf="password.errors.required">Password is required</div>
+                    <div *ngIf="password.errors.minlength">
+                      Password must be at least 8 characters
+                    </div>
+                  </div>
+                </mat-form-field>
+
+                <button
+                  class="space-top"
+                  color="primary"
+                  mat-raised-button
+                  type="submit">
+                  Login
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <div
+          fxLayoutAlign="center"
+          fxLayout="row"
+          fxLayout.xs="column"
+          style="margin-top: 10px;">
+          <button mat-button (click)="signInWithGoogle()" *ngIf="!isLoggedIn">
+            <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
+            Google
+          </button>
+          <button mat-button (click)="signInWithFB()" *ngIf="!isLoggedIn">
+            <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
+            Facebook
+          </button>
+  
+        </div>
+
+      </mat-tab>
 
       <mat-tab label="Sign Up">
         <mat-card class="login-card mat-elevation-z8">
@@ -304,74 +370,6 @@
   
         </div>
       </mat-tab>
-
-      <mat-tab label="Sign In">
-        <mat-card class="login-card mat-elevation-z8">
-          <mat-card-title>Signing In</mat-card-title>
-          <mat-card-content>
-            <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit('login')" #f="ngForm" novalidate>
-              <div class="form-element">
-                <div class="alert alert-primary" role="alert" *ngIf="f.submitted && isLoginFailed && infoMessage">
-                  {{ infoMessage }}
-                </div>
-              </div>
-              <div class="form-element">
-                <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed && loginErrorMessage">
-                  {{ loginErrorMessage }}
-                </div>
-              </div>
-              <div fxLayout="column" fxLayoutAlign="center">
-                <mat-form-field>
-                  <mat-label>Email/Username</mat-label>
-                  <input matInput type="text" name="username" [(ngModel)]="loginForm.username" required #username="ngModel" autocomplete="Email / Username">
-                  <mat-icon matSuffix>email</mat-icon>
-                  <div class="alert alert-danger" role="alert" *ngIf="username.errors && f.submitted">
-                    Username/Email is required!
-                  </div>
-                </mat-form-field>
-
-                <mat-form-field>
-                  <mat-label>Password</mat-label>
-                  <input matInput type="password" name="password" [(ngModel)]="loginForm.password" required minlength="8" #password="ngModel" autocomplete="Password" >
-                  <mat-icon matSuffix>lock</mat-icon>
-                  <div class="alert alert-danger" role="alert" *ngIf="password.errors && f.submitted">
-                    <div *ngIf="password.errors.required">Password is required</div>
-                    <div *ngIf="password.errors.minlength">
-                      Password must be at least 8 characters
-                    </div>
-                  </div>
-                </mat-form-field>
-
-                <button
-                  class="space-top"
-                  color="primary"
-                  mat-raised-button
-                  type="submit">
-                  Login
-                </button>
-              </div>
-            </form>
-          </mat-card-content>
-        </mat-card>
-
-        <div
-          fxLayoutAlign="center"
-          fxLayout="row"
-          fxLayout.xs="column"
-          style="margin-top: 10px;">
-          <button mat-button (click)="signInWithGoogle()" *ngIf="!isLoggedIn">
-            <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
-            Google
-          </button>
-          <button mat-button (click)="signInWithFB()" *ngIf="!isLoggedIn">
-            <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
-            Facebook
-          </button>
-  
-        </div>
-
-      </mat-tab>
-
     </mat-tab-group>
   </mat-card>
 </div>

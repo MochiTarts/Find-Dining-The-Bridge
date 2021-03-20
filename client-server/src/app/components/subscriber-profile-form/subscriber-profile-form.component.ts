@@ -26,6 +26,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   userData: any;
   siteKey: string;
   loggedOut: boolean = true;
+  closeButton: boolean = false;
 
   aFormGroup: FormGroup;
   validator: formValidator = new userValidator();
@@ -42,7 +43,7 @@ export class SubscriberProfileFormComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  open(): void {
+  open(closeButton: boolean): void {
     if (this.authService.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
@@ -59,6 +60,7 @@ export class SubscriberProfileFormComponent implements OnInit {
         terms: ['', Validators.requiredTrue],
       });
 
+      this.closeButton = closeButton;
       this.modalRef = this.modalService.open(this.buContent, { backdrop: 'static', keyboard: false });
     }
   }
@@ -94,17 +96,31 @@ export class SubscriberProfileFormComponent implements OnInit {
       subscriberInfo.phone = Number(subscriberInfo.phone);
       /*
       Update sduser first_name, last_name
-      Make new subscriber profile form with postalCode, phone, and consent_status
+      Make new subscriber profile form with postalCode, phone, and consent_status if profile_id empty
+      Otherwise, update existing subscriber profile if profile_id has value in it
       (Be sure to update the sduser record with the profile_id of the newly created subscriber profile)
       Call refresh token to get a new token with a profile_id that is no longer null
       */
       this.userService.editAccountUser(sduserInfo).subscribe(() => {
-        this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
-          alert("Updating subscriber profile");
-          // Call refresh token here
-          this.modalRef.close();
-          this.reload();
-        })
+        /*
+        Check if profile_id is null. If so, create subscriber profile
+        If not, edit subscriber profile
+        */
+        var dummy_profile_id = ""
+        if (dummy_profile_id) {
+          this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
+            alert("Updating subscriber profile");
+            this.modalRef.close();
+            this.reload();
+          })
+        } else {
+          this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
+            alert("Creating new subscriber profile");
+            // Call refresh token here
+            this.modalRef.close();
+            this.reload();
+          })
+        }
       })
     }
   }

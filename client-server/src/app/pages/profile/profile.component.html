@@ -1,4 +1,4 @@
-<div class="container" *ngIf="currentUser; else loggedOut">
+<!--<div class="container" *ngIf="currentUser; else loggedOut">
   <header class="jumbotron">
     <h3>
       <strong>{{ currentUser.username }}</strong> Profile
@@ -21,4 +21,25 @@
 
 <ng-template #loggedOut>
   Please login.
-</ng-template>
+</ng-template>-->
+
+<div class="profile-box" role="main" aria-label="profile">
+  <div>
+    <div class="content-wrap">
+        <h2 class="name">{{ currentUser.username }}</h2>
+        <p><b>Email:</b> {{ currentUser.email }}</p>
+        <p><b>Postal Code:</b> A#A #A#</p>
+        <p><b>Phone Number:</b> (123) 456 7890</p>
+        <button
+          class="btn edit-profile"
+          (click)="openEditModal()"
+          placement="top"
+          ngbTooltip="Update Your Info"
+        >
+          Edit Profile
+        </button>
+    </div>
+  </div>
+</div>
+
+<app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form>
