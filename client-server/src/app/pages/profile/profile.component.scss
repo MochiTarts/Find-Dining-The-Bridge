@@ -11,59 +11,23 @@
 .content-wrap {
   max-width: 950px;
   margin: 0 auto;
-  padding: 60px 50px;
+  //padding: 60px 50px;
   overflow: auto;
+  word-wrap: break-word;
 }
 
-.all-orders {
-  border-color: $secondary-color;
-  color: $secondary-color;
-  background-color: white;
+.name {
+  text-align: center;
 }
 
-.all-orders:hover {
-  background-color: $secondary-color;
-  color: white;
-}
-
-.calendar-date {
-  margin: 0px;
-  width: auto;
-  height: 38px;
-  align-content: center;
-}
-
-.calendar-date:hover {
-  color: $secondary-color;
-}
-
-.calendar-icon {
-  font-size: 1.2em;
-}
-
-.all-orders,
-.edit-profile,
-.upload-pic {
-  margin-left: 0px;
-  margin-bottom: 10px;
+.edit-profile {
+  margin: 0px auto;
   width: 300px;
 }
 
 /* Media Queries
 ------------------------*/
 @media (min-width: 900px) {
-  .col-narrow {
-    width: 50%;
-    float: left;
-  }
-
-  .col-wide {
-    width: 50%;
-    float: left;
-    padding-left: 20px;
-  }
-
-  .all-orders,
   .edit-profile {
     margin-left: 0px;
     margin-bottom: 10px;
@@ -79,10 +43,6 @@
     width: 95%;
     background: hsl(0, 0%, 96%);
   }
-  .profile-img {
-    width: 150px;
-    height: 150px;
-  }
 }
 
 @media (max-width: 400px) {
@@ -92,9 +52,5 @@
   .profile-box {
     width: 95%;
     background: hsl(0, 0%, 96%);
-  }
-  .profile-img {
-    width: 150px;
-    height: 150px;
   }
 }

@@ -178,8 +178,8 @@
   display: block;
   width: 100%;
   height: fit-content;
-  margin-top: 100px;
-  margin-bottom: 100px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .login-register-container {
@@ -193,8 +193,8 @@
   margin: 25px;
 }
 
-.space-top {
-  margin-top: .5rem;
+.social-providers {
+  margin-top: 10px;
 }
 
 .icons {
@@ -207,6 +207,15 @@
   position: relative;
 }
 
+.role-buttons {
+  display: inline-block;
+}
+
+.modal-body button {
+  margin: 0 2px;
+  text-align: center;
+}
+
 @media screen and (max-width: 525px) {
 
 .login-register-container {
@@ -215,6 +224,10 @@
 
 .login-card {
   margin: 5px;
+}
+
+.social-providers {
+  margin-top: 20px;
 }
 
 }

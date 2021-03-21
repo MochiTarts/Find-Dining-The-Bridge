@@ -106,6 +106,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
     this.publicContent = "public content";
     if (this.authService.isLoggedIn) {
+      this.loggedOut = false;
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
       this.username = user.username;
