@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 //const API_URL = 'http://localhost:8080/api/test/';
-const API_URL = 'http://127.0.0.1:8000/api/';
+const API_URL = '/api/';
 //const API_URL = '/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -47,8 +47,7 @@ export class UserService {
   */
   editAccountUser(userData): Observable<any> {
     const endpoint = API_URL + 'user/edit/'
-    console.log(userData);
-    return this.http.put<any>(endpoint, userData, httpOptions);
+    return this.http.put<any>(endpoint, JSON.stringify(userData), httpOptions);
   }
 
   /*
@@ -58,7 +57,7 @@ export class UserService {
   */
   createSubscriberProfile(userData): Observable<any> {
     const endpoint = API_URL + 'subscriber/signup/'
-    return this.http.put<any>(endpoint, userData, httpOptions);
+    return this.http.put<any>(endpoint, JSON.stringify(userData), httpOptions);
   }
 
   /*
@@ -91,7 +90,7 @@ export class UserService {
   */
   editSubscriberProfile(userData): Observable<any> {
     const endpoint = API_URL + 'subscriber/profile/';
-    return this.http.put<any>(endpoint, userData);
+    return this.http.put<any>(endpoint, JSON.stringify(userData));
   }
 
   /*

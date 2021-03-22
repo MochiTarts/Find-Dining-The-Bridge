@@ -118,7 +118,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // Add one more '&&' statement to see if profile_id is null
     if (this.role && this.role == 'BU' && this.profileId == null) {
-      this.userInfo.open(false);
+      //this.userInfo.open(false);
     } else if (this.role && this.role == 'RO') {
       this.restaurantInfo.open(false);
     }

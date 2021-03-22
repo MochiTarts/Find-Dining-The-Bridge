@@ -51,6 +51,7 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.username = user.username;
       this.email = user.email;
       this.userId = user.user_id;
+      this.profileId = user.profile_id;
 
       this.siteKey = `${environment.captcha.siteKey}`;
       this.aFormGroup = this.formBuilder.group({
@@ -75,6 +76,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   }
 
   updateProfile(): void {
+    console.log(this.profileId)
     var sduserInfo = {
       email: this.email,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
@@ -115,12 +117,16 @@ export class SubscriberProfileFormComponent implements OnInit {
             this.reload();
           })
         } else {
-          delete subscriberInfo.user_id;
+          console.log(subscriberInfo)
           this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
             alert("Creating new subscriber profile");
             // Call refresh token here
+            /*this.authService.refreshToken().subscribe(() => {
+              this.modalRef.close();
+              this.reload();
+            })*/
             this.modalRef.close();
-            this.reload();
+            //this.reload();
           })
         }
       })
