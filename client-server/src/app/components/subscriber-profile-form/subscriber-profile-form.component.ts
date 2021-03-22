@@ -83,12 +83,12 @@ export class SubscriberProfileFormComponent implements OnInit {
     var sduserInfo = {
       email: this.email,
       profile_id: this.userId,
-      first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
-      last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
     }
 
     var subscriberInfo = {
       user_id: this.userId,
+      first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
+      last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
     };
