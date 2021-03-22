@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
 #from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 import json
 
@@ -34,8 +35,11 @@ class deactivateView(APIView):
         except User.DoesNotExist:
             return JsonResponse({'message': 'deactivation failed: User not found', 'code': 'deactivation_fail'}, status=400)
 
+
 class editView(APIView):
     """ Edit user """
+    permission_classes = (IsAuthenticated,)
+
     def put(self, request):
         try:
             body = json.loads(request.body)

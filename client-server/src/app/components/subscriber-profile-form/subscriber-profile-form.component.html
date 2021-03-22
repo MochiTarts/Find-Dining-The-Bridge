@@ -82,32 +82,34 @@
         [name]="'errorPhone'"
         [message]="validator.errors['phone']" ></app-dynamic-label>
       </div>
-      <div class="form-group">
-        <div class="input-group">
-          <input
-            id="casl"
-            type="checkbox"
-          />
-          <label for="casl" style="padding-left: 5px;"><b>Please add me to your mailing list so I can receive information on promotions and updates to Find Dining!</b></label>
+      <div *ngIf="profileId == null">
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="casl"
+              type="checkbox"
+            />
+            <label for="casl" style="padding-left: 5px;"><b>Please add me to your mailing list so I can receive information on promotions and updates to Find Dining!</b></label>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="input-group">
-          <input
-            id="terms-of-service"
-            type="checkbox"
-            formControlName="terms"
-            aria-required="true"
-          />
-          <label for="terms-of-service" style="padding-left: 5px;">I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="terms-of-service"
+              type="checkbox"
+              formControlName="terms"
+              aria-required="true"
+            />
+            <label for="terms-of-service" style="padding-left: 5px;">I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <ngx-recaptcha2
-          #captchaElem
-          [siteKey]="siteKey"
-          formControlName="recaptcha"
-        ></ngx-recaptcha2>
+        <div class="form-group">
+          <ngx-recaptcha2
+            #captchaElem
+            [siteKey]="siteKey"
+            formControlName="recaptcha"
+          ></ngx-recaptcha2>
+        </div>
       </div>
     </form>
   </div>
