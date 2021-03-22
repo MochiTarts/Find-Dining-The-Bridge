@@ -46,8 +46,6 @@ class SubscriberProfile(models.Model):
             invalid['Invalid'].append("user_id must be passed and be equal to the user's id")
         elif User.objects.get(pk=fields['user_id']) == None:
             invalid['Invalid'].append("SDUser with this user_id does not exist")
-        elif SubscriberProfile.objects.filter(pk=fields['user_id']).exists():
-            invalid['Invalid'].append("Profile with this user_id already exists")
         
         if 'expired_at' in fields:
             try:
@@ -95,10 +93,9 @@ class SubscriberProfile(models.Model):
         if not invalid:
             profile = SubscriberProfile.objects.get(pk=subscriber_data['user_id'])
             for field in subscriber_data:
-                if field == "consent_status":
-                    subscriber_data.update(handleConsentStatus(subscriber_data['consent_status']))
-                else:
-                    profile[field] = subscriber_data[field]
+                setattr(profile, field, subscriber_data[field])
+            profile.clean()
+            profile.save()
             return profile
         else:
             raise ValidationError(
@@ -115,8 +112,4 @@ def handleConsentStatus(consent_status):
         profile["expired_at"] = datetime.datetime.today() + datetime.timedelta(days=+182)
         profile["subscribed_at"] = None
         profile["unsubscribed_at"] = None
-    elif consent_status == "UNSUBSCRIBED":
-        profile["expired_at"] = None
-        profile["subscribed_at"] = None
-        profile["unsubscribed_at"] = datetime.datetime.today()
     return profile

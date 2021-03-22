@@ -3,15 +3,20 @@ import json
 from django.shortcuts import render
 from django.forms import model_to_dict
 from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import SubscriberProfile
 
 
 class Signup(APIView):
-    def put(self, request):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
         try:
             body = json.loads(request.body)
             invalid = SubscriberProfile.field_validate(body)
+            if SubscriberProfile.objects.filter(pk=fields['user_id']).exists():
+                invalid['Invalid'].append("Profile with this user_id already exists")
             if invalid:
                 return JsonResponse(invalid, status=400)
             profile = SubscriberProfile.signup(body)
@@ -30,13 +35,12 @@ class Signup(APIView):
 
 
 class SubscriberProfileView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request):
         try:
-            body = json.loads(request.body)
-            invalid = SubscriberProfile.field_validate(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
-            profile = SubscriberProfile.objects.get(id=body['id'])
+            user_id = request.GET.get('user_id')
+            profile = SubscriberProfile.objects.get(pk=user_id)
             return JsonResponse(model_to_dict(profile))
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)

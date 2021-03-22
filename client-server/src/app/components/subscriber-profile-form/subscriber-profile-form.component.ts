@@ -24,6 +24,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   email: string = '';
   userId: string = '';
   username: string = '';
+  profileId: string = '';
   userData: any;
   siteKey: string;
   loggedOut: boolean = true;
@@ -32,7 +33,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   aFormGroup: FormGroup;
   validator: formValidator = new userValidator();
   modalRef: any;
-  
+
   constructor(
     private modalService: NgbModal,
     private router: Router,
@@ -40,7 +41,7 @@ export class SubscriberProfileFormComponent implements OnInit {
     private tokenStorageService: TokenStorageService,
     private userService: UserService,
     private formBuilder: FormBuilder
-    ) { }
+  ) { }
 
   ngOnInit(): void { }
 
@@ -51,6 +52,7 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.username = user.username;
       this.email = user.email;
       this.userId = user.user_id;
+      this.profileId = user.profile_id;
 
       this.siteKey = `${environment.captcha.siteKey}`;
       this.aFormGroup = this.formBuilder.group({
@@ -77,6 +79,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   updateProfile(): void {
     var sduserInfo = {
       email: this.email,
+      profile_id: this.userId,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
       last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
     }
@@ -85,8 +88,12 @@ export class SubscriberProfileFormComponent implements OnInit {
       user_id: this.userId,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
-      consent_status: (<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED"
     };
+
+    if (this.profileId == '') {
+      subscriberInfo["consent_status"] = ((<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED");
+    }
+
     // clear formErrors
     this.validator.clearAllErrors();
     //validate all formfields, the callback will throw appropriate errors, return true if any validation failed
@@ -107,8 +114,7 @@ export class SubscriberProfileFormComponent implements OnInit {
         Check if profile_id is null. If so, create subscriber profile
         If not, edit subscriber profile
         */
-        var dummy_profile_id = ""
-        if (dummy_profile_id) {
+        if (this.profileId) {
           this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
             alert("Updating subscriber profile");
             this.modalRef.close();

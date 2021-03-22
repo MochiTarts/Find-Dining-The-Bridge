@@ -40,7 +40,7 @@ export class UserService {
     return this.http.get(API_URL + 'ro', { responseType: 'text' });
   }
 
-  
+
   /* The below two are what I'm using for subscriber-profile-form.component.ts */
   /*
   @Input: JSON object containing fields to be modified for an sduser
@@ -59,7 +59,7 @@ export class UserService {
   */
   createSubscriberProfile(userData): Observable<any> {
     const endpoint = API_URL + 'subscriber/signup/'
-    return this.http.put<any>(endpoint, userData, httpOptions);
+    return this.http.post<any>(endpoint, userData, httpOptions);
   }
   /* The above two are what I'm using for subscriber-profile-form.component.ts */
 
@@ -83,7 +83,7 @@ export class UserService {
   Get all fields of subscriber
   */
   getSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'profile/subscriber/get/'
+    const endpoint = API_URL + 'subscriber/profile/'
     return this.http.get(endpoint, { params: userData });
   }
 
@@ -93,8 +93,8 @@ export class UserService {
   Modifies an existing subscriber profile
   */
   editSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'profile/subscriber/edit/';
-    return this.http.post<any>(endpoint, userData);
+    const endpoint = API_URL + 'subscriber/profile/';
+    return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
   /*
@@ -244,9 +244,9 @@ export class UserService {
   @Output: None
   Deactivate the user account
   */
-  deactivateUser(id:string): Observable<any> {
+  deactivateUser(id: string): Observable<any> {
     const endpoint = API_URL + 'user/deactivate/';
-    return this.http.post<any>(endpoint, JSON.stringify({'id':id}), httpOptions);
+    return this.http.post<any>(endpoint, JSON.stringify({ 'id': id }), httpOptions);
   }
 
   getNearbyRestaurants(userData): Observable<any> {
