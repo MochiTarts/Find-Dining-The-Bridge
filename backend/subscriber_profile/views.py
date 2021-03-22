@@ -15,8 +15,12 @@ class Signup(APIView):
         try:
             body = json.loads(request.body)
             invalid = SubscriberProfile.field_validate(body)
-            if SubscriberProfile.objects.filter(pk=fields['user_id']).exists():
-                invalid['Invalid'].append("Profile with this user_id already exists")
+            if SubscriberProfile.objects.filter(pk=body['user_id']).exists():
+                if not invalid:
+                    invalid = {"Invalid": "Profile with this user_id already exists"}
+                else:
+                    invalid['Invalid'].append("Profile with this user_id already exists")
+            print(invalid)
             if invalid:
                 return JsonResponse(invalid, status=400)
             profile = SubscriberProfile.signup(body)

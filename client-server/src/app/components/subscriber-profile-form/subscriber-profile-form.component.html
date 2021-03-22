@@ -82,7 +82,7 @@
         [name]="'errorPhone'"
         [message]="validator.errors['phone']" ></app-dynamic-label>
       </div>
-      <div *ngIf="profileId == ''">
+      <div *ngIf="profileId == null">
         <div class="form-group">
           <div class="input-group">
             <input
