@@ -251,7 +251,7 @@ class DishList(APIView):
     return JsonResponse(response)
 
 
-class DishView(APIView):
+class DishRestaurantView(APIView):
     """ dish restaurant view """
 
     def get(self, request, rest_id):
@@ -550,7 +550,7 @@ class RestaurantView(APIView):
 # get_pending_restaurant_page
 
 class PendingRestaurantView(APIView):
-    """ get pending restaurant view """
+    """ pending restaurant view """
 
     def get(self, request, rest_id):
     """Retrieve restaurant from pending collection by id"""
