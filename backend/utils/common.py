@@ -9,10 +9,14 @@ def save_and_clean(model, updated_fields=None):
     :params-model: referenced model
     :return: saved model
     """
-    model.clean_fields()
-    model.clean()
-    if updated_fields:
-        model.save(update_fields=updated_fields)
-    else:
-        model.save()
-    return model
+    try:
+        model.clean_fields()
+        model.clean()
+        if updated_fields:
+            model.save(update_fields=updated_fields)
+        else:
+            model.save()
+        return model
+    except Exception as err:
+        print(err)
+        raise err

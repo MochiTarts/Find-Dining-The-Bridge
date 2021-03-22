@@ -21,6 +21,7 @@ export class SubscriberProfileFormComponent implements OnInit {
 
   @ViewChild('userInfo', { static: true }) buContent: TemplateRef<any>;
   role: string = '';
+  email: string = '';
   userId: string = '';
   username: string = '';
   userData: any;
@@ -47,7 +48,8 @@ export class SubscriberProfileFormComponent implements OnInit {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
       this.username = user.username;
-      this.userId = user.email;
+      this.email = user.email;
+      this.userId = user.user_id;
 
       this.siteKey = `${environment.captcha.siteKey}`;
       this.aFormGroup = this.formBuilder.group({
@@ -72,18 +74,17 @@ export class SubscriberProfileFormComponent implements OnInit {
 
   updateProfile(): void {
     var sduserInfo = {
-      email: this.userId,
+      email: this.email,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
       last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
     }
 
     var subscriberInfo = {
-      email: this.userId,
+      user_id: this.userId,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
       consent_status: (<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED"
     };
-
     // clear formErrors
     this.validator.clearAllErrors();
     //validate all formfields, the callback will throw appropriate errors, return true if any validation failed

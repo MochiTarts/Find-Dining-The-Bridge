@@ -45,6 +45,7 @@ urlpatterns = [
     path('admin/', admin_site.urls),
     path('auth/', include('auth.urls')),
     path('user/', include('sduser.urls')),
+    path('subscriber/', include('subscriber_profile.urls')),
 
 ]
 

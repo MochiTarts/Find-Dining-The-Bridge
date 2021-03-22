@@ -48,8 +48,8 @@ export class UserService {
   Modified an sduser
   */
   editAccountUser(userData): Observable<any> {
-    const endpoint = API_URL + 'user/sduser/edit/'
-    return this.http.post<any>(endpoint, userData);
+    const endpoint = API_URL + 'user/edit/'
+    return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
   /*
@@ -58,8 +58,8 @@ export class UserService {
   Makes a new subscriber profile
   */
   createSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'profile/subscriber/create/'
-    return this.http.post<any>(endpoint, userData);
+    const endpoint = API_URL + 'subscriber/signup/'
+    return this.http.put<any>(endpoint, userData, httpOptions);
   }
   /* The above two are what I'm using for subscriber-profile-form.component.ts */
 
