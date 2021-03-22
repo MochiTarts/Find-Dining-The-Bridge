@@ -111,23 +111,22 @@ export class SubscriberProfileFormComponent implements OnInit {
       Otherwise, update existing subscriber profile if profile_id has value in it
       */
       this.userService.editAccountUser(sduserInfo).subscribe(() => {
-        alert("Here!");
         /*
         Check if profile_id is null. If so, create subscriber profile
         If not, edit subscriber profile
         */
         if (this.profileId) {
-          alert("Updating subscriber profile");
           this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
             this.modalRef.close();
             this.reload();
           })
         } else {
-          alert("Creating new subscriber profile");
-          console.log(subscriberInfo)
           this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
-            this.authService.refreshToken().subscribe(() => {
+            this.authService.refreshToken().subscribe((token) => {
+              this.tokenStorageService.updateTokenAndUser(token.access);
+              console.log(this.tokenStorageService.getUser());
               this.modalRef.close();
+              //window.location.reload();
             })
           })
         }
