@@ -25,13 +25,14 @@ export class SubscriberProfileFormComponent implements OnInit {
   userId: string = '';
   username: string = '';
   profileId: string = '';
+  userData: any;
   siteKey: string;
   closeButton: boolean = false;
 
   aFormGroup: FormGroup;
   validator: formValidator = new userValidator();
   modalRef: any;
-  
+
   constructor(
     private modalService: NgbModal,
     private router: Router,
@@ -39,11 +40,9 @@ export class SubscriberProfileFormComponent implements OnInit {
     private tokenStorageService: TokenStorageService,
     private userService: UserService,
     private formBuilder: FormBuilder
-    ) { }
+  ) { }
 
-  ngOnInit(): void { }
-
-  open(closeButton: boolean): void {
+  ngOnInit(): void {
     if (this.authService.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
@@ -52,7 +51,11 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
+    }
+  }
 
+  open(closeButton: boolean): void {
+    if (this.authService.isLoggedIn) {
       this.siteKey = `${environment.captcha.siteKey}`;
       this.aFormGroup = this.formBuilder.group({
         recaptcha: ['', Validators.required],
@@ -79,6 +82,7 @@ export class SubscriberProfileFormComponent implements OnInit {
     console.log(this.profileId)
     var sduserInfo = {
       email: this.email,
+      profile_id: this.userId,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
       last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
     }
@@ -87,8 +91,12 @@ export class SubscriberProfileFormComponent implements OnInit {
       user_id: this.userId,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
-      consent_status: (<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED"
     };
+
+    if (this.profileId == '') {
+      subscriberInfo["consent_status"] = ((<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED");
+    }
+
     // clear formErrors
     this.validator.clearAllErrors();
     //validate all formfields, the callback will throw appropriate errors, return true if any validation failed
@@ -110,13 +118,14 @@ export class SubscriberProfileFormComponent implements OnInit {
         Check if profile_id is null. If so, create subscriber profile
         If not, edit subscriber profile
         */
-        if (this.profileId != null) {
+        if (this.profileId) {
           this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
             alert("Updating subscriber profile");
             this.modalRef.close();
             this.reload();
           })
         } else {
+          alert("Creating new subscriber profile");
           console.log(subscriberInfo)
           this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
             alert("Creating new subscriber profile");
