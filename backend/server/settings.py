@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'gmailapi_backend',
     'login_audit',
     'snowpenguin.django.recaptcha2',
+    'subscriber_profile',
     'restaurant_owner',
     'restaurant',
     

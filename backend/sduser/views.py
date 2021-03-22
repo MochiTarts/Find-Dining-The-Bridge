@@ -34,3 +34,24 @@ class deactivateView(APIView):
         except User.DoesNotExist:
             return JsonResponse({'message': 'deactivation failed: User not found', 'code': 'deactivation_fail'}, status=400)
 
+class editView(APIView):
+    """ Edit user """
+    def put(self, request):
+        try:
+            body = json.loads(request.body)
+            user = User.objects.get(email=body['email'])
+            for field in body:
+                setattr(user, field, body[field])
+            user.save()
+            return JsonResponse(model_to_dict(user))
+        except ValueError as e:
+            return JsonResponse({'message': str(e)}, status=500)
+        except Exception as e:
+            body = json.loads(request.body)
+            message = ''
+            try:
+                message = getattr(e, 'message', str(e))
+            except Exception as e:
+                message = getattr(e, 'message', "something went wrong")
+            finally:
+                return JsonResponse({'message': message}, status=500)

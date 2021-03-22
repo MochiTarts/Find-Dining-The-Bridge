@@ -47,7 +47,8 @@ export class UserService {
   */
   editAccountUser(userData): Observable<any> {
     const endpoint = API_URL + 'user/edit/'
-    return this.http.put<any>(endpoint, userData);
+    console.log(userData);
+    return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
   /*
@@ -57,7 +58,7 @@ export class UserService {
   */
   createSubscriberProfile(userData): Observable<any> {
     const endpoint = API_URL + 'subscriber/signup/'
-    return this.http.post<any>(endpoint, userData);
+    return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
   /*

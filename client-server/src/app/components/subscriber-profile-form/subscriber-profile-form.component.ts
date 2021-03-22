@@ -49,8 +49,8 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.role = user.role;
       this.email = user.email;
       this.username = user.username;
+      this.email = user.email;
       this.userId = user.user_id;
-      this.profileId = user.profile_id;
 
       this.siteKey = `${environment.captcha.siteKey}`;
       this.aFormGroup = this.formBuilder.group({
@@ -87,7 +87,6 @@ export class SubscriberProfileFormComponent implements OnInit {
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
       consent_status: (<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED"
     };
-
     // clear formErrors
     this.validator.clearAllErrors();
     //validate all formfields, the callback will throw appropriate errors, return true if any validation failed
