@@ -213,6 +213,7 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['role'] = user.role
         token['username'] = user.username
         token['email'] = user.email
+        token['profile_id'] = user.profile_id
         #token['id'] = user.id
 
         return token

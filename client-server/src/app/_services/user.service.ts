@@ -88,6 +88,16 @@ export class UserService {
   }
 
   /*
+  @Input: JSON object containing user email and fields of subscriber profile to be modified
+  @Output: JSON object representing the updated subscriber profile
+  Modifies an existing subscriber profile
+  */
+  editSubscriberProfile(userData): Observable<any> {
+    const endpoint = API_URL + 'profile/subscriber/edit/';
+    return this.http.post<any>(endpoint, userData);
+  }
+
+  /*
   @Input: JSON object from auth
   @Output: Return all fields of a user
   Get all fields of a user

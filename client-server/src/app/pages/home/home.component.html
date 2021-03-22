@@ -10,8 +10,8 @@
 
 <div id="scroll"></div>
 
-<div class="overview-section row" data-aos="fade-right">
-  <div class="col overview-grid">
+<div class="row overview-grid" data-aos="fade-right">
+  <div class="col-lg-4 overview-item">
     <img
       src="assets/images/undraw_chef.png"
       class="overview-icons"
@@ -23,7 +23,7 @@
       their history and story through their foods!
     </p>
   </div>
-  <div class="col overview-grid">
+  <div class="col-lg-4 overview-item">
     <img
       src="assets/images/undraw_cooking.png"
       class="overview-icons"
@@ -35,7 +35,7 @@
       comfort of your home!
     </p>
   </div>
-  <div class="col overview-grid" *ngIf="loggedOut">
+  <div class="col-lg-4 overview-item" *ngIf="loggedOut">
     <img
       src="assets/images/undraw_shopping.png"
       class="overview-icons"
@@ -48,7 +48,7 @@
     </p>
     <button
       (click)="onLoginRegisterClicked()"
-      class="btn"
+      class="btn signup-btn"
       placement="top"
       ngbTooltip="Create An Account"
       tabindex="0"
@@ -119,8 +119,8 @@
   </div>
 </div>
 
-<div class="overview-section row" data-aos="fade-left">
-  <div class="col overview-grid">
+<div class="row overview-grid" data-aos="fade-right">
+  <div class="col-lg-4 overview-item">
     <img
       src="assets/images/undraw_book.png"
       class="overview-icons"
@@ -132,7 +132,8 @@
       restuarant owners in their lifetime.
     </p>
   </div>
-  <div class="col overview-grid">
+
+  <div class="col-lg-4 overview-item">
     <img
       src="assets/images/undraw_business.png"
       class="overview-icons"
@@ -144,7 +145,8 @@
         great cuisines in Scarborough.
     </p>
   </div>
-  <div class="col overview-grid">
+
+  <div class="col-lg-4 overview-item">
     <img
       src="assets/images/undraw_search.png"
       class="overview-icons"
@@ -162,11 +164,20 @@
   <div class="cuisine-carousel" data-aos="fade-right">
     <h2 class="heading">Cuisines</h2>
     <ivy-carousel
+      class="arrow-outside-carousel"
       [images]="cuisines"
       [margin]="20"
       [arrowsOutside]="arrowsOutside"
       [borderRadius]="20"
       [cellWidth]="300"
+    >
+    </ivy-carousel>
+    <ivy-carousel
+      class="arrow-inside-carousel"
+      [images]="cuisines"
+      [margin]="20"
+      [borderRadius]="20"
+      [cellWidth]="'100%'"
     >
     </ivy-carousel>
   </div>

@@ -217,7 +217,9 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => {
       this.modalService.dismissAll();
-      this.router.navigate(['']);
+      setTimeout(() => {
+        this.router.navigate(['']);
+      }, 1000);
     });
   }
 
@@ -225,7 +227,9 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID).then(() => {
       this.modalService.dismissAll();
-      this.router.navigate(['']);
+      setTimeout(() => {
+        this.router.navigate(['']);
+      }, 1000);
     });
   }
 

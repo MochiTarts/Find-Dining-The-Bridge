@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'login_audit',
     'snowpenguin.django.recaptcha2',
     'subscriber_profile',
+    'restaurant_owner',
+    'restaurant',
     
     #'user.apps.SDUserConfig',
 ]
@@ -299,3 +301,5 @@ GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
 # reCaptcha v2 for admin portal (still need to add the ip on recaptcha settings)
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAP_PRIV_KEY')
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAP_PUB_KEY')
+
+GEOCODE_API_KEY = os.environ.get('GEOCODE_API_KEY')

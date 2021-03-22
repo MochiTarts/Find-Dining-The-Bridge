@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
 import { TokenStorageService } from '../../_services/token-storage.service';
 
 @Component({
@@ -8,6 +9,7 @@ import { TokenStorageService } from '../../_services/token-storage.service';
 })
 export class ProfileComponent implements OnInit {
   currentUser: any;
+  @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
 
   constructor(private token: TokenStorageService) { }
 
@@ -15,4 +17,9 @@ export class ProfileComponent implements OnInit {
     this.currentUser = this.token.getUser();
     console.log(this.currentUser)
   }
+
+  openEditModal(): void {
+    this.userInfo.open(true);
+  }
+
 }

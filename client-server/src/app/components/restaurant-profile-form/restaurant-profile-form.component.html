@@ -1,6 +1,15 @@
 <ng-template #restaurantInfo let-modal role="form">
     <div class="modal-header">
         <h2 class="modal-title" id="modal-profile-title">Restaurant Information</h2>
+        <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+            *ngIf="closeButton"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="modal-body">
         <p style="font-style:italic; color: gray;">

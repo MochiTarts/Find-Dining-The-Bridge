@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 from .enum import Roles
+#from django import models as django_models
 
 class SDUser(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
@@ -16,7 +17,8 @@ class SDUser(AbstractUser):
     default_pwd_updated = models.NullBooleanField(default=None, editable=False)
     # reserved attribute to support interval password update policy
     pwd_update_time = models.DateTimeField(editable=False, null=True, default=None)
-
+    # mainly for frontend to check for the existence of profile (upon login)
+    profile_id = models.IntegerField(default=None)
 
     class Meta:
         #db_table = 'auth_user'

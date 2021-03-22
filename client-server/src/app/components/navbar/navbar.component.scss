@@ -3,7 +3,7 @@
 .logo {
   height: 40px;
   width: auto;
-  margin-left: 50px;
+  margin-left: 5px;
   cursor: pointer;
 }
 
@@ -151,7 +151,7 @@ br {
   color: rgb(77, 77, 77);
   margin: 7px 10px;
 
-  @media screen and (max-width: 991px) {
+  @media screen and (max-width: 1000px) {
     display: none;
   }
 }

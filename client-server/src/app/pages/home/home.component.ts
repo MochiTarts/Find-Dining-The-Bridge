@@ -106,6 +106,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
     this.publicContent = "public content";
     if (this.authService.isLoggedIn) {
+      this.loggedOut = false;
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
       this.username = user.username;
@@ -116,9 +117,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // Add one more '&&' statement to see if profile_id is null
     if (this.role && this.role == 'BU') {
-      this.userInfo.open();
+      //this.userInfo.open(false);
     } else if (this.role && this.role == 'RO') {
-      this.restaurantInfo.open();
+      this.restaurantInfo.open(false);
     }
   }
 

@@ -37,6 +37,7 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -103,6 +104,7 @@ import { RestaurantProfileFormComponent } from './components/restaurant-profile-
     MatTabsModule,
     MatInputModule,
     MatSelectModule,
+    MatFormFieldModule,
     MatProgressBarModule,
     MatDividerModule,
     NgxCaptchaModule,

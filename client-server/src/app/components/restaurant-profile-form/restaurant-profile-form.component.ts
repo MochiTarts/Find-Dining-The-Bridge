@@ -25,6 +25,7 @@ export class RestaurantProfileFormComponent implements OnInit {
   userData: any;
   siteKey: string;
   loggedOut: boolean = true;
+  closeButton: boolean = false;
 
   aFormGroup: FormGroup;
   validator: formValidator = new userValidator();
@@ -41,7 +42,7 @@ export class RestaurantProfileFormComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  open(): void {
+  open(closeButton: boolean): void {
     if (this.authService.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
@@ -58,6 +59,7 @@ export class RestaurantProfileFormComponent implements OnInit {
         terms: ['', Validators.requiredTrue],
       });
 
+      this.closeButton = closeButton;
       this.modalRef = this.modalService.open(this.roContent, { backdrop: 'static', keyboard: false });
     }
   }
