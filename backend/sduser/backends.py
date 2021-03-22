@@ -33,7 +33,6 @@ from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFail
 
 from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
 
-
 import json
 import jwt
 
