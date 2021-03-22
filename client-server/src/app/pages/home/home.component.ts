@@ -31,9 +31,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   publicContent?: string;
 
   role: string = '';
+  email: string = '';
   userId: string = '';
-  username: string = '';
   profileId: string = '';
+  username: string = '';
   idToken: string = '';
   siteKey: string;
   loggedOut: boolean = true;
@@ -110,14 +111,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
       this.username = user.username;
-      this.userId = user.email;
+      this.email = user.email;
+      this.userId = user.user_id;
       this.profileId = user.profile_id;
     }
   }
 
   ngAfterViewInit(): void {
     // Add one more '&&' statement to see if profile_id is null
-    if (this.role && this.role == 'BU' && !this.profileId) {
+    if (this.role && this.role == 'BU' && this.profileId == null) {
       this.userInfo.open(false);
     } else if (this.role && this.role == 'RO') {
       this.restaurantInfo.open(false);
@@ -160,7 +162,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/login']);
   }
 
-  browseListings(): void {}
+  browseListings(): void {
+    this.router.navigate(['/all-listings']);
+  }
 
   restaurant(): void {}
 

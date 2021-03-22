@@ -109,8 +109,6 @@ export class SubscriberProfileFormComponent implements OnInit {
       Update sduser first_name, last_name
       Make new subscriber profile form with postalCode, phone, and consent_status if profile_id empty
       Otherwise, update existing subscriber profile if profile_id has value in it
-      (Be sure to update the sduser record with the profile_id of the newly created subscriber profile)
-      Call refresh token to get a new token with a profile_id that is no longer null
       */
       this.userService.editAccountUser(sduserInfo).subscribe(() => {
         alert("Here!");
@@ -119,8 +117,8 @@ export class SubscriberProfileFormComponent implements OnInit {
         If not, edit subscriber profile
         */
         if (this.profileId) {
+          alert("Updating subscriber profile");
           this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
-            alert("Updating subscriber profile");
             this.modalRef.close();
             this.reload();
           })
@@ -128,14 +126,9 @@ export class SubscriberProfileFormComponent implements OnInit {
           alert("Creating new subscriber profile");
           console.log(subscriberInfo)
           this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
-            alert("Creating new subscriber profile");
-            // Call refresh token here
-            /*this.authService.refreshToken().subscribe(() => {
+            this.authService.refreshToken().subscribe(() => {
               this.modalRef.close();
-              this.reload();
-            })*/
-            this.modalRef.close();
-            //this.reload();
+            })
           })
         }
       })

@@ -217,9 +217,6 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => {
       this.modalService.dismissAll();
-      setTimeout(() => {
-        this.router.navigate(['']);
-      }, 1000);
     });
   }
 
@@ -227,9 +224,6 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID).then(() => {
       this.modalService.dismissAll();
-      setTimeout(() => {
-        this.router.navigate(['']);
-      }, 1000);
     });
   }
 
@@ -238,16 +232,6 @@ export class LoginComponent implements OnInit {
   }
   facebookRoleSelectPopup(facebookSignUp): void {
     this.modalService.open(facebookSignUp, {ariaLabelledBy: 'modal-basic-title', size: 'sm'});
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   onStrengthChanged(strength: number) {

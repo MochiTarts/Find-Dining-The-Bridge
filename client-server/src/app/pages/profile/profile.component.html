@@ -27,16 +27,16 @@
   <div>
     <div class="row no-gutters content-wrap">
       <div class="col-md-12">
-        <h2 class="name">First Name, Last Name</h2>
+        <h2 class="name">{{ currentUser.first_name }}, {{ currentUser.last_name }}</h2>
       </div>
       <div class="col-md-12" style="margin-top: 25px;">
         <p><b>Email:</b> {{ currentUser.email }}</p>
       </div>
       <div class="col-md-12">
-        <p><b>Postal Code:</b> A#A #A#</p>
+        <p><b>Postal Code:</b> {{ currentUser.postalCode }}</p>
       </div>
       <div class="col-md-12">
-        <p><b>Phone Number:</b> (123) 456 7890</p>
+        <p><b>Phone Number:</b> {{ currentUser.phone }}</p>
       </div>
       <div class="col-md-12 text-center" style="margin-top: 25px;">
         <button

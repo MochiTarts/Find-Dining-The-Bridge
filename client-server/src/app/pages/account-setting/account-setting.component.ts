@@ -40,7 +40,7 @@ export class AccountSettingComponent implements OnInit {
       this.reload()
       this.tokenStorage.signOut();
       this.authService.updateLoginStatus(false);
-      this.router.navigate(['/'])
+      this.router.navigate([''])
     }, err => {
       console.log(err);
     });

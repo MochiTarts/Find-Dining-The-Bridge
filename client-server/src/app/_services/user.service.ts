@@ -76,13 +76,16 @@ export class UserService {
   }
 
   /*
-  @Input: JSON object containing user email
+  @Input: the user's user_id
   @Output: Return all fields of a subscriber
   Get all fields of subscriber
   */
-  getSubscriberProfile(userData): Observable<any> {
+  getSubscriberProfile(user_id): Observable<any> {
     const endpoint = API_URL + 'subscriber/profile/'
-    return this.http.get(endpoint, { params: userData });
+    const params = {
+      user_id: user_id
+    }
+    return this.http.get(endpoint, { params: params });
   }
 
   /*
