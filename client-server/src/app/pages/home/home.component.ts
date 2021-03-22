@@ -33,8 +33,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   role: string = '';
   userId: string = '';
   username: string = '';
+  profileId: string = '';
   idToken: string = '';
-  userData: any;
   siteKey: string;
   loggedOut: boolean = true;
 
@@ -111,13 +111,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.role = user.role;
       this.username = user.username;
       this.userId = user.email;
+      this.profileId = user.profile_id;
     }
   }
 
   ngAfterViewInit(): void {
     // Add one more '&&' statement to see if profile_id is null
-    if (this.role && this.role == 'BU') {
-      //this.userInfo.open(false);
+    if (this.role && this.role == 'BU' && this.profileId == null) {
+      this.userInfo.open(false);
     } else if (this.role && this.role == 'RO') {
       this.restaurantInfo.open(false);
     }

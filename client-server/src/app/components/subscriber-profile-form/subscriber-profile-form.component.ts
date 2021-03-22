@@ -21,11 +21,11 @@ export class SubscriberProfileFormComponent implements OnInit {
 
   @ViewChild('userInfo', { static: true }) buContent: TemplateRef<any>;
   role: string = '';
+  email: string = '';
   userId: string = '';
   username: string = '';
-  userData: any;
+  profileId: string = '';
   siteKey: string;
-  loggedOut: boolean = true;
   closeButton: boolean = false;
 
   aFormGroup: FormGroup;
@@ -47,8 +47,10 @@ export class SubscriberProfileFormComponent implements OnInit {
     if (this.authService.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
+      this.email = user.email;
       this.username = user.username;
-      this.userId = user.email;
+      this.userId = user.user_id;
+      this.profileId = user.profile_id;
 
       this.siteKey = `${environment.captcha.siteKey}`;
       this.aFormGroup = this.formBuilder.group({
@@ -74,13 +76,13 @@ export class SubscriberProfileFormComponent implements OnInit {
 
   updateProfile(): void {
     var sduserInfo = {
-      email: this.userId,
+      email: this.email,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
       last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
     }
 
     var subscriberInfo = {
-      email: this.userId,
+      user_id: this.userId,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
       consent_status: (<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED"
@@ -102,18 +104,19 @@ export class SubscriberProfileFormComponent implements OnInit {
       Call refresh token to get a new token with a profile_id that is no longer null
       */
       this.userService.editAccountUser(sduserInfo).subscribe(() => {
+        alert("Here!");
         /*
         Check if profile_id is null. If so, create subscriber profile
         If not, edit subscriber profile
         */
-        var dummy_profile_id = ""
-        if (dummy_profile_id) {
+        if (this.profileId != null) {
           this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
             alert("Updating subscriber profile");
             this.modalRef.close();
             this.reload();
           })
         } else {
+          delete subscriberInfo.user_id;
           this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
             alert("Creating new subscriber profile");
             // Call refresh token here

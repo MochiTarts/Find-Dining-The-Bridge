@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 //const API_URL = 'http://localhost:8080/api/test/';
-const API_URL = '/api/';
+const API_URL = 'http://127.0.0.1:8000/api/';
 //const API_URL = '/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -40,16 +40,14 @@ export class UserService {
     return this.http.get(API_URL + 'ro', { responseType: 'text' });
   }
 
-  
-  /* The below two are what I'm using for subscriber-profile-form.component.ts */
   /*
   @Input: JSON object containing fields to be modified for an sduser
   @Ouput: JSON object representing the updated sduser
   Modified an sduser
   */
   editAccountUser(userData): Observable<any> {
-    const endpoint = API_URL + 'user/sduser/edit/'
-    return this.http.post<any>(endpoint, userData);
+    const endpoint = API_URL + 'user/edit/'
+    return this.http.put<any>(endpoint, userData);
   }
 
   /*
@@ -58,11 +56,9 @@ export class UserService {
   Makes a new subscriber profile
   */
   createSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'profile/subscriber/create/'
+    const endpoint = API_URL + 'subscriber/signup/'
     return this.http.post<any>(endpoint, userData);
   }
-  /* The above two are what I'm using for subscriber-profile-form.component.ts */
-
 
   /*
   @Input: JSON object containing user email
@@ -83,7 +79,7 @@ export class UserService {
   Get all fields of subscriber
   */
   getSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'profile/subscriber/get/'
+    const endpoint = API_URL + 'subscriber/profile/'
     return this.http.get(endpoint, { params: userData });
   }
 
@@ -93,8 +89,8 @@ export class UserService {
   Modifies an existing subscriber profile
   */
   editSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'profile/subscriber/edit/';
-    return this.http.post<any>(endpoint, userData);
+    const endpoint = API_URL + 'subscriber/profile/';
+    return this.http.put<any>(endpoint, userData);
   }
 
   /*
