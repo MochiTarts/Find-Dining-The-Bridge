@@ -30,8 +30,8 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log(error);
       if (error instanceof HttpErrorResponse && [401, 403].includes(error.status)) {
         console.log(error.error);
-        // determine the source of 401 error
-        if (!this.isCheckingRefreshToken && error.status === 401) {
+        // determine the source of 401/403 error (401 from readonly or 403 from isAuthenticated)
+        if (!this.isCheckingRefreshToken) {
           // the current request is for refreshing tokens (and not to log user out)
           if (error.error && error.error.code == "token_not_valid"){
             this.isCheckingRefreshToken = true;
@@ -42,7 +42,8 @@ export class AuthInterceptor implements HttpInterceptor {
           }
         }
         // auto logout if refresh token expired or 403 response returned from api
-        if (this.isCheckingRefreshToken || error.status === 403 && this.tokenStorage.getUser()) {
+        //if (this.isCheckingRefreshToken || error.status === 403 && this.tokenStorage.getUser()) {
+        if (this.isCheckingRefreshToken) {
           this.isCheckingRefreshToken = false;
           this.logout();
           //this.router.navigate(['login']);
