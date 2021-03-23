@@ -213,6 +213,7 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['username'] = user.username
         token['email'] = user.email
         token['profile_id'] = user.profile_id
+
         #token['id'] = user.id
 
         return token
@@ -334,7 +335,18 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
             if user_id is None:
                 return JsonResponse({'message': 'No user found', 'code': 'no_user_found'}, status=400)
             user = UserModel.objects.get(id=user_id)
-            print(user)
+
+            access_token = response.data.get('access')
+            if access_token:
+                old_user = jwt_decode(access_token)
+
+                if old_user['profile_id'] is None:
+                    del response.data['access']
+                    # need to obtain it manually because we need to update the profile id (by forcing a read from the db)
+                    new_token = SDUserCookieTokenObtainPairSerializer.get_token(user)
+                    response.data['access'] = str(new_token.access_token)
+                    # also update the refresh token
+                    new_refresh_token = str(new_token)
 
             if user.is_blocked:
                 return JsonResponse({'message': 'User has been blocked', 'code': 'user_blocked'}, status=401)
