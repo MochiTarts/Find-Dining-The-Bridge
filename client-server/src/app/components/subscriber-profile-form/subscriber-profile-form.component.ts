@@ -25,6 +25,10 @@ export class SubscriberProfileFormComponent implements OnInit {
   userId: string = '';
   username: string = '';
   profileId: string = '';
+  firstName: string = '';
+  lastName: string = '';
+  postalCode: string = '';
+  phone: string = '';
   siteKey: string;
   closeButton: boolean = false;
 
@@ -50,20 +54,45 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
+
+      if (this.userId) {
+        this.userService.getSubscriberProfile(this.userId).subscribe((data) => {
+          this.firstName = data.first_name;
+          this.lastName = data.last_name;
+          this.postalCode = data.postalCode;
+          this.phone = data.phone;
+          console.log(this.firstName)
+        })
+      }
     }
   }
 
   open(closeButton: boolean): void {
     if (this.authService.isLoggedIn) {
       this.siteKey = `${environment.captcha.siteKey}`;
-      this.aFormGroup = this.formBuilder.group({
-        recaptcha: ['', Validators.required],
-        firstname: ['', Validators.required],
-        lastname: ['', Validators.required],
-        postalcode: ['', Validators.required],
-        phone: ['', Validators.required],
-        terms: ['', Validators.requiredTrue],
-      });
+      if (!this.closeButton) {
+        this.aFormGroup = this.formBuilder.group({
+          recaptcha: ['', Validators.required],
+          firstname: ['', Validators.required],
+          lastname: ['', Validators.required],
+          postalcode: ['', Validators.required],
+          phone: ['', Validators.required],
+          terms: ['', Validators.requiredTrue],
+        });
+      } else {
+        this.aFormGroup = this.formBuilder.group({
+          recaptcha: ['', Validators.required],
+          firstname: ['', Validators.required],
+          lastname: ['', Validators.required],
+          postalcode: ['', Validators.required],
+          phone: ['', Validators.required],
+        });
+      }
+
+      this.aFormGroup.get('firstname').setValue(String(this.firstName));
+      this.aFormGroup.get('lastname').setValue(String(this.lastName));
+      this.aFormGroup.get('postalcode').setValue(String(this.postalCode));
+      this.aFormGroup.get('phone').setValue(String(this.phone));
 
       this.closeButton = closeButton;
       this.modalRef = this.modalService.open(this.buContent, { backdrop: 'static', keyboard: false });
