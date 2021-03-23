@@ -193,6 +193,15 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = False
 
+CORS_ALLOW_METHODS = (
+'GET',
+'POST',
+'PUT',
+'PATCH',
+'DELETE',
+'OPTIONS'
+ )
+
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:4200",
     "http://127.0.0.1:4200",
