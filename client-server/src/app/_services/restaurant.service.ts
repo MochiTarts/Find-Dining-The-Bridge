@@ -4,22 +4,23 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 const AUTH_API = '/api';
+const RO_ENDPOINT = AUTH_API + '/restaurant';
+const UPLOAD_ENDPOINT = AUTH_API + '/cloud_storage/upload/';
+const REMOVE_ENDPOINT = AUTH_API + '/cloud_storage/remove/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestaurantService {
-  private static readonly RO_ENDPOINT = AUTH_API + '/restaurant';
-  private static readonly UPLOAD_ENDPOINT = AUTH_API + '/cloud_storage/upload/';
-  private static readonly REMOVE_ENDPOINT = AUTH_API + '/cloud_storage/remove/';
+
   constructor(private http: HttpClient) {}
 
   /*
   @Input: restaurant id
   @Output: Google analytics data of restaurant page views
   */
-  getViewTraffic(id): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/get_restaurant_traffic/`
+  getViewTraffic(id:string): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/restaurant_traffic/'
     const params = {
       'restaurant_id': id
     }
@@ -33,7 +34,7 @@ export class RestaurantService {
   Return list of all restaurants in the database
   */
   listRestaurants(): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/get_all/`;
+    const endpoint = RO_ENDPOINT + '/all/';
     return this.http.get(endpoint);
   }
 
@@ -43,12 +44,9 @@ export class RestaurantService {
 
   Returns the details of the restaurant using its id.
   */
-  getRestaurant(id): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/get/`;
-    var params = {
-      _id: id,
-    };
-    return this.http.get(endpoint, { params: params });
+  getRestaurant(id:string): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/' + id + '/';
+    return this.http.get(endpoint);
   }
 
   /*
@@ -57,12 +55,10 @@ export class RestaurantService {
 
   Returns the details of the restaurant using its id.
   */
-  getPendingRestaurant(id): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/get_pending/`;
-    var params = {
-      _id: id,
-    };
-    return this.http.get(endpoint, { params: params });
+  getPendingRestaurant(id:string): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/pending/' + id + '/';
+
+    return this.http.get(endpoint);
   }
 
   /*
@@ -71,12 +67,9 @@ export class RestaurantService {
 
   Returns the details of the restaurant dishes using its id.
   */
-  getRestaurantFood(id): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/dish/get_by_restaurant/`;
-    var params = {
-      restaurant_id: id,
-    };
-    return this.http.get(endpoint, { params: params });
+  getRestaurantFood(id:string): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/dish/' + id + '/';
+    return this.http.get(endpoint);
   }
 
   /*
@@ -85,8 +78,8 @@ export class RestaurantService {
 
   Returns the details of the restaurant dishes using its id.
   */
-  getPendingRestaurantFood(id): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/dish/get_pending_by_restaurant/`;
+  getPendingRestaurantFood(id:string): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/dish/get_pending_by_restaurant/';
     var params = {
       restaurant_id: id,
     };
@@ -100,7 +93,7 @@ export class RestaurantService {
   Returns All Dishes.
   */
   getDishes(): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/dish/get_all/`;
+    const endpoint = RO_ENDPOINT + '/dish/';
     return this.http.get(endpoint);
   }
 
@@ -111,7 +104,7 @@ export class RestaurantService {
   Creates an entry for the restauant in the database and returns an id
   */
   getRestaurantID(restuarantInfo): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/save/`;
+    const endpoint = RO_ENDPOINT + '/draft/';
     const userToken = {
       idToken: restuarantInfo.idToken,
     };
@@ -126,7 +119,7 @@ export class RestaurantService {
   Creates an entry for the dish for a particular restuarant using its id.
   */
   createDish(dishInfo): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/dish/insert_pending/`;
+    const endpoint = RO_ENDPOINT + '/dish/p/';
     return this.http.post<any>(endpoint, dishInfo);
   }
 
@@ -137,8 +130,8 @@ export class RestaurantService {
   Creates an entry for the dish for a particular restuarant using its id.
   */
   editDish(dishInfo): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/dish/edit_pending/`;
-    return this.http.post<any>(endpoint, dishInfo);
+    const endpoint = RO_ENDPOINT + '/dish/p/';
+    return this.http.put<any>(endpoint, dishInfo);
   }
 
   /*
@@ -148,7 +141,7 @@ export class RestaurantService {
   Delete dish using dish name and restaurant id.
   */
   deleteDish(dishInfo): void {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/dish/delete/`;
+    const endpoint = RO_ENDPOINT + '/dish/' + dishInfo.restaurant_id + '/';
     this.http.post<any>(endpoint, dishInfo).subscribe((data) => {});
   }
 
@@ -159,16 +152,16 @@ export class RestaurantService {
   Edits information for a restuarant using its id.
   */
   editRestaurant(restInfo): Observable<any> {
-    const endpoint = `${RestaurantService.RO_ENDPOINT}/edit/`;
+    const endpoint = RO_ENDPOINT + '/draft/';
     const userToken = {
       idToken: restInfo.idToken,
     };
     delete restInfo.idToken;
-    return this.http.post<any>(endpoint, restInfo, { params: userToken });
+    return this.http.put<any>(endpoint, restInfo, { params: userToken });
   }
 
   uploadRestaurantMedia(formData, id, location): Observable<any> {
-    const endpoint = `${RestaurantService.UPLOAD_ENDPOINT}`;
+    const endpoint = UPLOAD_ENDPOINT;
 
     if (location == 'cover') {
       formData.append('save_location', 'cover_photo_url');
@@ -189,7 +182,7 @@ export class RestaurantService {
   }
 
   uploadFoodMedia(formData, id): Observable<any> {
-    const endpoint = `${RestaurantService.UPLOAD_ENDPOINT}`;
+    const endpoint = UPLOAD_ENDPOINT;
 
     formData.append('save_location', 'picture');
     formData.append('app', 'restaurant_FoodMedia');
@@ -199,7 +192,7 @@ export class RestaurantService {
   }
 
   removeRestaurantImage(formData, id, location): Observable<any> {
-    const endpoint = `${RestaurantService.REMOVE_ENDPOINT}`;
+    const endpoint = REMOVE_ENDPOINT;
     if (location == 'image') {
       formData.append('save_location', 'restaurant_image_url');
     }

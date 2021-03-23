@@ -760,3 +760,166 @@ class PendingRestaurant(models.Model):
             return None
         else:
             return invalid
+
+
+class UserFavRestrs(models.Model):
+    """ Model for displaying user-restaurant-favourite relation """
+    _id = models.ObjectIdField()
+    user_id = models.IntegerField(default=None)
+    restaurant = models.CharField(default='', max_length=24)
+
+    @classmethod
+    def insert(cls, data):
+        """ Inserts a new user-restaurant favourite relation
+        :param: data: dictionary containing user_email and restaurant_id of user and restaurant
+                      to be added in a favourite relation
+        :return: user-restaurant-favourite relation object with actual restaurant data of
+                 the favourite restaurant,
+                 or raises ValueError if relation already exists; user or restaurant
+                 does not exist
+        """
+        try:
+            consumer_filter = ConsumerSubscriber.objects.filter(user_id=data['user_id'])
+            restaurant_owner_filter = RestaurantOwner.objects.filter(user_id=data['user_id'])
+            user = {}
+            if consumer_filter.exists():
+                user = consumer_filter.first()
+            elif restaurant_owner_filter.exists():
+                user = restaurant_owner_filter.first()
+            else:
+                raise ValueError('The user does not exist')
+            restaurant = Restaurant.objects.get(_id=data['restaurant'])
+
+            try:
+                cls.objects.get(user_id=data['user_id'], restaurant=data['restaurant_id'])
+                raise ValueError('Cannot insert new user-restaurant-favourite relation, this relation already exists')
+            except ObjectDoesNotExist:
+                userFavRestr = cls(**data)
+                userFavRestr = save_and_clean(userFavRestr)
+                response = model_to_json(userFavRestr)
+
+                response['user'] = model_to_json(user)
+                response['restaurant'] = model_to_json(restaurant)
+                return response
+        except ObjectDoesNotExist:
+            raise ValueError('The restaurant does not exist')
+
+    @classmethod
+    def getUserFavourites(cls, user_id):
+        """
+        retrieve all restaurants favourited by user given user's email
+        :param: user_email: email of user to retrieve list of favourited restaurants
+        :return: list of restaurants in json format
+        """
+        restaurants = []
+
+        consumer_filter = ConsumerSubscriber.objects.filter(user_id=user_id)
+        restaurant_owner_filter = RestaurantOwner.objects.filter(user_id=user_id)
+        user = {}
+        if consumer_filter.exists():
+            user = consumer_filter.first()
+        elif restaurant_owner_filter.exists():
+            user = restaurant_owner_filter.first()
+        else:
+            raise ValueError('The user does not exist')
+
+        favourites = UserFavRestrs.objects.filter(user_id=user_id)
+        if not favourites:
+            return restaurants
+        for record in favourites:
+            try:
+                restaurant = Restaurant.objects.get(_id=record.restaurant)
+                restaurant.offer_options = ast.literal_eval(restaurant.offer_options)
+                restaurants.append(model_to_json(restaurant))
+            except ObjectDoesNotExist:
+                raise ValueError('One of the restaurants in the list of favourites does not appear to exist: '+restaurant._id)
+        return restaurants
+
+    @classmethod
+    def getRestrFavouriteds(cls, restaurant_id):
+        """
+        retrieve all users who have favourited this restaurant given the
+        restaurant_id
+        :param: restaurant_id: id of the restaurant whose list of favourited users to retrieve
+        :return: list of users who favourited this restaurant
+        """
+        users = []
+
+        try:
+            Restaurant.objects.get(_id=restaurant_id)
+        except ObjectDoesNotExist:
+            raise ValueError('The restaurant associated with id '+restaurant_id+' does not exist')
+
+        favouriteds = UserFavRestrs.objects.filter(restaurant_id=restaurant_id)
+        if not favouriteds:
+            return users
+        for record in favouriteds:
+            consumer_filter = ConsumerSubscriber.objects.filter(user_id=record.user_id)
+            restaurant_owner_filter = RestaurantOwner.objects.filter(user_id=record.user_id)
+            if consumer_filter.exists():
+                user = consumer_filter.first()
+                users.append(model_to_json(user))
+            elif restaurant_owner_filter.exists():
+                user = restaurant_owner_filter.first()
+                users.append(model_to_json(user))
+            else:
+                raise ValueError('One of the users in the list of favourites does not appear to exist: '+record.user)
+        return users
+
+    @classmethod
+    def remove_fav(self, data):
+        """
+        removes a restaurant from the user's favourites list
+        :param: data: the id of the restaurant to be removed from the user's list,
+                      and the email of the user whose list is going to be updated
+        :return: Message with success or raise ValueError upon exceptions
+        """
+        try:
+            consumer_filter = ConsumerSubscriber.objects.filter(user_id=data['user_id'])
+            restaurant_owner_filter = RestaurantOwner.objects.filter(user_id=data['user_id'])
+            user = {}
+            if consumer_filter.exists():
+                user = consumer_filter.first()
+            elif restaurant_owner_filter.exists():
+                user = restaurant_owner_filter.first()
+            else:
+                raise ValueError('The user does not exist')
+        except ObjectDoesNotExist:
+            raise ValueError('The user or restaurant does not exist')
+
+        try:
+            UserFavRestrs.objects.get(user_id=data['user_id'], restaurant_id=data['restaurant_id']).delete()
+            response = {
+                "message": "Successfully removed restaurant from user's favourites"
+            }
+            return response
+        except ObjectDoesNotExist:
+            raise ValueError('This user-restaurant favourite relation does not exist')
+
+    @classmethod
+    def field_validate(self, fields):
+        """
+        Validates fields (user_id and restaurant_id)
+        :param fields: Dictionary of fields to validate
+        :return: A list of fields that were invalid. Returns None if all fields are valid
+        """
+
+        invalid = {'Invalid': []}
+
+        if 'user_id' in fields:
+            try:
+                if not fields['user'].isnumeric():
+                    invalid['Invalid'].append('user_id')
+            except ValidationError as e:
+                invalid['Invalid'].append('user_id')
+
+        if 'restaurant_id' in fields:
+            try:
+                ObjectId(fields['restaurant_id'])
+            except Exception:
+                invalid['Invalid'].append('restaurant_id')
+
+        if len(invalid['Invalid']) == 0:
+            return None
+        else:
+            return invalid
