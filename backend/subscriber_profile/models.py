@@ -2,10 +2,10 @@ from django.db import models
 from django.forms import model_to_dict
 from django.contrib.auth import get_user_model
 from utils.common import save_and_clean
-from utils.validators import check_script_injections
+from utils.validators import check_script_injections, validate_postal_code, validate_name
+from utils.geo_controller import geocode
 
 from .enum import ConsentStatus
-from utils.validators import validate_name
 
 import datetime
 
@@ -62,8 +62,7 @@ class SubscriberProfile(models.Model):
             try:
                 validate_name(fields['last_name'])
             except ValidationError as e:
-                invalid['Invalid'].append('last_name')  
-            
+                invalid['Invalid'].append('last_name')
         
         if 'expired_at' in fields:
             try:
@@ -75,6 +74,12 @@ class SubscriberProfile(models.Model):
         if 'phone' in fields and fields['phone'] is not None:
             if len(str(fields['phone'])) != 10 and str(fields['phone']).isnumeric():
                 invalid['Invalid'].append('phone')
+
+        if 'postalCode' in fields and fields['postalCode'] is not None:
+            try:
+                validate_postal_code(fields['postalCode'])
+            except ValidationError as e:
+                invalid['Invalid'].append('postalCode')
 
         if not invalid['Invalid']:
             return None
@@ -93,6 +98,7 @@ class SubscriberProfile(models.Model):
             if "consent_status" in subscriber_data:
                 subscriber_data.update(handleConsentStatus(subscriber_data['consent_status']))
             profile = cls(**subscriber_data)
+            profile.GEO_location = geocode(profile.postalCode)
             profile = save_and_clean(profile)
             return profile
         else:
@@ -112,8 +118,8 @@ class SubscriberProfile(models.Model):
             profile = SubscriberProfile.objects.get(pk=subscriber_data['user_id'])
             for field in subscriber_data:
                 setattr(profile, field, subscriber_data[field])
-            profile.clean()
-            profile.save()
+            profile.GEO_location = geocode(profile.postalCode)
+            profile = save_and_clean(profile)
             return profile
         else:
             raise ValidationError(

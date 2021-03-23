@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-//const API_URL = 'http://localhost:8080/api/test/';
-const API_URL = '/api/';
-//const API_URL = '/';
+const API_URL = '/api/'
+const SDUSER_ENDPOINT = '/api/user/';
+const SUBSCRIBER_ENDPOINT = '/api/subscriber/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -40,16 +40,14 @@ export class UserService {
     return this.http.get(API_URL + 'ro', { responseType: 'text' });
   }
 
-
-  /* The below two are what I'm using for subscriber-profile-form.component.ts */
   /*
   @Input: JSON object containing fields to be modified for an sduser
   @Ouput: JSON object representing the updated sduser
   Modified an sduser
   */
   editAccountUser(userData): Observable<any> {
-    const endpoint = API_URL + 'user/edit/'
-    return this.http.put<any>(endpoint, JSON.stringify(userData), httpOptions);
+    const endpoint = SDUSER_ENDPOINT + 'edit/'
+    return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
   /*
@@ -58,34 +56,8 @@ export class UserService {
   Makes a new subscriber profile
   */
   createSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'subscriber/signup/'
+    const endpoint = SUBSCRIBER_ENDPOINT + 'signup/'
     return this.http.post<any>(endpoint, userData, httpOptions);
-  }
-
-  /*
-  @Input: JSON object containing user email
-  @Output: Return all fields of a sduser
-  Get all fields of a sduser
-  */
-  getAccountUser(userData): Observable<any> {
-    const endpoint = API_URL + 'user/sduser/get/'
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject })
-  }
-
-  /*
-  @Input: the user's user_id
-  @Output: Return all fields of a subscriber
-  Get all fields of subscriber
-  */
-  getSubscriberProfile(user_id): Observable<any> {
-    const endpoint = API_URL + 'subscriber/profile/'
-    const params = {
-      user_id: user_id
-    }
-    return this.http.get(endpoint, { params: params });
   }
 
   /*
@@ -94,9 +66,29 @@ export class UserService {
   Modifies an existing subscriber profile
   */
   editSubscriberProfile(userData): Observable<any> {
-    const endpoint = API_URL + 'subscriber/profile/';
+    const endpoint = SUBSCRIBER_ENDPOINT + 'profile/';
     return this.http.put<any>(endpoint, userData, httpOptions);
   }
+
+  /*
+  @Input: the logged in user's user_id from their token
+  @Output: Return all fields of a subscriber
+  Get all fields of subscriber
+  */
+  getSubscriberProfile(user_id): Observable<any> {
+    const endpoint = SUBSCRIBER_ENDPOINT + 'profile/'
+    const params = {
+      user_id: user_id
+    }
+    return this.http.get(endpoint, { params: params });
+  }
+
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+  /*
+  BELOW ARE THE OLD SERVICE METHODS FROM PREVIOUS REPO
+  SOME CAN BE MOVED OVER, SOME CAN BE SCRAPPED
+  */
+  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
   /*
   @Input: JSON object from auth

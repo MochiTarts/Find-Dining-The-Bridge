@@ -70,7 +70,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   open(closeButton: boolean): void {
     if (this.authService.isLoggedIn) {
       this.siteKey = `${environment.captcha.siteKey}`;
-      if (!this.closeButton) {
+      if (!closeButton) {
         this.aFormGroup = this.formBuilder.group({
           recaptcha: ['', Validators.required],
           firstname: ['', Validators.required],
@@ -80,6 +80,7 @@ export class SubscriberProfileFormComponent implements OnInit {
           terms: ['', Validators.requiredTrue],
         });
       } else {
+        console.log("Here")
         this.aFormGroup = this.formBuilder.group({
           recaptcha: ['', Validators.required],
           firstname: ['', Validators.required],
