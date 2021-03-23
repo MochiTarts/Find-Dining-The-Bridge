@@ -12,20 +12,12 @@ from jsonschema.exceptions import ValidationError
 from restaurant.enum import Status
 from restaurant.models import (
     Food,
-    ManualTag,
     Restaurant,
     PendingRestaurant,
     PendingFood,
     UserFavRestrs
 )
-from restaurant.serializer import (
-    PendingRestaurantInsertSerializer,
-    PendingRestaurantEditSerializer,
-    UserFavRestrsSerializer,
-    PendingFoodInsertSerializer,
-    PendingFoodEditSerializer,
-    PendingFoodDeleteSerializer
-)
+
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 
 from bson import ObjectId
@@ -245,25 +237,25 @@ class DishList(APIView):
     """ dish list """
 
     def get(self, request, rest_id):
-    """Retrieve all dishes from the database"""
-    foods = Food.objects.all()
-    response = {'Dishes': models_to_json(foods)}
-    return JsonResponse(response)
+        """Retrieve all dishes from the database"""
+        foods = Food.objects.all()
+        response = {'Dishes': models_to_json(foods)}
+        return JsonResponse(response)
 
 
 class DishRestaurantView(APIView):
     """ dish restaurant view """
 
     def get(self, request, rest_id):
-    """Retrieve all dishes from a restaurant"""
-       #rest_id = request.GET.get('restaurant_id')
-       dishes = Food.get_by_restaurant(rest_id)
+        """Retrieve all dishes from a restaurant"""
+        # rest_id = request.GET.get('restaurant_id')
+        dishes = Food.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
-    def post(self, request, rest_id)
-    """ Deletes dish from database """
-       try:
+    def post(self, request, rest_id):
+        """ Deletes dish from database """
+        try:
             body = json.loads(request.body)
             food = PendingFood.objects.get(
                 name=body["food_name"], restaurant_id=rest_id)
@@ -300,14 +292,14 @@ class PendingDishView(APIView):
 
     def get(self, request, rest_id):
         """Retrieve all dishes from a restaurant"""
-        #rest_id = request.GET.get('restaurant_id')
+        # rest_id = request.GET.get('restaurant_id')
         dishes = PendingFood.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
     def post(self, request, rest_id):
-    """ Insert dish into database """
-       try:
+        """ Insert dish into database """
+        try:
             validate(instance=json.loads(request.body), schema=food_schema)
             body = json.loads(request.body)
             invalid = PendingFood.field_validate(body)
@@ -340,8 +332,8 @@ class PendingDishView(APIView):
                 return JsonResponse({'message': message}, status=500)
 
     def put(self, request, rest_id):
-    """ Update Dish data """
-       try:
+        """ Update Dish data """
+        try:
             validate(instance=json.loads(request.body),
                      schema=food_edit_schema)
             body = json.loads(request.body)
@@ -421,9 +413,8 @@ class UserFavView(APIView):
     """ user fav view """
 
     def post(self, request, user_id):
-    """ Add a new user-restaurant-favourite relation """
-       try:
-
+        """ Add a new user-restaurant-favourite relation """
+        try:
             body = json.loads(request.body)
             body['user_id'] = user_id
             invalid = UserFavRestrs.field_validate(body)
@@ -449,9 +440,9 @@ class UserFavView(APIView):
                 return JsonResponse({'message': message}, status=500)
 
     def get(self, request, user_id):
-    """ Get all restaurants favourited by a user """
-       try:
-            #user_id = request.GET.get('user_id')
+        """ Get all restaurants favourited by a user """
+        try:
+            # user_id = request.GET.get('user_id')
             response = UserFavRestrs.getUserFavourites(user_id)
             return JsonResponse(response, safe=False)
         except ValueError as e:
@@ -470,9 +461,9 @@ class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
 
     def get(self, request, rest_id):
-    """ Get all users who favourited the requested restaurant """
-       try:
-            #_id = request.GET.get('restaurant_id')
+        """ Get all users who favourited the requested restaurant """
+        try:
+            # _id = request.GET.get('restaurant_id')
             response = UserFavRestrs.getRestrFavouriteds(rest_id)
             return JsonResponse(response, safe=False)
         except ValueError as e:
@@ -491,10 +482,10 @@ class FavRelationView(APIView):
     """ remove fav relation view """
 
     def delete(self, request, user_id, rest_id):
-    """ Remove a new user-restaurant-favourite relation """
-       try:
+        """ Remove a new user-restaurant-favourite relation """
+        try:
 
-            #body = json.loads(request.body)
+            # body = json.loads(request.body)
             body = {'user_id': user_id, 'restaurant_id': rest_id}
             invalid = UserFavRestrs.field_validate(body)
             if invalid:
@@ -523,9 +514,9 @@ class RestaurantView(APIView):
     """ get restaurant view dish view """
 
     def get(self, request, rest_id):
-    """Retrieve restaurant by id"""
-       try:
-            #_id = request.GET.get('_id')
+        """Retrieve restaurant by id"""
+        try:
+            # _id = request.GET.get('_id')
             _id = rest_id
             if _id is None:
                 return JsonResponse({'message': '_id parameter is required and cannot be None'}, status=400)
@@ -553,9 +544,9 @@ class PendingRestaurantView(APIView):
     """ pending restaurant view """
 
     def get(self, request, rest_id):
-    """Retrieve restaurant from pending collection by id"""
-       try:
-            #_id = request.GET.get('_id')
+        """Retrieve restaurant from pending collection by id"""
+        try:
+            # _id = request.GET.get('_id')
             _id = rest_id
             if _id is None:
                 return JsonResponse({'message': '_id parameter is required and cannot be None'}, status=400)
@@ -583,8 +574,8 @@ class AllRestaurantList(APIView):
     """ all restaurants list """
 
     def get(self, request):
-    """Retrieve all restaurants"""
-       restaurants = models_to_json(list(Restaurant.objects.all()))
+        """Retrieve all restaurants"""
+        restaurants = models_to_json(list(Restaurant.objects.all()))
         for restaurant in restaurants:
             restaurant['restaurant_image_url'] = ast.literal_eval(
                 restaurant['restaurant_image_url'])
@@ -601,8 +592,8 @@ class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
 
     def post(self, request):
-    """Insert new restaurant as a draft into database"""
-       try:
+        """Insert new restaurant as a draft into database"""
+        try:
             validate(instance=json.loads(request.body),
                      schema=restaurant_insert_draft_schema)
             body = json.loads(request.body)
@@ -635,8 +626,8 @@ class RestaurantDraftView(APIView):
                 return JsonResponse({'message': message}, status=500)
 
     def put(self, request):
-    """Edit a restaurant profile and save it as a draft in the database"""
-       try:
+        """Edit a restaurant profile and save it as a draft in the database"""
+        try:
             validate(instance=json.loads(request.body),
                      schema=restaurant_edit_draft_schema)
             body = json.loads(request.body)
@@ -683,8 +674,8 @@ class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
 
     def post(self, request):
-    """Insert or update a restaurant record for admin approval"""
-       try:
+        """Insert or update a restaurant record for admin approval"""
+        try:
             validate(instance=json.loads(request.body),
                      schema=restaurant_insert_for_approval_schema)
             body = json.loads(request.body)

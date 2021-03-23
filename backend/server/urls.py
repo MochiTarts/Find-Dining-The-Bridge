@@ -13,15 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include, re_path, reverse_lazy
-import index
-import auth
+from django.contrib import admin
 from django.contrib.auth import views as auth_views
+
 from sduser.backends import verify_email
+
 from server.admin import admin_site
 from sduser.forms import NewPasswordChangeForm
 from sduser.views import AdminPasswordResetView
+
+import restaurant
+import index
+import auth
 
 urlpatterns = [
     path('', include('index.urls')),
@@ -46,7 +50,7 @@ urlpatterns = [
     path('auth/', include('auth.urls')),
     path('user/', include('sduser.urls')),
     path('subscriber/', include('subscriber_profile.urls')),
-
+    path('/', include('restaurant.urls')),
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
