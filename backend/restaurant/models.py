@@ -41,30 +41,6 @@ class Food(models.Model):
         verbose_name_plural = "Foods (Live)"
 
     @classmethod
-    def add_dish(cls, food_data):
-        """
-        insert dish into database and return response
-        :param food_data: dictionary representation of dish
-        :return: Food model object
-        """
-        dish = cls(
-            name=food_data['name'],
-            restaurant_id=food_data['restaurant_id'],
-            description=food_data['description'],
-            price=food_data['price'],
-            specials=food_data['specials'],
-            category=food_data['category'],
-        )
-        save_and_clean(dish)
-        dish = model_refresh(
-            Food, {'name': dish.name, 'restaurant_id': dish.restaurant_id})
-        restaurant = Restaurant.objects.get(_id=food_data['restaurant_id'])
-        if not restaurant.category_exists(food_data['category']):
-            restaurant.categories.append(food_data['category'])
-            restaurant.save(update_fields=['categories'])
-        return dish
-
-    @classmethod
     def get_by_restaurant(cls, rest_id):
         """
         Retrieve restaurant by id
@@ -72,28 +48,6 @@ class Food(models.Model):
         :return: restaurant data in json
         """
         return list(Food.objects.filter(restaurant_id=rest_id))
-
-    @classmethod
-    def field_validate(self, fields):
-        """
-        Validates fields
-        :param fields: Dictionary of fields to validate
-        :return: A list of fields that were invalid. Returns None if all fields are valid
-        """
-        dish_urls = ['picture']
-        invalid = {'Invalid': []}
-
-        for field in dish_urls:
-            if field in fields and fields[field] != '':
-                try:
-                    requests.get(fields[field])
-                except (requests.ConnectionError, requests.exceptions.MissingSchema):
-                    invalid['Invalid'].append(field)
-
-        if not invalid['Invalid']:
-            return None
-        else:
-            return invalid
 
     def clean_description(self):
         description = {food for food in self.description.split(' ')}
@@ -309,142 +263,19 @@ class Restaurant(models.Model):
         except ObjectDoesNotExist:
             return None
 
-    @classmethod
-    def insert(cls, restaurant_data):
-        """
-        Insert restaurant into database given restaurant data
-        :param restaurant_data: json data of restaurant
-        :return: restaurant object representing sent data
-        """
-        try:
-            cls.objects.get(email=restaurant_data['email'])
-            raise ValueError(
-                'Cannot insert restaurant object, an object with this email already exists')
-        except ObjectDoesNotExist:
-            restaurant = cls(
-                **restaurant_data
-            )
-            update_model_geo(restaurant, restaurant_data['address'])
-            restaurant = save_and_clean(restaurant)
-            return restaurant
-
-    @classmethod
-    def field_validate(self, fields):
-        """
-        Validates fields
-        :param fields: Dictionary of fields to validate
-        :return: A list of fields that were invalid. Returns None if all fields are valid
-        """
-        restaurant_urls = ['twitter', 'instagram', 'cover_photo_url', 'logo_url', 'owner_picture_url',
-                           'external_delivery_link']
-
-        invalid = {'Invalid': []}
-
-        for field in restaurant_urls:
-            if field in fields and fields[field] != '':
-                try:
-                    requests.get(fields[field])
-                except (requests.ConnectionError, requests.exceptions.MissingSchema):
-                    invalid['Invalid'].append(field)
-
-        # check if there is script in any field values
-        for attr in self.attr_list:
-            if attr in fields:
-                value = fields[attr]
-                if value is not None:
-                    try:
-                        check_script_injections(value)
-                    except ValidationError as e:
-                        invalid['Invalid'].append(attr)
-
-        for field in restaurant_urls:
-            if field in fields and fields[field] != '':
-                try:
-                    requests.get(fields[field])
-                except (requests.ConnectionError, requests.exceptions.MissingSchema):
-                    invalid['Invalid'].append(field)
-        if 'owner_first_name' in fields and fields['owner_first_name']:
-            try:
-                for name in fields['owner_first_name']:
-                    validate_name(name)
-            except ValidationError as e:
-                invalid['Invalid'].append('owner_first_name')
-
-        if 'owner_last_name' in fields and fields['owner_last_name']:
-            try:
-                for name in fields['owner_last_name']:
-                    validate_name(name)
-            except ValidationError as e:
-                invalid['Invalid'].append('owner_last_name')
-        else:
-            invalid['Invalid'].append('owner_last_name')
-
-        if 'web_url' in fields and fields['web_url'] != "":
-            website = fields['web_url']
-            try:
-                validate_url(website)
-            except ValidationError as e:
-                invalid['Invalid'].append('website')
-
-        if 'facebook' in fields and fields['facebook'] != "":
-            website = fields['facebook']
-            try:
-                validate_url(website)
-            except ValidationError as e:
-                invalid['Invalid'].append('facebook')
-
-        if 'twitter' in fields and fields['twitter'] != "":
-            website = fields['twitter']
-            try:
-                validate_url(website)
-            except ValidationError as e:
-                invalid['Invalid'].append('twitter')
-
-        if 'instagram' in fields and fields['instagram'] != "":
-            website = fields['instagram']
-            try:
-                validate_url(website)
-            except ValidationError as e:
-                invalid['Invalid'].append('instagram')
-
-        if 'email' in fields:
-            # if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", fields['email']):
-            try:
-                validate_email(fields['email'])
-            except ValidationError as e:
-                invalid['Invalid'].append('email')
-        else:
-            invalid['Invalid'].append('email')
-
-        if 'phone' in fields and fields['phone'] is not None:
-            if len(str(fields['phone'])) != 10 and str(fields['phone']).isnumeric():
-                invalid['Invalid'].append('phone')
-
-        if not 'open_hours' in fields:
-            invalid['Invalid'].append('open hours')
-
-        if 'payment_methods' in fields and fields['payment_methods']:
-            for payment in fields['payment_methods']:
-                if payment not in Payment.values():
-                    invalid['Invalid'].append(
-                        'payment_methods ('+payment+' is not a valid payment method. Should be credit, debit, or cash)')
-
-        if len(invalid['Invalid']) == 0:
-            return None
-        else:
-            return invalid
-
 
 class PendingRestaurant(models.Model):
     """ Model for Restaurants """
 
-    attr_list = ['name', 'phone', 'web_url', 'years',
-                 'address', 'streetAddress2', 'streetAddress3',
-                 'postalCode', 'owner_first_name', 'owner_last_name',
-                 'owner_preferred_name', 'owner_story',
-                 'email', 'locationNotes', 'facebook', 'twitter',
-                 'instagram', 'bio', 'dineinPickupDetails', 'restaurant_video_url',
-                 'restaurant_image_url', 'full_menu_url', ]
+    attr_list = [
+        'name', 'phone', 'web_url', 'years',
+        'address', 'streetAddress2', 'streetAddress3',
+        'postalCode', 'owner_first_name', 'owner_last_name',
+        'owner_preferred_name', 'owner_story',
+        'email', 'locationNotes', 'facebook', 'twitter',
+        'instagram', 'bio', 'dineinPickupDetails', 'restaurant_video_url',
+        'restaurant_image_url', 'full_menu_url',
+    ]
 
     _id = models.ObjectIdField()
     name = models.CharField(max_length=30, blank=True, default='')
@@ -515,14 +346,6 @@ class PendingRestaurant(models.Model):
         verbose_name_plural = "Restaurants (Submission)"
         ordering = ['-status', 'modified_time']
 
-    def category_exists(self, category):
-        """
-        Check whether category is new
-        @param category: referenced category
-        @return: boolean
-        """
-        return category in self.categories
-
     @classmethod
     def get(cls, _id):
         """
@@ -539,7 +362,7 @@ class PendingRestaurant(models.Model):
     @classmethod
     def insert(cls, restaurant_data):
         """
-        Insert restaurant into database given restaurant data
+        Insert pending restaurant into database given restaurant data
         :param restaurant_data: json data of restaurant
         :return: restaurant object representing sent data
         """
@@ -580,6 +403,12 @@ class PendingRestaurant(models.Model):
             except ValidationError:
                 invalid['Invalid'].append('postalCode')
 
+        if 'email' in fields:
+            try:
+                validate_email(fields['email'])
+            except ValidationError as e:
+                invalid['Invalid'].append('email')
+
         if 'owner_first_name' in fields and fields['owner_first_name']:
             try:
                 for name in fields['owner_first_name']:
@@ -600,13 +429,6 @@ class PendingRestaurant(models.Model):
             except ValidationError as e:
                 invalid['Invalid'].append('owner_last_name')
 
-        if 'email' in fields:
-            # if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", fields['email']):
-            try:
-                validate_email(fields['email'])
-            except ValidationError as e:
-                invalid['Invalid'].append('email')
-
         if len(invalid['Invalid']) == 0:
             return None
         else:
@@ -619,17 +441,7 @@ class PendingRestaurant(models.Model):
         :param fields: Dictionary of fields to validate
         :return: A list of fields that were invalid. Returns None if all fields are valid
         """
-        restaurant_urls = ['twitter', 'instagram', 'cover_photo_url', 'logo_url', 'owner_picture_url',
-                           'external_delivery_link', 'full_menu_url']
-
         invalid = {'Invalid': []}
-
-        for field in restaurant_urls:
-            if field in fields and fields[field] != '':
-                try:
-                    requests.get(fields[field])
-                except (requests.ConnectionError, requests.exceptions.MissingSchema):
-                    invalid['Invalid'].append(field)
 
         # check if there is script in any field values
         for attr in self.attr_list:
@@ -640,13 +452,6 @@ class PendingRestaurant(models.Model):
                         check_script_injections(value)
                     except ValidationError as e:
                         invalid['Invalid'].append(attr)
-
-        for field in restaurant_urls:
-            if field in fields and fields[field] != '':
-                try:
-                    requests.get(fields[field])
-                except (requests.ConnectionError, requests.exceptions.MissingSchema):
-                    invalid['Invalid'].append(field)
 
         if 'name' in fields and not fields['name']:
             invalid['Invalid'].append('name')
@@ -669,25 +474,25 @@ class PendingRestaurant(models.Model):
             except ValidationError:
                 invalid['Invalid'].append('postalCode')
 
-        if 'owner_first_name' in fields and fields['owner_first_name']:
-            try:
-                for name in fields['owner_first_name']:
-                    if not name:
-                        invalid['Invalid'].append('owner_last_name')
-                        break
-                    validate_name(name)
-            except ValidationError as e:
-                invalid['Invalid'].append('owner_first_name')
+        if 'phone' in fields:
+            if fields['phone'] is not None:
+                if len(str(fields['phone'])) != 10 and str(fields['phone']).isnumeric():
+                    invalid['Invalid'].append('phone')
+            else:
+                invalid['Invalid'].append('phone')
 
-        if 'owner_last_name' in fields and fields['owner_last_name']:
+        if 'email' in fields:
             try:
-                for name in fields['owner_last_name']:
-                    if not name:
-                        invalid['Invalid'].append('owner_last_name')
-                        break
-                    validate_name(name)
+                validate_email(fields['email'])
             except ValidationError as e:
-                invalid['Invalid'].append('owner_last_name')
+                invalid['Invalid'].append('email')
+
+        if 'pricepoint' in fields:
+            if fields['pricepoint'] is not None:
+                if not Prices.has_key(fields['pricepoint']):
+                    invalid['Invalid'].append('pricepoint')
+            else:
+                invalid['Invalid'].append('pricepoint')
 
         if 'web_url' in fields and fields['web_url'] != "":
             website = fields['web_url']
@@ -717,26 +522,25 @@ class PendingRestaurant(models.Model):
             except ValidationError as e:
                 invalid['Invalid'].append('instagram')
 
-        if 'email' in fields:
-            # if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", fields['email']):
+        if 'owner_first_name' in fields and fields['owner_first_name']:
             try:
-                validate_email(fields['email'])
+                for name in fields['owner_first_name']:
+                    if not name:
+                        invalid['Invalid'].append('owner_last_name')
+                        break
+                    validate_name(name)
             except ValidationError as e:
-                invalid['Invalid'].append('email')
+                invalid['Invalid'].append('owner_first_name')
 
-        if 'pricepoint' in fields:
-            if fields['pricepoint'] is not None:
-                if not Prices.has_key(fields['pricepoint']):
-                    invalid['Invalid'].append('pricepoint')
-            else:
-                invalid['Invalid'].append('pricepoint')
-
-        if 'phone' in fields:
-            if fields['phone'] is not None:
-                if len(str(fields['phone'])) != 10 and str(fields['phone']).isnumeric():
-                    invalid['Invalid'].append('phone')
-            else:
-                invalid['Invalid'].append('phone')
+        if 'owner_last_name' in fields and fields['owner_last_name']:
+            try:
+                for name in fields['owner_last_name']:
+                    if not name:
+                        invalid['Invalid'].append('owner_last_name')
+                        break
+                    validate_name(name)
+            except ValidationError as e:
+                invalid['Invalid'].append('owner_last_name')
 
         if 'open_hours' in fields and not fields['open_hours']:
             invalid['Invalid'].append('open_hours')
@@ -771,7 +575,7 @@ class UserFavRestrs(models.Model):
     @classmethod
     def insert(cls, data):
         """ Inserts a new user-restaurant favourite relation
-        :param: data: dictionary containing user_email and restaurant_id of user and restaurant
+        :param: data: dictionary containing user_id and restaurant_id of user and restaurant
                       to be added in a favourite relation
         :return: user-restaurant-favourite relation object with actual restaurant data of
                  the favourite restaurant,
