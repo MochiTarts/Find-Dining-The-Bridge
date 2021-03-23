@@ -23,7 +23,8 @@ export class ProfileComponent implements OnInit {
       this.currentUser.first_name = data.first_name;
       this.currentUser.last_name = data.last_name;
       this.currentUser.postalCode = data.postalCode;
-      this.currentUser.phone = data.phone;
+      var phone: string = String(data.phone);
+      this.currentUser.phone = phone != 'null' ? "(" + phone.slice(0,3) + ") " + phone.slice(3,6) + " " + phone.slice(6,10) : '';
     })
   }
 

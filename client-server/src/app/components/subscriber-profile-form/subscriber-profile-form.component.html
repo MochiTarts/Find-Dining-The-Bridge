@@ -22,6 +22,7 @@
           <input
             id="firstname"
             class="form-control"
+            value="Jane"
             placeholder="Ex: Jane"
             formControlName="firstname"
             aria-required="true"
@@ -114,7 +115,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn" (click)="updateProfile()">
+    <button type="button" class="btn" (click)="updateProfile()" [disabled]="!aFormGroup.valid">
       Save Profile
     </button>
   </div>
