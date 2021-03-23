@@ -1,11 +1,12 @@
 import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from django.conf import settings
 
 credentials = service_account.Credentials.from_service_account_info({
-    "client_email": os.environ.get('GOOGLE_OAUTH2_CLIENT_EMAIL'),
+    "client_email": settings.GOOGLE_OAUTH2_CLIENT_EMAIL,
     "token_uri": "https://oauth2.googleapis.com/token",
-    "private_key": os.environ.get('GOOGLE_OAUTH2_PRIVATE_KEY').replace('\\n', '\n')
+    "private_key": settings.GOOGLE_OAUTH2_PRIVATE_KEY,
 },
     scopes=['https://www.googleapis.com/auth/spreadsheets'],
     subject="info@finddining.ca")

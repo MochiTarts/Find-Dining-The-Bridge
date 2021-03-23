@@ -18,6 +18,8 @@ from restaurant.models import (
     UserFavRestrs
 )
 
+from google.analytics import get_access_token, get_analytics_data
+
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 
 from bson import ObjectId
@@ -777,3 +779,20 @@ def add_cateogory(category, restaurant):
     """
     restaurant.categories.append(category)
     restaurant.save(update_fields=['categories'])
+
+
+class AnalyticsAccessTokenView(APIView):
+    """ analytics access token view """
+
+    def get(self, request):
+        """ Get OAuth2 access token for Google Analytics API to make call """
+        return JsonResponse({'token': get_access_token()})
+
+class AnalyticsDataView(APIView):
+    """ analytics data view """
+
+    def get(self, request, rest_id):
+        """ Retrieves analytics data for a restaurant page given restaurant id """
+        #restaurant_id = request.GET.get('restaurant_id')
+        traffic = get_analytics_data(rest_id)
+        return JsonResponse(traffic)

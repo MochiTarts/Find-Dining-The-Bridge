@@ -20,11 +20,8 @@ export class RestaurantService {
   @Output: Google analytics data of restaurant page views
   */
   getViewTraffic(id:string): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/restaurant_traffic/'
-    const params = {
-      'restaurant_id': id
-    }
-    return this.http.get(endpoint, { params: params })
+    const endpoint = RO_ENDPOINT + id + '/restaurant_traffic/'
+    return this.http.get(endpoint)
   }
 
   /*
