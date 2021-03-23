@@ -25,7 +25,6 @@ export class SubscriberProfileFormComponent implements OnInit {
   userId: string = '';
   username: string = '';
   profileId: string = '';
-  userData: any;
   siteKey: string;
   closeButton: boolean = false;
 
@@ -71,19 +70,11 @@ export class SubscriberProfileFormComponent implements OnInit {
     }
   }
 
-  reload() {
-    let currentUrl = this.router.url;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([currentUrl]);
-  }
-
   updateProfile(): void {
-    console.log(this.profileId)
     var sduserInfo = {
       email: this.email,
       profile_id: this.userId,
-    }
+    };
 
     var subscriberInfo = {
       user_id: this.userId,
@@ -124,14 +115,20 @@ export class SubscriberProfileFormComponent implements OnInit {
           this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
             this.authService.refreshToken().subscribe((token) => {
               this.tokenStorageService.updateTokenAndUser(token.access);
-              console.log(this.tokenStorageService.getUser());
               this.modalRef.close();
-              //window.location.reload();
+              this.reload();
             })
           })
         }
       })
     }
+  }
+
+  reload() {
+    let currentUrl = this.router.url;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate([currentUrl]);
   }
 
 }

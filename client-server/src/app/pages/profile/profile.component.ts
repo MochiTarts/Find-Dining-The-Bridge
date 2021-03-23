@@ -24,7 +24,6 @@ export class ProfileComponent implements OnInit {
       this.currentUser.last_name = data.last_name;
       this.currentUser.postalCode = data.postalCode;
       this.currentUser.phone = data.phone;
-      console.log(this.currentUser)
     })
   }
 
