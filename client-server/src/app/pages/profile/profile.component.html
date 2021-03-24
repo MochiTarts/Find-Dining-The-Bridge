@@ -1,0 +1,70 @@
+<!--<div class="container" *ngIf="currentUser; else loggedOut">
+  <header class="jumbotron">
+    <h3>
+      <strong>{{ currentUser.username }}</strong> Profile
+    </h3>
+  </header>
+  <p>
+    <strong>Token:</strong>
+    {{ currentUser.token.substring(0, 20) }} ...
+    {{ currentUser.token.substr(currentUser.token.length - 20) }}
+  </p>
+  <p>
+    <strong>Email:</strong>
+    {{ currentUser.email }}
+  </p>
+  <p>
+    <strong>Role:</strong>
+    {{ currentUser.role }}
+  </p>
+</div>
+
+<ng-template #loggedOut>
+  Please login.
+</ng-template>-->
+
+<div class="profile-box" role="main" aria-label="profile">
+  <div>
+    <div class="row no-gutters content-wrap">
+      <div class="col-md-12">
+        <h2 class="name">{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
+      </div>
+      <div class="col-md-12" style="margin-top: 25px;">
+        <p><b>Email:</b> {{ currentUser.email }}</p>
+      </div>
+      <div class="col-md-12">
+        <p><b>Postal Code:</b> {{ currentUser.postalCode }}</p>
+      </div>
+      <div class="col-md-12">
+        <p><b>Phone Number:</b> {{ currentUser.phone }}</p>
+      </div>
+      <div class="col-md-12 text-center" style="margin-top: 25px;">
+        <button
+          class="btn edit-profile"
+          (click)="openEditModal()"
+          placement="top"
+          ngbTooltip="Update Your Info"
+        >
+          Edit Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form>
+
+<!--
+<h2 class="name">{{ currentUser.username }}</h2>
+<p><b>Email:</b> {{ currentUser.email }}</p>
+<p><b>Postal Code:</b> A#A #A#</p>
+<p><b>Phone Number:</b> (123) 456 7890</p>
+<button
+  class="btn edit-profile"
+  (click)="openEditModal()"
+  placement="top"
+  ngbTooltip="Update Your Info"
+>
+  Edit Profile
+</button>
+-->

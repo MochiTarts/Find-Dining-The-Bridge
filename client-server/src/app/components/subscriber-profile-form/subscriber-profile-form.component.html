@@ -1,0 +1,122 @@
+<ng-template #userInfo let-modal role="form">
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-profile-title">Profile Information</h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+      *ngIf="closeButton"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p style="font-style:italic; color: gray;">
+      All required fields are marked with an asterisk (<app-required-star></app-required-star>)
+    </p>
+    <form [formGroup]="aFormGroup">
+      <div class="form-group">
+        <label for="name">First Name <app-required-star></app-required-star></label>
+        <div class="input-group">
+          <input
+            id="firstname"
+            class="form-control"
+            value="Jane"
+            placeholder="Ex: Jane"
+            formControlName="firstname"
+            aria-required="true"
+          />
+        </div>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorName'"
+          [message]="validator.errors['first_name']"
+        ></app-dynamic-label>
+      </div>
+      <div class="form-group">
+        <label for="name">Last Name <app-required-star></app-required-star></label>
+        <div class="input-group">
+          <input
+            id="lastname"
+            class="form-control"
+            placeholder="Ex: Doe"
+            formControlName="lastname"
+            aria-required="true"
+          />
+        </div>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorName'"
+          [message]="validator.errors['last_name']"
+        ></app-dynamic-label>
+      </div>
+      <div class="form-group">
+        <label for="postalcode">Postal Code (A#A #A#) <app-required-star></app-required-star></label>
+        <div class="input-group">
+          <input
+            id="postalcode"
+            class="form-control"
+            placeholder="Ex: A1A 1A1"
+            formControlName="postalcode"
+            aria-required="true"
+          />
+        </div>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPostalCode'"
+          [message]="validator.errors['postalCode']"
+        ></app-dynamic-label>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number (10 digits no dashes) <app-required-star></app-required-star></label>
+        <div class="input-group">
+          <input
+            id="phone"
+            class="form-control"
+            placeholder="Ex: 6471234657"
+            formControlName="phone"
+            aria-required="true"
+          />
+        </div>
+        <app-dynamic-label class="error-label"
+        [name]="'errorPhone'"
+        [message]="validator.errors['phone']" ></app-dynamic-label>
+      </div>
+      <div *ngIf="profileId == null">
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="casl"
+              type="checkbox"
+            />
+            <label for="casl" style="padding-left: 5px;"><b>Please add me to your mailing list so I can receive information on promotions and updates to Find Dining!</b></label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="terms-of-service"
+              type="checkbox"
+              formControlName="terms"
+              aria-required="true"
+            />
+            <label for="terms-of-service" style="padding-left: 5px;">I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <ngx-recaptcha2
+          #captchaElem
+          [siteKey]="siteKey"
+          formControlName="recaptcha"
+        ></ngx-recaptcha2>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn" (click)="updateProfile()" [disabled]="!aFormGroup.valid">
+      Save Profile
+    </button>
+  </div>
+</ng-template>

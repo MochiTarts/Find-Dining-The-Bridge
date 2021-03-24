@@ -1,0 +1,157 @@
+@import "src/styles";
+
+.logo {
+  height: 40px;
+  width: auto;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.navbar {
+  background-color: $primary-color;
+  z-index: 100;
+}
+
+.word {
+  font-family: "Alegreya Sans SC", sans-serif;
+  font-size: 20px;
+  margin: 0px 2px;
+  cursor: pointer;
+  text-align: center;
+
+  @media screen and (max-width: 500px) {
+    font-size: 16px;
+  }
+}
+
+.find {
+  font-weight: bold;
+  margin-left: 10px;
+  color: rgb(77, 77, 77);
+
+  @media screen and (max-width: 400px) {
+    margin-left: 0px;
+  }
+}
+
+.dining {
+  font-weight: bold;
+  color: #009edd;
+}
+
+.scarborough {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+  color: rgb(77, 77, 77);
+
+  @media screen and (max-width: 500px) {
+    font-size: 14px;
+  }
+}
+
+br {
+  display: none;
+
+  @media screen and (max-width: 400px) {
+    display: block;
+  }
+}
+
+.nav-link {
+  font-size: 15px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: $navigation-color;
+  margin: 0;
+  cursor: pointer;
+}
+
+.btn {
+  margin: 5px;
+}
+
+.nav-link:hover {
+  color: black;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(77, 77, 77, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.active {
+  color: black;
+  font-weight: 500;
+}
+
+.upgrade-button {
+  border-radius: 30px;
+  border-width: medium;
+  border-color: white;
+  background-color: $primary-color;
+  font-size: 15px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: $navigation-color;
+  padding: 5px 5px 5px 5px;
+  margin-right: 20px;
+}
+
+.upgrade-button:hover {
+  color: black;
+}
+
+.confirm {
+  padding: 5px 30px;
+}
+
+.cancel {
+  background-color: white;
+  color: $secondary-color;
+  border-color: $secondary-color;
+}
+
+.cancel:hover {
+  background-color: $secondary-color;
+  color: white;
+}
+
+.dropdown {
+  font-size: 15px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: $primary-color;
+  margin: 0;
+  padding: 0;
+}
+
+.address:hover {
+  color: black;
+}
+
+.dropdown:hover {
+  border-color: $primary-color;
+  color: black;
+}
+
+.address-icon {
+  font-size: 15px;
+  color: $navigation-color;
+}
+
+.icon {
+  height: 20px;
+  margin: 7px 10px;
+}
+
+.icon:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.separator {
+  font-size: 20px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: rgb(77, 77, 77);
+  margin: 7px 10px;
+
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
+}

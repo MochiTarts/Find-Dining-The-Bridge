@@ -11,8 +11,6 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 
-from verify_email.email_handler import send_verification_email
-
 from sduser.backends import SDUserCookieTokenObtainPairSerializer, create_disable_user_and_send_verification_email
 from sduser.forms import SDUserCreateForm
 
@@ -74,7 +72,7 @@ class GoogleView(APIView):
             email = googleJWT['email']
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
-                Q(authId__iexact=auth_id) | Q(email__iexact=email))
+                Q(auth_id__iexact=auth_id) | Q(email__iexact=email))
             if user.email is not email:
                 user.email = email
                 user.save()
@@ -87,7 +85,7 @@ class GoogleView(APIView):
 
             # if email is verified with 3rd party we can simply save the user with an 3rd party id
             if googleJWT['email_verified']:
-                user.authId = auth_id
+                user.auth_id = auth_id
                 user.save()
             # otherwise we create a disabled user and send an email for verification
             else:
@@ -144,7 +142,7 @@ class FacebookView(APIView):
         try:
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
-                Q(authId__iexact=auth_id) | Q(email__iexact=email))
+                Q(auth_id__iexact=auth_id) | Q(email__iexact=email))
             # update user email in case they updated it in 3rd party service
             # we can also ask it before update (future enhancements)
             if user.email is not email:
@@ -180,7 +178,7 @@ def construct_response_for_3rd_party_auth(user):
     cookie_max_age = 3600 * 24
     # print(dir(token))
     refresh_token = str(token)
-    user.refreshToken = refresh_token
+    user.refresh_token = refresh_token
     user.save()
     res = Response(response)
     res.set_cookie('refresh_token', refresh_token,
@@ -207,6 +205,6 @@ def create_default_user_for_3rd_party(email, auth_id, role):
     user.role = role
 
     # note that facebook users have their email verified so we do not need to check it
-    user.authId = auth_id
+    user.auth_id = auth_id
     user.save()
     return user

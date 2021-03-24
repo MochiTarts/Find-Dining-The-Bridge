@@ -2,33 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-
-import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatTabsModule } from '@angular/material/tabs';
-import { NgxCaptchaModule } from 'ngx-captcha';
-
-import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
-import { YouTubePlayerModule } from '@angular/youtube-player';
-import { MatIconModule } from '@angular/material/icon';
-import { FlexLayoutModule } from "@angular/flex-layout";
-import { GalleryModule } from 'ng-gallery';
-import { LightboxModule } from 'ng-gallery/lightbox';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
-import { MatInputModule } from '@angular/material/input';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { BoardROComponent } from './board-ro/board-ro.component';
-import { BoardUserComponent } from './board-user/board-user.component';
-
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import {
   GoogleLoginProvider,
@@ -39,15 +12,81 @@ import { NgHttpLoaderModule } from 'ng-http-loader';
 
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatTabsModule } from '@angular/material/tabs';
+import { NgxCaptchaModule } from 'ngx-captcha';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import { YouTubePlayerModule } from '@angular/youtube-player';
+import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { GalleryModule } from 'ng-gallery';
+import { LightboxModule } from 'ng-gallery/lightbox';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+import { LoginComponent } from './pages/login/login.component';
+import { HomeComponent } from './pages/home/home.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { NewsletterComponent } from './pages/newsletter/newsletter.component';
+
+import { IvyCarouselComponent } from './components/carousel/carousel.component';
+import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
+import { DishCardComponent } from './components/dish-card/dish-card.component';
+import { OwnerCardComponent } from './components/owner-card/owner-card.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants.component';
+import { FavouritesComponent } from './pages/favourites/favourites.component';
+import { FilterlistCardComponent } from './components/filterlist-card/filterlist-card.component';
+import { MapComponent } from './components/map/map.component';
+import { RestaurantCardComponent } from './components/restaurant-card/restaurant-card.component';
+import { RestaurantFavsCardComponent } from './components/restaurant-favs-card/restaurant-favs-card.component';
+import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-card/restaurant-nearby-card.component';
+import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.component';
+import { RequiredStarComponent } from './components/required-star/required-star.component';
+import { SubscriberProfileFormComponent } from './components/subscriber-profile-form/subscriber-profile-form.component';
+import { RestaurantProfileFormComponent } from './components/restaurant-profile-form/restaurant-profile-form.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
+    IvyCarouselComponent,
+    CarouselWithThumbnailComponent,
+    DishCardComponent,
+    OwnerCardComponent,
     LoginComponent,
     HomeComponent,
     ProfileComponent,
-    BoardROComponent,
-    BoardUserComponent,
+    NewsletterComponent,
+    NavbarComponent,
+    FooterComponent,
+    AllRestaurantsComponent,
+    FavouritesComponent,
+    FilterlistCardComponent,
+    MapComponent,
+    RestaurantCardComponent,
+    RestaurantFavsCardComponent,
+    RestaurantNearbyCardComponent,
+    DynamicLabelComponent,
+    RequiredStarComponent,
+    SubscriberProfileFormComponent,
+    RestaurantProfileFormComponent
   ],
   imports: [
     BrowserModule,
@@ -64,8 +103,14 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     MatIconModule,
     MatTabsModule,
     MatInputModule,
+    MatSelectModule,
+    MatFormFieldModule,
     MatProgressBarModule,
+    MatDividerModule,
     NgxCaptchaModule,
+    MatCardModule,
+    MatButtonModule,
+    CarouselModule.forRoot(),
     NgMultiSelectDropDownModule.forRoot(),
     YouTubePlayerModule,
     FlexLayoutModule,
@@ -91,7 +136,8 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
         }
       ]
     } as SocialAuthServiceConfig,
-  }],
+  },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

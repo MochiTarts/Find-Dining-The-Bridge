@@ -1,0 +1,38 @@
+export const servicesStr = [
+  "Delivery",
+  "Pick-up",
+  "Dine-in",
+  "Meal Kits",
+  "Catering",
+  "Patio",
+  "Live music",
+  "Wifi",
+  "Parking",
+  "Accessible Access (ramps, one floor etc.)",
+  "LLBO (Liquor License Board of Ontario)",
+  "Cash only",
+  "Vegetarian Options",
+  "Vegan Option",
+  "Gluten-free Options",
+  "Halal Options",
+]
+
+export const servicesObj = [
+  {item_id: 1, item_text: "Delivery"},
+  {item_id: 2, item_text: "Pick-up"},
+  {item_id: 3, item_text: "Dine-in"},
+  {item_id: 4, item_text: "Meal Kits"},
+  {item_id: 5, item_text: "Catering"},
+  {item_id: 6, item_text: "Patio"},
+  {item_id: 7, item_text: "Live music"},
+  {item_id: 8, item_text: "Wifi"},
+  {item_id: 9, item_text: "Parking"},
+  {item_id: 10, item_text: "Accessible Access (ramps, one floor etc.)"},
+  {item_id: 11, item_text: "LLBO (Liquor License Board of Ontario)"},
+  {item_id: 12, item_text: "Cash only"},
+  {item_id: 13, item_text: "Vegetarian Options"},
+  {item_id: 14, item_text: "Vegan Option"},
+  {item_id: 15, item_text: "Gluten-free Options"},
+  {item_id: 16, item_text: "Halal Options"},
+]
+

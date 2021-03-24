@@ -1,0 +1,40 @@
+<div class="carousel">
+	<!-- slides -->
+	<ul class="slides">
+		<li class="slide" *ngFor="let slide of slides; let i = index;" [@slideState]="getAnimationSlideState(i)">
+			<ng-container *ngTemplateOutlet="slideTemplateRef; context: { $implicit: slide }"></ng-container>
+		</li>
+	</ul>
+	<!-- navigations & thumbnails -->
+	<div
+			class="carousel-arrows"
+			[class.carousel-arrows-outside]="arrowsOutside"
+			[class.carousel-dark-arrows]="darkArrows"
+			*ngIf="slides.length > 1 && isNavigationVisible"
+	>
+		<div
+			class="carousel-arrow carousel-arrow-prev"
+			(click)="select(activeSlides.previous)" 
+		></div>
+		<div
+			class="carousel-arrow carousel-arrow-next"
+			(click)="select(activeSlides.next)"
+		></div> 
+	</div>
+
+	<div class="navigations">
+		<!-- <button type="button" (click)="select(activeSlides.previous)" *ngIf="slides.length > 1 && isNavigationVisible">
+        <span>left</span> 
+    </button> -->
+		<div>
+			<ol class="thumbnails" *ngIf="slides.length > 1 && isThumbnailsVisible">
+				<li *ngFor="let slide of slides; let i = index;" [class.is-active]="i === activeSlides.current" (click)="select(i)">
+					<ng-container *ngTemplateOutlet="thumbnailTemplateRef; context: { $implicit: slide }"></ng-container>
+				</li>
+			</ol>
+		</div>
+		<!-- <button type="button" (click)="select(activeSlides.next)" *ngIf="slides.length > 1 && isNavigationVisible">
+        <span>right</span> 
+    </button> -->
+	</div>
+</div>

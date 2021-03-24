@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ["uat.finddining.ca"]
 # Application definition
 
 INSTALLED_APPS = [
+    'server', # This is added for my admin.py to take effect first (which replaces admin site with my custom one)
     #'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,7 +52,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'gmailapi_backend',
-    'verify_email',
+    'login_audit',
+    'snowpenguin.django.recaptcha2',
+    'subscriber_profile',
+    'restaurant_owner',
+    'restaurant',
     
     #'user.apps.SDUserConfig',
 ]
@@ -149,7 +154,8 @@ AUTHENTICATION_BACKENDS = ['sduser.backends.EmailBackend']
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -187,9 +193,19 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = False
 
+CORS_ALLOW_METHODS = (
+'GET',
+'POST',
+'PUT',
+'PATCH',
+'DELETE',
+'OPTIONS'
+ )
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
+    "https://localhost:4200",
     "http://127.0.0.1:4200",
+    "https://jsonip.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -222,7 +238,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
+    'UPDATE_LAST_LOGIN': True,
 
     'ALGORITHM': JWT_ALGORITHM,
     'SIGNING_KEY': SECRET_KEY,
@@ -290,3 +306,17 @@ CACHES = {
 
 
 GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
+
+# reCaptcha v2 for admin portal (still need to add the ip on recaptcha settings)
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAP_PRIV_KEY')
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAP_PUB_KEY')
+
+GEOCODE_API_KEY = os.environ.get('GEOCODE_API_KEY')
+
+GOOGLE_OAUTH2_CLIENT_EMAIL = os.environ.get('GOOGLE_OAUTH2_CLIENT_EMAIL')
+# note that the replace is required after reading
+GOOGLE_OAUTH2_PRIVATE_KEY = os.environ.get('GOOGLE_OAUTH2_PRIVATE_KEY').replace('\\n', '\n')
+
+GOOGLE_ANALYTICS_CLIENT_EMAIL = os.environ.get('GOOGLE_ANALYTICS_CLIENT_EMAIL')
+# note that the replace is required after reading
+GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get('GOOGLE_ANALYTICS_PRIVATE_KEY').replace('\\n', '\n')

@@ -1,0 +1,18 @@
+export const OfferedServices = [
+  {service_id: "pick_up", service_value: "Pick-up"},
+  {service_id: "delivery", service_value: "Delivery"},
+  {service_id: "dine_in", service_value: "Dine-in"},
+  {service_id: "patio", service_value: "Patio"},
+  {service_id: "meal_kits", service_value: "Meal kits"},
+  {service_id: "catering", service_value: "Catering"},
+  {service_id: "live_music", service_value: "Live music"},
+  {service_id: "wifi", service_value: "Wifi"},
+  {service_id: "parking", service_value: "Parking"},
+  {service_id: "accessible_access", service_value: "Accessible Access (ramps, one floor etc.)"},
+  {service_id: "llbo", service_value: "LLBO (Liquor License Board of Ontario)"},
+  {service_id: "cash_only", service_value: "Cash only"},
+  {service_id: "vegetarian", service_value: "Vegetarian Options"},
+  {service_id: "vegan", service_value: "Vegan Options"},
+  {service_id: "gluten_free", service_value: "Gluten-free Options"},
+  {service_id: "halal", service_value: "Halal Options"},
+]

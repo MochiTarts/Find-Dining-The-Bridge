@@ -13,15 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.urls import path, include, re_path, reverse_lazy
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.contrib.auth import views as auth_views
+
+from sduser.backends import verify_email
+
+from server.admin import admin_site
+from sduser.forms import NewPasswordChangeForm
+from sduser.views import AdminPasswordResetView
+
+import restaurant
 import index
 import auth
-from django.contrib.auth import views as auth_views
-from sduser.backends import verify_email
 
 urlpatterns = [
     path('', include('index.urls')),
+    path('admin/password_change/',
+         auth_views.PasswordChangeView.as_view(
+             form_class=NewPasswordChangeForm,
+             success_url=reverse_lazy('admin:password_change_done')
+         ), name='password_change'),
     path('admin/password_reset/',
         auth_views.PasswordResetView.as_view(),
         name='admin_password_reset',),
@@ -34,9 +46,11 @@ urlpatterns = [
     path('reset/done/',
         auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete',),
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
     path('auth/', include('auth.urls')),
-
+    path('user/', include('sduser.urls')),
+    path('subscriber/', include('subscriber_profile.urls')),
+    path('/', include('restaurant.urls')),
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
