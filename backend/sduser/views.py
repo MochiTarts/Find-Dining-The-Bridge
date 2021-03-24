@@ -65,7 +65,6 @@ class editView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
