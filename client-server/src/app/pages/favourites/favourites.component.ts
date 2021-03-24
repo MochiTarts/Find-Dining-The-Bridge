@@ -42,7 +42,7 @@ export class FavouritesComponent implements OnInit {
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-    this.userId = user.email;
+    this.userId = user.user_id;
     this.role = user.role;
     this.allCuisines = cuisinesStr;
     this.loadRestaurant(this.userId);

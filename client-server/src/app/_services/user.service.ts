@@ -90,6 +90,37 @@ export class UserService {
     return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
+  /*
+  @Input: JSON object containing restaurant_id of restaurant that will be part of this new relation
+  @Input: user_id of the user who will be part of this new relation
+  @Output: Message from request or error
+  Add a new restaurant to a user's list of favourites
+  */
+  addFavouriteRestaurant(data, user_id): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/${user_id}/favourite/`
+    return this.http.post<any>(endpoint, data)
+  }
+
+  /*
+  @Input: user_id of user whose list of favourites will be retrieved
+  @Output: List of favourited restaurants
+  Get all restaurants favourited by a user
+  */
+  getFavouriteRestaurants(user_id): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/${user_id}/favourite/`
+    return this.http.get(endpoint)
+  }
+
+  /*
+  @Input: JSON user-restaurant favourite object
+  @Output: Message from request
+  Removes a restaurant from a user's list of favourites
+  */
+  removeFavRestaurant(user_id, restaurant_id): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/${user_id}/favourite/${restaurant_id}/`
+    return this.http.delete<any>(endpoint)
+  }
+
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   /*
   BELOW ARE THE OLD SERVICE METHODS FROM PREVIOUS REPO
@@ -149,39 +180,6 @@ export class UserService {
       email: userData.email
     };
     return this.http.get(endpoint, { params: userObject });
-  }
-
-  /*
-  @Input: JSON user-restaurant favourite object
-  @Output: Message from request or error
-  Add a new restaurant to a user's list of favourites
-  */
-  addFavouriteRestaurant(data): Observable<any> {
-    const endpoint = API_URL + 'user/add_favourite/'
-    return this.http.post<any>(endpoint, data)
-  }
-
-  /*
-  @Input: email of user whose list of favourites will be retrieved
-  @Output: List of favourited restaurants
-  Get all restaurants favourited by a user
-  */
-  getFavouriteRestaurants(email): Observable<any> {
-    const endpoint = API_URL + 'user/get_favourites/'
-    const paramObject = {
-      'user': email
-    }
-    return this.http.get(endpoint, { params: paramObject })
-  }
-
-  /*
-  @Input: JSON user-restaurant favourite object
-  @Output: Message from request
-  Removes a restaurant from a user's list of favourites
-  */
-  removeFavRestaurant(data): Observable<any> {
-    const endpoint = API_URL + 'user/remove_favourite/'
-    return this.http.post<any>(endpoint, data)
   }
 
 

@@ -217,10 +217,9 @@ restaurant_edit_draft_schema = {
 
 user_fav_schema = {
     "properties": {
-        "user": {"type": "number"},
         "restaurant": {"type": "string"}
     },
-    "required": ["user", "restaurant"],
+    "required": ["restaurant"],
     "additionalProperties": False
 }
 
@@ -437,12 +436,12 @@ class UserFavView(APIView):
     """ user fav view """
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, user_id=''):
+    def post(self, request, user_id):
         """ Add a new user-restaurant-favourite relation """
         try:
             validate(instance=request.data, schema=user_fav_schema)
             body = request.data
-            user_id = body['user']
+            body['user_id'] = user_id
             rest_id = body['restaurant']
             invalid = UserFavRestrs.field_validate(body)
             if invalid:
