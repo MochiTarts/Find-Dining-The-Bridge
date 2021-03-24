@@ -34,19 +34,18 @@ restaurant_owner_signup_schema = {
 
 restaurant_owner_edit_schema = {
     "properties": {
-        "user_id": {"type": "number"},
+        "restaurant_id": {"type": "string"},
         "last_updated": {"type": "string", "format": "date"},
         "consent_status": {"type": "string"},
         "subscribed_at": {"type": "string", "format": "date"},
         "unsubscribed_at": {"type": "string", "format": "date"},
         "expired_at": {"type": "string", "format": "date"},
     },
-    "required": ["user_id"],
     "additionalProperties": False
 }
 
 restaurant_owner_editable = [
-    "email_verified", "status", "last_updated", "consent_status", "subscribed_at", "unsubscribed_at", "expired_at"
+   "restaurant_id", "last_updated", "consent_status", "subscribed_at", "unsubscribed_at", "expired_at"
 ]
 
 
@@ -106,19 +105,21 @@ class RestaurantOwnerView(APIView):
             finally:
                 return JsonResponse({'message': message}, status=500)
 
-    def put(self, request, user_id=''):
+    def put(self, request, user_id):
         """ Updates a restaurant owner profile """
         try:
             validate(instance=json.loads(request.body), schema=restaurant_owner_edit_schema)
             body = json.loads(request.body)
             invalid = RestaurantOwner.field_validate(body)
             profile = {}
-            profile_filter = RestaurantOwner.objects.filter(user_id=body['user_id'])
+            ro_filter = RestaurantOwner.objects.filter(user_id=user_id)
             
-            if not profile_filter.exists():
+            if not ro_filter.exists():
                 return JsonResponse({"message": "This restaurant owner profile does not exist"}, status=404)
             else:
-                profile = profile_filter.first()
+                profile = ro_filter.first()
+            if not PendingRestaurant.objects.filter(_id=body['restaurant_id']).exists():
+                return JsonResponse({"message": "This restaurant_id does not exist"}, status=400)
 
             edit_model(profile, body, restaurant_owner_editable)
             profile = save_and_clean(profile)

@@ -97,7 +97,7 @@ class PendingFood(models.Model):
         :param: food_data: dictionary representation of dish
         :type food_data: json
         :param: rest_id: id of the restaurant the dish is associated with
-        "type rest_id: ObjectId string
+        :type rest_id: ObjectId string
         :return: PendingFood object of the newly inserted record
         :rtype: PendingFood object
         """
@@ -376,7 +376,7 @@ class PendingRestaurant(models.Model):
         :type restaurant_data: json
         :raises ValueError: if the pending restaurant already exists in the database
         :return: restaurant object representing sent data
-        :rtype: json object
+        :rtype: :class:`PendingRestaurant` object
         """
         if cls.objects.filter(email=restaurant_data['email']).exists():
             raise ValueError(

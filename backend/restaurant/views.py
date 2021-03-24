@@ -31,7 +31,6 @@ import json
 
 food_schema = {
     "properties": {
-        "_id": {"type": "string"},
         "name": {"type": "string"},
         "description": {"type": "string"},
         "picture": {"type": "string"},
@@ -59,14 +58,12 @@ food_edit_schema = {
         "specials": {"type": "string"},
         "category": {"type": "string"}
     },
-    "required": ["_id"],
     "additionalProperties": False
 }
 
 
 restaurant_insert_for_approval_schema = {
     "properties": {
-        "restaurant_id": {"type": "string"},
         "name": {"type": "string"},
         "years": {"type": "number"},
         "address": {"type": "string"},
@@ -169,7 +166,6 @@ restaurant_insert_draft_schema = {
 
 restaurant_edit_draft_schema = {
     "properties": {
-        "restaurant_id": {"type": "string"},
         "name": {"type": "string"},
         "years": {"type": "number"},
         "address": {"type": "string"},
@@ -214,7 +210,7 @@ restaurant_edit_draft_schema = {
 
         "full_menu_url": {"type": "string"}
     },
-    "required": ["restaurant_id"],
+    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
 }
 
@@ -311,7 +307,7 @@ class PendingDishView(APIView):
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
-    def post(self, request, rest_id):
+    def post(self, request, rest_id, dish_id=''):
         """ Insert dish into database """
         try:
             validate(instance=json.loads(request.body), schema=food_schema)
@@ -345,7 +341,7 @@ class PendingDishView(APIView):
             finally:
                 return JsonResponse({'message': message}, status=500)
 
-    def put(self, request, rest_id):
+    def put(self, request, rest_id, dish_id):
         """ Update Dish data """
         try:
             validate(instance=json.loads(request.body),
@@ -355,27 +351,26 @@ class PendingDishView(APIView):
             if invalid is not None:
                 return JsonResponse(invalid)
 
-            dish = PendingFood.objects.get(_id=rest_id)
-            restaurant = PendingRestaurant.objects.get(_id=dish.restaurant_id)
+            dish = PendingFood.objects.filter(_id=dish_id).first()
+            restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
             if should_add_category(body, dish.category, restaurant):
                 add_cateogory(dish.category, restaurant)
 
             restaurant_editable = ["status"]
-            restaurant_editable_values = {'status': Status.Pending.value}
+            restaurant_editable_values = {'status': Status.In_Progress.value}
 
-            if 'category' in body and PendingFood.objects.filter(restaurant_id=restaurant._id, category=body['category']).exists():
-                if (body['category'] == 'Popular Dish' and PendingFood.objects.filter(restaurant_id=restaurant._id, category='Popular Dish').count() == 6):
-                    if ObjectId(body['_id']) not in list(PendingFood.objects.filter(restaurant_id=restaurant._id, category='Popular Dish').values_list('_id', flat=True)):
+            if 'category' in body and PendingFood.objects.filter(restaurant_id=rest_id, category=body['category']).exists():
+                if (body['category'] == 'Popular Dish' and PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').count() == 6):
+                    if ObjectId(dish_id) not in list(PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').values_list('_id', flat=True)):
                         return JsonResponse({'message': 'You can only have up to a maximum of 6 popular dishes.'}, status=400)
-                if (body['category'] == 'Signature Dish' and PendingFood.objects.filter(restaurant_id=restaurant._id, category='Signature Dish').count() == 1):
-                    if body['_id'] != str(PendingFood.objects.filter(restaurant_id=restaurant._id, category='Signature Dish').first()._id):
+                if (body['category'] == 'Signature Dish' and PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').count() == 1):
+                    if dish_id != str(PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').first()._id):
                         return JsonResponse({'message': 'You can only have 1 signature dish.'}, status=400)
                 restaurant_editable.append("categories")
 
             body["status"] = Status.Pending.value
             edit_model(dish, body, dish_editable)
             updated_fields = [field for field in body.keys()]
-            updated_fields.remove('_id')
             dish = save_and_clean(dish, updated_fields)
 
             if 'categories' in restaurant_editable:
@@ -608,7 +603,7 @@ class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
     permission_classes = (AllowAny,)
 
-    def post(self, request):
+    def post(self, request, rest_id=''):
         """Insert new restaurant as a draft into database"""
         try:
             validate(instance=json.loads(request.body),
@@ -642,7 +637,7 @@ class RestaurantDraftView(APIView):
             finally:
                 return JsonResponse({'message': message}, status=500)
 
-    def put(self, request):
+    def put(self, request, rest_id):
         """Edit a restaurant profile and save it as a draft in the database"""
         try:
             validate(instance=json.loads(request.body),
@@ -651,9 +646,9 @@ class RestaurantDraftView(APIView):
             invalid = PendingRestaurant.field_validate_draft(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
-            restaurant = PendingRestaurant.get(body["restaurant_id"])
+            restaurant = PendingRestaurant.get(rest_id)
             if not restaurant:
-                return JsonResponse({'message': 'restaurant with id '+body['restaurant_id']+' does not exist'}, status=404)
+                return JsonResponse({'message': 'restaurant with id '+rest_id+' does not exist'}, status=404)
             if 'email' in body and body['email'] != restaurant.email:
                 return JsonResponse({'message': "You're not allowed to modify your restaurant's email address"}, status=400)
             body["status"] = Status.In_Progress.value
@@ -691,8 +686,8 @@ class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
     permission_classes = (AllowAny,)
 
-    def post(self, request):
-        """Insert or update a restaurant record for admin approval"""
+    def put(self, request, rest_id=''):
+        """ Insert or update a restaurant record for admin approval """
         try:
             validate(instance=json.loads(request.body),
                      schema=restaurant_insert_for_approval_schema)
@@ -701,12 +696,9 @@ class RestaurantForApprovalView(APIView):
             if invalid:
                 return JsonResponse(invalid, status=400)
 
-            restaurant = {}
-            restaurant_filter = PendingRestaurant.objects.filter(
-                email=body['email'])
-            if not restaurant_filter.exists():
+            if not rest_id:
+                body['status'] = Status.Pending.value
                 restaurant = model_to_json(PendingRestaurant.insert(body))
-                restaurant['status'] = Status.Pending.value
                 restaurant['restaurant_image_url'] = ast.literal_eval(
                     restaurant['restaurant_image_url'])
                 restaurant['offer_options'] = ast.literal_eval(
@@ -714,7 +706,10 @@ class RestaurantForApprovalView(APIView):
                 restaurant['payment_methods'] = ast.literal_eval(
                     restaurant['payment_methods'])
             else:
-                restaurant = restaurant_filter.first()
+                restaurant_filter = PendingRestaurant.objects.filter(_id=rest_id)
+                if not restaurant_filter.exists():
+                    return JsonResponse({"message": "This restaurant does not exist"}, status=404)
+                restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
                 body['status'] = Status.Pending.value
                 body["modified_time"] = timezone.now()
                 edit_model(restaurant, body, restaurant_editable)
