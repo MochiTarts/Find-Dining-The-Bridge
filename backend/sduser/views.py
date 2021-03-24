@@ -46,8 +46,8 @@ class editView(APIView):
 
     def put(self, request):
         try:
-
-            body = json.loads(request.body)
+            body = request.data
+            print(request.user.id)
             user = User.objects.get(id=request.user.id)
             for field in body:
                 setattr(user, field, body[field])
@@ -56,7 +56,6 @@ class editView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
