@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import SubscriberProfile
+from utils.model_util import model_to_json
 
 
 class Signup(APIView):
@@ -15,7 +16,7 @@ class Signup(APIView):
         try:
             body = json.loads(request.body)
             invalid = SubscriberProfile.field_validate(body)
-            if SubscriberProfile.objects.filter(pk=body['user_id']).exists():
+            if SubscriberProfile.objects.filter(user_id=body['user_id']).exists():
                 if not invalid:
                     invalid = {"Invalid": "Profile with this user_id already exists"}
                 else:
@@ -23,7 +24,7 @@ class Signup(APIView):
             if invalid:
                 return JsonResponse(invalid, status=400)
             profile = SubscriberProfile.signup(body)
-            return JsonResponse(model_to_dict(profile))
+            return JsonResponse(model_to_json(profile))
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
@@ -43,7 +44,7 @@ class SubscriberProfileView(APIView):
     def get(self, request):
         try:
             user_id = request.GET.get('user_id')
-            profile = SubscriberProfile.objects.get(pk=user_id)
+            profile = SubscriberProfile.objects.get(user_id=user_id)
             return JsonResponse(model_to_dict(profile))
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
@@ -64,7 +65,7 @@ class SubscriberProfileView(APIView):
             if invalid:
                 return JsonResponse(invalid, status=400)
             profile = SubscriberProfile.edit(body)
-            return JsonResponse(model_to_dict(profile))
+            return JsonResponse(model_to_json(profile))
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:

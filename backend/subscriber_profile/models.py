@@ -12,7 +12,7 @@ import datetime
 User = get_user_model()
 
 class SubscriberProfile(models.Model):
-    user_id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     phone = models.BigIntegerField(blank=True, default=None)
@@ -31,10 +31,12 @@ class SubscriberProfile(models.Model):
 
     @classmethod
     def field_validate(self, fields):
-        """
-        Validates fields
+        """ Validates fields
+
         :param fields: Dictionary of fields to validate
+        :type fields: dict
         :return: A list of fields that were invalid. Returns None if all fields are valid
+        :rtype: json
         """
 
         invalid = {'Invalid': []}
@@ -88,10 +90,12 @@ class SubscriberProfile(models.Model):
 
     @classmethod
     def signup(cls, subscriber_data:dict):
-        """
-        Constructs & Saves SubscriberProfile to DB returning the newly created profile
-        :param subscriber_data: json data of the subscriber
+        """ Constructs and saves SubscriberProfile to database returning the newly created profile
+
+        :param subscriber_data: data of the subscriber
+        :subscriber_data: dict
         :return: SubscriberProfile Object
+        :rtype: :class:`SubscriberProfile`
         """
         invalid = SubscriberProfile.field_validate(subscriber_data)
         if not invalid:
@@ -115,7 +119,7 @@ class SubscriberProfile(models.Model):
         invalid = SubscriberProfile.field_validate(subscriber_data)
 
         if not invalid:
-            profile = SubscriberProfile.objects.get(pk=subscriber_data['user_id'])
+            profile = SubscriberProfile.objects.get(user_id=subscriber_data['user_id'])
             for field in subscriber_data:
                 setattr(profile, field, subscriber_data[field])
             profile.GEO_location = geocode(profile.postalCode)
