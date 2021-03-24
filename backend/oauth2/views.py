@@ -72,7 +72,7 @@ class GoogleView(APIView):
             email = googleJWT['email']
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
-                Q(auth_id__iexact=auth_id) | Q(email__iexact=email))
+                Q(auth_id=auth_id) | Q(email__iexact=email))
             if user.email is not email:
                 user.email = email
                 user.save()
@@ -142,7 +142,7 @@ class FacebookView(APIView):
         try:
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
-                Q(auth_id__iexact=auth_id) | Q(email__iexact=email))
+                Q(auth_id=auth_id) | Q(email__iexact=email))
             # update user email in case they updated it in 3rd party service
             # we can also ask it before update (future enhancements)
             if user.email is not email:
