@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'account-setting', component: AccountSettingComponent, canActivate: [AuthGuard] },
   { path: 'newsletter', component: NewsletterComponent, canActivate: [AuthGuard] },
-  { path: 'all-listings', component: AllRestaurantsComponent, canActivate: [AuthGuard] },
+  { path: 'all-listings', component: AllRestaurantsComponent },
   { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuard] },
   /*
   { path: 'verification', component: EmptyComponent, children: [
