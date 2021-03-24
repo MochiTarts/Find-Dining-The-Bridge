@@ -50,7 +50,8 @@ urlpatterns = [
     path('auth/', include('auth.urls')),
     path('user/', include('sduser.urls')),
     path('subscriber/', include('subscriber_profile.urls')),
-    path('/', include('restaurant.urls')),
+    path('owner/', include('restaurant_owner.urls')),
+    path('', include('restaurant.urls')),
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
