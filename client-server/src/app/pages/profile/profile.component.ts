@@ -25,6 +25,9 @@ export class ProfileComponent implements OnInit {
       this.currentUser.postalCode = data.postalCode;
       var phone: string = String(data.phone);
       this.currentUser.phone = phone != 'null' ? "(" + phone.slice(0,3) + ") " + phone.slice(3,6) + " " + phone.slice(6,10) : '';
+    },
+    err => {
+      console.log(err);
     })
   }
 
