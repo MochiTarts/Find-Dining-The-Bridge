@@ -54,19 +54,23 @@ class SignUp(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        """ Inserts a new restaurant profile record into the database """
+        """ Inserts a new restaurant profile record into the database and attaches user_id to restaurant """
         try:
             validate(instance=json.loads(request.body), schema=restaurant_owner_signup_schema)
             body = json.loads(request.body)
             invalid = RestaurantOwner.field_validate(body)
+            restaurant_filter = PendingRestaurant.objects.filter(_id=body['restaurant_id'])
             if invalid:
                 return JsonResponse(invalid, status=400)
             if RestaurantOwner.objects.filter(user_id=body['user_id']).exists():
                 return JsonResponse({"message": "Profile with this user_id already exists"}, status=400)
-            if not PendingRestaurant.objects.filter(_id=body['restaurant_id']).exists():
+            if not restaurant_filter.exists():
                 return JsonResponse({"message": "This restaurant_id does not exist"}, status=400)
             
             profile = RestaurantOwner.signup(body)
+            restaurant = restaurant_filter.first()
+            restaurant.owner_user_id = body['user_id']
+            save_and_clean(restaurant)
             return JsonResponse(model_to_json(profile))
         except ValidationError as e:
             return JsonResponse({"message": e.message}, status=500)

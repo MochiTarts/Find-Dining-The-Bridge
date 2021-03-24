@@ -181,6 +181,7 @@ class PendingFood(models.Model):
 class Restaurant(models.Model):
     """ Model for Restaurants """
     _id = models.ObjectIdField()
+    owner_user_id = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=30)
     years = models.IntegerField(null=True)
     address = models.CharField(max_length=60)
@@ -285,6 +286,7 @@ class PendingRestaurant(models.Model):
 
     _id = models.ObjectIdField()
     name = models.CharField(max_length=30, blank=True, default='')
+    owner_user_id = models.IntegerField(blank=True, null=True)
     years = models.IntegerField(null=True, blank=True, default=0)
     address = models.CharField(max_length=60, blank=True, default='')
     streetAddress2 = models.CharField(max_length=50, blank=True, default='')

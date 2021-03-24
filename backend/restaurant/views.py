@@ -35,9 +35,6 @@ food_schema = {
         "description": {"type": "string"},
         "picture": {"type": "string"},
         "price": {"type": ["string", "number"]},
-        "tags": {"type": "array",
-                 "items": {"type": "string"}
-                 },
         "specials": {"type": "string"},
         "category": {"type": "string"}
     },
@@ -47,20 +44,24 @@ food_schema = {
 
 food_edit_schema = {
     "properties": {
-        "_id": {"type": "string"},
         "name": {"type": "string"},
         "description": {"type": "string"},
         "picture": {"type": "string"},
         "price": {"type": ["string", "number"]},
-        "tags": {"type": "array",
-                 "items": {"type": "string"}
-                 },
         "specials": {"type": "string"},
         "category": {"type": "string"}
     },
     "additionalProperties": False
 }
 
+food_delete_schema = {
+    "properties": {
+        "name": {"type": "string"},
+        "category": {"type": "string"}
+    },
+    "required": ["name", "category"],
+    "additionalProperties": False
+}
 
 restaurant_insert_for_approval_schema = {
     "properties": {
@@ -72,7 +73,6 @@ restaurant_insert_for_approval_schema = {
         "postalCode": {"type": "string"},
 
         "phone": {"type": "number"},
-        "email": {"type": "string"},
         "cuisines": {"type": "array"},
         "pricepoint": {"type": "string"},
 
@@ -108,7 +108,7 @@ restaurant_insert_for_approval_schema = {
 
         "full_menu_url": {"type": "string"}
     },
-    "required": ["name", "years", "address", "postalCode", "phone", "email", "pricepoint", "offer_options",
+    "required": ["name", "years", "address", "postalCode", "phone", "pricepoint", "offer_options",
                  "bio", "owner_first_name", "owner_last_name", "open_hours", "payment_methods"],
     "additionalProperties": False
 }
@@ -124,7 +124,6 @@ restaurant_insert_draft_schema = {
         "postalCode": {"type": "string"},
 
         "phone": {"type": "number"},
-        "email": {"type": "string"},
         "cuisines": {"type": "array"},
         "pricepoint": {"type": "string"},
 
@@ -160,7 +159,7 @@ restaurant_insert_draft_schema = {
 
         "full_menu_url": {"type": "string"}
     },
-    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
+    "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
 }
 
@@ -174,7 +173,6 @@ restaurant_edit_draft_schema = {
         "postalCode": {"type": "string"},
 
         "phone": {"type": "number"},
-        "email": {"type": "string"},
         "cuisines": {"type": "array"},
         "pricepoint": {"type": "string"},
 
@@ -210,7 +208,7 @@ restaurant_edit_draft_schema = {
 
         "full_menu_url": {"type": "string"}
     },
-    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
+    "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
 }
 
@@ -244,7 +242,7 @@ class DishList(APIView):
     """ dish list """
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, rest_id):
+    def get(self, request, rest_id=''):
         """Retrieve all dishes from the database"""
         foods = Food.objects.all()
         response = {'Dishes': models_to_json(foods)}
@@ -262,52 +260,22 @@ class DishRestaurantView(APIView):
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
-    def delete(self, request, rest_id):
-        """ Deletes dish from database """
-        try:
-            body = json.loads(request.body)
-            food = PendingFood.objects.get(
-                name=body["food_name"], restaurant_id=rest_id)
-            food.delete()
-            Food.objects.filter(
-                name=body['food_name'], restaurant_id=rest_id).delete()
-            restaurant = PendingRestaurant.objects.get(_id=rest_id)
-
-            restaurant_categories = PendingFood.get_all_categories(
-                restaurant._id)
-            restaurant_editable = ['categories']
-            edit_model(restaurant, {'categories': restaurant_categories}, [
-                       'categories'])
-            save_and_clean(restaurant)
-            return JsonResponse({'message': 'Successfully removed dish from restaurant'})
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ObjectDoesNotExist as e:
-            return JsonResponse({'message': e.message}, status=404)
-        except Exception:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
-
 
 class PendingDishView(APIView):
     """ pending dish view """
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, rest_id):
+    def get(self, request, user_id):
         """Retrieve all dishes from a restaurant"""
-        # rest_id = request.GET.get('restaurant_id')
+        restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+        if not restaurant:
+            return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
+        rest_id = restaurant._id
         dishes = PendingFood.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
-    def post(self, request, rest_id, dish_id=''):
+    def post(self, request, user_id, dish_id=''):
         """ Insert dish into database """
         try:
             validate(instance=json.loads(request.body), schema=food_schema)
@@ -315,6 +283,10 @@ class PendingDishView(APIView):
             invalid = PendingFood.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
+            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+            if not restaurant:
+                return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
+            rest_id = restaurant._id
 
             if PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').count() == 6 and body['category'] == 'Popular Dish':
                 return JsonResponse({'message': 'You can only have up to a maximum of 6 popular dishes.'}, status=400)
@@ -341,7 +313,7 @@ class PendingDishView(APIView):
             finally:
                 return JsonResponse({'message': message}, status=500)
 
-    def put(self, request, rest_id, dish_id):
+    def put(self, request, user_id, dish_id):
         """ Update Dish data """
         try:
             validate(instance=json.loads(request.body),
@@ -352,7 +324,10 @@ class PendingDishView(APIView):
                 return JsonResponse(invalid)
 
             dish = PendingFood.objects.filter(_id=dish_id).first()
-            restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
+            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+            if not restaurant:
+                return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
+            rest_id = restaurant._id
             if should_add_category(body, dish.category, restaurant):
                 add_cateogory(dish.category, restaurant)
 
@@ -387,6 +362,43 @@ class PendingDishView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
+            message = 'something went wrong'
+            try:
+                message = getattr(e, 'message', str(e))
+            except Exception as e:
+                message = getattr(e, 'message', 'something went wrong')
+            finally:
+                return JsonResponse({'message': message}, status=500)
+
+    def delete(self, request, user_id):
+        """ Deletes dish from database """
+        try:
+            validate(instance=json.loads(request.body), schema=food_delete_schema)
+            body = json.loads(request.body)
+            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+            if not restaurant:
+                return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
+            rest_id = restaurant._id
+            food = PendingFood.objects.get(
+                name=body["name"], category=body['category'], restaurant_id=rest_id)
+            food.delete()
+            Food.objects.filter(
+                name=body['name'], category=body['category'], restaurant_id=rest_id).delete()
+            restaurant = PendingRestaurant.objects.get(_id=rest_id)
+
+            restaurant_categories = PendingFood.get_all_categories(rest_id)
+            restaurant_editable = ['categories']
+            edit_model(restaurant, {'categories': restaurant_categories}, [
+                       'categories'])
+            save_and_clean(restaurant)
+            return JsonResponse({'message': 'Successfully removed dish from restaurant'})
+        except ValidationError as e:
+            return JsonResponse({'message': e.message}, status=500)
+        except json.decoder.JSONDecodeError as e:
+            return JsonResponse({'message': e.message}, status=500)
+        except ObjectDoesNotExist as e:
+            return JsonResponse({'message': e.message}, status=404)
+        except Exception:
             message = 'something went wrong'
             try:
                 message = getattr(e, 'message', str(e))
@@ -470,7 +482,7 @@ class UserFavView(APIView):
 
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, rest_id):
         """ Get all users who favourited the requested restaurant """
@@ -555,15 +567,16 @@ class PendingRestaurantView(APIView):
     """ pending restaurant view """
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request, rest_id):
-        """Retrieve restaurant from pending collection by id"""
+    def get(self, request, user_id):
+        """ Retrieve restaurant from pending collection by the owner's user_id """
         try:
             # _id = request.GET.get('_id')
-            _id = rest_id
-            if _id is None:
-                return JsonResponse({'message': '_id parameter is required and cannot be None'}, status=400)
+            user_id = user_id
+            print(user_id)
+            if user_id is None:
+                return JsonResponse({'message': 'user_id parameter is required and cannot be None'}, status=400)
 
-            restaurant = PendingRestaurant.get(_id)
+            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
             if restaurant:
                 restaurant_image_url = ast.literal_eval(
                     restaurant.restaurant_image_url)
@@ -576,7 +589,7 @@ class PendingRestaurantView(APIView):
                 restaurant['payment_methods'] = payment_methods
                 return JsonResponse(restaurant)
             else:
-                return JsonResponse({'message': 'No pending restaurant found with this id: '+_id}, status=404)
+                return JsonResponse({'message': 'No pending restaurant found with owner user id of this: '+_id}, status=404)
         except Exception:
             return JsonResponse({'message': 'Something went wrong'}, status=500)
 
@@ -605,7 +618,7 @@ class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, rest_id=''):
+    def post(self, request, user_id=''):
         """Insert new restaurant as a draft into database"""
         try:
             validate(instance=json.loads(request.body),
@@ -639,7 +652,7 @@ class RestaurantDraftView(APIView):
             finally:
                 return JsonResponse({'message': message}, status=500)
 
-    def put(self, request, rest_id):
+    def put(self, request, user_id):
         """Edit a restaurant profile and save it as a draft in the database"""
         try:
             validate(instance=json.loads(request.body),
@@ -648,9 +661,9 @@ class RestaurantDraftView(APIView):
             invalid = PendingRestaurant.field_validate_draft(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
-            restaurant = PendingRestaurant.get(rest_id)
+            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
             if not restaurant:
-                return JsonResponse({'message': 'restaurant with id '+rest_id+' does not exist'}, status=404)
+                return JsonResponse({'message': 'restaurant with owner user id '+user_id+' does not exist'}, status=404)
             if 'email' in body and body['email'] != restaurant.email:
                 return JsonResponse({'message': "You're not allowed to modify your restaurant's email address"}, status=400)
             body["status"] = Status.In_Progress.value
@@ -688,7 +701,7 @@ class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
     permission_classes = (IsAuthenticated,)
 
-    def put(self, request, rest_id=''):
+    def put(self, request, user_id=''):
         """ Insert or update a restaurant record for admin approval """
         try:
             validate(instance=json.loads(request.body),
@@ -698,7 +711,7 @@ class RestaurantForApprovalView(APIView):
             if invalid:
                 return JsonResponse(invalid, status=400)
 
-            if not rest_id:
+            if not user_id:
                 body['status'] = Status.Pending.value
                 restaurant = model_to_json(PendingRestaurant.insert(body))
                 restaurant['restaurant_image_url'] = ast.literal_eval(
@@ -708,10 +721,10 @@ class RestaurantForApprovalView(APIView):
                 restaurant['payment_methods'] = ast.literal_eval(
                     restaurant['payment_methods'])
             else:
-                restaurant_filter = PendingRestaurant.objects.filter(_id=rest_id)
+                restaurant_filter = PendingRestaurant.objects.filter(owner_user_id=user_id)
                 if not restaurant_filter.exists():
                     return JsonResponse({"message": "This restaurant does not exist"}, status=404)
-                restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
+                restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
                 body['status'] = Status.Pending.value
                 body["modified_time"] = timezone.now()
                 edit_model(restaurant, body, restaurant_editable)
