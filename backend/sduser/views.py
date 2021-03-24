@@ -7,8 +7,11 @@ from django.db.models import Q
 #from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+
+from utils.common import get_user
+
 import json
-from sduser.backends import jwt_decode
+
 User = get_user_model()
 
 
@@ -24,9 +27,12 @@ class deactivateView(APIView):
 
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
-        current_user = request.user
+        header = request.META.get('HTTP_AUTHORIZATION')
+        current_user = get_user(header)
+        if not current_user:
+            return JsonResponse({'message': 'fail to obtain user', 'code': 'deactivation_fail'}, status=405)
 
-        if not current_user or current_user.id is not user_id:
+        if current_user['user_id'] is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
 
         try:
@@ -46,9 +52,12 @@ class editView(APIView):
 
     def put(self, request):
         try:
-
-            body = json.loads(request.body)
-            user = User.objects.get(id=request.user.id)
+            body = request.data
+            header = request.META.get('HTTP_AUTHORIZATION')
+            user = get_user(header)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user = User.objects.get(id=user['user_id'])
             for field in body:
                 setattr(user, field, body[field])
             user.save()

@@ -63,6 +63,7 @@ export class SubscriberProfileFormComponent implements OnInit {
           this.phone = data.phone;
         },
           err => {
+            console.log(err);
             if (err.error && err.error.code == 'no_profile_found') {
               // redirect to home page to fill the profile
               this.router.navigate(['/']);
