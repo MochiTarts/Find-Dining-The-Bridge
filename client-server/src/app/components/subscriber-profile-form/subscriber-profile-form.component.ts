@@ -61,7 +61,6 @@ export class SubscriberProfileFormComponent implements OnInit {
           this.lastName = data.last_name;
           this.postalCode = data.postalCode;
           this.phone = data.phone;
-          console.log(this.firstName)
         })
       }
     }
@@ -80,7 +79,6 @@ export class SubscriberProfileFormComponent implements OnInit {
           terms: ['', Validators.requiredTrue],
         });
       } else {
-        console.log("Here")
         this.aFormGroup = this.formBuilder.group({
           recaptcha: ['', Validators.required],
           firstname: ['', Validators.required],
@@ -101,11 +99,6 @@ export class SubscriberProfileFormComponent implements OnInit {
   }
 
   updateProfile(): void {
-    var sduserInfo = {
-      email: this.email,
-      profile_id: this.userId,
-    };
-
     var subscriberInfo = {
       user_id: this.userId,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
@@ -122,36 +115,38 @@ export class SubscriberProfileFormComponent implements OnInit {
     // clear formErrors
     this.validator.clearAllErrors();
     //validate all formfields, the callback will throw appropriate errors, return true if any validation failed
-    let failFlagOne = this.validator.validateAll(sduserInfo, (key) => this.validator.setError(key));
     let failFlagOneTwo = this.validator.validateAll(subscriberInfo, (key) => this.validator.setError(key));
     //if any validation failed, do not POST
-    if (!failFlagOne && !failFlagOneTwo) {
+    if (!failFlagOneTwo) {
       subscriberInfo.phone = Number(subscriberInfo.phone);
       /*
-      Update sduser first_name, last_name
       Make new subscriber profile form with postalCode, phone, and consent_status if profile_id empty
       Otherwise, update existing subscriber profile if profile_id has value in it
+      Updates sduser profile_id with id of newly created profile, if profile_id is currently null
       */
-      this.userService.editAccountUser(sduserInfo).subscribe(() => {
-        /*
-        Check if profile_id is null. If so, create subscriber profile
-        If not, edit subscriber profile
-        */
-        if (this.profileId) {
-          this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
-            this.modalRef.close();
-            this.reload();
-          })
-        } else {
-          this.userService.createSubscriberProfile(subscriberInfo).subscribe(() => {
+
+      if (this.profileId) {
+        this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
+          this.modalRef.close();
+          this.reload();
+        })
+      } else {
+        this.userService.createSubscriberProfile(subscriberInfo).subscribe((profile) => {
+          console.log(profile)
+          var sduserInfo = {
+            email: this.email,
+            profile_id: profile.id,
+          };
+
+          this.userService.editAccountUser(sduserInfo).subscribe(() => {
             this.authService.refreshToken().subscribe((token) => {
               this.tokenStorageService.updateTokenAndUser(token.access);
               this.modalRef.close();
               this.reload();
             })
           })
-        }
-      })
+        })
+      }
     }
   }
 

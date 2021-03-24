@@ -12,7 +12,7 @@ import datetime
 User = get_user_model()
 
 class SubscriberProfile(models.Model):
-    user_id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField()
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=150, blank=True)
     phone = models.BigIntegerField(blank=True, default=None)
@@ -119,7 +119,7 @@ class SubscriberProfile(models.Model):
         invalid = SubscriberProfile.field_validate(subscriber_data)
 
         if not invalid:
-            profile = SubscriberProfile.objects.get(pk=subscriber_data['user_id'])
+            profile = SubscriberProfile.objects.get(user_id=subscriber_data['user_id'])
             for field in subscriber_data:
                 setattr(profile, field, subscriber_data[field])
             profile.GEO_location = geocode(profile.postalCode)
