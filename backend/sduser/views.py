@@ -8,7 +8,7 @@ from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 import json
-
+from sduser.backends import jwt_decode
 User = get_user_model()
 
 
@@ -23,9 +23,14 @@ class deactivateView(APIView):
     def post(self, request):
 
         refresh_token = request.COOKIES.get('refresh_token')
+        user_id = request.data.get('id')
+        current_user = request.user
+
+        if not current_user or current_user.id is not user_id:
+            return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
 
         try:
-            user = User.objects.get(id=request.data.get('id'))
+            user = User.objects.get(id=user_id)
             if refresh_token == user.refresh_token:
                 user.is_active = False
                 user.save()
@@ -43,6 +48,7 @@ class editView(APIView):
     def put(self, request):
         try:
             body = json.loads(request.body)
+            
             user = User.objects.get(email=body['email'])
             for field in body:
                 setattr(user, field, body[field])
