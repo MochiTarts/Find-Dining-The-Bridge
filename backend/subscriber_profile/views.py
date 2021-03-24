@@ -14,7 +14,7 @@ class Signup(APIView):
 
     def post(self, request):
         try:
-            body = json.loads(request.body)
+            body = request.data
             invalid = SubscriberProfile.field_validate(body)
             if SubscriberProfile.objects.filter(user_id=body['user_id']).exists():
                 if not invalid:
@@ -28,7 +28,7 @@ class Signup(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
+            body = request.data
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
@@ -49,7 +49,7 @@ class SubscriberProfileView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
+            body = request.data
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
@@ -60,7 +60,7 @@ class SubscriberProfileView(APIView):
 
     def put(self, request):
         try:
-            body = json.loads(request.body)
+            body = request.data
             invalid = SubscriberProfile.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -69,7 +69,7 @@ class SubscriberProfileView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
+            body = request.data
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
@@ -84,7 +84,7 @@ class ConsentStatusView(APIView):
 
     def put(self, request):
         try:
-            body = json.loads(request.body)
+            body = request.data
             invalid = SubscriberProfile.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -93,7 +93,7 @@ class ConsentStatusView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
+            body = request.data
             message = ''
             try:
                 message = getattr(e, 'message', str(e))

@@ -57,7 +57,7 @@ class SignUp(APIView):
         """ Inserts a new restaurant profile record into the database and attaches user_id to restaurant """
         try:
             validate(instance=json.loads(request.body), schema=restaurant_owner_signup_schema)
-            body = json.loads(request.body)
+            body = request.data
             invalid = RestaurantOwner.field_validate(body)
             restaurant_filter = PendingRestaurant.objects.filter(_id=body['restaurant_id'])
             if invalid:
@@ -113,7 +113,7 @@ class RestaurantOwnerView(APIView):
         """ Updates a restaurant owner profile """
         try:
             validate(instance=json.loads(request.body), schema=restaurant_owner_edit_schema)
-            body = json.loads(request.body)
+            body = request.data
             invalid = RestaurantOwner.field_validate(body)
             profile = {}
             ro_filter = RestaurantOwner.objects.filter(user_id=user_id)

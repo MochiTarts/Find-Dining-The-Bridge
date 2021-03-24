@@ -73,6 +73,7 @@ restaurant_insert_for_approval_schema = {
         "postalCode": {"type": "string"},
 
         "phone": {"type": "number"},
+        "email": {"type": "string"},
         "cuisines": {"type": "array"},
         "pricepoint": {"type": "string"},
 
@@ -124,6 +125,7 @@ restaurant_insert_draft_schema = {
         "postalCode": {"type": "string"},
 
         "phone": {"type": "number"},
+        "email": {"type": "string"},
         "cuisines": {"type": "array"},
         "pricepoint": {"type": "string"},
 
@@ -173,6 +175,7 @@ restaurant_edit_draft_schema = {
         "postalCode": {"type": "string"},
 
         "phone": {"type": "number"},
+        "email": {"type": "string"},
         "cuisines": {"type": "array"},
         "pricepoint": {"type": "string"},
 
@@ -279,7 +282,7 @@ class PendingDishView(APIView):
         """ Insert dish into database """
         try:
             validate(instance=json.loads(request.body), schema=food_schema)
-            body = json.loads(request.body)
+            body = request.data
             invalid = PendingFood.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -302,7 +305,7 @@ class PendingDishView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
+            body = request.data
             PendingFood.objects.filter(
                 restaurant_id=rest_id, name=body['name']).delete()
             message = 'something went wrong'
@@ -318,7 +321,7 @@ class PendingDishView(APIView):
         try:
             validate(instance=json.loads(request.body),
                      schema=food_edit_schema)
-            body = json.loads(request.body)
+            body = request.data
             invalid = PendingFood.field_validate(body)
             if invalid is not None:
                 return JsonResponse(invalid)
@@ -374,7 +377,7 @@ class PendingDishView(APIView):
         """ Deletes dish from database """
         try:
             validate(instance=json.loads(request.body), schema=food_delete_schema)
-            body = json.loads(request.body)
+            body = request.data
             restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
             if not restaurant:
                 return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
@@ -438,7 +441,7 @@ class UserFavView(APIView):
         """ Add a new user-restaurant-favourite relation """
         try:
             validate(instance=json.loads(request.body), schema=user_fav_schema)
-            body = json.loads(request.body)
+            body = request.data
             user_id = body['user']
             rest_id = body['restaurant']
             invalid = UserFavRestrs.field_validate(body)
@@ -616,14 +619,14 @@ class AllRestaurantList(APIView):
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def post(self, request, user_id=''):
         """Insert new restaurant as a draft into database"""
         try:
             validate(instance=json.loads(request.body),
                      schema=restaurant_insert_draft_schema)
-            body = json.loads(request.body)
+            body = request.data
             invalid = PendingRestaurant.field_validate_draft(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -642,7 +645,7 @@ class RestaurantDraftView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
+            body = request.data
             PendingRestaurant.objects.filter(email=body['email']).delete()
             message = 'something went wrong'
             try:
@@ -657,7 +660,7 @@ class RestaurantDraftView(APIView):
         try:
             validate(instance=json.loads(request.body),
                      schema=restaurant_edit_draft_schema)
-            body = json.loads(request.body)
+            body = request.data
             invalid = PendingRestaurant.field_validate_draft(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -706,7 +709,7 @@ class RestaurantForApprovalView(APIView):
         try:
             validate(instance=json.loads(request.body),
                      schema=restaurant_insert_for_approval_schema)
-            body = json.loads(request.body)
+            body = request.data
             invalid = PendingRestaurant.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -746,7 +749,7 @@ class RestaurantForApprovalView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
+            body = request.data
             PendingRestaurant.objects.filter(email=body['email']).delete()
             message = 'something went wrong'
             try:
