@@ -43,13 +43,12 @@ class deactivateView(APIView):
 
 class editView(APIView):
     """ Edit user """
-    permission_classes = (IsAuthenticated,)
 
     def put(self, request):
         try:
+
             body = json.loads(request.body)
-            
-            user = User.objects.get(email=body['email'])
+            user = User.objects.get(id=request.user.id)
             for field in body:
                 setattr(user, field, body[field])
             user.save()

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
 import { UserService } from 'src/app/_services/user.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -14,21 +15,26 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private token: TokenStorageService,
-    private userService: UserService
-    ) { }
+    private userService: UserService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.currentUser = this.token.getUser();
-    this.userService.getSubscriberProfile(this.currentUser.user_id).subscribe((data) => {
+    this.userService.getSubscriberProfile().subscribe((data) => {
       this.currentUser.first_name = data.first_name;
       this.currentUser.last_name = data.last_name;
       this.currentUser.postalCode = data.postalCode;
       var phone: string = String(data.phone);
-      this.currentUser.phone = phone != 'null' ? "(" + phone.slice(0,3) + ") " + phone.slice(3,6) + " " + phone.slice(6,10) : '';
+      this.currentUser.phone = phone != 'null' ? "(" + phone.slice(0, 3) + ") " + phone.slice(3, 6) + " " + phone.slice(6, 10) : '';
     },
-    err => {
-      console.log(err);
-    })
+      err => {
+        console.log(err);
+        if (err.error && err.error.code == 'no_profile_found') {
+          // redirect to home page to fill the profile
+          this.router.navigate(['/']);
+        }
+      })
   }
 
   openEditModal(): void {
