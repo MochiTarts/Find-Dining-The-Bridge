@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework.utils import json
 from rest_framework.views import APIView
@@ -24,6 +25,7 @@ from utils.model_util import model_to_json, save_and_clean, edit_model, update_m
 
 from bson import ObjectId
 import ast
+import json
 
 # jsonschema validation schemes
 
@@ -31,7 +33,6 @@ food_schema = {
     "properties": {
         "_id": {"type": "string"},
         "name": {"type": "string"},
-        "restaurant_id": {"type": "string"},
         "description": {"type": "string"},
         "picture": {"type": "string"},
         "price": {"type": ["string", "number"]},
@@ -41,7 +42,7 @@ food_schema = {
         "specials": {"type": "string"},
         "category": {"type": "string"}
     },
-    "required": ["name", "restaurant_id", "description", "price", "specials", "category"],
+    "required": ["name", "description", "price", "specials", "category"],
     "additionalProperties": False
 }
 
@@ -49,7 +50,6 @@ food_edit_schema = {
     "properties": {
         "_id": {"type": "string"},
         "name": {"type": "string"},
-        "restaurant_id": {"type": "string"},
         "description": {"type": "string"},
         "picture": {"type": "string"},
         "price": {"type": ["string", "number"]},
@@ -218,6 +218,15 @@ restaurant_edit_draft_schema = {
     "additionalProperties": False
 }
 
+user_fav_schema = {
+    "properties": {
+        "user": {"type": "number"},
+        "restaurant": {"type": "string"}
+    },
+    "required": ["user", "restaurant"],
+    "additionalProperties": False
+}
+
 
 dish_editable = ["name", "description", "picture",
     "price", "specials", "category", "status"]
@@ -237,6 +246,7 @@ restaurant_editable = [
 
 class DishList(APIView):
     """ dish list """
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """Retrieve all dishes from the database"""
@@ -247,6 +257,7 @@ class DishList(APIView):
 
 class DishRestaurantView(APIView):
     """ dish restaurant view """
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """Retrieve all dishes from a restaurant"""
@@ -255,7 +266,7 @@ class DishRestaurantView(APIView):
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
-    def post(self, request, rest_id):
+    def delete(self, request, rest_id):
         """ Deletes dish from database """
         try:
             body = json.loads(request.body)
@@ -291,6 +302,7 @@ class DishRestaurantView(APIView):
 
 class PendingDishView(APIView):
     """ pending dish view """
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """Retrieve all dishes from a restaurant"""
@@ -306,14 +318,14 @@ class PendingDishView(APIView):
             body = json.loads(request.body)
             invalid = PendingFood.field_validate(body)
             if invalid:
-                return JsonResponse(invalid)
+                return JsonResponse(invalid, status=400)
 
             if PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').count() == 6 and body['category'] == 'Popular Dish':
                 return JsonResponse({'message': 'You can only have up to a maximum of 6 popular dishes.'}, status=400)
             if PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').count() == 1 and body['category'] == 'Signature Dish':
                 return JsonResponse({'message': 'You can only have 1 signature dish.'}, status=400)
 
-            food = PendingFood.add_dish(body)
+            food = PendingFood.add_dish(body, rest_id)
             return JsonResponse(model_to_json(food))
         except ValidationError as e:
             return JsonResponse({'message': e.message}, status=500)
@@ -324,7 +336,7 @@ class PendingDishView(APIView):
         except Exception as e:
             body = json.loads(request.body)
             PendingFood.objects.filter(
-                restaurant_id=body['restaurant_id'], name=body['name']).delete()
+                restaurant_id=rest_id, name=body['name']).delete()
             message = 'something went wrong'
             try:
                 message = getattr(e, 'message', str(e))
@@ -413,17 +425,20 @@ def category_exists(restaurant_id, category):
 # add_user_fav_page
 class UserFavView(APIView):
     """ user fav view """
+    permission_classes = (AllowAny,)
 
-    def post(self, request, user_id):
+    def post(self, request, user_id=''):
         """ Add a new user-restaurant-favourite relation """
         try:
+            validate(instance=json.loads(request.body), schema=user_fav_schema)
             body = json.loads(request.body)
-            body['user_id'] = user_id
+            user_id = body['user']
+            rest_id = body['restaurant']
             invalid = UserFavRestrs.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
-            response = UserFavRestrs.insert(body)
-            return JsonResponse(response)
+            response = UserFavRestrs.insert(user_id, rest_id)
+            return JsonResponse(response, safe=False)
         except ValidationError as e:
             return JsonResponse({'message': e.message}, status=500)
         except json.decoder.JSONDecodeError as e:
@@ -444,7 +459,6 @@ class UserFavView(APIView):
     def get(self, request, user_id):
         """ Get all restaurants favourited by a user """
         try:
-            # user_id = request.GET.get('user_id')
             response = UserFavRestrs.getUserFavourites(user_id)
             return JsonResponse(response, safe=False)
         except ValueError as e:
@@ -461,11 +475,11 @@ class UserFavView(APIView):
 
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """ Get all users who favourited the requested restaurant """
         try:
-            # _id = request.GET.get('restaurant_id')
             response = UserFavRestrs.getRestrFavouriteds(rest_id)
             return JsonResponse(response, safe=False)
         except ValueError as e:
@@ -482,17 +496,16 @@ class UserFavRestaurantView(APIView):
 
 class FavRelationView(APIView):
     """ remove fav relation view """
+    permission_classes = (AllowAny,)
 
     def delete(self, request, user_id, rest_id):
         """ Remove a new user-restaurant-favourite relation """
         try:
-
-            # body = json.loads(request.body)
             body = {'user_id': user_id, 'restaurant_id': rest_id}
             invalid = UserFavRestrs.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
-            response = UserFavRestrs.remove_fav(body)
+            response = UserFavRestrs.remove_fav(user_id, rest_id)
             return JsonResponse(response, safe=False)
         except ValidationError as e:
             return JsonResponse({'message': e.message}, status=500)
@@ -574,6 +587,7 @@ class PendingRestaurantView(APIView):
 
 class AllRestaurantList(APIView):
     """ all restaurants list """
+    permission_classes = (AllowAny,)
 
     def get(self, request):
         """Retrieve all restaurants"""
@@ -592,6 +606,7 @@ class AllRestaurantList(APIView):
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         """Insert new restaurant as a draft into database"""
@@ -674,6 +689,7 @@ class RestaurantDraftView(APIView):
 
 class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         """Insert or update a restaurant record for admin approval"""

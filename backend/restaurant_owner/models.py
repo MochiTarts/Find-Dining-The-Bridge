@@ -22,39 +22,42 @@ class RestaurantOwner(models.Model):
     expired_at = models.DateField(blank=True)
 
     @classmethod
-    def signup(cls, restaurant_owner_data):
-        """
-        Constructs and saves restaurant owner to the database
-        Returns the newly registered restaurant owner object
-        :param: restaurant_owner_data: json data of the restaurant owner
+    def signup(cls, restaurant_owner_data:dict):
+        """ Constructs and saves restaurant owner to the database and
+        returns the newly registered restaurant owner object
+
+        :param: restaurant_owner_data: data of the restaurant owner
         :return: new RestaurantOwner object
         """
-        if not cls.objects.filter(email=restaurant_owner_data['email']).exists():
-            user = cls(**restaurant_owner_data)
-            user = save_and_clean(user)
-            return user
+        if not cls.objects.filter(user_id=restaurant_owner_data['user_id']).exists():
+            if "consent_status" in restaurant_owner_data:
+                restaurant_owner_data.update(handleConsentStatus(subscriber_data['consent_status']))
+            profile = cls(**restaurant_owner_data)
+            profile = save_and_clean(profile)
+            return profile
         else:
             raise ValueError('Cannot insert restaurant owner user, a user with this email already exists')
 
     @classmethod
     def field_validate(self, fields):
-        """
-        Validates fields
+        """ Validates the fields of the request to insert or modify a RestaurantOwner object
+
         :param fields: Dictionary of fields to validate
+        :type fields: dict
         :return: A list of fields that were invalid. Returns None if all fields are valid
+        :rtype: json
         """
 
         invalid = {'Invalid': []}
 
         # check if there is script in any field values
-        for attr in self.attr_list:
-            if attr in fields:
-                value = fields[attr]
-                if value is not None:
-                    try:
-                        check_script_injections(value)
-                    except ValidationError as e:
-                        invalid['Invalid'].append(attr)
+        for attr in fields:
+            value = fields[attr]
+            if value is not None:
+                try:
+                    check_script_injections(value)
+                except ValidationError as e:
+                    invalid['Invalid'].append(attr)
 
         if 'restaurant_id' in fields:
             try:
@@ -81,3 +84,16 @@ class RestaurantOwner(models.Model):
 
     class Meta:
         verbose_name = 'Restaurant Owner'
+
+def handleConsentStatus(consent_status):
+    profile = {}
+    profile["consent_status"] = consent_status
+    if consent_status == "EXPRESSED":
+        profile["expired_at"] =  None
+        profile["subscribed_at"] = datetime.datetime.today()
+        profile["unsubscribed_at"] = None
+    elif consent_status == "IMPLIED":
+        profile["expired_at"] = datetime.datetime.today() + datetime.timedelta(days=+182)
+        profile["subscribed_at"] = None
+        profile["unsubscribed_at"] = None
+    return profile
