@@ -6,7 +6,7 @@ def validate_signup_user(user):
     if not validate_email_address(user['email']):
         invalid.append('email')
 
-    if not validate_name(user['username']):
+    if not validate_username(user['username']):
         invalid.append('username')
 
     return invalid
@@ -21,6 +21,14 @@ def validate_name(name):
     except ValidationError:
         return False
 
+# username should not contain weird symbols (@, +, -, _, and . are allowed)
+def validate_username(name):
+    try:
+        regexValidator = RegexValidator('^[^±!£$%^&*§¡€#¢§¶•ªº«\\/<>?:;|=,]{1,100}$')
+        regexValidator(name)
+        return True
+    except ValidationError:
+        return False
 
 def validate_email_address(email):
     try:
