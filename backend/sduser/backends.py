@@ -79,9 +79,9 @@ def signup(request):
 
         if (len(invalid) == 0):
             try:
-                if UserModel.objects.filter(username=username).exists():
+                if UserModel.objects.filter(username__iexact=username).exists():
                     return JsonResponse({'message': 'username already exists'}, status=400)
-                elif UserModel.objects.filter(email=email).exists():
+                elif UserModel.objects.filter(email__iexact=email).exists():
                     return JsonResponse({'message': 'email already exists'}, status=400)
                 else:
                     return create_disable_user_and_send_verification_email(user, password, request)

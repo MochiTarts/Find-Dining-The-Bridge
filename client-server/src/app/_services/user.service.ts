@@ -75,12 +75,9 @@ export class UserService {
   @Output: Return all fields of a subscriber
   Get all fields of subscriber
   */
-  getSubscriberProfile(user_id): Observable<any> {
+  getSubscriberProfile(): Observable<any> {
     const endpoint = SUBSCRIBER_ENDPOINT + 'profile/'
-    const params = {
-      user_id: user_id
-    }
-    return this.http.get(endpoint, { params: params });
+    return this.http.get(endpoint);
   }
 
   /*

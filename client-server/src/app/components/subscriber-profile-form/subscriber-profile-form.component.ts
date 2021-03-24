@@ -56,12 +56,18 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.profileId = user.profile_id;
 
       if (this.profileId) {
-        this.userService.getSubscriberProfile(this.userId).subscribe((data) => {
+        this.userService.getSubscriberProfile().subscribe((data) => {
           this.firstName = data.first_name;
           this.lastName = data.last_name;
           this.postalCode = data.postalCode;
           this.phone = data.phone;
-        })
+        },
+          err => {
+            if (err.error && err.error.code == 'no_profile_found') {
+              // redirect to home page to fill the profile
+              this.router.navigate(['/']);
+            }
+          })
       }
     }
   }
@@ -134,7 +140,6 @@ export class SubscriberProfileFormComponent implements OnInit {
         this.userService.createSubscriberProfile(subscriberInfo).subscribe((profile) => {
           console.log(profile)
           var sduserInfo = {
-            email: this.email,
             profile_id: profile.id,
           };
 
