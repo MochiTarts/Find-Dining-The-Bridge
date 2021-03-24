@@ -281,7 +281,7 @@ class PendingDishView(APIView):
     def post(self, request, user_id, dish_id=''):
         """ Insert dish into database """
         try:
-            validate(instance=json.loads(request.body), schema=food_schema)
+            validate(instance=request.data, schema=food_schema)
             body = request.data
             invalid = PendingFood.field_validate(body)
             if invalid:
@@ -319,7 +319,7 @@ class PendingDishView(APIView):
     def put(self, request, user_id, dish_id):
         """ Update Dish data """
         try:
-            validate(instance=json.loads(request.body),
+            validate(instance=request.data,
                      schema=food_edit_schema)
             body = request.data
             invalid = PendingFood.field_validate(body)
@@ -376,7 +376,7 @@ class PendingDishView(APIView):
     def delete(self, request, user_id):
         """ Deletes dish from database """
         try:
-            validate(instance=json.loads(request.body), schema=food_delete_schema)
+            validate(instance=request.data, schema=food_delete_schema)
             body = request.data
             restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
             if not restaurant:
@@ -440,7 +440,7 @@ class UserFavView(APIView):
     def post(self, request, user_id=''):
         """ Add a new user-restaurant-favourite relation """
         try:
-            validate(instance=json.loads(request.body), schema=user_fav_schema)
+            validate(instance=request.data, schema=user_fav_schema)
             body = request.data
             user_id = body['user']
             rest_id = body['restaurant']
@@ -624,7 +624,7 @@ class RestaurantDraftView(APIView):
     def post(self, request, user_id=''):
         """Insert new restaurant as a draft into database"""
         try:
-            validate(instance=json.loads(request.body),
+            validate(instance=request.data,
                      schema=restaurant_insert_draft_schema)
             body = request.data
             invalid = PendingRestaurant.field_validate_draft(body)
@@ -658,7 +658,7 @@ class RestaurantDraftView(APIView):
     def put(self, request, user_id):
         """Edit a restaurant profile and save it as a draft in the database"""
         try:
-            validate(instance=json.loads(request.body),
+            validate(instance=request.data,
                      schema=restaurant_edit_draft_schema)
             body = request.data
             invalid = PendingRestaurant.field_validate_draft(body)
@@ -707,7 +707,7 @@ class RestaurantForApprovalView(APIView):
     def put(self, request, user_id=''):
         """ Insert or update a restaurant record for admin approval """
         try:
-            validate(instance=json.loads(request.body),
+            validate(instance=request.data,
                      schema=restaurant_insert_for_approval_schema)
             body = request.data
             invalid = PendingRestaurant.field_validate(body)
