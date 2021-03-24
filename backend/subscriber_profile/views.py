@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from .models import SubscriberProfile
+from utils.model_util import model_to_json
 
 
 class Signup(APIView):
@@ -23,7 +24,7 @@ class Signup(APIView):
             if invalid:
                 return JsonResponse(invalid, status=400)
             profile = SubscriberProfile.signup(body)
-            return JsonResponse(model_to_dict(profile))
+            return JsonResponse(model_to_json(profile))
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
@@ -64,7 +65,7 @@ class SubscriberProfileView(APIView):
             if invalid:
                 return JsonResponse(invalid, status=400)
             profile = SubscriberProfile.edit(body)
-            return JsonResponse(model_to_dict(profile))
+            return JsonResponse(model_to_json(profile))
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:

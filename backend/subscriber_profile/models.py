@@ -31,10 +31,12 @@ class SubscriberProfile(models.Model):
 
     @classmethod
     def field_validate(self, fields):
-        """
-        Validates fields
+        """ Validates fields
+
         :param fields: Dictionary of fields to validate
+        :type fields: dict
         :return: A list of fields that were invalid. Returns None if all fields are valid
+        :rtype: json
         """
 
         invalid = {'Invalid': []}
@@ -88,10 +90,12 @@ class SubscriberProfile(models.Model):
 
     @classmethod
     def signup(cls, subscriber_data:dict):
-        """
-        Constructs & Saves SubscriberProfile to DB returning the newly created profile
-        :param subscriber_data: json data of the subscriber
+        """ Constructs and saves SubscriberProfile to database returning the newly created profile
+
+        :param subscriber_data: data of the subscriber
+        :subscriber_data: dict
         :return: SubscriberProfile Object
+        :rtype: :class:`SubscriberProfile`
         """
         invalid = SubscriberProfile.field_validate(subscriber_data)
         if not invalid:
