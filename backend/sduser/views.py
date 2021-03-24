@@ -27,8 +27,7 @@ class deactivateView(APIView):
 
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
-        header = request.META.get('HTTP_AUTHORIZATION')
-        current_user = get_user(header)
+        current_user = get_user(request)
         if not current_user:
             return JsonResponse({'message': 'fail to obtain user', 'code': 'deactivation_fail'}, status=405)
 
@@ -53,8 +52,7 @@ class editView(APIView):
     def put(self, request):
         try:
             body = request.data
-            header = request.META.get('HTTP_AUTHORIZATION')
-            user = get_user(header)
+            user = get_user(request)
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
             user = User.objects.get(id=user['user_id'])

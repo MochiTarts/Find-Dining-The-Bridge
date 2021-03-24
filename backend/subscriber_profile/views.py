@@ -18,8 +18,7 @@ class Signup(APIView):
     def post(self, request):
         try:
             body = request.data
-            header = request.META.get('HTTP_AUTHORIZATION')
-            user = get_user(header)
+            user = get_user(request)
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
             body['user_id'] = user['user_id']
@@ -49,8 +48,7 @@ class SubscriberProfileView(APIView):
 
     def get(self, request):
         try:
-            header = request.META.get('HTTP_AUTHORIZATION')
-            user = get_user(header)
+            user = get_user(request)
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
 
@@ -72,8 +70,7 @@ class SubscriberProfileView(APIView):
     def put(self, request):
         try:
             body = request.data
-            header = request.META.get('HTTP_AUTHORIZATION')
-            user = get_user(header)
+            user = get_user(request)
 
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
@@ -100,8 +97,7 @@ class ConsentStatusView(APIView):
     def put(self, request):
         try:
             body = request.data
-            header = request.META.get('HTTP_AUTHORIZATION')
-            user = get_user(header)
+            user = get_user(request)
 
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
