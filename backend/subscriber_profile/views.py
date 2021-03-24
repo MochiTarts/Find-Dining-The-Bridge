@@ -27,10 +27,6 @@ class Signup(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-<<<<<<< HEAD
-            body = request.data
-=======
->>>>>>> 70316ae05ccee8124008398baaac816615ffe53d
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
