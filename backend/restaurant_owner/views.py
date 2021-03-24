@@ -51,7 +51,7 @@ restaurant_owner_editable = [
 
 class SignUp(APIView):
     """ Restaurant Owner signup view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         """ Inserts a new restaurant profile record into the database """
@@ -86,7 +86,7 @@ class SignUp(APIView):
 
 class RestaurantOwnerView(APIView):
     """ Restaurant Owner view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, user_id):
         """ Retrieves a restaurant owner profile """

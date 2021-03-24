@@ -242,7 +242,7 @@ restaurant_editable = [
 
 class DishList(APIView):
     """ dish list """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, rest_id):
         """Retrieve all dishes from the database"""
@@ -253,7 +253,7 @@ class DishList(APIView):
 
 class DishRestaurantView(APIView):
     """ dish restaurant view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, rest_id):
         """Retrieve all dishes from a restaurant"""
@@ -298,7 +298,7 @@ class DishRestaurantView(APIView):
 
 class PendingDishView(APIView):
     """ pending dish view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, rest_id):
         """Retrieve all dishes from a restaurant"""
@@ -420,7 +420,7 @@ def category_exists(restaurant_id, category):
 # add_user_fav_page
 class UserFavView(APIView):
     """ user fav view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, user_id=''):
         """ Add a new user-restaurant-favourite relation """
@@ -491,7 +491,7 @@ class UserFavRestaurantView(APIView):
 
 class FavRelationView(APIView):
     """ remove fav relation view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, user_id, rest_id):
         """ Remove a new user-restaurant-favourite relation """
@@ -522,6 +522,7 @@ class FavRelationView(APIView):
 
 class RestaurantView(APIView):
     """ get restaurant view dish view """
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, rest_id):
         """Retrieve restaurant by id"""
@@ -552,6 +553,7 @@ class RestaurantView(APIView):
 
 class PendingRestaurantView(APIView):
     """ pending restaurant view """
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, rest_id):
         """Retrieve restaurant from pending collection by id"""
@@ -582,7 +584,7 @@ class PendingRestaurantView(APIView):
 
 class AllRestaurantList(APIView):
     """ all restaurants list """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         """Retrieve all restaurants"""
@@ -601,7 +603,7 @@ class AllRestaurantList(APIView):
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, rest_id=''):
         """Insert new restaurant as a draft into database"""
@@ -684,7 +686,7 @@ class RestaurantDraftView(APIView):
 
 class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def put(self, request, rest_id=''):
         """ Insert or update a restaurant record for admin approval """
