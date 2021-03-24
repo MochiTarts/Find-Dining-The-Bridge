@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'account-setting', component: AccountSettingComponent, canActivate: [AuthGuard] },
-  { path: 'newsletter', component: NewsletterComponent },
+  { path: 'newsletter', component: NewsletterComponent, canActivate: [AuthGuard] },
   { path: 'all-listings', component: AllRestaurantsComponent, canActivate: [AuthGuard] },
   { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuard] },
   /*

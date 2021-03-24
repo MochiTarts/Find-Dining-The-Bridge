@@ -114,9 +114,10 @@ export class SubscriberProfileFormComponent implements OnInit {
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
     };
 
-    if (this.profileId == '') {
-      subscriberInfo["consent_status"] = ((<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED");
+    if (!this.profileId) {
+      subscriberInfo["consent_status"] = ((<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED")
     }
+    console.log(subscriberInfo)
 
     // clear formErrors
     this.validator.clearAllErrors();

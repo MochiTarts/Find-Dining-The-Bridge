@@ -83,6 +83,16 @@ export class UserService {
     return this.http.get(endpoint, { params: params });
   }
 
+  /*
+  @Input: JSON object containing userID and fields of subscriber profile to be modified
+  @Output: JSON object representing the updated subscriber profile
+  Edit consumer's consent status
+  */
+  editConsentStatus(userData): Observable<any> {
+    const endpoint = SUBSCRIBER_ENDPOINT + 'consent_status/';
+    return this.http.put<any>(endpoint, userData, httpOptions);
+  }
+
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   /*
   BELOW ARE THE OLD SERVICE METHODS FROM PREVIOUS REPO
@@ -222,15 +232,6 @@ export class UserService {
     return this.http.post<any>(endpoint, userData);
   }
 
-  /*
-  @Input: JSON object from auth
-  @Output: None
-  Edit consumer's consent status
-  */
-  editConsentStatus(userData): void {
-    const endpoint = API_URL + 'user/consent_status/';
-    this.http.post(endpoint, userData).subscribe((data) => { });
-  }
 
   /*
   @Input: None

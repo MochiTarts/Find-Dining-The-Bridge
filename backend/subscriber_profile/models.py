@@ -119,6 +119,10 @@ class SubscriberProfile(models.Model):
             for field in subscriber_data:
                 setattr(profile, field, subscriber_data[field])
             profile.GEO_location = geocode(profile.postalCode)
+            if "consent_status" in subscriber_data:
+                consent_data = handleConsentStatus(subscriber_data["consent_status"])
+                for field in consent_data:
+                    setattr(profile, field, consent_data[field])
             profile = save_and_clean(profile)
             return profile
         else:
@@ -129,11 +133,9 @@ def handleConsentStatus(consent_status):
     profile = {}
     profile["consent_status"] = consent_status
     if consent_status == "EXPRESSED":
-        profile["expired_at"] =  None
         profile["subscribed_at"] = datetime.datetime.today()
-        profile["unsubscribed_at"] = None
     elif consent_status == "IMPLIED":
         profile["expired_at"] = datetime.datetime.today() + datetime.timedelta(days=+182)
-        profile["subscribed_at"] = None
-        profile["unsubscribed_at"] = None
+    elif consent_status == "UNSUBSCRIBED":
+        profile["unsubscribed_at"] = datetime.datetime.today()
     return profile

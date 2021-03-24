@@ -104,6 +104,14 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  newsletter() {
+    this.router.navigate(['/newsletter']).then(() => {
+      setTimeout(function () {
+        //window.location.reload();
+      }, 100);
+    });
+  }
+
   restaurantSetup() {
     this.router.navigate(['/restaurant-setup'])
   }
