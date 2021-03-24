@@ -47,6 +47,7 @@ class editView(APIView):
     def put(self, request):
         try:
             body = request.data
+            print(request.user.id)
             user = User.objects.get(id=request.user.id)
             for field in body:
                 setattr(user, field, body[field])
