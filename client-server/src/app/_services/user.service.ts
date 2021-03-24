@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 const API_URL = '/api/'
 const SDUSER_ENDPOINT = '/api/user/';
 const SUBSCRIBER_ENDPOINT = '/api/subscriber/';
+const OWNER_ENDPOINT = '/api/owner/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -121,6 +122,30 @@ export class UserService {
     return this.http.delete<any>(endpoint)
   }
 
+  /*
+  @Input: user_id of the subscriber user
+  @Output: list of nearby restaurants from the subscriber user
+  Returns a list of up to 5 json objects, each object contains
+  the restaurant_id and the distance from the subscriber
+  List is ordered from nearest to furthest
+  */
+  getNearbyRestaurantsSubscriber(user_id): Observable<any> {
+    const endpoint = SUBSCRIBER_ENDPOINT + `/nearby/${user_id}/`
+    return this.http.get(endpoint);
+  }
+
+  /*
+  @Input: user_id of the restaurant owner user
+  @Output: list of nearby restaurants from the restaurant owner
+  Returns a list of up to 5 json objects, each object contains
+  the restaurant_id and the distance from the restaurant owner
+  List is ordered from nearest to furthest
+  */
+  getNearbyRestaurantsOwner(user_id): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + `/nearby/${user_id}/`;
+    return this.http.get(endpoint);
+  }
+
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
   /*
   BELOW ARE THE OLD SERVICE METHODS FROM PREVIOUS REPO
@@ -164,22 +189,6 @@ export class UserService {
   editOwner(userData): Observable<any> {
     const endpoint = API_URL + 'restaurant_owner_edit/';
     return this.http.post<any>(endpoint, userData);
-  }
-
-  getNearbyRestaurantsConsumer(userData): Observable<any> {
-    const endpoint = API_URL + 'consumer_subscriber_get_nearby/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
-  }
-
-  getNearbyRestaurantsOwner(userData): Observable<any> {
-    const endpoint = API_URL + 'restaurant_owner_get_nearby/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
   }
 
 
