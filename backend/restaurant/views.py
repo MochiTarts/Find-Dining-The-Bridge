@@ -243,7 +243,7 @@ restaurant_editable = [
 
 class DishList(APIView):
     """ dish list """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id=''):
         """Retrieve all dishes from the database"""
@@ -254,7 +254,7 @@ class DishList(APIView):
 
 class DishRestaurantView(APIView):
     """ dish restaurant view """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """Retrieve all dishes from a restaurant"""
@@ -537,7 +537,7 @@ class FavRelationView(APIView):
 
 class RestaurantView(APIView):
     """ get restaurant view dish view """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """Retrieve restaurant by id"""
@@ -600,7 +600,7 @@ class PendingRestaurantView(APIView):
 
 class AllRestaurantList(APIView):
     """ all restaurants list """
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (AllowAny,)
 
     def get(self, request):
         """Retrieve all restaurants"""
