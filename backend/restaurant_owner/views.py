@@ -71,6 +71,7 @@ class SignUp(APIView):
             if not restaurant_filter.exists():
                 return JsonResponse({"message": "This restaurant_id does not exist"}, status=400)
             
+            body['user_id'] = user_id
             profile = RestaurantOwner.signup(body)
             restaurant = restaurant_filter.first()
             restaurant.owner_user_id = user_id
