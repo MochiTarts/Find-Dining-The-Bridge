@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from collections import Iterable
 from django.core.validators import URLValidator, RegexValidator
-from profanity_filter import ProfanityFilter
+from profanityfilter import ProfanityFilter
 #from django.core import validators
 
 def check_script_injections(value):
@@ -65,7 +65,6 @@ def validate_profane_content(content):
     :return: None
     :rtype: None
     """
+    print(ProfanityFilter().is_clean(content))
     if not ProfanityFilter().is_clean(content):
-        raise ValidationError
-
-validate_profane_content("Happy")
+        raise ValidationError(None)
