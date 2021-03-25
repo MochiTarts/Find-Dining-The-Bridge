@@ -37,7 +37,7 @@ FROM nginx:1.16.0-alpine
 COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf 
 
 # copy django admin static files nginx/html directory
-# COPY static /usr/share/nginx/html/static
+COPY static /usr/share/nginx/html/static
 
 COPY ssl/server.crt /etc/nginx/certs/server.crt
 COPY ssl/server.key /etc/nginx/certs/server.key
