@@ -1,27 +1,19 @@
 #from django.contrib.auth.tokens import default_token_generator
-from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 from django.contrib.auth import get_user_model
-from django.utils.encoding import force_bytes
-from django.utils.html import strip_tags
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils import timezone
 from django.core.exceptions import MultipleObjectsReturned
-from django.core.mail import BadHeaderError, send_mail
-from django.template.loader import render_to_string
+from django.core.mail import BadHeaderError
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
 from django.conf import settings
-from django.urls import reverse
 from django.db.models import Q
 from django import forms
 
-from .validators import validate_signup_user
-from .forms import SDUserCreateForm
-from .tokens import sduser_activation_token_generator
+from sduser.validators import validate_signup_user
+from sduser.forms import SDUserCreateForm
 
 from smtplib import SMTPException
 
@@ -32,6 +24,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 
 from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
+from sduser.utils import send_email_verification, verify_email
 
 import json
 import jwt
@@ -79,9 +72,9 @@ def signup(request):
 
         if (len(invalid) == 0):
             try:
-                if UserModel.objects.filter(username=username).exists():
+                if UserModel.objects.filter(username__iexact=username).exists():
                     return JsonResponse({'message': 'username already exists'}, status=400)
-                elif UserModel.objects.filter(email=email).exists():
+                elif UserModel.objects.filter(email__iexact=email).exists():
                     return JsonResponse({'message': 'email already exists'}, status=400)
                 else:
                     return create_disable_user_and_send_verification_email(user, password, request)
@@ -108,18 +101,8 @@ def create_disable_user_and_send_verification_email(user, password, request):
         user.is_active = False
         user.save()
 
-        current_site = get_current_site(request)
-        subject = 'Verify Your Email for Find Dining'
-        message = render_to_string('verify_email/verification.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': sduser_activation_token_generator.make_token(user),
-        })
-
         try:
-            send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
-                      recipient_list=[user.email], html_message=message)
+            send_email_verification(user, request)
             # send a signal to frontend to ask them to verify email before log in
             return JsonResponse({'message': 'verification email has been sent. Please activate your account before sign in.'})
         except (BadHeaderError, SMTPException):
@@ -129,35 +112,6 @@ def create_disable_user_and_send_verification_email(user, password, request):
     # this should never happen
     else:
         return JsonResponse({'message': 'invalid form'}, status=400)
-
-
-def verify_email(request, uidb64, token):
-    try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = UserModel._default_manager.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and not user.is_blocked and sduser_activation_token_generator.check_token(user, token):
-        user.is_active = True
-        user.save()
-        return render(
-            request,
-            template_name='verify_email/success.html',
-            context={
-                'msg': 'Thank you for confirming your email with Find Dining. Your account has been activated. Please click the button below to login.',
-                'status': 'Verification Successful!',
-                'link': reverse('login')
-            }
-        )
-    else:
-        return render(
-            request,
-            template_name='verify_email/failure.html',
-            context={
-                'msg': 'Activation link has been used or is invalid!',
-                'status': 'Verification Failed!',
-            }
-        )
 
 
 def check_user_status(user):

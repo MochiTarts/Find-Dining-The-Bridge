@@ -1,4 +1,5 @@
 from bson import ObjectId
+from sduser.backends import jwt_decode
 
 def isObjectId(oid):
     return ObjectId.is_valid(oid)
@@ -20,3 +21,12 @@ def save_and_clean(model, updated_fields=None):
     except Exception as err:
         print(err)
         raise err
+
+def get_user(request):
+    header = request.META.get('HTTP_AUTHORIZATION')
+    print(header)
+    if header and header.startswith('Bearer'):
+        token = header.split(' ')[1]
+        return jwt_decode(token)
+    else:
+        return False

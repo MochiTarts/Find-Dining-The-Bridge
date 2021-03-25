@@ -26,7 +26,7 @@ export class RestaurantCardComponent implements OnInit {
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-      this.userId = user.email
+      this.userId = user.user_id
       this.role = user.role
 
       this.pricepoints = [
@@ -60,7 +60,7 @@ export class RestaurantCardComponent implements OnInit {
       }
 
       if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
-        this.userService.getFavouriteRestaurants(this.userId).subscribe((favs) => {
+        this.userService.getFavouriteRestaurants().subscribe((favs) => {
           if (typeof favs !== 'undefined' && favs.length > 0) {
             for (const fav of favs) {
               if (fav._id == this.restaurant._id) {
@@ -77,7 +77,6 @@ export class RestaurantCardComponent implements OnInit {
 
   addFavourite(restaurnt_id) {
     var data = {
-      user: this.userId,
       restaurant: restaurnt_id
     }
     this.userService.addFavouriteRestaurant(data).subscribe(() => {

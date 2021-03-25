@@ -75,12 +75,9 @@ export class UserService {
   @Output: Return all fields of a subscriber
   Get all fields of subscriber
   */
-  getSubscriberProfile(user_id): Observable<any> {
+  getSubscriberProfile(): Observable<any> {
     const endpoint = SUBSCRIBER_ENDPOINT + 'profile/'
-    const params = {
-      user_id: user_id
-    }
-    return this.http.get(endpoint, { params: params });
+    return this.http.get(endpoint);
   }
 
   /*
@@ -91,6 +88,48 @@ export class UserService {
   editConsentStatus(userData): Observable<any> {
     const endpoint = SUBSCRIBER_ENDPOINT + 'consent_status/';
     return this.http.put<any>(endpoint, userData, httpOptions);
+  }
+
+  /*
+  @Input: JSON object containing restaurant_id of restaurant that will be part of this new relation
+  @Output: Message from request or error
+  Add a new restaurant to a user's list of favourites
+  */
+  addFavouriteRestaurant(data): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/favourite/`
+    return this.http.post<any>(endpoint, data)
+  }
+
+  /*
+  @Input: None
+  @Output: List of favourited restaurants
+  Get all restaurants favourited by a user
+  */
+  getFavouriteRestaurants(): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/favourite/`
+    return this.http.get(endpoint)
+  }
+
+  /*
+  @Input: id of the restaurant to be removed from user's favourites
+  @Output: Message from request
+  Removes a restaurant from a user's list of favourites
+  */
+  removeFavRestaurant(restaurant_id): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/favourite/${restaurant_id}/`
+    return this.http.delete<any>(endpoint)
+  }
+
+  /*
+  @Input: None
+  @Output: list of nearby restaurants from the user
+  Returns a list of up to 5 json objects, each object contains
+  the restaurant_id and the distance from the user
+  List is ordered from nearest to furthest
+  */
+  getNearbyRestaurants(): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/nearby/`
+    return this.http.get(endpoint);
   }
 
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -136,55 +175,6 @@ export class UserService {
   editOwner(userData): Observable<any> {
     const endpoint = API_URL + 'restaurant_owner_edit/';
     return this.http.post<any>(endpoint, userData);
-  }
-
-  getNearbyRestaurantsConsumer(userData): Observable<any> {
-    const endpoint = API_URL + 'consumer_subscriber_get_nearby/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
-  }
-
-  getNearbyRestaurantsOwner(userData): Observable<any> {
-    const endpoint = API_URL + 'restaurant_owner_get_nearby/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
-  }
-
-  /*
-  @Input: JSON user-restaurant favourite object
-  @Output: Message from request or error
-  Add a new restaurant to a user's list of favourites
-  */
-  addFavouriteRestaurant(data): Observable<any> {
-    const endpoint = API_URL + 'user/add_favourite/'
-    return this.http.post<any>(endpoint, data)
-  }
-
-  /*
-  @Input: email of user whose list of favourites will be retrieved
-  @Output: List of favourited restaurants
-  Get all restaurants favourited by a user
-  */
-  getFavouriteRestaurants(email): Observable<any> {
-    const endpoint = API_URL + 'user/get_favourites/'
-    const paramObject = {
-      'user': email
-    }
-    return this.http.get(endpoint, { params: paramObject })
-  }
-
-  /*
-  @Input: JSON user-restaurant favourite object
-  @Output: Message from request
-  Removes a restaurant from a user's list of favourites
-  */
-  removeFavRestaurant(data): Observable<any> {
-    const endpoint = API_URL + 'user/remove_favourite/'
-    return this.http.post<any>(endpoint, data)
   }
 
 
@@ -241,14 +231,6 @@ export class UserService {
   deactivateUser(id: string): Observable<any> {
     const endpoint = API_URL + 'user/deactivate/';
     return this.http.post<any>(endpoint, JSON.stringify({ 'id': id }), httpOptions);
-  }
-
-  getNearbyRestaurants(userData): Observable<any> {
-    const endpoint = API_URL + 'user/get_nearby/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
   }
 
 }

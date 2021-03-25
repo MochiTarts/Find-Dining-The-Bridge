@@ -4,6 +4,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 const AUTH_API = '/api';
+const OWNER_ENDPOINT = AUTH_API + '/owner';
 const RO_ENDPOINT = AUTH_API + '/restaurant';
 const UPLOAD_ENDPOINT = AUTH_API + '/cloud_storage/upload/';
 const REMOVE_ENDPOINT = AUTH_API + '/cloud_storage/remove/';
@@ -41,8 +42,8 @@ export class RestaurantService {
 
   Returns the details of the restaurant using its id.
   */
-  getRestaurant(id:string): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/' + id + '/';
+  getApprovedRestaurant(id:string): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/approved/' + id + '/';
     return this.http.get(endpoint);
   }
 
@@ -52,9 +53,8 @@ export class RestaurantService {
 
   Returns the details of the restaurant using its id.
   */
-  getPendingRestaurant(id:string): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/pending/' + id + '/';
-
+  getPendingRestaurant(): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/pending/';
     return this.http.get(endpoint);
   }
 
@@ -94,20 +94,20 @@ export class RestaurantService {
     return this.http.get(endpoint);
   }
 
-  /*
-  @Input: JSON object containing restaurant info
-  @Output: The ID for that restaurant
+  // /*
+  // @Input: JSON object containing restaurant info
+  // @Output: The ID for that restaurant
 
-  Creates an entry for the restauant in the database and returns an id
-  */
-  getRestaurantID(restuarantInfo): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/draft/';
-    const userToken = {
-      idToken: restuarantInfo.idToken,
-    };
-    delete restuarantInfo.idToken;
-    return this.http.post<any>(endpoint, restuarantInfo, { params: userToken });
-  }
+  // Creates an entry for the restauant in the database and returns an id
+  // */
+  // getRestaurantID(restuarantInfo): Observable<any> {
+  //   const endpoint = RO_ENDPOINT + '/draft/';
+  //   const userToken = {
+  //     idToken: restuarantInfo.idToken,
+  //   };
+  //   delete restuarantInfo.idToken;
+  //   return this.http.post<any>(endpoint, restuarantInfo, { params: userToken });
+  // }
 
   /*
   @Input: JSON object containing dish info
@@ -143,18 +143,48 @@ export class RestaurantService {
   }
 
   /*
-  @Input: JSON object containing restaurant info (must have ID)
+  @Input: JSON object containing restaurant owner info
+          Required: user_id (number), restaurant_id (string)
+  @Output: RO record
+
+  Return a RO record
+  */
+  roSignup(ownerInfo): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + '/signup/';
+    return this.http.post<any>(endpoint, ownerInfo);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
   @Output: None
 
-  Edits information for a restuarant using its id.
+  Insert new restaurant as a draft into database
   */
-  editRestaurant(restInfo): Observable<any> {
+  insertRestaurantDraft(restInfo): Observable<any> {
     const endpoint = RO_ENDPOINT + '/draft/';
-    const userToken = {
-      idToken: restInfo.idToken,
-    };
-    delete restInfo.idToken;
-    return this.http.put<any>(endpoint, restInfo, { params: userToken });
+    return this.http.post<any>(endpoint, restInfo);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
+  @Output: None
+
+  Updates an existing restaurant record in pending restaurant collection, marks the status to 'In_Progress'
+  */
+  updateRestaurantDraft(restInfo): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/draft/';
+    return this.http.put<any>(endpoint, restInfo);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
+  @Output: None
+
+  Inserts or update a new restaurant record into pending restaurant collection, marks the status to 'Pending'
+  */
+  insertRestaurantApproval(restInfo): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/submit/';
+    return this.http.put<any>(endpoint, restInfo);
   }
 
   uploadRestaurantMedia(formData, id, location): Observable<any> {

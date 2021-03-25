@@ -1,20 +1,27 @@
-import json
-
 from django.shortcuts import render
 from django.forms import model_to_dict
 from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated
+
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
-from .models import SubscriberProfile
+
+from subscriber_profile.models import SubscriberProfile
+
 from utils.model_util import model_to_json
+from utils.common import get_user
+
+import json
 
 
 class Signup(APIView):
-    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         try:
-            body = json.loads(request.body)
+            body = request.data
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            body['user_id'] = user['user_id']
             invalid = SubscriberProfile.field_validate(body)
             if SubscriberProfile.objects.filter(user_id=body['user_id']).exists():
                 if not invalid:
@@ -28,7 +35,6 @@ class Signup(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
@@ -39,17 +45,20 @@ class Signup(APIView):
 
 
 class SubscriberProfileView(APIView):
-    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         try:
-            user_id = request.GET.get('user_id')
-            profile = SubscriberProfile.objects.get(user_id=user_id)
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+
+            profile = SubscriberProfile.objects.get(user_id=user['user_id'])
             return JsonResponse(model_to_dict(profile))
+        except SubscriberProfile.DoesNotExist as e:
+            return JsonResponse({'message': "no profile found!", 'code': "no_profile_found"}, status=400)
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
@@ -60,7 +69,12 @@ class SubscriberProfileView(APIView):
 
     def put(self, request):
         try:
-            body = json.loads(request.body)
+            body = request.data
+            user = get_user(request)
+
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            body['user_id'] = user['user_id']
             invalid = SubscriberProfile.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -69,7 +83,6 @@ class SubscriberProfileView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
             message = ''
             try:
                 message = getattr(e, 'message', str(e))
@@ -80,11 +93,15 @@ class SubscriberProfileView(APIView):
 
 
 class ConsentStatusView(APIView):
-    permission_classes = (IsAuthenticated,)
 
     def put(self, request):
         try:
-            body = json.loads(request.body)
+            body = request.data
+            user = get_user(request)
+
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            body['user_id'] = user['user_id']
             invalid = SubscriberProfile.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -93,7 +110,6 @@ class ConsentStatusView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = json.loads(request.body)
             message = ''
             try:
                 message = getattr(e, 'message', str(e))

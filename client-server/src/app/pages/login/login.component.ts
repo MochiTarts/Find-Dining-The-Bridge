@@ -150,7 +150,16 @@ export class LoginComponent implements OnInit {
           this.isLoginFailed = false;
           this.isLoggedIn = true;
           this.role = this.tokenStorage.getUser().role;
-          this.router.navigate([''])
+          let profileId = this.tokenStorage.getUser().profile_id;
+
+          if (this.role == 'RO') {
+            if (profileId == null)
+              this.router.navigate(['/restaurant-setup']);
+            else
+              this.router.navigate(['/restaurant']);
+          } else {
+            this.router.navigate(['/']);
+          }
 
         },
         // login failed

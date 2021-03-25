@@ -12,6 +12,9 @@ import { AccountSettingComponent } from './pages/account-setting/account-setting
 import { NewsletterComponent } from './pages/newsletter/newsletter.component';
 import { FavouritesComponent } from './pages/favourites/favourites.component';
 import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants.component';
+import { RestaurantSetupComponent } from './pages/restaurant-setup/restaurant-setup.component';
+import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
+import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,8 +22,11 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'account-setting', component: AccountSettingComponent, canActivate: [AuthGuard] },
   { path: 'newsletter', component: NewsletterComponent, canActivate: [AuthGuard] },
-  { path: 'all-listings', component: AllRestaurantsComponent, canActivate: [AuthGuard] },
+  { path: 'all-listings', component: AllRestaurantsComponent },
   { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuard] },
+  { path: 'restaurant-setup', component: RestaurantSetupComponent, canActivate: [AuthGuard, ROGuard] },
+  { path: 'terms-of-service', component: TermsOfServiceComponent },
+  { path: 'restaurant', component: RestaurantPageComponent, canActivate: [AuthGuard] },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {

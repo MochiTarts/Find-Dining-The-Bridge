@@ -9,16 +9,33 @@ class SDUser(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     role = models.CharField(max_length=5, choices=Roles.choices(), default="BU")
     # validation purpose for a given session
-    refresh_token = models.CharField(max_length=1023, default='')
+    refresh_token = models.CharField(max_length=1023, default='', blank=True, help_text=_(
+            'This is for authentication purpose.'
+        ),)
     # unique id from third party
-    auth_id = models.CharField(max_length=255, default='')
+    auth_id = models.CharField(max_length=255, default='', blank=True, help_text=_(
+            'This is a unique id given by third parties'
+            '(if the user logs in with a third party service)'
+        ),)
     # if the user is blocked by admin
-    is_blocked = models.BooleanField(default=False)
+    is_blocked = models.BooleanField(default=False, help_text=_(
+            'Select this to block the user from accessing the site. '
+        ),)
     default_pwd_updated = models.NullBooleanField(default=None, editable=False)
     # reserved attribute to support interval password update policy
-    pwd_update_time = models.DateTimeField(editable=False, null=True, default=None)
+    pwd_update_time = models.DateTimeField(editable=False, null=True, blank=True, default=None)
     # mainly for frontend to check for the existence of profile (upon login)
-    profile_id = models.IntegerField(default=None)
+    profile_id = models.IntegerField(default=None, null=True, blank=True)
+    # override default is_active field to have it default to false
+    is_active = models.BooleanField(
+        _('active'),
+        default=False,
+        help_text=_(
+            'Designates whether this user should be treated as active. '
+            'If this field is not selected, a verification email will be send to the user. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
 
     class Meta:
         #db_table = 'auth_user'

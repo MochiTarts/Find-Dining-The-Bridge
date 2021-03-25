@@ -75,7 +75,6 @@ export class restaurantValidator extends formValidator{
         'locationNotes': (locationNotes) => formValidation.isShorterThan(2000, locationNotes, false),
         'owner_first_name': (owner_first_name) => formValidation.isOwnerNamesNonEmpty(owner_first_name),
         'owner_last_name': (owner_last_name) => formValidation.isOwnerNamesNonEmpty(owner_last_name),
-        'owner_preferred_name': (owner_preferred_name) => formValidation.isOwnerNamesNonEmpty(owner_preferred_name),
         'open_hours': '',
         'payment_methods': (payment_methods) => formValidation.isListNonEmpty(payment_methods),
     })

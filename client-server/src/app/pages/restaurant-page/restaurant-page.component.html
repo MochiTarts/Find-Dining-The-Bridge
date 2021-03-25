@@ -1,0 +1,650 @@
+<div *ngIf="error">
+  <app-page-error></app-page-error>
+</div>
+
+<div *ngIf="restaurantDetails" role="main" aria-label="restaurant page">
+  <div class="header">
+    <div class="card infoCard">
+      <div class="row" id="info-row">
+        <div class="logo col-12 col-md-4" id="info-col1">
+          <img
+            src="{{ restaurantDetails.logo_url }}"
+            alt="logo"
+            class="logo-img"
+          />
+        </div>
+
+        <div class="col-12 col-md-8" id="info-col2">
+          <h2 class="restaurant-name">
+            {{ restaurantDetails.name | titlecase }}
+          </h2>
+          <div class="row">
+            <div class="col-md-6">
+              <p>
+                {{ cuisineList | titlecase }} -
+                {{ pricepoint | titlecase }}
+              </p>
+              <p *ngIf="expandService">
+                {{ serviceList }} <span (click)="expandService = false" style="color: gray; cursor: pointer;">show less...</span>
+              </p>
+              <p *ngIf="!expandService">
+                {{ firstFourServices }} <span *ngIf="serviceCount > 4" (click)="expandService = true" style="color: gray; cursor: pointer;">show more...</span>
+              </p>
+              <p *ngIf="restaurantDetails.payment_methods.length > 0">
+                {{ paymentList }}
+              </p>
+              <p>
+                {{ restaurantDetails.years }} year(s) in business
+              </p>
+            </div>
+            <div class="col-md-6">
+              <div class="row info-item-child">
+                <fa-icon class="contact-icon" [icon]="faMapMarker"></fa-icon>
+                <p>
+                  <a 
+                    [routerLink]="['/all-listings']" 
+                    [queryParams]="{GEO_location: restaurantDetails.GEO_location}"
+                    target="_blank"
+                    placement="bottom" 
+                    ngbTooltip="Visit Restaurant Page"
+                    style="color: black;"
+                  >
+                    {{ restaurantDetails.address }} <br> Scarborough, ON {{ restaurantDetails.postalCode }}
+                  </a>
+                </p>
+                
+              </div>
+              <div class="row info-item-child">
+                <fa-icon class="contact-icon" [icon]="faPhone"></fa-icon>
+                <div>
+                  <p>
+                    {{ displayed_phone }}
+                  </p>
+                </div>
+              </div>
+              <div class="row info-item-child" style="margin-top: 10px;">
+                <fa-icon class="contact-icon" [icon]="faMail"></fa-icon>
+                <div>
+                  <p>
+                    {{ restaurantDetails.email }}
+                  </p>
+                </div>
+              </div>
+  
+              <div class="row info-item-child" style="margin-top: 10px;">
+                <a
+                  *ngIf="restaurantDetails.web_url != ''"
+                  href="{{ restaurantDetails.web_url }}"
+                  target="_blank"
+                  aria-label="View Restaurant Website"
+                >
+                  <fa-icon class="contact-icon" [icon]="faShareAlt" placement="bottom" ngbTooltip="View our Website"></fa-icon>
+                </a>
+                <a
+                  *ngIf="restaurantDetails.facebook != ''"
+                  href="{{ restaurantDetails.facebook }}"
+                  target="_blank"
+                  aria-label="View Restaurant Facebook"
+                >
+                  <fa-icon class="contact-icon" [icon]="faFacebookF" placement="bottom" ngbTooltip="View our Facebook"></fa-icon>
+                </a>
+                <a
+                  *ngIf="restaurantDetails.twitter != ''"
+                  href="{{ restaurantDetails.twitter }}"
+                  target="_blank"
+                  aria-label="View Restaurant Twitter"
+                >
+                  <fa-icon class="contact-icon" [icon]="faTwitter" placement="bottom" ngbTooltip="View our Twitter"></fa-icon>
+                </a>
+                <a
+                  *ngIf="restaurantDetails.instagram != ''"
+                  href="{{ restaurantDetails.instagram }}"
+                  target="_blank"
+                  aria-label="View Restaurant Instagram"
+                >
+                  <fa-icon class="contact-icon" [icon]="faInstagram" placement="bottom" ngbTooltip="View our Instagram"></fa-icon>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 
+          <div class="media-icons">
+            <fa-icon class="media-icon" [icon]="faHeartLine"></fa-icon>
+          </div>
+      -->
+    </div>
+
+    <!-- <button class="updatesBtn" (click)="viewTimeline()" placement="top" ngbTooltip="View our Timeline">
+      <b>VIEW UPDATES</b>
+    </button> -->
+  </div>
+
+  <div class="editRestaurantWrap">
+    <button
+      *ngIf="role == 'RO' && !isQueryRestaurant"
+      class="btn editRestaurant"
+      (click)="editRestaurant()"
+      placement="top" ngbTooltip="Update Restaurant Info"
+      aria-label="Edit Restaurant Profile"
+    >
+      <fa-icon [icon]="faEdit"></fa-icon>
+      <b>EDIT RESTAURANT PROFILE</b>
+    </button>
+  </div>
+
+  <mat-tab-group mat-align-tabs="center">
+    <mat-tab label="Our Story">
+      <div class="row">
+        <div class="col-md-8">
+          <p class="tab-info-left section_p">{{ restaurantDetails.bio }}</p>
+          <div class="tab-info-left section_p" style="margin-top: 25px;">
+            <b>Restaurant Owners: </b><br />
+            <div *ngFor="let owner of restaurantDetails.owner_first_name; let i=index;">
+              <div>
+                {{ restaurantDetails.owner_first_name[i] + ' ' + restaurantDetails.owner_last_name[i] }} ( {{ restaurantDetails.owner_preferred_name[i] }} )
+              </div>
+            </div>
+          </div>
+          <div *ngIf="restaurantDetails.owner_story && restaurantDetails.owner_story != restaurantDetails.bio" class="tab-info-left section_p" style="margin-top: 25px;">
+            <b>Owner Story: </b><br />
+            <p>{{ restaurantDetails.owner_story }}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url != 'https://storage.googleapis.com/default-assets/cover.jpg'">
+            <img
+              src="{{ restaurantDetails.cover_photo_url }}"
+              width="100%"
+              alt="Story photo"
+            />
+          </div>
+          <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url == 'https://storage.googleapis.com/default-assets/cover.jpg'">
+            <img
+              src="/assets/images/undraw_chef.png"
+              width="100%"
+              alt="Story photo"
+            />
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center; padding-bottom: 50px;">
+        <button 
+          *ngIf="role == 'RO' && !isQueryRestaurant" 
+          class="btn editBtn" 
+          (click)="openEditModal(storyImageModal)" 
+          placement="bottom" 
+          ngbTooltip="Upload an Image for Our Story"
+          aria-label="Upload an Image for Our Story"
+        >
+          <fa-icon [icon]="faEdit"></fa-icon>
+          <b>UPLOAD IMAGE</b>
+        </button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Menu">
+      <ngb-alert *ngIf="restaurantMenu.length == 0" [dismissible]="false">
+        Menu currently empty! Please check again at a later time.
+      </ngb-alert>
+
+      <div class="col">
+        <div class="tab-info-menu">
+          <h1 class="section-title" *ngIf="specialDish.length != 0" style="text-align: center;">Specials</h1>
+          <div class="row justify-content-center">
+            <div *ngFor="let dish of specialDish">
+              <div class="col-sm-4 d-flex">
+                <app-dish-card [dish]="dish"></app-dish-card>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-info-menu">
+          <h1 class="section-title" *ngIf="popularDish.length != 0" style="text-align: center;">Popular Dishes</h1>
+          <div class="row justify-content-center">
+            <div *ngFor="let dish of popularDish">
+              <div class="col-sm-4 d-flex">
+                <app-dish-card [dish]="dish"></app-dish-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; padding-bottom: 30px;">
+        <button
+          *ngIf="role == 'RO' && !isQueryRestaurant" 
+          class="btn editBtn" 
+          (click)="editMenu()" 
+          placement="bottom" 
+          ngbTooltip="Update Your Menu"
+          aria-label="Update Your Menu"
+        >
+          <fa-icon [icon]="faEdit"></fa-icon>
+          <b>EDIT MENU</b>
+        </button>
+      </div>
+
+      <div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
+        <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
+      </div>
+      <div style="text-align: center; padding-bottom: 50px;">
+        <button
+          *ngIf="role == 'RO' && !isQueryRestaurant" 
+          class="btn editBtn" 
+          (click)="openEditModal(fullMenuModal)" 
+          placement="bottom" 
+          ngbTooltip="Add/Update URL of Your Full Menu"
+        >
+          <fa-icon [icon]="faEdit"></fa-icon>
+          <b>EDIT FULL MENU URL</b>
+        </button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Details">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="tab-info-left">
+            <div>
+              <h1 class="section-title">Hours of Operation</h1>
+              <p class="section_p">{{ restaurantDetails.open_hours }}</p>
+            </div>
+            <div>
+              <p class="section_p">{{ paymentList }}</p>
+            </div>
+            <div *ngIf="restaurantDetails.web_url">
+              <a class="section_p web_url" href="{{ restaurantDetails.web_url }}" target="_blank">{{ restaurantDetails.web_url }}</a>
+            </div>
+          </div>
+
+          <div class="row tab-info-left" style="margin-top: 10px;">
+            <a
+              *ngIf="restaurantDetails.web_url != ''"
+              href="{{ restaurantDetails.web_url }}"
+              target="_blank"
+              aria-label="View our Website"
+            >
+              <fa-icon class="contact-icon" [icon]="faShareAlt" placement="bottom" ngbTooltip="View our Website"></fa-icon>
+            </a>
+            <a
+              *ngIf="restaurantDetails.facebook != ''"
+              href="{{ restaurantDetails.facebook }}"
+              target="_blank"
+              aria-label="View our Facebook"
+            >
+              <fa-icon class="contact-icon" [icon]="faFacebookF" placement="bottom" ngbTooltip="View our Facebook"></fa-icon>
+            </a>
+            <a
+              *ngIf="restaurantDetails.twitter != ''"
+              href="{{ restaurantDetails.twitter }}"
+              target="_blank"
+              aria-label="View our Twitter"
+            >
+              <fa-icon class="contact-icon" [icon]="faTwitter" placement="bottom" ngbTooltip="View our Twitter"></fa-icon>
+            </a>
+            <a
+              *ngIf="restaurantDetails.instagram != ''"
+              href="{{ restaurantDetails.instagram }}"
+              target="_blank"
+              aria-label="View our Instagram"
+            >
+              <fa-icon class="contact-icon" [icon]="faInstagram" placement="bottom" ngbTooltip="View our Instagram"></fa-icon>
+            </a>
+          </div>
+
+          <div class="tab-info-left" style="margin-top: 10px;">
+            <app-virtual-scrolling [restaurantName]="restaurantDetails.name"></app-virtual-scrolling>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="tab-info-right tab-detail-right">
+            <ngb-alert 
+              *ngIf="restaurantDetails.deliveryDetails.length == 0
+                      && restaurantDetails.dineinPickupDetails.length == 0
+                      && restaurantDetails.locationNotes.length == 0" 
+              [dismissible]="false"
+            >
+              No updates available. Please check again at a later time.
+            </ngb-alert>
+
+            <div *ngIf="restaurantDetails.deliveryDetails" class="sub_section">
+              <h1 class="section-title">Delivery Details</h1>
+              <p class="section_p">{{ restaurantDetails.deliveryDetails }}</p>
+            </div>
+
+            <div *ngIf="restaurantDetails.dineinPickupDetails" class="sub_section">
+              <h1 class="section-title">Dine-in / Pick-up Details</h1>
+              <p class="section_p">{{ restaurantDetails.dineinPickupDetails }}</p>
+            </div>
+
+            <div *ngIf="restaurantDetails.locationNotes" class="sub_section">
+              <h1 class="section-title">Location Notes</h1>
+              <p class="section_p">{{ restaurantDetails.locationNotes }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Photo & Videos">
+      <div class="tab-info">
+        <app-carousel-with-thumbnail 
+          *ngIf="restaurantDetails.restaurant_image_url[0] != '/'"
+          [autoPlayDuration]="5000" 
+          animation="slide" 
+          [isNavigationVisible]="true" 
+          [isThumbnailsVisible]="true"
+          [slides]="slides"
+          [slideTemplateRef]="slide" 
+          [thumbnailTemplateRef]="thumbnail"
+        ></app-carousel-with-thumbnail>
+        <ng-template #slide let-slide>
+          <div [ngStyle]="{
+              'background-size': 'cover',
+              'background-image': 'url(' + slide.url + ')',
+              'background-repeat': 'no-repeat',
+              'width': '100%',
+              'height': '100%'
+            }">
+          </div>
+        </ng-template>
+        <ng-template #thumbnail let-slide>
+            <div [ngStyle]="{
+                'background-size': 'cover',
+                'background-image': 'url(' + slide.url + ')',
+                'background-repeat': 'no-repeat',
+                'background-position': 'center center',
+                'width': '100%',
+                'height': '100%'
+              }"></div>
+        </ng-template>
+
+      </div>
+      <div style="text-align: center;">
+        <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(imageModal)" placement="bottom" ngbTooltip="Update Your Restaurant Image">
+          <fa-icon [icon]="faEdit"></fa-icon>
+          <b>EDIT RESTAURANT IMAGES</b>
+        </button>
+      </div>
+
+      <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_url != '/' && videoId == undefined">
+        <video width="100%" controls>
+          <source src="{{ restaurantDetails.restaurant_video_url }}" type="video/mp4">
+          Your browser does not support the video.
+        </video>
+      </div>
+      
+      <div #youtubeContainer class="tab-info" *ngIf="videoId != undefined">
+        <youtube-player videoId="{{ videoId }}" [width]="youtubeContainer.offsetWidth"></youtube-player>
+      </div>
+  
+      <div style="text-align: center; padding-bottom: 50px;">
+        <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
+          <fa-icon [icon]="faEdit"></fa-icon>
+          <b>EDIT RESTAURANT VIDEO</b>
+        </button>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div class="nearby" *ngIf="role == 'BU' || role == 'RO'">
+    <p class="nearby_text">Nearby Restaurants</p>
+    <div class="row  justify-content-center">
+      <app-restaurant-nearby-card 
+        *ngFor="let restaurant of nearbyRestaurants" 
+        [restaurant]="restaurant">
+      </app-restaurant-nearby-card>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #storyImageModal let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Choose Story Image</h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="uploadStoryImgForm" (ngSubmit)="onSubmitStoryImg()">
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="cover">Upload image for our story:</label>
+          <input
+            type="file"
+            name="cover"
+            id="cover"
+            (change)="onStoryImgSelect($event)"
+            accept="image/*"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="text-right">
+      <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
+        CANCEL
+      </button>
+      <button class="btn saveBtn" type="submit" (click)="onSubmitStoryImg()" [disabled]="!newFile">
+        CONFIRM
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #fullMenuModal let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Add/Update Full Menu URL</h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="onSubmitFullMenu()">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <label for="cover">Please enter URL of your full menu:</label>
+          <textarea
+            class="form-control"
+            id="full_menu_url"
+            placeholder="Copy and paste your full menu link here"
+            rows="2"
+            value="{{ restaurantDetails.full_menu_url }}"
+          ></textarea>
+          <app-dynamic-label class="error-label"
+            [name]="'errorMenuLink'"
+            [message]="validator.errors['full_menu_url']" 
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="text-right">
+      <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
+        CANCEL
+      </button>
+      <button class="btn saveBtn" type="submit" (click)="onSubmitFullMenu();">
+        CONFIRM
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #videoModal let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Upload Restaurant Video</h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="uploadVideoForm" (ngSubmit)="onSubmitVideo()" role="form">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <label for="upload_method">Upload Method<app-required-star></app-required-star></label>
+          <select
+            id="upload_method"
+            name="upload_method"
+            class="form-control"
+            (change)="updateUploadMethod()"
+            formControlName="upload_method"
+            aria-required="true"
+          >
+            <option selected disabled hidden>Choose a method to upload video...</option>
+            <option>YouTube video link</option>
+            <option>Upload .mp4 video file</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" *ngIf="uploadMethod == 'YouTube video link'">
+        <div class="form-group col-md-12">
+          <label for="video">YouTube link:</label>
+          <textarea
+            class="form-control"
+            id="youtube_link"
+            placeholder="Copy and paste the YouTube link here"
+            rows="2"
+          ></textarea>
+          <app-dynamic-label class="error-label"
+            [name]="'errorLink'"
+            [message]="validator.errors['link']" 
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+      </div>
+      <div class="row" *ngIf="uploadMethod == 'Upload .mp4 video file'">
+        <div class="form-group col-md-12">
+          <label for="video">Upload restaurant video (.mp4):</label>
+          <input
+            type="file"
+            name="video"
+            id="video"
+            class="form-control"
+            (change)="onVideoFileSelect($event)"
+            accept="video/*"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="text-right">
+      <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
+        CANCEL
+      </button>
+      <button 
+        class="btn saveBtn" 
+        type="submit" 
+        (click)="onSubmitVideo()" 
+        [disabled]="uploadMethod == '' || (uploadMethod == 'Upload .mp4 video file' && !submitVideoAllowed)"
+      >
+        CONFIRM
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #imageModal let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Edit Restaurant Images</h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="uploadImageForm" (ngSubmit)="onSubmitImage()">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <label for="add_or_remove">Edit Images<app-required-star></app-required-star></label>
+          <select
+            id="add_or_remove"
+            name="add_or_remove"
+            class="form-control"
+            (change)="updateAddOrRemove()"
+            formControlName="add_or_remove"
+            aria-required="true"
+          >
+            <option selected disabled hidden>Choose a method to modify images...</option>
+            <option>Upload new images</option>
+            <option>Delete from existing images</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" *ngIf="addOrRemove == 'Upload new images'">
+        <div class="form-group col-md-12" >
+          <label for="images">Upload restaurant images:</label>
+          <input
+            class="form-control"
+            type="file"
+            name="images"
+            id="images"
+            (change)="onImageFileSelect($event)"
+            accept="image/*"
+            multiple
+          />
+        </div>
+      </div>
+      <div class="row" *ngIf="addOrRemove == 'Delete from existing images'">
+        <div *ngFor="let img of imageUrls" style="margin: auto;">
+          <button
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="deleteImage(img)"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <img
+            (click)="deleteImage(img)"
+            src="{{ img }}"
+            class="grid-image"
+            alt="restaurant image"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="text-right">
+      <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
+        CANCEL
+      </button>
+      <button 
+        class="btn saveBtn" 
+        type="submit" 
+        (click)="onSubmitImage(); modal.dismiss('Cross click')"
+        [disabled]="addOrRemove == '' || (addOrRemove == 'Upload new images' && !newFile)"
+      >
+        CONFIRM
+      </button>
+    </div>
+  </div>
+</ng-template>

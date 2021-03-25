@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.forms import ModelForm, Textarea
 from django.utils.translation import gettext_lazy as _
@@ -6,6 +7,7 @@ from django.utils.html import format_html
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import PasswordChangeForm
 #from django.contrib.auth.forms import UserCreationForm
+from sduser.utils import send_email_verification
 
 User = get_user_model()
 
@@ -51,6 +53,20 @@ class AdminForm(ModelForm):
         help_texts = {
             'password': format_html(pwd_help_text) + format_html(password_validation.password_validators_help_text_html())
         }
+    
+    def save(self, commit=True):
+        user = super(AdminForm, self).save(commit=False)
+
+        # only send email verification when user is not active (yet) and have never logged in before (no refresh token, password has not been hashed)
+        if not user.is_active and user.refresh_token is None and not user.password.startswith('pbkdf2_sha256'):
+            try:
+                send_email_verification(user=user, site=admin.site.site_url)
+            except Exception:
+                print('fail to send email verification to ' + user.username + ' (' + user.email + ')')
+        if commit:
+            user.save()
+
+        return user
 
     def clean_password(self):
         password = self.cleaned_data.get('password')

@@ -181,6 +181,7 @@ class PendingFood(models.Model):
 class Restaurant(models.Model):
     """ Model for Restaurants """
     _id = models.ObjectIdField()
+    owner_user_id = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=30)
     years = models.IntegerField(null=True)
     address = models.CharField(max_length=60)
@@ -285,6 +286,7 @@ class PendingRestaurant(models.Model):
 
     _id = models.ObjectIdField()
     name = models.CharField(max_length=30, blank=True, default='')
+    owner_user_id = models.IntegerField(blank=True, null=True)
     years = models.IntegerField(null=True, blank=True, default=0)
     address = models.CharField(max_length=60, blank=True, default='')
     streetAddress2 = models.CharField(max_length=50, blank=True, default='')
@@ -698,7 +700,7 @@ class UserFavRestrs(models.Model):
         return users
 
     @classmethod
-    def remove_fav(self, user_id, rest_id):
+    def remove_fav(cls, user_id, rest_id):
         """ removes a restaurant from the user's favourites list
 
         :param user_id: the id of the user whose list of favourites will have one restaurant removed
@@ -750,6 +752,56 @@ class UserFavRestrs(models.Model):
                 ObjectId(fields['restaurant_id'])
             except Exception:
                 invalid['Invalid'].append('restaurant_id')
+
+        if len(invalid['Invalid']) == 0:
+            return None
+        else:
+            return invalid
+
+
+class RestaurantPost(models.Model):
+    """ Model for a restaurant post """
+    _id = models.ObjectIdField()
+    restaurant_id = models.CharField(max_length=24)
+    owner_user_id = models.IntegerField(blank=True, null=True)
+    content = models.TextField(max_length=4096)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def insert(cls, post_data:dict):
+        """ Inserts a new post into the database
+
+        :param post_data: data of the post to be inserted
+        :type post_data: dict
+        :return: the newly inserted post record
+        :rtype: :class: `RestaurantPost`
+        """
+        post = RestaurantPost(**post_data)
+        post = save_and_clean(post)
+        return post
+
+    @classmethod
+    def field_validate(self, fields):
+        """ Validates fields
+
+        :param fields: Dictionary of fields to validate
+        :type fields: dict
+        :return: A list of fields that were invalid. Returns None if all fields are valid
+        :rtype: list
+        """
+
+        invalid = {'Invalid': []}
+
+        if 'restaurant_id' in fields:
+            try:
+                ObjectId(fields['restaurant_id'])
+            except Exception:
+                invalid['Invalid'].append('restaurant_id')
+
+        if 'content' in fields:
+            if not fields['content']:
+                invalid['Invalid'].append('content')
+
 
         if len(invalid['Invalid']) == 0:
             return None
