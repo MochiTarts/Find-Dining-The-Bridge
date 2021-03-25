@@ -16,4 +16,6 @@ urlpatterns = [
     path('user/favourite/', views.UserFavView.as_view(), name='user_favourite'),
     path('user/favourite/<str:rest_id>/', views.FavRelationView.as_view(), name='remove_fav'),
     path('analytics/access_token/', views.AnalyticsAccessTokenView.as_view(), name='analytics_access_token'),
+    path('restaurant/post/', views.PostView.as_view(), name='restaurant_post'),
+    path('restaurant/post/<str:post_id>/', views.PostView.as_view(), name='restaurant_post_delete'),
 ]

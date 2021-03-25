@@ -759,7 +759,7 @@ class UserFavRestrs(models.Model):
             return invalid
 
 
-class TimelinePost(models.Model):
+class RestaurantPost(models.Model):
     """ Model for a restaurant post """
     _id = models.ObjectIdField()
     restaurant_id = models.CharField(max_length=24)
@@ -774,9 +774,9 @@ class TimelinePost(models.Model):
         :param post_data: data of the post to be inserted
         :type post_data: dict
         :return: the newly inserted post record
-        :rtype: :class: `TimelinePost`
+        :rtype: :class: `RestaurantPost`
         """
-        post = TimelinePost(**post_data)
+        post = RestaurantPost(**post_data)
         post = save_and_clean(post)
         return post
 
@@ -791,13 +791,6 @@ class TimelinePost(models.Model):
         """
 
         invalid = {'Invalid': []}
-
-        if 'owner_user_id' in fields:
-            if fields['owner_user_id']:
-                if not str(fields['owner_user_id']).isnumeric():
-                    invalid['Invalid'].append('owner_user_id')
-            else:
-                invalid['Invalid'].append('owner_user_id')
 
         if 'restaurant_id' in fields:
             try:
