@@ -42,7 +42,7 @@ export class FavouritesComponent implements OnInit {
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-    this.userId = user.email;
+    this.userId = user.user_id;
     this.role = user.role;
     this.allCuisines = cuisinesStr;
     this.loadRestaurant(this.userId);
@@ -52,7 +52,7 @@ export class FavouritesComponent implements OnInit {
   loadRestaurant(userId: string): void {
     /* Replace this with method for calling list
        of favourite restaurants by userId */
-    this.userService.getFavouriteRestaurants(this.userId).subscribe((data) => {
+    this.userService.getFavouriteRestaurants().subscribe((data) => {
       this.restaurants = data
       if (this.restaurants != undefined && this.restaurants.length != 0) {
         this.emptyFavourites = false

@@ -11,16 +11,18 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
+from utils.math import calculate_distance
+from utils.common import get_user
 from .models import RestaurantOwner
-from restaurant.models import PendingRestaurant
+from restaurant.models import PendingRestaurant, Restaurant
 
 from bson import ObjectId
-import ast
 import json
+from operator import itemgetter
+import ast
 
 restaurant_owner_signup_schema = {
     "properties": {
-        "user_id": {"type": "number"},
         "restaurant_id": {"type": "string"},
         "last_updated": {"type": "string", "format": "date"},
         "consent_status": {"type": "string"},
@@ -28,7 +30,7 @@ restaurant_owner_signup_schema = {
         "unsubscribed_at": {"type": "string", "format": "date"},
         "expired_at": {"type": "string", "format": "date"},
     },
-    "required": ["user_id"],
+    "required": ["restaurant_id"],
     "additionalProperties": False
 }
 
@@ -51,25 +53,30 @@ restaurant_owner_editable = [
 
 class SignUp(APIView):
     """ Restaurant Owner signup view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
     def post(self, request):
         """ Inserts a new restaurant profile record into the database and attaches user_id to restaurant """
         try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+
             validate(instance=request.data, schema=restaurant_owner_signup_schema)
             body = request.data
             invalid = RestaurantOwner.field_validate(body)
             restaurant_filter = PendingRestaurant.objects.filter(_id=body['restaurant_id'])
             if invalid:
                 return JsonResponse(invalid, status=400)
-            if RestaurantOwner.objects.filter(user_id=body['user_id']).exists():
+            if RestaurantOwner.objects.filter(user_id=user_id).exists():
                 return JsonResponse({"message": "Profile with this user_id already exists"}, status=400)
             if not restaurant_filter.exists():
                 return JsonResponse({"message": "This restaurant_id does not exist"}, status=400)
             
             profile = RestaurantOwner.signup(body)
             restaurant = restaurant_filter.first()
-            restaurant.owner_user_id = body['user_id']
+            restaurant.owner_user_id = user_id
             save_and_clean(restaurant)
             return JsonResponse(model_to_json(profile))
         except ValidationError as e:
@@ -90,11 +97,16 @@ class SignUp(APIView):
 
 class RestaurantOwnerView(APIView):
     """ Restaurant Owner view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
-    def get(self, request, user_id):
+    def get(self, request):
         """ Retrieves a restaurant owner profile """
         try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+
             ro_filter = RestaurantOwner.objects.filter(user_id=user_id)
             if ro_filter.exists():
                 return JsonResponse(model_to_json(ro_filter.first()))
@@ -109,9 +121,14 @@ class RestaurantOwnerView(APIView):
             finally:
                 return JsonResponse({'message': message}, status=500)
 
-    def put(self, request, user_id):
+    def put(self, request):
         """ Updates a restaurant owner profile """
         try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+
             validate(instance=request.data, schema=restaurant_owner_edit_schema)
             body = request.data
             invalid = RestaurantOwner.field_validate(body)
@@ -140,5 +157,45 @@ class RestaurantOwnerView(APIView):
                 message = getattr(e, 'message', str(e))
             except Exception as e:
                 message = getattr(e, 'message', 'something went wrong')
+            finally:
+                return JsonResponse({'message': message}, status=500)
+
+
+class NearbyRestaurantsView(APIView):
+    """ Get nearby restaurants from a restaurant owner """
+    #permission_classes = (AllowAny,)
+
+    def get(self, request):
+        """ Retrieves the 5 (or less) nearest restaurants from a restaurant owner provided the user_id """
+        try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+
+            user = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+            if not user:
+                return JsonResponse({"message": "The user with this user_id does not exist"}, status=400)
+            user_location = ast.literal_eval(user.GEO_location)
+            
+            nearest = []
+            restaurants = list(Restaurant.objects.all())
+            for restaurant in restaurants:
+                if restaurant._id == user._id:
+                    continue
+                rest_location = ast.literal_eval(restaurant.GEO_location)
+                distance = calculate_distance(user_location, rest_location)
+                nearest.append({"restaurant": str(restaurant._id), "distance": distance})
+
+            nearest = sorted(nearest, key=itemgetter("distance"))
+            if (len(nearest) > 5):
+                nearest = nearest[:5]
+            return JsonResponse(nearest, safe=False)
+        except Exception as e:
+            message = ''
+            try:
+                message = getattr(e, 'message', str(e))
+            except Exception as e:
+                message = getattr(e, 'message', "something went wrong")
             finally:
                 return JsonResponse({'message': message}, status=500)
