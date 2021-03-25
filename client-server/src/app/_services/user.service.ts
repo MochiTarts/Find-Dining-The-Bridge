@@ -123,25 +123,13 @@ export class UserService {
 
   /*
   @Input: None
-  @Output: list of nearby restaurants from the subscriber user
+  @Output: list of nearby restaurants from the user
   Returns a list of up to 5 json objects, each object contains
-  the restaurant_id and the distance from the subscriber
+  the restaurant_id and the distance from the user
   List is ordered from nearest to furthest
   */
-  getNearbyRestaurantsSubscriber(): Observable<any> {
-    const endpoint = SUBSCRIBER_ENDPOINT + `/nearby/`
-    return this.http.get(endpoint);
-  }
-
-  /*
-  @Input: None
-  @Output: list of nearby restaurants from the restaurant owner
-  Returns a list of up to 5 json objects, each object contains
-  the restaurant_id and the distance from the restaurant owner
-  List is ordered from nearest to furthest
-  */
-  getNearbyRestaurantsOwner(): Observable<any> {
-    const endpoint = OWNER_ENDPOINT + `/nearby/`;
+  getNearbyRestaurants(): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/nearby/`
     return this.http.get(endpoint);
   }
 
@@ -244,14 +232,6 @@ export class UserService {
   deactivateUser(id: string): Observable<any> {
     const endpoint = API_URL + 'user/deactivate/';
     return this.http.post<any>(endpoint, JSON.stringify({ 'id': id }), httpOptions);
-  }
-
-  getNearbyRestaurants(userData): Observable<any> {
-    const endpoint = API_URL + 'user/get_nearby/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
   }
 
 }
