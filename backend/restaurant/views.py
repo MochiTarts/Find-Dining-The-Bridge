@@ -265,7 +265,7 @@ class DishRestaurantView(APIView):
 
 class PendingDishView(APIView):
     """ pending dish view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
     def get(self, request, user_id):
         """Retrieve all dishes from a restaurant"""
@@ -434,7 +434,7 @@ def category_exists(restaurant_id, category):
 # add_user_fav_page
 class UserFavView(APIView):
     """ user fav view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
     def post(self, request, user_id):
         """ Add a new user-restaurant-favourite relation """
@@ -484,7 +484,7 @@ class UserFavView(APIView):
 
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """ Get all users who favourited the requested restaurant """
@@ -505,7 +505,7 @@ class UserFavRestaurantView(APIView):
 
 class FavRelationView(APIView):
     """ remove fav relation view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
     def delete(self, request, user_id, rest_id):
         """ Remove a new user-restaurant-favourite relation """
@@ -567,7 +567,6 @@ class RestaurantView(APIView):
 
 class PendingRestaurantView(APIView):
     """ pending restaurant view """
-    permission_classes = (IsAuthenticated,)
 
     def get(self, request, user_id):
         """ Retrieve restaurant from pending collection by the owner's user_id """
@@ -618,7 +617,7 @@ class AllRestaurantList(APIView):
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
     def post(self, request, user_id=''):
         """Insert new restaurant as a draft into database"""
@@ -701,7 +700,7 @@ class RestaurantDraftView(APIView):
 
 class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (AllowAny,)
 
     def put(self, request, user_id=''):
         """ Insert or update a restaurant record for admin approval """

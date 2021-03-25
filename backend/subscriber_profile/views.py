@@ -125,7 +125,7 @@ class ConsentStatusView(APIView):
 
 class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a subscriber """
-    permission_classes = (AllowAny,)
+    #permission_classes = (AllowAny,)
 
     def get(self, request, user_id):
         """ Retrieves the 5 (or less) nearest restaurants from a subscriber provided the user_id """

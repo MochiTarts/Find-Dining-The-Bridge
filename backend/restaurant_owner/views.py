@@ -148,7 +148,7 @@ class RestaurantOwnerView(APIView):
 
 class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
-    permission_classes = (AllowAny,)
+    #permission_classes = (AllowAny,)
 
     def get(self, request, user_id):
         """ Retrieves the 5 (or less) nearest restaurants from a restaurant owner provided the user_id """
