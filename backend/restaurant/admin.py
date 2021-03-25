@@ -111,10 +111,8 @@ def approve_restr(model_admin, request, queryset):
         print(r._id)
         restaurant = Restaurant(**model_to_json(r))
         old_restaurant = Restaurant.objects.filter(_id=r._id).first()
-        res_dict = model_to_json(r)
-        res_status = res_dict['status']
 
-        if res_status == Status.Pending.value:
+        if r.status == Status.Pending.value:
             count += 1
             #if old_restaurant:
             #    if old_restaurant.logo_url != r.logo_url:
@@ -125,10 +123,10 @@ def approve_restr(model_admin, request, queryset):
             #        cloud_controller.delete(old_restaurant.restaurant_video_url)
             edit_model(restaurant, {"status": Status.Approved.value, "approved_once": True}, ["status", "approved_once"])
             save_and_clean(restaurant)
-            owner_prefer_names = res_dict.get('owner_preferred_name', "")
-            restaurant_name = res_dict.get('name', "")
-            email = res_dict.get('email', "")
-            restaurant_id = res_dict["_id"]
+            owner_prefer_names = r.owner_preferred_name
+            restaurant_name = r.name
+            email = r.email
+            restaurant_id = r._id
             send_approval_email(owner_prefer_names, email, restaurant_name, 'restaurant')
         else:
             messages.error(request, "You can only approve of 'Pending' restaurants")
@@ -162,11 +160,10 @@ def reject_food(model_admin, request, queryset):
         # note that if the submission is already rejected then it will not be on the live site
         if f.status != Status.Rejected.value:
             count += 1
-            food_dict = model_to_json(f)
-            res_dict = model_to_json(restaurant.first())
-            owner_prefer_names = res_dict.get('owner_preferred_name', "")
-            food_name = food_dict.get('name', "")
-            email = res_dict.get('email', "")
+            restr = restaurant.first()
+            owner_prefer_names = restr.owner_preferred_name
+            food_name = f.name
+            email = restr.email
             send_reject_email(owner_prefer_names, email, food_name, 'food')
             # restaurant that is being displayed on the live site
             food = Food.objects.filter(_id=f._id)
@@ -201,11 +198,10 @@ def unpublish_food(model_admin, request, queryset):
         pendingFood = PendingFood.objects.filter(_id=f._id).first()
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
         if pendingFood.status == Status.Approved.value:
-            food_dict = model_to_json(f)
-            res_dict = model_to_json(restaurant.first())
-            owner_prefer_names = res_dict.get('owner_preferred_name', "")
-            food_name = food_dict.get('name', "")
-            email = res_dict.get('email', "")
+            restr = restaurant.first()
+            owner_prefer_names = restr.owner_preferred_name
+            food_name = f.name
+            email = restr.email
             send_unpublish_email(owner_prefer_names, email, food_name, 'food')
             pendingFood.status = Status.Rejected.value
             save_and_clean(pendingFood)
@@ -230,11 +226,10 @@ def approve_food(model_admin, request, queryset):
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
         if restaurant.exists() and f.status != 'Approved':
             count += 1
-            food_dict = model_to_json(f)
-            res_dict = model_to_json(restaurant.first())
-            owner_prefer_names = res_dict.get('owner_preferred_name', "")
-            food_name = food_dict.get('name', "")
-            email = res_dict.get('email', "")
+            restr = restaurant.first()
+            owner_prefer_names = restr.owner_preferred_name
+            food_name = f.name
+            email = restr.email
             send_approval_email(owner_prefer_names, email, food_name, 'food')
             if old_food:
                 if old_food.picture != f.picture:

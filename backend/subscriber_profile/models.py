@@ -13,18 +13,18 @@ User = get_user_model()
 
 class SubscriberProfile(models.Model):
     user_id = models.IntegerField()
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
-    phone = models.BigIntegerField(blank=True, default=None)
-    postalCode = models.CharField(max_length=7, blank=True, default='')
+    first_name = models.CharField(max_length=30, default="", blank=True)
+    last_name = models.CharField(max_length=150, default="", blank=True)
+    phone = models.BigIntegerField(null=True, default=None, blank=True)
+    postalCode = models.CharField(max_length=7, default='', blank=True)
     GEO_location = models.CharField(
-        max_length=50, blank=True, default='')
-    last_updated = models.DateField(auto_now=True, blank=True)
+        max_length=50, default='')
+    last_updated = models.DateField(auto_now=True, null=True, editable=False)
     consent_status = models.CharField(
-        max_length=12, choices=ConsentStatus.choices(), default='IMPLIED', blank=True)
-    expired_at = models.DateField(blank=True)
-    subscribed_at = models.DateField(blank=True)
-    unsubscribed_at = models.DateField(blank=True)
+        max_length=12, choices=ConsentStatus.choices(), default='IMPLIED')
+    expired_at = models.DateField(null=True, blank=True)
+    subscribed_at = models.DateField(null=True, blank=True)
+    unsubscribed_at = models.DateField(null=True, blank=True)
     
     class Meta:
         db_table = 'subscriber_profile'
