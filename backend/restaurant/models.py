@@ -700,7 +700,7 @@ class UserFavRestrs(models.Model):
         return users
 
     @classmethod
-    def remove_fav(self, user_id, rest_id):
+    def remove_fav(cls, user_id, rest_id):
         """ removes a restaurant from the user's favourites list
 
         :param user_id: the id of the user whose list of favourites will have one restaurant removed
@@ -752,6 +752,63 @@ class UserFavRestrs(models.Model):
                 ObjectId(fields['restaurant_id'])
             except Exception:
                 invalid['Invalid'].append('restaurant_id')
+
+        if len(invalid['Invalid']) == 0:
+            return None
+        else:
+            return invalid
+
+
+class TimelinePost(models.Model):
+    """ Model for a restaurant post """
+    _id = models.ObjectIdField()
+    restaurant_id = models.CharField(max_length=24)
+    owner_user_id = models.IntegerField(blank=True, null=True)
+    content = models.TextField(max_length=4096)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def insert(cls, post_data:dict):
+        """ Inserts a new post into the database
+
+        :param post_data: data of the post to be inserted
+        :type post_data: dict
+        :return: the newly inserted post record
+        :rtype: :class: `TimelinePost`
+        """
+        post = TimelinePost(**post_data)
+        post = save_and_clean(post)
+        return post
+
+    @classmethod
+    def field_validate(self, fields):
+        """ Validates fields
+
+        :param fields: Dictionary of fields to validate
+        :type fields: dict
+        :return: A list of fields that were invalid. Returns None if all fields are valid
+        :rtype: list
+        """
+
+        invalid = {'Invalid': []}
+
+        if 'owner_user_id' in fields:
+            if fields['owner_user_id']:
+                if not str(fields['owner_user_id']).isnumeric():
+                    invalid['Invalid'].append('owner_user_id')
+            else:
+                invalid['Invalid'].append('owner_user_id')
+
+        if 'restaurant_id' in fields:
+            try:
+                ObjectId(fields['restaurant_id'])
+            except Exception:
+                invalid['Invalid'].append('restaurant_id')
+
+        if 'content' in fields:
+            if not fields['content']:
+                invalid['Invalid'].append('content')
+
 
         if len(invalid['Invalid']) == 0:
             return None
