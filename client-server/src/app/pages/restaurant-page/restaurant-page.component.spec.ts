@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DynamicLabelComponent } from './dynamic-label.component';
+import { RestaurantPageComponent } from './restaurant-page.component';
 
-describe('ValidatedFormControlComponent', () => {
-  let component: DynamicLabelComponent;
-  let fixture: ComponentFixture<DynamicLabelComponent>;
+describe('RestaurantPageComponent', () => {
+  let component: RestaurantPageComponent;
+  let fixture: ComponentFixture<RestaurantPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicLabelComponent ]
+      declarations: [ RestaurantPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DynamicLabelComponent);
+    fixture = TestBed.createComponent(RestaurantPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

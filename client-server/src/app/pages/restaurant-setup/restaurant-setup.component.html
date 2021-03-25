@@ -1,0 +1,541 @@
+<div class="page-box">
+  <h2 id="res-setup1">{{ profileId ? 'Edit Restaurant Profile' : 'Initial Set Up' }}</h2>
+  <p id="res-setup2">
+    {{ profileId ? 'Please make corrections as needed and save.' :
+      'Please fill in the form with your restaurant information to set up your page.' }}
+  </p>
+  <p style="font-style:italic; color: gray;">
+    All required fields are marked with an asterisk (<span style="color: red;">*</span>)
+  </p>
+  <div class="form-box" role="form" aria-labelledby="res-setup1 res-setup2">
+    <form [formGroup]="uploadForm">
+      <div class="row">
+        <div class="form-group col-md-8">
+          <label for="restaurant-name">Restaurant Name <app-required-star></app-required-star></label>
+          <input
+            type="text"
+            class="form-control"
+            id="restaurant-name"
+            placeholder="Ex: Dan's Dumplings"
+            value="{{ profileId ? restaurantDetails.name : '' }}"
+            aria-required="true"
+            required
+          />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorName'"
+            [message]="validator.errors['name']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="years-in-business">Years in Business <app-required-star></app-required-star></label>
+          <input
+            type="number"
+            class="form-control"
+            id="years-in-business"
+            value="{{ profileId ? restaurantDetails.years : '' }}"
+            aria-required="true"
+          />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorYears'"
+            [message]="validator.errors['years']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-3">
+          <label for="owner-first-name" class="owner-name-label">Owner First Name <app-required-star></app-required-star></label>
+          <input
+            type="text"
+            class="form-control"
+            id="owner-first-name"
+            value="{{ profileId ? restaurantDetails.owner_first_name[0] : '' }}"
+            aria-required="true"
+            required
+          />
+        </div>
+        <div class="form-group col-md-3">
+          <label for="owner-last-name" class="owner-name-label">Owner Last Name <app-required-star></app-required-star></label>
+          <input
+            type="text"
+            class="form-control"
+            id="owner-last-name"
+            value="{{ profileId ? restaurantDetails.owner_last_name[0] : '' }}"
+            aria-required="true"
+            required
+          />
+        </div>
+        <div class="form-group col-md-3">
+          <label for="owner-preferred-name" class="owner-name-label">Owner Preferred Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="owner-preferred-name"
+            value="{{ profileId ? restaurantDetails.owner_preferred_name[0] : '' }}"
+          />
+        </div>
+        <div class="form-group col-md-3 add-btn">
+          <button type="button" class="btn-success btn-sm" (click)="addOwner()">Add Owner</button>
+        </div>
+      </div>
+
+      <div formArrayName="owner_names">
+        <div class="row" *ngFor="let item of ownerNames.controls; let nameIndex=index;" [formGroupName]="nameIndex">
+          <div class="form-group col-md-3" >
+            <input
+              type="text"
+              class="form-control"
+              formControlName="first_name"
+              aria-required="true"
+            />
+          </div>
+          <div class="form-group col-md-3">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="last_name"
+              aria-required="true"
+            />
+          </div>
+          <div class="form-group col-md-3">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="preferred_name"
+            />
+          </div>
+          <div class="form-group col-md-3">
+            <div class="delete-btn">
+              <button type="button" class="btn-danger btn-sm" (click)="deleteOwner(nameIndex)">Delete Owner</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-3">
+          <app-dynamic-label class="error-label"
+          [name]="'errorOwnerFirstName'"
+          [message]="validator.errors['owner_first_name']"
+          tabindex="0" ></app-dynamic-label>
+        </div>
+        <div class="form-group col-md-3">
+          <app-dynamic-label class="error-label"
+          [name]="'errorOwnerLastName'"
+          [message]="validator.errors['owner_last_name']"
+          tabindex="0" ></app-dynamic-label>
+        </div>
+        <div class="form-group col-md-3">
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorOwnerPreferredName'"
+            [message]="validator.errors['owner_preferred_name']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+      </div>
+
+      <div class="form-group botton-padding">
+        <label for="restaurant-address">Street Address 1 <app-required-star></app-required-star></label>
+        <input
+          type="text"
+          class="form-control"
+          id="restaurant-address"
+          value="{{ profileId ? restaurantDetails.address : '' }}"
+          placeholder="Ex: 1234 Address Ave"
+          aria-required="true"
+        />
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorAddress'"
+          [message]="validator.errors['address']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class = "form-group botton-padding">
+        <label for="StreetAdd2">Street Address 2</label>
+          <input
+            type = "text"
+            class="form-control"
+            id="StreetAdd2"
+            value = "{{  profileId ? restaurantDetails.streetAddress2 : '' }}"
+            placeholder="Ex: 1234 Address Ave"
+          />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorAddress2'"
+            [message]="validator.errors['streetAddress2']"
+            tabindex="0"
+          ></app-dynamic-label>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-8">
+          <label for="StreetAdd3">Street Address 3</label>
+          <input
+            type = "text"
+            class="form-control"
+            id="StreetAdd3"
+            value="{{ profileId ? restaurantDetails.streetAddress3 : '' }}"
+            placeholder="Ex: 1234 Address Ave"
+          />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorAddress3'"
+            [message]="validator.errors['streetAddress3']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+        <div class = "form-group col-md-4">
+          <label for="PostalCode">Postal Code <app-required-star></app-required-star></label>
+          <input
+            type = "text"
+            class="form-control"
+            id="PostalCode"
+            value="{{  profileId ? restaurantDetails.postalCode : '' }}"
+            placeholder="Ex: A1A 1A1"
+            aria-required="true"
+          />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'postalCode'"
+            [message]="validator.errors['postalCode']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-4">
+          <label for="phone-number">Phone Number <app-required-star></app-required-star></label>
+          <input
+            type="text"
+            class="form-control"
+            id="phone-number"
+            placeholder="Ex: 4161234567"
+            value="{{ profileId ? restaurantDetails.phone : '' }}"
+            aria-required="true"
+          />
+          <app-dynamic-label class="error-label"
+          [name]="'errorPhone'"
+          [message]="validator.errors['phone']"
+          tabindex="0"></app-dynamic-label>
+        </div>
+        <div class="form-group col-md-8">
+          <label for="restaurant-email">Email Address</label>
+          <input
+            type="text"
+            class="form-control"
+            id="restaurant-email"
+            placeholder="Ex: sample@email.com"
+            value="{{ email }}"
+            disabled="true"
+          />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorEmail'"
+            [message]="validator.errors['email']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-4">
+          <label for="pricepoint">Price Point <app-required-star></app-required-star></label>
+          <select
+            id="pricepoint"
+            class="form-control"
+            value="{{ profileId ? getPricepoint() : [] }}"
+            aria-required="true"
+          >
+            <option selected disabled hidden>Choose...</option>
+            <option>$ (under $10)</option>
+            <option>$$ ($11 - $30)</option>
+            <option>$$$ ($31 - $60)</option>
+            <option>$$$$ (over $61)</option>
+          </select>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorPrice'"
+            [message]="validator.errors['pricepoint']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+        <div class="form-group col-md-8">
+          <label for="restaurant-cuisine">Type(s) of Cuisine <app-required-star></app-required-star></label>
+          <kendo-multiselect
+            class="form-control"
+            [placeholder]="'Select your cuisine!'"
+            [data]="cuisineItems"
+            formControlName="cuisines"
+            aria-required="true"
+            id="cuisineList"
+          ></kendo-multiselect>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorCuisine'"
+            [message]="validator.errors['cuisines']"
+            tabindex="0"
+          ></app-dynamic-label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="payment-methods">Accepted Payment Methods <app-required-star></app-required-star></label>
+          <kendo-multiselect
+            class="form-control"
+            [placeholder]="'Select accepted payment methods'"
+            [data]="paymentItems"
+            formControlName="payments"
+            aria-required="true"
+            id="paymentList"
+          ></kendo-multiselect>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPayment'"
+          [message]="validator.errors['payment_methods']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class="form-group">
+        <label for="restaurant-service">General Services</label>
+        <kendo-multiselect
+          class="form-control"
+          [placeholder]="'Select general services'"
+          [data]="serviceItems"
+          formControlName="services"
+          aria-required="true"
+          id="service-list"
+        ></kendo-multiselect>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorServices'"
+          [message]="validator.errors['offer_options']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class = "form-group botton-padding">
+        <label for="delivery-details">Delivery Details</label>
+        <textarea
+          class="form-control"
+          id="delivery-details"
+          rows="7"
+          placeholder="Include any additional delivery details here!"
+          value="{{ profileId ? restaurantDetails.deliveryDetails : '' }}"
+        ></textarea>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorDeliveryDetails'"
+          [message]="validator.errors['deliveryDetails']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class="form-group botton-padding">
+        <label for="dinein-pickup-details">Dine-in / Pick-up Details</label>
+        <textarea
+          class="form-control"
+          id="dinein-pickup-details"
+          rows="7"
+          value="{{ profileId ? restaurantDetails.dineinPickupDetails : '' }}"
+          placeholder="Include any additional dine-in / pick-up details here!"
+        ></textarea>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorDineinPickupDetails'"
+          [message]="validator.errors['dineinPickupDetails']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class="form-group botton-padding">
+        <label for="location-Notes">Location Notes</label>
+        <textarea
+          class="form-control"
+          id="location-notes"
+          rows="7"
+          value="{{ profileId ? restaurantDetails.locationNotes : '' }}"
+          placeholder="Include any extra details about your restaurant's location here!"
+        ></textarea>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorLocationNotes'"
+          [message]="validator.errors['locationNotes']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class="form-group">
+        <label for="restaurant-bio">Restaurant Story <app-required-star></app-required-star></label>
+        <textarea
+          class="form-control"
+          id="restaurant-bio"
+          rows="7"
+          placeholder="Tell customers about the type of dishes offered at your restaurant and unique highlights of your restaurants..."
+          value="{{ profileId ? restaurantDetails.bio : '' }}"
+          aria-required="true"
+          required
+        ></textarea>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorBio'"
+          [message]="validator.errors['bio']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class="form-group">
+        <label for="owner-story">Owner Story</label>
+        <textarea
+          class="form-control"
+          id="owner-story"
+          rows="7"
+          placeholder="Tell customers the story of your culinary joruney towards opening your restaurant..."
+          value="{{ profileId ? restaurantDetails.owner_story : '' }}"
+        ></textarea>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorStory'"
+          [message]="validator.errors['owner_story']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class="form-group">
+        <label for="open_hours">Open Hours <app-required-star></app-required-star></label>
+        <textarea
+          class="form-control"
+          id="open_hours"
+          rows="7"
+          value="{{ profileId ? restaurantDetails.open_hours : '' }}"
+          aria-required="true"
+          required
+        ></textarea>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorOpenHours'"
+          [message]="validator.errors['open_hours']"
+          tabindex="0"
+        ></app-dynamic-label>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="website">Website URL</label>
+          <input
+            type="text"
+            class="form-control"
+            id="web_url"
+            value="{{ profileId ? restaurantDetails.web_url : '' }}"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="facebook">Facebook URL</label>
+          <input
+            type="text"
+            class="form-control"
+            id="facebook"
+            value="{{ profileId ? restaurantDetails.facebook : '' }}"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="twitter">Twitter URL</label>
+          <input
+            type="text"
+            class="form-control"
+            id="twitter"
+            value="{{ profileId ? restaurantDetails.twitter : '' }}"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="instagram">Instagram URL</label>
+          <input
+            type="text"
+            class="form-control"
+            id="instagram"
+            value="{{ profileId ? restaurantDetails.instagram : '' }}"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="logo">Add logo image:</label>
+          <input
+            type="file"
+            name="logo"
+            id="logo"
+            (change)="onFileSelect($event)"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="avatar">Add owner image:</label>
+          <input
+            type="file"
+            name="owner"
+            id="owner"
+            (change)="onOwnerImageSelect($event)"
+          />
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="!profileId">
+        <div class="input-group">
+          <input
+            id="terms-of-service"
+            type="checkbox"
+            formControlName="terms"
+            aria-required="true"
+          />
+          <label for="terms-of-service" style="padding-left: 5px;">I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-4" *ngIf="profileId">
+          <div class="text-left">
+            <button class="btn cancel" type="button" (click)="cancel()">
+              CANCEL
+            </button>
+          </div>
+        </div>
+        <div class="form-group col-md-6" id="draft-btn">
+          <div class="text-left">
+            <button
+              class="btn save-next"
+              type="button"
+              (click)="!profileId ? setupROProfile('SETUP-DRAFT') : setupROProfile('EDIT-DRAFT')"
+              [disabled]="profileId ? false : !uploadForm.valid"
+            >
+              SAVE DRAFT
+            </button>
+          </div>
+        </div>
+        <div class="form-group col-md-6" id="submit-btn">
+          <div class="text-right">
+            <button
+              type="submit"
+              class="btn save-next"
+              (click)="!profileId ? setupROProfile('SETUP-SUBMIT') : setupROProfile('EDIT-SUBMIT')"
+              [disabled]="profileId ? false : !uploadForm.valid"
+            >
+              SUBMIT FOR APPROVAL
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

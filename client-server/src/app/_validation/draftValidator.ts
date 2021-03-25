@@ -1,7 +1,7 @@
 import { formValidator } from "./formValidator"
 import { formValidation } from "./forms"
 
-export class restaurantValidator extends formValidator{
+export class draftValidator extends formValidator{
 
     constructor(){
         super();
@@ -65,9 +65,7 @@ export class restaurantValidator extends formValidator{
         'streetAddress3': (address) => formValidation.isShorterThan(100, address, false),
         'phone': (phone) => formValidation.isPhoneValid(phone),
         'email': (email) => formValidation.isEmailValid(email),
-        'pricepoint': (pricepoint) => formValidation.isPricepointValid(pricepoint),
-        'cuisines': (cuisines) => formValidation.isListNonEmpty(cuisines),
-        'bio': (bio) => formValidation.isShorterThan(2000, bio, true),
+        'bio': (bio) => formValidation.isShorterThan(2000, bio, false),
         'owner_story': (owner_story) => formValidation.isShorterThan(2000, owner_story, false),
         'postalCode': (postalCode)=> formValidation.isPostalValid(postalCode),
         'deliveryDetails': (deliveryDetails) => formValidation.isShorterThan(2000, deliveryDetails, false),
@@ -75,8 +73,6 @@ export class restaurantValidator extends formValidator{
         'locationNotes': (locationNotes) => formValidation.isShorterThan(2000, locationNotes, false),
         'owner_first_name': (owner_first_name) => formValidation.isOwnerNamesNonEmpty(owner_first_name),
         'owner_last_name': (owner_last_name) => formValidation.isOwnerNamesNonEmpty(owner_last_name),
-        'open_hours': '',
-        'payment_methods': (payment_methods) => formValidation.isListNonEmpty(payment_methods),
     })
 
 }

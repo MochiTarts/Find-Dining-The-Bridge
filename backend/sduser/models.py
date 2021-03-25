@@ -9,16 +9,16 @@ class SDUser(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     role = models.CharField(max_length=5, choices=Roles.choices(), default="BU")
     # validation purpose for a given session
-    refresh_token = models.CharField(max_length=1023, default='')
+    refresh_token = models.CharField(max_length=1023, default='', blank=True)
     # unique id from third party
-    auth_id = models.CharField(max_length=255, default='')
+    auth_id = models.CharField(max_length=255, default='', blank=True)
     # if the user is blocked by admin
     is_blocked = models.BooleanField(default=False)
     default_pwd_updated = models.NullBooleanField(default=None, editable=False)
     # reserved attribute to support interval password update policy
-    pwd_update_time = models.DateTimeField(editable=False, null=True, default=None)
+    pwd_update_time = models.DateTimeField(editable=False, null=True, blank=True, default=None)
     # mainly for frontend to check for the existence of profile (upon login)
-    profile_id = models.IntegerField(default=None)
+    profile_id = models.IntegerField(default=None, null=True, blank=True)
 
     class Meta:
         #db_table = 'auth_user'
