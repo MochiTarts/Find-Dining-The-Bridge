@@ -27,7 +27,7 @@ export class RestaurantFavsCardComponent implements OnInit {
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-    this.userId = user.email;
+    this.userId = user.user_id;
     this.role = user.role;
 
     this.pricepoints = [
@@ -70,11 +70,7 @@ export class RestaurantFavsCardComponent implements OnInit {
   }
 
   remove(restaurnt_id) {
-    var data = {
-      user: this.userId,
-      restaurant: restaurnt_id
-    }
-    this.userService.removeFavRestaurant(data).subscribe(() => {
+    this.userService.removeFavRestaurant(restaurnt_id).subscribe(() => {
       this.reload()
     },(error) => {
       alert(error.error.message)

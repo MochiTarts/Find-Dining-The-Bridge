@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.forms import model_to_dict
 from django.http import JsonResponse
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from subscriber_profile.models import SubscriberProfile
