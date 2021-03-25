@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 const API_URL = '/api/'
 const SDUSER_ENDPOINT = '/api/user/';
 const SUBSCRIBER_ENDPOINT = '/api/subscriber/';
-const OWNER_ENDPOINT = '/api/owner/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
