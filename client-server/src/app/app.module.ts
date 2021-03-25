@@ -49,6 +49,8 @@ import { FavouritesComponent } from './pages/favourites/favourites.component';
 import { RestaurantSetupComponent } from './pages/restaurant-setup/restaurant-setup.component';
 import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
 import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page.component';
+import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
+import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -67,6 +69,7 @@ import { SubscriberProfileFormComponent } from './components/subscriber-profile-
 import { RestaurantProfileFormComponent } from './components/restaurant-profile-form/restaurant-profile-form.component';
 import { PageErrorComponent } from './components/page-error/page-error.component';
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
+import { PostComponent } from './components/post/post.component';
 
 
 @NgModule({
@@ -98,6 +101,9 @@ import { VirtualScrollingComponent } from './components/virtual-scrolling/virtua
     RestaurantPageComponent,
     PageErrorComponent,
     VirtualScrollingComponent,
+    EditPostsComponent,
+    PostComponent,
+    MenuEditComponent,
   ],
   imports: [
     BrowserModule,

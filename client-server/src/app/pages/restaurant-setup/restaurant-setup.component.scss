@@ -74,3 +74,22 @@
   color: white;
   background-color: $secondary-color;
 }
+
+.editPosts {
+  margin: auto;
+  height: 50px;
+
+  fa-icon {
+    color: white;
+  }
+}
+
+.editPosts:hover {
+  fa-icon {
+    color: rgb(0, 153, 204);
+  }
+}
+
+.editPostsWrap {
+  padding-bottom: 25px;
+}

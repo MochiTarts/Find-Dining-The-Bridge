@@ -15,6 +15,8 @@ import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants
 import { RestaurantSetupComponent } from './pages/restaurant-setup/restaurant-setup.component';
 import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
 import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page.component';
+import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
+import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,6 +29,8 @@ const routes: Routes = [
   { path: 'restaurant-setup', component: RestaurantSetupComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'terms-of-service', component: TermsOfServiceComponent },
   { path: 'restaurant', component: RestaurantPageComponent, canActivate: [AuthGuard] },
+  { path: 'edit-posts', component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
+  { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {
