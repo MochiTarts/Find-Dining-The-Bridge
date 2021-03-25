@@ -20,7 +20,6 @@ import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-pr
 import { RestaurantCardComponent } from 'src/app/components/restaurant-card/restaurant-card.component';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
-import { RestaurantProfileFormComponent } from 'src/app/components/restaurant-profile-form/restaurant-profile-form.component';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +39,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loggedOut: boolean = true;
 
   @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
-  @ViewChild('restaurantInfo') restaurantInfo: RestaurantProfileFormComponent;
 
   isShow: boolean;
   topPosToStartShowing = 100;
@@ -48,7 +46,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   faArrowCircleDown = faArrowCircleDown;
   arrowsOutside = true;
   faCalendar = faCalendar;
-  
+
   modalRef: any;
 
   totalStars: number = 5;
@@ -121,8 +119,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Add one more '&&' statement to see if profile_id is null
     if (this.role && this.role == 'BU' && this.profileId == null) {
       this.userInfo.open(false);
-    } else if (this.role && this.role == 'RO') {
-      this.restaurantInfo.open(false);
     }
   }
 

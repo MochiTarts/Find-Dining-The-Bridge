@@ -1,0 +1,28 @@
+@import "src/styles";
+
+.example-viewport {
+  height: 500px;
+  width: 90%;
+  border: 1px solid lightgray;
+  margin: 25px 0px;
+}
+
+.example-item {
+  width: 100%;
+}
+
+.post-card {
+  margin: 10px;
+}
+
+.card {
+  width: 100%;
+  height: auto;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 30px;
+}
+
+.post-content {
+  border-radius: 5px;
+}

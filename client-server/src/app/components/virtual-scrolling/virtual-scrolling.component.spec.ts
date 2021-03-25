@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DynamicLabelComponent } from './dynamic-label.component';
+import { VirtualScrollingComponent } from './virtual-scrolling.component';
 
-describe('ValidatedFormControlComponent', () => {
-  let component: DynamicLabelComponent;
-  let fixture: ComponentFixture<DynamicLabelComponent>;
+describe('VirtualScrollingComponent', () => {
+  let component: VirtualScrollingComponent;
+  let fixture: ComponentFixture<VirtualScrollingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicLabelComponent ]
+      declarations: [ VirtualScrollingComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DynamicLabelComponent);
+    fixture = TestBed.createComponent(VirtualScrollingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

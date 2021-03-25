@@ -37,12 +37,18 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { NewsletterComponent } from './pages/newsletter/newsletter.component';
+import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants.component';
+import { FavouritesComponent } from './pages/favourites/favourites.component';
+import { RestaurantSetupComponent } from './pages/restaurant-setup/restaurant-setup.component';
+import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
+import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -50,8 +56,6 @@ import { DishCardComponent } from './components/dish-card/dish-card.component';
 import { OwnerCardComponent } from './components/owner-card/owner-card.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { AllRestaurantsComponent } from './pages/all-restaurants/all-restaurants.component';
-import { FavouritesComponent } from './pages/favourites/favourites.component';
 import { FilterlistCardComponent } from './components/filterlist-card/filterlist-card.component';
 import { MapComponent } from './components/map/map.component';
 import { RestaurantCardComponent } from './components/restaurant-card/restaurant-card.component';
@@ -61,6 +65,8 @@ import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.
 import { RequiredStarComponent } from './components/required-star/required-star.component';
 import { SubscriberProfileFormComponent } from './components/subscriber-profile-form/subscriber-profile-form.component';
 import { RestaurantProfileFormComponent } from './components/restaurant-profile-form/restaurant-profile-form.component';
+import { PageErrorComponent } from './components/page-error/page-error.component';
+import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 
 
 @NgModule({
@@ -83,10 +89,15 @@ import { RestaurantProfileFormComponent } from './components/restaurant-profile-
     RestaurantCardComponent,
     RestaurantFavsCardComponent,
     RestaurantNearbyCardComponent,
+    RestaurantSetupComponent,
     DynamicLabelComponent,
     RequiredStarComponent,
+    TermsOfServiceComponent,
     SubscriberProfileFormComponent,
-    RestaurantProfileFormComponent
+    RestaurantProfileFormComponent,
+    RestaurantPageComponent,
+    PageErrorComponent,
+    VirtualScrollingComponent,
   ],
   imports: [
     BrowserModule,
@@ -118,6 +129,7 @@ import { RestaurantProfileFormComponent } from './components/restaurant-profile-
     LightboxModule,
     ScrollingModule,
     MatPasswordStrengthModule.forRoot(),
+    DropDownsModule,
   ],
   providers: [authInterceptorProviders, {
     provide: 'SocialAuthServiceConfig',

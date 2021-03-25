@@ -1,0 +1,29 @@
+<cdk-virtual-scroll-viewport 
+  itemSize="50" 
+  minBufferPx="200" 
+  maxBufferPx="400"                    
+  class="example-viewport" 
+  *ngIf="lstPosts | async as posts;"
+>
+  <div
+    *cdkVirtualFor="let post of posts"
+    class="example-item"
+  >
+    <div class="post-card">
+      <div class="card post-content">
+        {{ post.content }}
+        <div class="text-right" style="margin-top: 20px;">
+          Posted on {{ post.Timestamp }} by
+          <br />
+          <b> {{ restaurantName | titlecase }} </b>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ngb-alert 
+    *ngIf="posts.length == 0" 
+    [dismissible]="false"
+  >
+    No posts available. Please check again at a later time.
+  </ngb-alert>
+</cdk-virtual-scroll-viewport>
