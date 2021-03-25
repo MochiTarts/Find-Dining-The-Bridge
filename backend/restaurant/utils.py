@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.mail import send_mail
+from django.utils.html import strip_tags
 
 
 def send_approval_email(names, receiver, profile_title, profile_type):

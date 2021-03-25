@@ -1,12 +1,16 @@
-import json
-
 from django.shortcuts import render
 from django.forms import model_to_dict
 from django.http import JsonResponse
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from .models import SubscriberProfile
+
+from subscriber_profile.models import SubscriberProfile
+
 from utils.model_util import model_to_json
+from utils.common import get_user
+
+import json
 
 
 class Signup(APIView):
@@ -14,6 +18,10 @@ class Signup(APIView):
     def post(self, request):
         try:
             body = request.data
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            body['user_id'] = user['user_id']
             invalid = SubscriberProfile.field_validate(body)
             if SubscriberProfile.objects.filter(user_id=body['user_id']).exists():
                 if not invalid:
@@ -40,9 +48,11 @@ class SubscriberProfileView(APIView):
 
     def get(self, request):
         try:
-            #user_id = request.GET.get('user_id')
-            user_id = request.user.id
-            profile = SubscriberProfile.objects.get(user_id=user_id)
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+
+            profile = SubscriberProfile.objects.get(user_id=user['user_id'])
             return JsonResponse(model_to_dict(profile))
         except SubscriberProfile.DoesNotExist as e:
             return JsonResponse({'message': "no profile found!", 'code': "no_profile_found"}, status=400)
@@ -60,7 +70,11 @@ class SubscriberProfileView(APIView):
     def put(self, request):
         try:
             body = request.data
-            body['user_id'] = request.user.id
+            user = get_user(request)
+
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            body['user_id'] = user['user_id']
             invalid = SubscriberProfile.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)
@@ -83,7 +97,11 @@ class ConsentStatusView(APIView):
     def put(self, request):
         try:
             body = request.data
-            body['user_id'] = request.user.id
+            user = get_user(request)
+
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            body['user_id'] = user['user_id']
             invalid = SubscriberProfile.field_validate(body)
             if invalid:
                 return JsonResponse(invalid, status=400)

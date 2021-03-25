@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(catchError(error => {
       console.log(error);
-      if (error instanceof HttpErrorResponse && [401, 403].includes(error.status)) {
+      if (error instanceof HttpErrorResponse && [401, 403, 405].includes(error.status)) {
         console.log(error.error);
 
         var user = this.tokenStorage.getUser();
