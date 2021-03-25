@@ -127,9 +127,14 @@ class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a subscriber """
     #permission_classes = (AllowAny,)
 
-    def get(self, request, user_id):
+    def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from a subscriber provided the user_id """
         try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+
             user = SubscriberProfile.objects.filter(user_id=user_id).first()
             if not user:
                 return JsonResponse({"message": "The user with this user_id does not exist"}, status=400)

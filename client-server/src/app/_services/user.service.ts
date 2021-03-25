@@ -93,56 +93,55 @@ export class UserService {
 
   /*
   @Input: JSON object containing restaurant_id of restaurant that will be part of this new relation
-  @Input: user_id of the user who will be part of this new relation
   @Output: Message from request or error
   Add a new restaurant to a user's list of favourites
   */
-  addFavouriteRestaurant(data, user_id): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/${user_id}/favourite/`
+  addFavouriteRestaurant(data): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/favourite/`
     return this.http.post<any>(endpoint, data)
   }
 
   /*
-  @Input: user_id of user whose list of favourites will be retrieved
+  @Input: None
   @Output: List of favourited restaurants
   Get all restaurants favourited by a user
   */
-  getFavouriteRestaurants(user_id): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/${user_id}/favourite/`
+  getFavouriteRestaurants(): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/favourite/`
     return this.http.get(endpoint)
   }
 
   /*
-  @Input: JSON user-restaurant favourite object
+  @Input: id of the restaurant to be removed from user's favourites
   @Output: Message from request
   Removes a restaurant from a user's list of favourites
   */
-  removeFavRestaurant(user_id, restaurant_id): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/${user_id}/favourite/${restaurant_id}/`
+  removeFavRestaurant(restaurant_id): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `/favourite/${restaurant_id}/`
     return this.http.delete<any>(endpoint)
   }
 
   /*
-  @Input: user_id of the subscriber user
+  @Input: None
   @Output: list of nearby restaurants from the subscriber user
   Returns a list of up to 5 json objects, each object contains
   the restaurant_id and the distance from the subscriber
   List is ordered from nearest to furthest
   */
-  getNearbyRestaurantsSubscriber(user_id): Observable<any> {
-    const endpoint = SUBSCRIBER_ENDPOINT + `/nearby/${user_id}/`
+  getNearbyRestaurantsSubscriber(): Observable<any> {
+    const endpoint = SUBSCRIBER_ENDPOINT + `/nearby/`
     return this.http.get(endpoint);
   }
 
   /*
-  @Input: user_id of the restaurant owner user
+  @Input: None
   @Output: list of nearby restaurants from the restaurant owner
   Returns a list of up to 5 json objects, each object contains
   the restaurant_id and the distance from the restaurant owner
   List is ordered from nearest to furthest
   */
-  getNearbyRestaurantsOwner(user_id): Observable<any> {
-    const endpoint = OWNER_ENDPOINT + `/nearby/${user_id}/`;
+  getNearbyRestaurantsOwner(): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + `/nearby/`;
     return this.http.get(endpoint);
   }
 

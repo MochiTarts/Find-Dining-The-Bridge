@@ -70,7 +70,7 @@ export class RestaurantFavsCardComponent implements OnInit {
   }
 
   remove(restaurnt_id) {
-    this.userService.removeFavRestaurant(this.userId, restaurnt_id).subscribe(() => {
+    this.userService.removeFavRestaurant(restaurnt_id).subscribe(() => {
       this.reload()
     },(error) => {
       alert(error.error.message)

@@ -60,7 +60,7 @@ export class RestaurantCardComponent implements OnInit {
       }
 
       if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
-        this.userService.getFavouriteRestaurants(this.userId).subscribe((favs) => {
+        this.userService.getFavouriteRestaurants().subscribe((favs) => {
           if (typeof favs !== 'undefined' && favs.length > 0) {
             for (const fav of favs) {
               if (fav._id == this.restaurant._id) {
@@ -79,7 +79,7 @@ export class RestaurantCardComponent implements OnInit {
     var data = {
       restaurant: restaurnt_id
     }
-    this.userService.addFavouriteRestaurant(data, this.userId).subscribe(() => {
+    this.userService.addFavouriteRestaurant(data).subscribe(() => {
       this.favourited = true
     },(error) => {
       alert(error.error.message)
