@@ -16,7 +16,8 @@ from restaurant.models import (
     Restaurant,
     PendingRestaurant,
     PendingFood,
-    UserFavRestrs
+    UserFavRestrs,
+    RestaurantPost
 )
 
 from google.analytics import get_access_token, get_analytics_data
@@ -222,6 +223,13 @@ user_fav_schema = {
     },
     "required": ["restaurant"],
     "additionalProperties": False
+}
+
+post_schema = {
+    'properties': {
+        'restaurant_id': {'type': 'string'},
+        'content': {'type': 'string'}
+    }
 }
 
 
@@ -626,8 +634,14 @@ class PendingRestaurantView(APIView):
                 return JsonResponse(restaurant)
             else:
                 return JsonResponse({'message': 'No pending restaurant found with owner user id of this: '+_id}, status=404)
-        except Exception:
-            return JsonResponse({'message': 'Something went wrong'}, status=500)
+        except Exception as e:
+            message = 'something went wrong'
+            try:
+                message = getattr(e, 'message', str(e))
+            except Exception as e:
+                message = getattr(e, 'message', 'something went wrong')
+            finally:
+                return JsonResponse({'message': message}, status=500)
 
 # get_all_restaurants_page
 
@@ -870,3 +884,85 @@ class AnalyticsDataView(APIView):
         #restaurant_id = request.GET.get('restaurant_id')
         traffic = get_analytics_data(rest_id)
         return JsonResponse(traffic)
+
+
+class PostView(APIView):
+    """ Restaurant posts view """
+    #permission_classes = (AllowAny,)
+
+    def post(self, request):
+        """ Insert a new post for a restaurant """
+        try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+
+            validate(instance=request.data, schema=post_schema)
+            body = request.data
+            body['owner_user_id'] = user_id
+            invalid = RestaurantPost.field_validate(body)
+            if invalid:
+                return JsonResponse(invalid, status=400)
+
+            post = RestaurantPost.insert(body)
+            return JsonResponse(model_to_json(post))
+        except ValidationError as e:
+            return JsonResponse({'message': e.message}, status=500)
+        except json.decoder.JSONDecodeError as e:
+            return JsonResponse({'message': e.message}, status=500)
+        except ValueError as e:
+            return JsonResponse({'message': str(e)}, status=500)
+        except Exception as e:
+            message = 'something went wrong'
+            try:
+                message = getattr(e, 'message', str(e))
+            except Exception as e:
+                message = getattr(e, 'message', 'something went wrong')
+            finally:
+                return JsonResponse({'message': message}, status=500)
+
+    def get(self, request):
+        """ Get all posts for a restaurant """
+        try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+            posts = list(RestaurantPost.objects.filter(owner_user_id=user_id))
+            response = {"Posts": []}
+            for post in posts:
+                time_stamp = {"Timestamp": post.timestamp.strftime("%b %d, %Y %H:%M")}
+                response["Posts"].append(model_to_json(post, time_stamp))
+            return JsonResponse(response)
+        except Exception as e:
+            message = 'something went wrong'
+            try:
+                message = getattr(e, 'message', str(e))
+            except Exception as e:
+                message = getattr(e, 'message', 'something went wrong')
+            finally:
+                return JsonResponse({'message': message}, status=500)
+
+    def delete(self, request, post_id):
+        """ Deletes a single restaurant post """
+        try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+
+            post_filter = RestaurantPost.objects.filter(_id=post_id)
+            post = post_filter.first()
+            if not post:
+                return JsonResponse({"message": "no post found with this id"}, status=404)
+            post_deleted = model_to_json(post)
+            post_filter.delete()
+            return JsonResponse({"Post delete": post_deleted})
+        except Exception as e:
+            message = 'something went wrong'
+            try:
+                message = getattr(e, 'message', str(e))
+            except Exception as e:
+                message = getattr(e, 'message', 'something went wrong')
+            finally:
+                return JsonResponse({'message': message}, status=500)
