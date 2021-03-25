@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import BadHeaderError
 from django.utils.html import format_html
 from django.urls import reverse
+from django import forms
 
 from sduser.forms import AdminForm
 from sduser.utils import send_email_verification
@@ -13,30 +14,64 @@ from utils.model_util import model_to_json
 from smtplib import SMTPException
 from collections import OrderedDict
 
+import copy
+
 User = get_user_model()
 
+
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'first_name', 'last_name', 'email', 'activated', 'role', 'is_blocked', 'is_staff', 'is_superuser', 'last_login', 'pwd_update_time')
-    list_filter = (EmailFilter, UsernameFilter, 'is_staff', 'is_superuser', 'is_blocked',)
+    list_display = ('username', 'email', 'activated', 'is_blocked', 'role',
+                    'is_staff', 'is_superuser', 'last_login', 'pwd_update_time')
+    list_filter = (EmailFilter, UsernameFilter, 'is_staff',
+                   'is_superuser', 'is_blocked',)
     # note that the order of actions will be reversed (in get_actions)
     actions = ('email_verification', 'unblock_user', 'block_user',)
-    #list_per_page=200
+    # list_per_page=200
 
-    readonly_fields = [
+    readonly_fields = (
         "last_login",
         "pwd_update_time",
-    ]
+    )
 
     class Meta:
         # for some reason setting this is not enough, need to override get_form as well
         form = AdminForm
+
+    def get_form(self, request, obj=None, **kwargs):
+        """
+        overrode get_form to apply field logics
+        """
+        kwargs['form'] = AdminForm
+        form = super().get_form(request, obj, **kwargs)
+
+        if 'change' in kwargs:
+            # copy the form to avoid change by reference
+            form = copy.deepcopy(form)
+
+            first_name_field = form.base_fields['first_name']
+            last_name_field = form.base_fields['last_name']
+            # hide first name and last name field as we are not using them
+            # but they are inherited from abstractUser
+            first_name_field.widget = forms.HiddenInput()
+            last_name_field.widget = forms.HiddenInput()
+            # if editing
+            # if kwargs['change']:
+
+        return form
+
+    # make auth_id and refresh_token field read only on creation
+    def get_readonly_fields(self, request, obj=None):
+        # creating a user
+        if not obj:
+            return self.readonly_fields + ("auth_id", "refresh_token",)
+        return self.readonly_fields
 
     def get_actions(self, request):
         actions = super().get_actions(request)
         # reverse the action list so delete comes latest
         actions = OrderedDict(reversed(list(actions.items())))
         return actions
-    
+
     def block_user(self, request, queryset):
         try:
             queryset.update(is_blocked=True)
@@ -59,7 +94,6 @@ class UserAdmin(admin.ModelAdmin):
 
     unblock_user.short_description = "Unblock selected Users"
 
-
     def email_verification(self, request, queryset):
         """
         sends a verification email to each selected unverified user
@@ -68,7 +102,7 @@ class UserAdmin(admin.ModelAdmin):
         total = 0
 
         for user in queryset:
-            
+
             user_id = user.id
             username = user.username
 
@@ -83,40 +117,33 @@ class UserAdmin(admin.ModelAdmin):
             except (BadHeaderError, SMTPException):
                 total = total + 1
                 continue
-        
+
         if count > 1:
-            messages.success(request, "Verification email has been sent to " + str(count) + " unverified users.")
+            messages.success(
+                request, "Verification email has been sent to " + str(count) + " unverified users.")
         elif count == 1:
             link = reverse("admin:sduser_sduser_change", args=[user_id])
-            msg = format_html("Verification email has been sent to User <a href='{}' target='_blank' rel='noopener'>{}</a>", link, username)
+            msg = format_html(
+                "Verification email has been sent to User <a href='{}' target='_blank' rel='noopener'>{}</a>", link, username)
             messages.success(request, msg)
         else:
             if total > 1:
                 msg = "The selected Users have already been verified."
             else:
                 link = reverse("admin:sduser_sduser_change", args=[user_id])
-                msg = format_html("The selected User <a href='{}' target='_blank' rel='noopener'>{}</a> has already been verified.", link, username)
+                msg = format_html(
+                    "The selected User <a href='{}' target='_blank' rel='noopener'>{}</a> has already been verified.", link, username)
             messages.error(request, msg)
-
 
     email_verification.short_description = "Send verification email (to unverified user)"
 
-
-    def get_form(self, request, obj=None, **kwargs):
-        '''
-        if request.user.is_superuser:
-            kwargs['form'] = MySuperuserForm
-        '''
-        kwargs['form'] = AdminForm
-        return super().get_form(request, obj, **kwargs)
-    
     # a field to keep track whether this user has activated the account (has reset the password upon log in)
     def activated(self, obj):
         if obj.is_superuser or obj.is_staff:
             return obj.default_pwd_updated
         else:
             return obj.is_active
-    
+
     def save_model(self, request, obj, form, change):
         # need to make sure the pk is a required field when creating a new admin user
         # otherwise we need to check its existence for now
@@ -152,5 +179,6 @@ class UserAdmin(admin.ModelAdmin):
 
         return templateResponse
     '''
+
 
 admin.site.register(User, UserAdmin)

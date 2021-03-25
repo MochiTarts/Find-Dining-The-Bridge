@@ -40,13 +40,15 @@ def verify_email(request, uidb64, token):
             }
         )
 
-def send_email_verification(user, request):
-    current_site = get_current_site(request)
+def send_email_verification(user, request=None, site=None):
+    if site is not None:
+        domain = site
+    else:
+        domain = get_current_site(request).domain
     subject = 'Verify Your Email for Find Dining'
-
     message = render_to_string('verify_email/verification.html', {
                 'user': user,
-                'domain': current_site.domain,
+                'domain': domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': sduser_activation_token_generator.make_token(user),
             })
