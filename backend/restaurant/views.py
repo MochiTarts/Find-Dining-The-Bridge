@@ -888,7 +888,7 @@ class AnalyticsDataView(APIView):
 
 class PostView(APIView):
     """ Restaurant posts view """
-    #permission_classes = (AllowAny,)
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         """ Insert a new post for a restaurant """
