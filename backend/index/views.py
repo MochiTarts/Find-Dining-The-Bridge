@@ -1,36 +1,29 @@
 from django.shortcuts import render
-#from rest_framework_jwt.views import verify_jwt_token
-#rom rest_framework_simplejwt.backends import TokenBackend
 from django.shortcuts import redirect
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
-# Create your views here.
-from django.http import HttpResponse
+from rest_framework.permissions import AllowAny
+#from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.http import JsonResponse
+from django.conf import settings
+from django.core.mail import send_mail
+from django.utils.html import strip_tags
 
-class indexView(APIView):
-    permission_classes = (IsAuthenticated,)
-    authentication_classes = [JWTAuthentication]
+class EmailView(APIView):
+    permission_classes = (AllowAny,)
 
-    def get(self, request):
-        path = request.path
-        print(request.path)
+    def post(self, request):
+        data = request.data
+        try:
+            subject = data['subject']
+            content = data['content']
+            send_mail(subject, strip_tags(content), from_email="info@finddining.ca",
+                recipient_list=["mouisaac88801@gmail.com"], html_message=content)
+            return JsonResponse({'message': 'email has been sent'})
+        except Exception:
+            return JsonResponse({'message': 'unable to send email', 'code':'send_email_failed'}, status=429)
 
-        if path == '/api/all':
-            content = "public content"
-        elif path == '/api/user':
-            content = "basic user content"
-        elif path == '/api/ro':
-            content = "restaurant owner content"
-        else:
-            content = "default content"
-        return HttpResponse(content)
-
-
-def angularIndex(request, path=''):
-    return render(request, 'index/landing-page.html')
 
 def angularLogIn(request, path=''):
     """

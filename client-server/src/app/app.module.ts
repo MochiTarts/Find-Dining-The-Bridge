@@ -70,7 +70,7 @@ import { RestaurantProfileFormComponent } from './components/restaurant-profile-
 import { PageErrorComponent } from './components/page-error/page-error.component';
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 import { PostComponent } from './components/post/post.component';
-
+import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +104,7 @@ import { PostComponent } from './components/post/post.component';
     EditPostsComponent,
     PostComponent,
     MenuEditComponent,
+    GetInvolvedComponent,
   ],
   imports: [
     BrowserModule,

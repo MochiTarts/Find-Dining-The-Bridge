@@ -17,6 +17,7 @@ import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-servi
 import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page.component';
 import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
 import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
+import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'restaurant', component: RestaurantPageComponent, canActivate: [AuthGuard] },
   { path: 'edit-posts', component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
+  { path: 'get-involved', component: GetInvolvedComponent,  },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {
