@@ -1,24 +1,24 @@
 from django.contrib import admin
-from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs
+from django.contrib.admin import SimpleListFilter
 from django.utils.html import format_html
 from django.urls import reverse
-from django.contrib.admin import SimpleListFilter
+from django.urls.exceptions import NoReverseMatch
+
+from utils.geo_controller import geocode
 from utils.model_util import save_and_clean, model_to_json, edit_model
+from utils.admin import InputFilter, OwnerNameFilter, NameFilter, PriceMaxFilter, PriceMinFilter
+
 from restaurant.enum import Status
 from restaurant.forms import RestaurantAdminForm
-from utils.admin import InputFilter, OwnerNameFilter, NameFilter, PriceMaxFilter, PriceMinFilter
+from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs
 from restaurant.utils import send_approval_email, send_reject_email, send_unpublish_email
+
 from django.contrib import messages
-from utils.geo_controller import geocode
+
 # from cloud_storage import cloud_controller
 import ast
 # from decimal import Decimal
 #from django.contrib.admin.actions import delete_selected
-
-# for debugging
-import logging
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
 
 def reject_restr(model_admin, request, queryset):
     """
