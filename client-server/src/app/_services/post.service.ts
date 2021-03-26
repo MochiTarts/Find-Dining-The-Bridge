@@ -16,7 +16,7 @@ export class PostService {
   @Input: None
   @Output: List of all posts by a restaurant
 
-  Retrieves all posts from restaurant in the database using restaurant id.
+  Retrieves all posts from a restaurant in the database.
   */
   getRestaurantPosts(): Observable<any> {
     const endpoint = POST_API;
@@ -24,10 +24,12 @@ export class PostService {
   }
 
   /*
-  @Input: JSON object restaurant_id, user_email, and content
-  @Output: None
+  @Input: JSON object containing:
+            restaurant_id (string),
+            content (string; max_length=4096)
+  @Output: JSON object of inserted post record
 
-  Creates a post on the for the restaurant on their timeline.
+  Inserts a new restaurant post into the database
   */
   createPost(postInfo): Observable<any> {
     const endpoint = POST_API;
