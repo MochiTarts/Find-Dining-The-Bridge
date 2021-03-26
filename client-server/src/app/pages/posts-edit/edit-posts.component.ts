@@ -7,6 +7,9 @@ import { TokenStorageService } from '../../_services/token-storage.service';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { formValidator } from '../../_validation/formValidator';
+import { postValidator } from '../../_validation/postValidator';
+import { formValidation } from 'src/app/_validation/forms';
 
 @Component({
   selector: 'app-edit-posts',
@@ -29,6 +32,8 @@ export class EditPostsComponent implements OnInit {
   deleteModalRef: any;
   deletePostId: string = '';
   deletePostIndex: number;
+
+  validator: formValidator = new postValidator();
 
   constructor(
     private titleService: Title,
@@ -69,6 +74,8 @@ export class EditPostsComponent implements OnInit {
   }
 
   openPostModal(content) {
+    this.content = '';
+    this.validator.clearAllErrors();
     this.postModalRef = this.postModalService.open(content, { size: 'lg' });
   }
 
@@ -87,12 +94,29 @@ export class EditPostsComponent implements OnInit {
         content: this.content,
       };
 
-      this.postService.createPost(postObj).subscribe((data) => {
-        this.posts.unshift(data);
-        this.postModalRef.close();
+      const post = {
+        content: this.content,
+        is_profane: this.content,
+      }
+
+      this.validator.clearAllErrors();
+      let failFlag = this.validator.validateAll(post, (key) => {
+        this.validator.setError(key);
       });
 
-      this.content = '';
+      if (!failFlag) {
+        this.postService.createPost(postObj).subscribe((data) => {
+          if (data && formValidation.isInvalidResponse(data)) {
+            formValidation.HandleInvalid(data, (key) => this.validator.setError(key));
+            alert("Please ensure the post content is valid");
+          } else {
+            this.posts.unshift(data);
+            this.postModalRef.close();
+          }
+        });
+      } else {
+        alert("Please ensure the post content is valid");
+      }
     }
   }
 

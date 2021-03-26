@@ -117,7 +117,7 @@ export class formValidation {
     static isListValid(roles: Array<String>) {
         return this.isListNonEmpty(roles) && !roles.includes('');
     }
-    
+
     static isOwnerNamesNonEmpty(list: Array<String>) {
         return list.indexOf('') < 0;
     }
@@ -143,5 +143,10 @@ export class formValidation {
 
     static isNameValid(name: string) {
         return name != null && name != '' && formValidation.NAME_REGEX.test(name);
+    }
+
+    static isNotProfane(content: string) {
+      var Filter = require('bad-words'), filter = new Filter();
+      return !filter.isProfane(content);
     }
 }

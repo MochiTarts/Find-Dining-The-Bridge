@@ -305,7 +305,7 @@ export class RestaurantSetupComponent implements OnInit {
       restaurantInfo = this.improveDraftAnswer(restaurantInfo);
     }
 
-    console.log(restaurantInfo);
+    // console.log(restaurantInfo);
 
     let validator = this.chooseValidator(option);
     this.validator.clearAllErrors();

@@ -79,6 +79,18 @@
           aria-required="true"
           required
         ></textarea>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPost'"
+          [message]="validator.errors['content']"
+          tabindex="validator.errors['content'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPost'"
+          [message]="validator.errors['is_profane']"
+          tabindex="validator.errors['is_profane'] ? 0 : -1"
+        ></app-dynamic-label>
       </div>
     </div>
   </div>
