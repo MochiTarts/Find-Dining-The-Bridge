@@ -1,0 +1,50 @@
+@import "src/styles";
+
+app-dish-card {
+  margin-bottom: 0;
+}
+
+.form-box {
+  padding: 20px;
+}
+
+.center {
+  text-align: center;
+  margin: 40px;
+}
+
+.dishes {
+  margin: 10%;
+}
+
+.icon {
+  height: 45px;
+  width: 45px;
+  padding: 0px;
+  margin: 0 10px;
+  position: relative;
+}
+
+.icon:hover {
+  fa-icon {
+    color: $secondary-color;
+  }
+}
+
+.saveBtn {
+  margin-left: 0px;
+  height: 40px;
+  padding: 0 60px;
+  position: relative;
+}
+
+.skip {
+  background-color: white;
+  color: $secondary-color;
+  border-color: $secondary-color;
+}
+
+.skip:hover {
+  background-color: $secondary-color;
+  color: white;
+}

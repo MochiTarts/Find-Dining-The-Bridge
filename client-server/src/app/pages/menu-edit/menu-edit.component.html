@@ -1,0 +1,190 @@
+<div class="center">
+  <h2 id="editdish-label">Edit Restaurant Menu</h2>
+  <p>
+    Please provide menu items.
+  </p>
+  <br />
+  <button class="btn saveBtn" (click)="openDishModal(dishModal)">
+    ADD NEW DISH
+  </button>
+</div>
+
+<div class="dishes" role="main" aria-labelledby="edit-dish-label">
+  <ngb-alert *ngIf="showAlert" [dismissible]="false" [type]="'danger'">
+    {{ alertMessage }}
+  </ngb-alert>
+  <div class="row equal">
+    <div *ngFor="let dish of dishes; let i = index" class="col-sm-4 d-flex">
+      <div class="col">
+        <div class="row">
+          <app-dish-card [dish]="dish"></app-dish-card>
+        </div>
+        <div class="row">
+          <button class="icon btn" (click)="openDishModal(dishModal, dish, i)" aria-label="Edit dish" >
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </button>
+          <button
+            class="icon btn"
+            (click)="openDeleteModal(deleteModal, dish, i)"
+            aria-label="Delete dish"
+          >
+            <fa-icon [icon]="faTrash"></fa-icon>
+          </button>
+        </div>
+        <br />
+        <br />
+      </div>
+    </div>
+  </div>
+  <div class="text-right">
+    <button class="btn saveBtn" (click)="back()">
+      SAVE
+    </button>
+  </div>
+</div>
+
+<ng-template #dishModal let-modal role="form">
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Configure Dish</h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="uploadForm" (ngSubmit)="configDish()" class="form-box">
+      <p style="font-style:italic; color: gray;">
+        All required fields are marked with an asterisk (<app-required-star></app-required-star>)
+      </p>
+      <div class="form-group">
+        <label for="dishName">
+          Dish Name <app-required-star></app-required-star>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="dishName"
+          [(ngModel)]="dishName"
+          [ngModelOptions]="{ standalone: true }"
+          placeholder="Ex: Spicy Chicken"
+          aria-required="true"
+          required
+        />
+        <app-dynamic-label class="error-label"
+        [name]="'errorName'"
+        [message]="validator.errors['name']" ></app-dynamic-label>
+      </div>
+
+      <div class="form-group">
+        <label for="price">
+          Price <app-required-star></app-required-star>
+        </label>
+        <input
+          type="text"
+          class="form-control"
+          id="price"
+          [(ngModel)]="price"
+          [ngModelOptions]="{ standalone: true }"
+          placeholder="Ex: 12.99"
+          aria-required="true"
+          required
+        />
+        <app-dynamic-label class="error-label"
+        [name]="'errorPrice'"
+        [message]="validator.errors['price']" ></app-dynamic-label>
+      </div>
+
+      <div class="form-group">
+        <label for="menuCategory">
+          Menu Category <app-required-star></app-required-star>
+        </label>
+        <select
+          id="menuCategory"
+          class="form-control"
+          [(ngModel)]="menuCategory"
+          [ngModelOptions]="{ standalone: true }"
+          aria-required="true"
+          required
+        >
+          <option>Special</option>
+          <option>Popular Dish</option>
+        </select>
+        <app-dynamic-label class="error-label"
+        [name]="'errorCategory'"
+        [message]="validator.errors['menuCategory']" ></app-dynamic-label>
+      </div>
+
+      <div class="form-group">
+        <label for="dishInfo">
+          Dish Information <app-required-star></app-required-star>
+        </label>
+        <textarea
+          class="form-control"
+          id="description"
+          [(ngModel)]="description"
+          [ngModelOptions]="{ standalone: true }"
+          rows="4"
+          placeholder="Tell customers the story of your dish..."
+          aria-required="true"
+          required
+        ></textarea>
+        <app-dynamic-label class="error-label"
+        [name]="'errorDescription'"
+        [message]="validator.errors['description']" ></app-dynamic-label>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="dish">Add dish image:</label>
+          <input
+            type="file"
+            name="dish"
+            id="dish"
+            (change)="onFileSelect($event)"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="text-right">
+      <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
+        CANCEL
+      </button>
+      <button class="btn saveBtn" type="submit" (click)="configDish()">
+        COMPLETE DISH
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteModal let-modal>
+  <div class="modal-header">
+    <h2 class="modal-title" id="modal-basic-title">Delete Dish</h2>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Are you sure you want to delete this dish?
+  </div>
+  <div class="modal-footer">
+    <div class="text-right">
+      <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
+        NO
+      </button>
+      <button class="btn saveBtn" (click)="deleteDish()">
+        YES
+      </button>
+    </div>
+  </div>
+</ng-template>

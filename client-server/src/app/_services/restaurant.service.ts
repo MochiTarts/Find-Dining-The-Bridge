@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, ReplaySubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 const AUTH_API = '/api';
 const OWNER_ENDPOINT = AUTH_API + '/owner';
 const RO_ENDPOINT = AUTH_API + '/restaurant';
+const DISH_ENDPOINT = AUTH_API + '/dish';
 const UPLOAD_ENDPOINT = AUTH_API + '/cloud_storage/upload/';
 const REMOVE_ENDPOINT = AUTH_API + '/cloud_storage/remove/';
 
@@ -70,17 +71,25 @@ export class RestaurantService {
   }
 
   /*
-  @Input: Restaurant id
+  @Input: None
+  @Output: Corresponding restaurant object with dishes
+
+  Returns the details of the restaurant pending dishes.
+  */
+  getPendingRestaurantFood(): Observable<any> {
+    const endpoint = DISH_ENDPOINT + '/pending/';
+    return this.http.get(endpoint);
+  }
+
+  /*
+  @Input: None
   @Output: Corresponding restaurant object with dishes
 
   Returns the details of the restaurant dishes using its id.
   */
-  getPendingRestaurantFood(id:string): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/dish/get_pending_by_restaurant/';
-    var params = {
-      restaurant_id: id,
-    };
-    return this.http.get(endpoint, { params: params });
+  getApprovedRestaurantFood(restaurantId): Observable<any> {
+    const endpoint = DISH_ENDPOINT + '/approved/' + restaurantId + '/';
+    return this.http.get(endpoint);
   }
 
   /*
@@ -94,29 +103,14 @@ export class RestaurantService {
     return this.http.get(endpoint);
   }
 
-  // /*
-  // @Input: JSON object containing restaurant info
-  // @Output: The ID for that restaurant
-
-  // Creates an entry for the restauant in the database and returns an id
-  // */
-  // getRestaurantID(restuarantInfo): Observable<any> {
-  //   const endpoint = RO_ENDPOINT + '/draft/';
-  //   const userToken = {
-  //     idToken: restuarantInfo.idToken,
-  //   };
-  //   delete restuarantInfo.idToken;
-  //   return this.http.post<any>(endpoint, restuarantInfo, { params: userToken });
-  // }
-
   /*
   @Input: JSON object containing dish info
   @Output: None
 
   Creates an entry for the dish for a particular restuarant using its id.
   */
-  createDish(dishInfo): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/dish/p/';
+  createPendingDish(dishInfo): Observable<any> {
+    const endpoint = DISH_ENDPOINT + '/pending/';
     return this.http.post<any>(endpoint, dishInfo);
   }
 
@@ -126,8 +120,8 @@ export class RestaurantService {
 
   Creates an entry for the dish for a particular restuarant using its id.
   */
-  editDish(dishInfo): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/dish/p/';
+  editPendingDish(dishInfo, dishId): Observable<any> {
+    const endpoint = DISH_ENDPOINT + '/pending/' + dishId + '/';
     return this.http.put<any>(endpoint, dishInfo);
   }
 
@@ -135,11 +129,17 @@ export class RestaurantService {
   @Input: JSON object containing dish name and restaurant id
   @Output: None
 
-  Delete dish using dish name and restaurant id.
+  Deletes the pending dish and approved dish from the database, given the dish name and the dish category
   */
   deleteDish(dishInfo): void {
-    const endpoint = RO_ENDPOINT + '/dish/' + dishInfo.restaurant_id + '/';
-    this.http.post<any>(endpoint, dishInfo).subscribe((data) => {});
+    const endpoint = DISH_ENDPOINT + '/pending/';
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: dishInfo,
+    };
+    this.http.delete<any>(endpoint, options).subscribe((data) => {});
   }
 
   /*

@@ -9,6 +9,18 @@
   </p>
   <div class="form-box" role="form" aria-labelledby="res-setup1 res-setup2">
     <form [formGroup]="uploadForm">
+      <div class="editPostsWrap" *ngIf="profileId">
+        <button
+          type="button"
+          class="btn editPosts"
+          (click)="gotoEditPosts()"
+          placement="top" ngbTooltip="Update Restaurant Posts"
+        >
+          <fa-icon [icon]="faEdit"></fa-icon>
+          <b>EDIT POSTS</b>
+        </button>
+      </div>
+
       <div class="row">
         <div class="form-group col-md-8">
           <label for="restaurant-name">Restaurant Name <app-required-star></app-required-star></label>
@@ -20,6 +32,7 @@
             value="{{ profileId ? restaurantDetails.name : '' }}"
             aria-required="true"
             required
+            [disabled]="profileId ? restaurantDetails.approved_once : false"
           />
           <app-dynamic-label
             class="error-label"
@@ -383,6 +396,7 @@
           value="{{ profileId ? restaurantDetails.bio : '' }}"
           aria-required="true"
           required
+          [disabled]="profileId ? restaurantDetails.approved_once : false"
         ></textarea>
         <app-dynamic-label
           class="error-label"

@@ -112,17 +112,17 @@ export class RestaurantPageComponent implements OnInit {
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
-
-      // console.log(user);
     }
 
     this.restaurantId = this.route.snapshot.queryParams.restaurantId || this.userId;
 
     if (this.restaurantId == this.route.snapshot.queryParams.restaurantId) this.isQueryRestaurant = true;
 
-    this.getPendingOrApproved(this.restaurantId).subscribe((data) => {
-      // console.log(data);
+    this.getPendingOrApprovedRestaurant(this.restaurantId).subscribe((data) => {
       this.restaurantDetails = data;
+
+      // tab title
+      this.titleService.setTitle(data.name + " | Find Dining Scarborough");
 
       // displayed phone
       var phone: string = String(this.restaurantDetails.phone);
@@ -178,89 +178,34 @@ export class RestaurantPageComponent implements OnInit {
       }
 
       this.videoId = this.getVideoId(this.restaurantDetails.restaurant_video_url);
-    })
 
-
-    // this.restaurantDetails = {
-    //   _id: "603554df682689f2764ca4a2",
-    //   name: "Min's Restaurant",
-    //   years: 10,
-    //   address: "1265 Military Trail",
-    //   streetAddress2: "",
-    //   streetAddress3: "",
-    //   postalCode: "M1C 1A4",
-    //   phone: 1231231234,
-    //   email: "ahar@plussmail.com",
-    //   pricepoint: "EXHIGH",
-    //   cuisines: [
-    //       "American"
-    //   ],
-    //   offer_options: [
-    //       "Delivery",
-    //       "Pick-up",
-    //       "Dine-in",
-    //       "Meal Kits",
-    //       "Catering",
-    //       "Cash only",
-    //       "Gluten-free Options"
-    //   ],
-    //   dineinPickupDetails: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac dui non urna tempor luctus et eu lorem. Proin ac dapibus dolor. Proin pellentesque leo nunc, sit amet vulputate justo dictum nec. Etiam nisi metus, sollicitudin quis nibh non, viverra gravida tellus. Suspendisse potenti. Nullam ornare sit amet turpis a mattis. Nullam sit amet nisl at dolor tempus facilisis. Vestibulum eu faucibus neque. Mauris id commodo nisi, vel dapibus ipsum. Etiam convallis eros felis, et suscipit nisi pharetra ut. Duis ac nisi id risus tempus vehicula.",
-    //   deliveryDetails: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac dui non urna tempor luctus et eu lorem. Proin ac dapibus dolor. Proin pellentesque leo nunc, sit amet vulputate justo dictum nec. Etiam nisi metus, sollicitudin quis nibh non, viverra gravida tellus. Suspendisse potenti. Nullam ornare sit amet turpis a mattis. Nullam sit amet nisl at dolor tempus facilisis. Vestibulum eu faucibus neque. Mauris id commodo nisi, vel dapibus ipsum. Etiam convallis eros felis, et suscipit nisi pharetra ut. Duis ac nisi id risus tempus vehicula.",
-    //   locationNotes: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac dui non urna tempor luctus et eu lorem. Proin ac dapibus dolor. Proin pellentesque leo nunc, sit amet vulputate justo dictum nec. Etiam nisi metus, sollicitudin quis nibh non, viverra gravida tellus. Suspendisse potenti. Nullam ornare sit amet turpis a mattis. Nullam sit amet nisl at dolor tempus facilisis. Vestibulum eu faucibus neque. Mauris id commodo nisi, vel dapibus ipsum. Etiam convallis eros felis, et suscipit nisi pharetra ut. Duis ac nisi id risus tempus vehicula.",
-    //   web_url: "",
-    //   facebook: "https://www.facebook.com/finddiningscarborough/",
-    //   twitter: "https://twitter.com/FDscarborough",
-    //   instagram: "https://www.instagram.com/finddiningscarborough/",
-    //   bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac dui non urna tempor luctus et eu lorem. Proin ac dapibus dolor. Proin pellentesque leo nunc, sit amet vulputate justo dictum nec. Etiam nisi metus, sollicitudin quis nibh non, viverra gravida tellus. Suspendisse potenti. Nullam ornare sit amet turpis a mattis. Nullam sit amet nisl at dolor tempus facilisis. Vestibulum eu faucibus neque. Mauris id commodo nisi, vel dapibus ipsum. Etiam convallis eros felis, et suscipit nisi pharetra ut. Duis ac nisi id risus tempus vehicula.",
-    //   GEO_location: "{'lat': 43.7825084, 'lng': -79.1853174}",
-    //   cover_photo_url: "https://storage.googleapis.com/test-storage-nog/FILE-rgxlmwhtkx-2021-03-03 18:02:44.675947.png",
-    //   logo_url: "https://storage.googleapis.com/default-assets/logo.jpg",
-    //   restaurant_video_url: "https://storage.googleapis.com/test-storage-nog/FILE-vsphyaetao-2021-02-23 21:57:17.919193.mp4",
-    //   restaurant_image_url: [
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-hojjovlzvu-2021-02-23 19:41:23.457993.png",
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-aekyxbzwoe-2021-02-23 19:41:27.150875.png",
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-wzwcrdqyzw-2021-02-23 19:41:28.117848.png",
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-ahlssfibfa-2021-02-23 19:41:28.834423.png",
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-ttgmlbwiud-2021-02-23 19:41:29.774578.png",
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-zxnfrcxetu-2021-02-23 19:41:32.839115.png",
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-gorfjgjbze-2021-02-23 19:41:34.429799.png",
-    //       "https://storage.googleapis.com/test-storage-nog/FILE-ippzznymjk-2021-02-23 19:41:35.548928.png"
-    //   ],
-    //   owner_first_name: [
-    //       "Min Qi"
-    //   ],
-    //   owner_last_name: [
-    //       "Zhang"
-    //   ],
-    //   owner_preferred_name: [
-    //       "Min"
-    //   ],
-    //   owner_story: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac dui non urna tempor luctus et eu lorem. Proin ac dapibus dolor. Proin pellentesque leo nunc, sit amet vulputate justo dictum nec. Etiam nisi metus, sollicitudin quis nibh non, viverra gravida tellus. Suspendisse potenti. Nullam ornare sit amet turpis a mattis. Nullam sit amet nisl at dolor tempus facilisis. Vestibulum eu faucibus neque. Mauris id commodo nisi, vel dapibus ipsum. ",
-    //   owner_picture_url: "https://storage.googleapis.com/test-storage-nog/FILE-ztawvdypdr-2021-02-23 19:17:51.665567.png",
-    //   categories: [
-    //       "Signature Dish",
-    //       "Popular Dish"
-    //   ],
-    //   status: "Pending",
-    //   sysAdminComments: "",
-    //   open_hours: "Monday - 9:00am-5:00pm\nTuesday - 9:00am-5:00pm\nWednesday - 9:00am-5:00pm\nThursday - 9:00am-5:00pm\nFriday - 9:00am-5:00pm\nSaturday - 9:00am-5:00pm\nSunday - 9:00am-5:00pm",
-    //   payment_methods: [
-    //       "Debit",
-    //       "Credit",
-    //       "Cash"
-    //   ],
-    //   full_menu_url: "https://thierrysans.me/CSCC09/lectures/02/slides/C09-Javascript.pdf",
-    //   approved_once: false
-    // };
-
+      this.getPendingOrApprovedDishes(this.restaurantId).subscribe((data) => {
+        this.restaurantMenu = data.Dishes;
+        for (let dish of data.Dishes) {
+          if (dish.category == "Popular Dish") {
+            this.popularDish.push(dish)
+          } else if (dish.category == "Special") {
+            this.specialDish.push(dish);
+          }
+        }
+      })
+    });
 
   }
 
-  getPendingOrApproved(id) {
+  getPendingOrApprovedRestaurant(id) {
     if (this.authService.isLoggedIn && this.role == 'RO' && !this.isQueryRestaurant) {
       return this.restaurantService.getPendingRestaurant();
     } else {
       return this.restaurantService.getApprovedRestaurant(id);
+    }
+  }
+
+  getPendingOrApprovedDishes(id) {
+    if (this.authService.isLoggedIn && this.role == 'RO' && !this.isQueryRestaurant) {
+      return this.restaurantService.getPendingRestaurantFood();
+    } else {
+      return this.restaurantService.getApprovedRestaurantFood(id);
     }
   }
 
