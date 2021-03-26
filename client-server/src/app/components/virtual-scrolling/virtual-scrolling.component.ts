@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-// import { TimelineService } from 'src/app/service/timeline.service';
+import { PostService } from 'src/app/_services/post.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -18,23 +17,18 @@ export class VirtualScrollingComponent implements OnInit {
   lstPosts = new BehaviorSubject<any[]>(null);
 
   constructor(
-    // private authFirebase: FirebaseAuthService,
-    private route: ActivatedRoute,
-    // private timeline: TimelineService,
+    private postService: PostService,
   ) { }
 
   ngOnInit(): void {
-    // this.authFirebase.userProfile.subscribe((user) => {
-    //   this.restaurantId = this.route.snapshot.queryParams.restaurantId || user.restaurantId;
-    //   this.loadTimeline(this.restaurantId);
-    // })
+    this.loadPosts();
   }
 
-  loadTimeline(id) {
-    // this.timeline.getRestaurantPosts(id).subscribe((data) => {
-    //   this.posts = data.Posts;
-    //   this.lstPosts.next(this.posts);
-    // });
+  loadPosts() {
+    this.postService.getRestaurantPosts().subscribe((data) => {
+      this.posts = data.Posts;
+      this.lstPosts.next(this.posts);
+    })
   }
 
 }

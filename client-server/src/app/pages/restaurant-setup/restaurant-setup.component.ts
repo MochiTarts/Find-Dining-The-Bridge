@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 import { formValidation } from '../../_validation/forms';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-restaurant-setup',
@@ -41,6 +42,8 @@ export class RestaurantSetupComponent implements OnInit {
   newImage: boolean = false;
   newOwnerImage: boolean = false;
 
+  faEdit = faEdit;
+
   constructor(
     private tokenStorage: TokenStorageService,
     private formBuilder: FormBuilder,
@@ -60,7 +63,6 @@ export class RestaurantSetupComponent implements OnInit {
       this.userId = user.user_id;
       this.profileId = user.profile_id;
       // this.profileId = '1';
-      console.log(user);
     }
 
     this.uploadForm = this.formBuilder.group({
@@ -303,7 +305,7 @@ export class RestaurantSetupComponent implements OnInit {
       restaurantInfo = this.improveDraftAnswer(restaurantInfo);
     }
 
-    console.log(restaurantInfo);
+    // console.log(restaurantInfo);
 
     let validator = this.chooseValidator(option);
     this.validator.clearAllErrors();
@@ -357,14 +359,6 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
-  saveDraft() {
-    console.log("save draft")
-  }
-
-  upgradeUser() {
-    console.log("upgrade user");
-  }
-
   reload() {
     let currentUrl = this.router.url;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -377,6 +371,10 @@ export class RestaurantSetupComponent implements OnInit {
       return;
     }
     this.router.navigate(['/restaurant']);
+  }
+
+  gotoEditPosts() {
+    this.router.navigate(['/edit-posts']);
   }
 
 }

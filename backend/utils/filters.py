@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 
 # custom input filter (parent) class that works with the default list filter (can create custom filter by subclassing it)
+
+
 class InputFilter(admin.SimpleListFilter):
     template = 'admin/input_filter.html'
 
@@ -24,6 +26,8 @@ class InputFilter(admin.SimpleListFilter):
 ''' custom filters'''
 
 # email filter (not exact match but 'contains' for wider usability)
+
+
 class EmailFilter(InputFilter):
     parameter_name = 'email'
     title = _('email')
@@ -37,6 +41,8 @@ class EmailFilter(InputFilter):
             )
 
 # email filter (not exact match but 'contains' for wider usability)
+
+
 class UsernameFilter(InputFilter):
     parameter_name = 'username'
     title = _('username')
@@ -48,7 +54,6 @@ class UsernameFilter(InputFilter):
             return queryset.filter(
                 Q(username__icontains=username)
             )
-
 
 
 # owner name filter (not exact match but 'contains' for wider usability)
@@ -80,8 +85,36 @@ class NameFilter(InputFilter):
                 Q(name__icontains=name)
             )
 
+# user id filter (exact match)
+
+class UserIDFilter(InputFilter):
+    parameter_name = 'user_id'
+    title = _('user_id')
+
+    def queryset(self, request, queryset):
+        user_id = self.value()
+        if user_id is not None:
+            return queryset.filter(
+                Q(user_id=user_id)
+            )
+
+# restaurant id filter (exact match)
+
+class RestaurantIDFilter(InputFilter):
+    parameter_name = 'restaurant_id'
+    title = _('restaurant_id')
+
+    def queryset(self, request, queryset):
+        restaurant_id = self.value()
+        if restaurant_id is not None:
+            return queryset.filter(
+                Q(restaurant_id=restaurant_id)
+            )
+
 # filter won't work until we change the db schema (change price field from string to number)
 # price max filter (upper bound)
+
+
 class PriceMaxFilter(InputFilter):
     parameter_name = 'price'
     title = _('price (maximum)')
@@ -95,6 +128,8 @@ class PriceMaxFilter(InputFilter):
                 )
 
 # price min filter (lower bound)
+
+
 class PriceMinFilter(InputFilter):
     parameter_name = 'price'
     title = _('price (minimum)')
@@ -105,5 +140,4 @@ class PriceMinFilter(InputFilter):
             if price.isnumeric:
                 return queryset.filter(
                     Q(price__gt=float(price))
-                )              
-
+                )

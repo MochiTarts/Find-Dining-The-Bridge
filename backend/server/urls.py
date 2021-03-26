@@ -28,7 +28,7 @@ import index
 import auth
 
 urlpatterns = [
-    path('', include('index.urls')),
+    path('email/', include('index.urls')),
     path('admin/password_change/',
          auth_views.PasswordChangeView.as_view(
              form_class=NewPasswordChangeForm,

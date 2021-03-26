@@ -5,7 +5,9 @@ from django.core.validators import URLValidator, validate_email
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.contrib.auth import get_user_model
 
-from utils.validators import check_script_injections, validate_url, validate_name, validate_postal_code
+from utils.validators import (
+    check_script_injections, validate_url, validate_name, validate_postal_code, validate_profane_content
+)
 from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json
 from restaurant.cuisine_dict import load_dict
 from restaurant.fields import StringListField, CustomListField
@@ -799,9 +801,13 @@ class RestaurantPost(models.Model):
                 invalid['Invalid'].append('restaurant_id')
 
         if 'content' in fields:
-            if not fields['content']:
+            try:
+                if not fields['content']:
+                    invalid['Invalid'].append('content')
+                else:
+                    validate_profane_content(fields['content'])
+            except ValidationError:
                 invalid['Invalid'].append('content')
-
 
         if len(invalid['Invalid']) == 0:
             return None

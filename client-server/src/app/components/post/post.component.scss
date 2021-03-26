@@ -1,0 +1,72 @@
+@import "src/styles";
+
+.post-card {
+  margin: 20px;
+}
+
+.card {
+  width: 1000px;
+  height: auto;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 30px;
+
+  @media screen and (max-width: 1100px) {
+    width: 100%;
+  }
+}
+
+.trashBtn {
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+}
+
+.trashBtn:hover {
+  fa-icon {
+    color: $secondary-color;
+  }
+}
+
+.post-content {
+  border-radius: 10px;
+  background-color: $grey-color;
+}
+
+.user-img {
+  border-radius: 100%;
+  border: 1px solid $grey-color;
+  object-fit: fill;
+  width: 50px;
+  height: 50px;
+}
+
+.user-input {
+  width: 90%;
+  height: 50px;
+  padding: 15px 20px;
+  margin: 0 20px;
+  border-radius: 40px;
+  border: 1px solid $grey-color;
+
+  @media screen and (max-width: 1100px) {
+    width: 70%;
+  }
+}
+
+.postBtn {
+  padding: 5px 30px;
+}
+
+.cancel {
+  background-color: white;
+  color: $secondary-color;
+  border-color: $secondary-color;
+}
+
+.cancel:hover {
+  background-color: $secondary-color;
+  color: white;
+}

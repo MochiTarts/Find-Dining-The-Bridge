@@ -1,0 +1,54 @@
+<div class="cover">
+  <h1 tabindex="0">Get Involved</h1>
+</div>
+
+<div class="box-1">
+  <div class="titles">
+    <h2 class="title" tabindex="0">
+      Interested in becoming involved? <br>
+      Let's work together and celebrate <br>
+      Scarborough Restaurants!
+    </h2>
+    <h3 class="subtitle" tabindex="0">
+      It is our mission to connect Scarborough residents and visitors to <br>
+      Scarborough's amazing culinary industry!
+    </h3>
+  </div>
+
+  <form class="form-box" [formGroup]="messageForm">
+    <div class="form-group">
+      <label for="name">Name <app-required-star></app-required-star></label>
+      <input type="text" class="form-control" id="name" formControlName="name" aria-required="true" />
+    </div>
+    <div class="form-group">
+      <label for="email">Email <app-required-star></app-required-star></label>
+      <input type="text" class="form-control" id="email" formControlName="email" aria-required="true" />
+    </div>
+    <div class="form-group">
+      <label for="message">Message <app-required-star></app-required-star></label>
+      <textarea type="text" class="form-control" id="message" name="message" rows="3" formControlName="message"
+        aria-required="true"></textarea>
+    </div>
+    <div>
+      <button type="button" class="btn" (click)="onSubmit()" [disabled]="messageForm.invalid">
+        Join Us
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="bg2">
+  <div class="titles">
+    <h2 class="title" tabindex="0">Our Community</h2>
+    <h3 class="subtitle" tabindex="0">
+      Members of our team have been essential behind the planning and overall success of Find Dining Scarborough.
+      We continue to work collaboratively with them to not only maintain our platform but strive towards out collective
+      goal of helping the Scarborough community.
+    </h3>
+  </div>
+  <div class="carousel" tabindex="0">
+    <ivy-carousel [images]="cuisines" [margin]="20" [arrowsOutside]="arrowsOutside" [borderRadius]="20" [cellWidth]="200"
+      [height]="300">
+    </ivy-carousel>
+  </div>
+</div>
