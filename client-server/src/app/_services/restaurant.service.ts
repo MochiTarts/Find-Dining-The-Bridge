@@ -28,9 +28,9 @@ export class RestaurantService {
 
   /*
   @Input: None
-  @Output: List of all restaurants
+  @Output: List of all approved restaurants
 
-  Return list of all restaurants in the database
+  Retrieves all restaurants that are approved
   */
   listRestaurants(): Observable<any> {
     const endpoint = RO_ENDPOINT + '/all/';
@@ -41,7 +41,7 @@ export class RestaurantService {
   @Input: Restaurant id
   @Output: Corresponding restaurant object
 
-  Returns the details of the restaurant using its id.
+  Retrieved the approved restaurant record provided the restaurant_id (can be obtained from the site url's query string)
   */
   getApprovedRestaurant(id:string): Observable<any> {
     const endpoint = RO_ENDPOINT + '/approved/' + id + '/';
@@ -49,10 +49,10 @@ export class RestaurantService {
   }
 
   /*
-  @Input: Restaurant id
+  @Input: None
   @Output: Corresponding restaurant object from pending collection
 
-  Returns the details of the restaurant using its id.
+  Retrieved the pending restaurant record
   */
   getPendingRestaurant(): Observable<any> {
     const endpoint = RO_ENDPOINT + '/pending/';
@@ -60,21 +60,79 @@ export class RestaurantService {
   }
 
   /*
-  @Input: Restaurant id
-  @Output: Corresponding restaurant object with dishes
+  @Input: JSON object containing restaurant owner info
+          Required fields:
+            user_id (number),
+            restaurant_id (string)
+  @Output: RO record
 
-  Returns the details of the restaurant dishes using its id.
+  Inserts a new restaurant_owner record into restaurant owner collection
   */
-  getRestaurantFood(id:string): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/dish/' + id + '/';
-    return this.http.get(endpoint);
+  roSignup(ownerInfo): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + '/signup/';
+    return this.http.post<any>(endpoint, ownerInfo);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
+          Required fields:
+            name, address, postalCode, email, owner_first_name, owner_last_name (all are strings)
+  @Output: JSON object of restaurant
+
+  Inserts a new restaurant record into pending restaurant collection, status is marked as 'In_Progress'
+  */
+  insertRestaurantDraft(restInfo): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/draft/';
+    return this.http.post<any>(endpoint, restInfo);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
+          Required fields:
+            name (string),
+            address (string),
+            postalCode (string),
+            owner_first_name (array),
+            owner_last_name (array)
+  @Output: JSON object of restaurant
+
+  Updates an existing restaurant record in pending restaurant collection, marks the status to 'In_Progress'
+  */
+  updateRestaurantDraft(restInfo): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/draft/';
+    return this.http.put<any>(endpoint, restInfo);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
+          Required fields:
+            name (string),
+            years (number),
+            address (string),
+            postalCode (string),
+            phone (number),
+            pricepoint (string),
+            offer_options (array),
+            bio (string),
+            owner_first_name (array),
+            owner_last_name (array),
+            open_hours (string),
+            payment_methods (array)
+  @Output: JSON object of restaurant
+
+  Inserts or update a new restaurant record into pending restaurant collection, marks the status to 'Pending'
+  */
+  insertRestaurantApproval(restInfo): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/submit/';
+    return this.http.put<any>(endpoint, restInfo);
   }
 
   /*
   @Input: None
-  @Output: Corresponding restaurant object with dishes
+  @Output: JSON object containing:
+            Dishes (a list of dish objects)
 
-  Returns the details of the restaurant pending dishes.
+  Retrieves all pending dishes of a restaurant.
   */
   getPendingRestaurantFood(): Observable<any> {
     const endpoint = DISH_ENDPOINT + '/pending/';
@@ -82,10 +140,11 @@ export class RestaurantService {
   }
 
   /*
-  @Input: None
-  @Output: Corresponding restaurant object with dishes
+  @Input: restaurant id
+  @Output: JSON object containing:
+            Dishes (a list of dish objects)
 
-  Returns the details of the restaurant dishes using its id.
+  Retrieves all approved dishes of a restaurant using restaurant id (path parameter).
   */
   getApprovedRestaurantFood(restaurantId): Observable<any> {
     const endpoint = DISH_ENDPOINT + '/approved/' + restaurantId + '/';
@@ -94,20 +153,26 @@ export class RestaurantService {
 
   /*
   @Input: None
-  @Output: All Dishes
+  @Output: JSON object containing:
+            Dishes (a list of dish objects)
 
-  Returns All Dishes.
+  Retrieves all approved dishes from the database
   */
   getDishes(): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/dish/';
+    const endpoint = DISH_ENDPOINT + '/all/';
     return this.http.get(endpoint);
   }
 
   /*
-  @Input: JSON object containing dish info
-  @Output: None
+  @Input: JSON object containing:
+            name (string),
+            description (string),
+            price (string or number),
+            specials (string),
+            category (string)
+  @Output: JSON object of dish record
 
-  Creates an entry for the dish for a particular restuarant using its id.
+  Inserts a new pending dish record
   */
   createPendingDish(dishInfo): Observable<any> {
     const endpoint = DISH_ENDPOINT + '/pending/';
@@ -115,10 +180,18 @@ export class RestaurantService {
   }
 
   /*
-  @Input: JSON object containing dish info
-  @Output: None
+  @Input: Dish info and dish id
+          Nothing in the request body is required. But these are the only fields the request body can accept:
+            JSON object containing:
+              name (string),
+              description (string),
+              picture (string),
+              price (string or number),
+              specials (string),
+              category (string)
+  @Output: Updated JSON object of dish record
 
-  Creates an entry for the dish for a particular restuarant using its id.
+  Updates an existing dish record, provided the dish's id (path parameter)
   */
   editPendingDish(dishInfo, dishId): Observable<any> {
     const endpoint = DISH_ENDPOINT + '/pending/' + dishId + '/';
@@ -126,7 +199,9 @@ export class RestaurantService {
   }
 
   /*
-  @Input: JSON object containing dish name and restaurant id
+  @Input: JSON object containing:
+            name (string),
+            category (string)
   @Output: None
 
   Deletes the pending dish and approved dish from the database, given the dish name and the dish category
@@ -140,51 +215,6 @@ export class RestaurantService {
       body: dishInfo,
     };
     this.http.delete<any>(endpoint, options).subscribe((data) => {});
-  }
-
-  /*
-  @Input: JSON object containing restaurant owner info
-          Required: user_id (number), restaurant_id (string)
-  @Output: RO record
-
-  Return a RO record
-  */
-  roSignup(ownerInfo): Observable<any> {
-    const endpoint = OWNER_ENDPOINT + '/signup/';
-    return this.http.post<any>(endpoint, ownerInfo);
-  }
-
-  /*
-  @Input: JSON object containing restaurant info
-  @Output: None
-
-  Insert new restaurant as a draft into database
-  */
-  insertRestaurantDraft(restInfo): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/draft/';
-    return this.http.post<any>(endpoint, restInfo);
-  }
-
-  /*
-  @Input: JSON object containing restaurant info
-  @Output: None
-
-  Updates an existing restaurant record in pending restaurant collection, marks the status to 'In_Progress'
-  */
-  updateRestaurantDraft(restInfo): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/draft/';
-    return this.http.put<any>(endpoint, restInfo);
-  }
-
-  /*
-  @Input: JSON object containing restaurant info
-  @Output: None
-
-  Inserts or update a new restaurant record into pending restaurant collection, marks the status to 'Pending'
-  */
-  insertRestaurantApproval(restInfo): Observable<any> {
-    const endpoint = RO_ENDPOINT + '/submit/';
-    return this.http.put<any>(endpoint, restInfo);
   }
 
   uploadRestaurantMedia(formData, id, location): Observable<any> {
