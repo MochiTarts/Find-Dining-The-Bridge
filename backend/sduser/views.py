@@ -30,7 +30,6 @@ class deactivateView(APIView):
     #authentication_classes = [JWTAuthentication]
 
     def post(self, request):
-
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
         current_user = get_user(request)
@@ -93,14 +92,16 @@ class NearbyRestaurantsView(APIView):
             user = None
 
             if role == 'BU':
-                user = SubscriberProfile.objects.filter(user_id=user_id).first()
+                user = SubscriberProfile.objects.filter(
+                    user_id=user_id).first()
             else:
-                user = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+                user = PendingRestaurant.objects.filter(
+                    owner_user_id=user_id).first()
 
             if not user:
                 return JsonResponse({"message": "The user with this user_id does not exist"}, status=400)
             user_location = ast.literal_eval(user.GEO_location)
-            
+
             nearest = []
             restaurants = list(Restaurant.objects.all())
             for restaurant in restaurants:
@@ -108,7 +109,8 @@ class NearbyRestaurantsView(APIView):
                     continue
                 user_location = ast.literal_eval(restaurant.GEO_location)
                 distance = calculate_distance(user_location, user_location)
-                nearest.append({"restaurant": str(restaurant._id), "distance": distance})
+                nearest.append(
+                    {"restaurant": str(restaurant._id), "distance": distance})
 
             nearest = sorted(nearest, key=itemgetter("distance"))
             if (len(nearest) > 5):

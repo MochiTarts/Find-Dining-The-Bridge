@@ -11,6 +11,7 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
+from utils.permissions import ROPermission
 from utils.common import get_user
 from .models import RestaurantOwner
 from restaurant.models import PendingRestaurant
@@ -50,6 +51,7 @@ restaurant_owner_editable = [
 
 class SignUp(APIView):
     """ Restaurant Owner signup view """
+    permission_classes = [ROPermission]
     #permission_classes = (AllowAny,)
 
     def post(self, request):
@@ -95,6 +97,7 @@ class SignUp(APIView):
 
 class RestaurantOwnerView(APIView):
     """ Restaurant Owner view """
+    permission_classes = [ROPermission]
     #permission_classes = (AllowAny,)
 
     def get(self, request):

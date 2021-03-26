@@ -24,6 +24,7 @@ from google.analytics import get_access_token, get_analytics_data
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.common import get_user
+from utils.permissions import ROPermission
 
 from bson import ObjectId
 import ast
@@ -275,6 +276,7 @@ class DishRestaurantView(APIView):
 class PendingDishView(APIView):
     """ pending dish view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def get(self, request):
         """Retrieve all dishes from a restaurant"""
@@ -464,6 +466,7 @@ def category_exists(restaurant_id, category):
 class UserFavView(APIView):
     """ user fav view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def post(self, request):
         """ Add a new user-restaurant-favourite relation """
@@ -524,6 +527,7 @@ class UserFavView(APIView):
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def get(self, request, rest_id):
         """ Get all users who favourited the requested restaurant """
@@ -545,6 +549,7 @@ class UserFavRestaurantView(APIView):
 class FavRelationView(APIView):
     """ remove fav relation view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def delete(self, request, rest_id):
         """ Remove a new user-restaurant-favourite relation """
@@ -581,6 +586,7 @@ class FavRelationView(APIView):
 class RestaurantView(APIView):
     """ get restaurant view dish view """
     permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def get(self, request, rest_id):
         """Retrieve restaurant by id"""
@@ -611,6 +617,7 @@ class RestaurantView(APIView):
 
 class PendingRestaurantView(APIView):
     """ pending restaurant view """
+    permission_classes = [ROPermission]
 
     def get(self, request):
         """ Retrieve restaurant from pending collection by the owner's user_id """
@@ -667,6 +674,7 @@ class AllRestaurantList(APIView):
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def post(self, request):
         """Insert new restaurant as a draft into database"""
@@ -759,6 +767,7 @@ class RestaurantDraftView(APIView):
 class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def put(self, request):
         """ Insert or update a restaurant record for admin approval """
@@ -889,6 +898,7 @@ class AnalyticsDataView(APIView):
 class PostView(APIView):
     """ Restaurant posts view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def post(self, request):
         """ Insert a new post for a restaurant """

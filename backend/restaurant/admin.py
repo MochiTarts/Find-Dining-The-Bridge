@@ -319,7 +319,7 @@ class RestaurantFilter(admin.SimpleListFilter):
 
 class PendingFoodAdmin(admin.ModelAdmin):
     """ Admin Model for PendingFood """
-    list_filter = (RestaurantFilter, 'status', NameFilter)
+    list_filter = ('status', NameFilter, RestaurantFilter,)
     list_display = ('name', 'restaurant', 'description', 'pictureUrl', 'price', 'specials', 'category', 'status', 'link_to_restaurant',)
     readonly_fields = ('restaurant_id', 'status')
     actions = (approve_food, reject_food,)
@@ -437,7 +437,7 @@ class RestrAdmin(admin.ModelAdmin):
 
 class FoodAdmin(admin.ModelAdmin):
     """ Admin Model for Food """
-    list_filter = (RestaurantFilter, 'status', NameFilter)
+    list_filter = ('status', NameFilter, RestaurantFilter,)
     list_display = ('name', 'restaurant', 'description', 'pictureUrl', 'price', 'specials', 'category', 'status', 'link_to_restaurant',)
     readonly_fields = ('restaurant_id', 'status')
     actions = (unpublish_food,)
