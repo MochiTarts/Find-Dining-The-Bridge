@@ -19,7 +19,7 @@ class EmailView(APIView):
             subject = data['subject']
             content = data['content']
             send_mail(subject, strip_tags(content), from_email="info@finddining.ca",
-                recipient_list=["mouisaac88801@gmail.com"], html_message=content)
+                recipient_list=["info@finddining.ca"], html_message=content)
             return JsonResponse({'message': 'email has been sent'})
         except Exception:
             return JsonResponse({'message': 'unable to send email', 'code':'send_email_failed'}, status=429)
