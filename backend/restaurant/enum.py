@@ -110,3 +110,41 @@ class Payment(Enum):
         :return: payment methods' values in tuple form
         """
         return tuple(payment.value for payment in cls)
+
+class MediaType(Enum):
+    """ The types of media a restaurant can upload """
+    IMAGE = 'image'
+    VIDEO = 'video'
+
+    @classmethod
+    def choices(cls):
+        """ Gets the choies in tuple form
+        :return: Media type name and value in tuple form
+        """
+        return tuple((media_type.name, media_type.value) for media_type in cls)
+
+class RestaurantSaveLocations(Enum):
+    """ The valid locations a restaurant can upload/remove media to/from """
+    cover_photo_url = "Cover Photo"
+    logo_url = 'Logo'
+    owner_picture_url = 'Owner Picture'
+    restaurant_video_url = 'Restaurant Video'
+    restaurant_image_url = 'Restaurant Image'
+
+    @classmethod
+    def choices(cls):
+        """ Gets the choices in tuple form
+        :return: Location name and value in tuple form
+        """
+        return tuple((location.name, location.value) for location in cls)
+
+class FoodSaveLocations(Enum):
+    """ The valid locations a restaurant dish can upload/remove media to/from """
+    picture = 'Food Picture'
+
+    @classmethod
+    def choices(cls):
+        """ Gets the choices in tuple form
+        :return: Location name and value in tuple for
+        """
+        return tuple((location.name, location.value) for location in cls)

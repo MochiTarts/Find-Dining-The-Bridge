@@ -1,5 +1,5 @@
 from django.utils import timezone
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, QueryDict
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
-from restaurant.enum import Status
+from restaurant.enum import Status, MediaType, RestaurantSaveLocations, FoodSaveLocations
 from restaurant.models import (
     Food,
     Restaurant,
@@ -19,6 +19,7 @@ from restaurant.models import (
     UserFavRestrs,
     RestaurantPost
 )
+from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, FoodMediaForm
 
 from google.analytics import get_access_token, get_analytics_data
 
@@ -323,16 +324,10 @@ class PendingDishView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = request.data
-            PendingFood.objects.filter(
-                restaurant_id=rest_id, name=body['name']).delete()
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
     def put(self, request, dish_id):
         """ Update Dish data """
@@ -389,12 +384,9 @@ class PendingDishView(APIView):
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
     def delete(self, request):
         """ Deletes dish from database """
@@ -431,12 +423,9 @@ class PendingDishView(APIView):
             return JsonResponse({'message': e.message}, status=404)
         except Exception:
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
 
 def remove_category(category, restaurant):
@@ -512,12 +501,10 @@ class UserFavView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=404)
         except Exception as e:
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            message = 'something went wrong'
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
 # get_user_favs_restr_page
 
@@ -533,12 +520,10 @@ class UserFavRestaurantView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=404)
         except Exception as e:
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            message = 'something went wrong'
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
 # remove_fav_page
 
@@ -567,15 +552,10 @@ class FavRelationView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            UserFavRestrs.objects.create(
-                user=user_id, restaurant=rest_id).save()
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
 
 class RestaurantView(APIView):
@@ -636,12 +616,9 @@ class PendingRestaurantView(APIView):
                 return JsonResponse({'message': 'No pending restaurant found with owner user id of this: '+_id}, status=404)
         except Exception as e:
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
 # get_all_restaurants_page
 
@@ -696,15 +673,10 @@ class RestaurantDraftView(APIView):
         except ValueError as e:
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
-            body = request.data
-            PendingRestaurant.objects.filter(email=body['email']).delete()
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
     def put(self, request):
         """Edit a restaurant profile and save it as a draft in the database"""
@@ -747,12 +719,9 @@ class RestaurantDraftView(APIView):
             return JsonResponse({'message': str(e)}, status=500)
         except Exception as e:
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
 # insert_restaurant_for_approval_page
 
@@ -778,13 +747,7 @@ class RestaurantForApprovalView(APIView):
             rest_filter = PendingRestaurant.objects.filter(owner_user_id=user_id)
             if not rest_filter.exists():
                 body['status'] = Status.Pending.value
-                restaurant = model_to_json(PendingRestaurant.insert(body))
-                restaurant['restaurant_image_url'] = ast.literal_eval(
-                    restaurant['restaurant_image_url'])
-                restaurant['offer_options'] = ast.literal_eval(
-                    restaurant['offer_options'])
-                restaurant['payment_methods'] = ast.literal_eval(
-                    restaurant['payment_methods'])
+                restaurant = PendingRestaurant.insert(body)
             else:
                 restaurant = rest_filter.first()
                 body['status'] = Status.Pending.value
@@ -793,30 +756,19 @@ class RestaurantForApprovalView(APIView):
                 if address_changed(body):
                     address = restaurant.address + ', ' + restaurant.postalCode + ', Ontario'
                     update_model_geo(restaurant, address)
-                restaurant = model_to_json(save_and_clean(restaurant))
-                restaurant['restaurant_image_url'] = ast.literal_eval(
-                    restaurant['restaurant_image_url'])
-                restaurant['offer_options'] = ast.literal_eval(
-                    restaurant['offer_options'])
-                restaurant['payment_methods'] = ast.literal_eval(
-                    restaurant['payment_methods'])
-            return JsonResponse(restaurant)
+                restaurant = save_and_clean(restaurant)
+            return JsonResponse(model_to_json(restaurant))
         except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
+            return JsonResponse({'error': e.message}, status=400)
         except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
+            return JsonResponse({'error': e.message}, status=400)
         except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
+            return JsonResponse({'error': str(e)}, status=400)
         except Exception as e:
-            body = request.data
-            PendingRestaurant.objects.filter(email=body['email']).delete()
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
 
 def address_changed(body):
@@ -908,19 +860,16 @@ class PostView(APIView):
             post = RestaurantPost.insert(body)
             return JsonResponse(model_to_json(post))
         except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
+            return JsonResponse({'error': e.message}, status=400)
         except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
+            return JsonResponse({'error': e.message}, status=400)
         except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
+            return JsonResponse({'error': str(e)}, status=400)
         except Exception as e:
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
     def get(self, request):
         """ Get all posts for a restaurant """
@@ -937,12 +886,9 @@ class PostView(APIView):
             return JsonResponse(response)
         except Exception as e:
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
 
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
@@ -954,15 +900,93 @@ class PostView(APIView):
             post_filter = RestaurantPost.objects.filter(_id=post_id)
             post = post_filter.first()
             if not post:
-                return JsonResponse({"message": "no post found with this id"}, status=404)
+                return JsonResponse({"message": "no post found with this id: "+post_id}, status=404)
+
             post_deleted = model_to_json(post)
             post_filter.delete()
             return JsonResponse({"Post delete": post_deleted})
         except Exception as e:
             message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
+
+
+class RestaurantMediaView(APIView):
+    """ Restaurant media (image/video) view """
+    #permission_classes = (AllowAny,)
+
+    def put(self, request):
+        """ For inserting or updating restaurant media """
+        try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+            if not restaurant:
+                return JsonResponse({"error": "Could not find restaurant owned by this user"}, status=400)
+
+            form = RestaurantMediaForm(request.data, request.FILES)
+            if not form.is_valid():
+                return JsonResponse({"error": form.errors}, status=400)
+
+            restaurant = PendingRestaurant.upload_media(restaurant, request.data, request.FILES)
+            return JsonResponse(model_to_json(restaurant))
+        except Exception as e:
+            message = 'something went wrong'
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
+
+    def delete(self, request):
+        """ For removing image(s) from the restaurant_image_url field and Google Cloud bucket """
+        try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+            form_data = request.data
+            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+            if not restaurant:
+                return JsonResponse({"error": "Could not find restaurant owned by this user"}, status=400)
+
+            form = RestaurantImageDeleteForm(form_data, request.FILES)
+            if not form.is_valid():
+                return JsonResponse({"error": form.errors}, status=400)
+
+            restaurant = PendingRestaurant.delete_media(restaurant, form_data)
+            return JsonResponse(model_to_json(restaurant))
+        except Exception as e:
+            message = 'something went wrong'
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)
+
+
+class DishMediaView(APIView):
+    """ Dish media (image) view """
+    #permission_classes = (AllowAny,)
+
+    def put(self, request, dish_id):
+        """ For inserting or updating restaurant media """
+        try:
+            user = get_user(request)
+            if not user:
+                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            user_id = user['user_id']
+            dish = PendingFood.objects.filter(_id=dish_id).first()
+            if not dish:
+                return JsonResponse({"error": "Could not find the dish with id: "+dish_id}, status=400)
+
+            form = FoodMediaForm(request.data, request.FILES)
+            if not form.is_valid():
+                return JsonResponse({"error": form.errors}, status=400)
+
+            dish = PendingFood.upload_media(dish, request.data, request.FILES)
+            return JsonResponse(model_to_json(dish))
+        except Exception as e:
+            message = 'something went wrong'
+            if hasattr(e, 'message'):
+                message = e.message
+            return JsonResponse({'error': message}, status=500)

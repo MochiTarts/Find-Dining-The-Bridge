@@ -9,9 +9,12 @@ from utils.validators import (
     check_script_injections, validate_url, validate_name, validate_postal_code, validate_profane_content
 )
 from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json
+from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 from restaurant.cuisine_dict import load_dict
 from restaurant.fields import StringListField, CustomListField
-from restaurant.enum import Prices, Categories, Status, Options, Payment
+from restaurant.enum import (
+    Prices, Categories, Status, Options, Payment, MediaType, RestaurantSaveLocations, FoodSaveLocations
+)
 from sduser.models import SDUser
 
 from bson import ObjectId
@@ -178,6 +181,40 @@ class PendingFood(models.Model):
             clean_description.add(''.join(e for e in word if e.isalpha()))
         clean_description = set(map(str.lower, clean_description))
         return clean_description
+
+    @classmethod
+    def upload_media(self, dish, form_data, form_file):
+        """ Uploads an image to Google Cloud bucket
+        and updates the field in the PendingFood record
+        with the link to the uploaded image
+
+        :param dish: the PendingFood object to be updated
+        :type dish: :class: `PendingFood`
+        :param form_data: the form containing fields that specify the file,
+                            and the file type
+        :type form_data: QueryDict
+        :param form_file: the file(s) to be uploaded
+        :type form_file: File
+        :return: the updated PendingFood object
+        :rtype: :class: `PendingFood`
+        """
+        media_type = form_data.get('media_type')
+        save_location = form_data.get('save_location')
+        media_file = form_file['media_file']
+
+        file_path = upload(media_file, DEV_BUCKET, IMAGE)
+
+        approved_dish = Food.objects.filter(_id=dish._id).first()
+        old_file_path = getattr(dish, save_location)
+        if approved_dish:
+            approved_file_path = getattr(approved_dish, save_location)
+            if approved_file_path != old_file_path:
+                delete(old_file_path)
+        else:
+            delete(old_file_path)
+
+        setattr(dish, save_location, file_path)
+        return save_and_clean(dish)
 
 
 class Restaurant(models.Model):
@@ -593,6 +630,98 @@ class PendingRestaurant(models.Model):
             return None
         else:
             return invalid
+
+    @classmethod
+    def delete_media(self, restaurant, form_data):
+        """ Deletes image(s) from Google Cloud bucket and
+        updates the restaurant_image_url field in the PendingRestaurant
+        object
+
+        :param restaurant: the PendingRestaurant object to be updated
+        :type restaurant: :class: `PendingRestaurant`
+        :param form_data: the form containing the list of images to be deleted
+        :type form_data: QueryDict
+        :return: the updated PendingRestaurant object
+        :rtype: :class: `PendingRestaurant`
+        """
+        restaurant_images = form_data.get('restaurant_images')
+        file_path = []
+        old_file_path = ast.literal_eval(restaurant.restaurant_image_url)
+        for image_url in old_file_path:
+            if image_url in restaurant_images:
+                delete(image_url)
+            else:
+                file_path.append(image_url)
+        
+        file_path = json.dumps(file_path) if file_path else ['/']
+        approved_restaurant = Restaurant.objects.filter(_id=restaurant._id).first()
+        setattr(restaurant, 'restaurant_image_url', file_path)
+        if approved_restaurant:
+            setattr(approved_restaurant, 'restaurant_image_url', file_path)
+            save_and_clean(approved_restaurant)
+        
+        return save_and_clean(restaurant)
+
+    @classmethod
+    def upload_media(self, restaurant, form_data, form_file):
+        """ Uploads an image(s) or video to Google Cloud bucket
+        and updates the field in the PendingRestaurant record
+        with the link to the uploaded image/video
+
+        :param restaurant: the PendingRestaurant object to be updated
+        :type restaurant: :class: `PendingRestaurant`
+        :param form_data: the form containing fields that specify the file,
+                            the file type, and whether this PendingRestaurant is just
+                            created or is being edited
+        :type form_data: QueryDict
+        :param form_file: the file(s) to be uploaded
+        :type form_file: File or Array of Files
+        :return: the updated PendingRestaurant object
+        :rtype: :class: `PendingRestaurant`
+        """
+        media_type = form_data.get('media_type')
+        save_location = form_data.get('save_location')
+        media_link = form_data.get('media_link')
+        first_time_submission = form_data.get('first_time_submission')
+
+        if media_type == MediaType.IMAGE.name:
+            if save_location == 'restaurant_video_url':
+                return JsonResponse({"message": "Invalid save_location for media_type"}, status=400)
+
+            if save_location == RestaurantSaveLocations.restaurant_image_url.name:
+                media_files_list = form_file.getlist('media_file')
+                file_path = ast.literal_eval(restaurant.restaurant_image_url)
+                if '/' in file_path: file_path.remove('/')
+                
+                for image in media_files_list:
+                    file_path.append(upload(image, DEV_BUCKET, IMAGE))
+                file_path = json.dumps(file_path)
+            else:
+                media_file = form_file['media_file']
+                file_path = upload(media_file, DEV_BUCKET, IMAGE)
+        else:
+            if save_location != 'restaurant_video_url':
+                return JsonResponse({"message": "Invalid save_location for media_type"}, status=400)
+
+            if media_link:
+                file_path = media_link
+            else:
+                media_file = form_file['media_file']
+                file_path = upload(media_file, DEV_BUCKET, VIDEO)
+
+        approved_restaurant = Restaurant.objects.filter(_id=restaurant._id).first()
+        old_file_path = getattr(restaurant, save_location)
+        if first_time_submission == 'False':
+            setattr(restaurant, 'status', Status.In_Progress.value)
+        if approved_restaurant:
+            approved_file_path = getattr(approved_restaurant, save_location)
+            if save_location != RestaurantSaveLocations.restaurant_image_url.name and approved_file_path != old_file_path:
+                delete(old_file_path)
+        else:
+            delete(old_file_path)
+
+        setattr(restaurant, save_location, file_path)
+        return save_and_clean(restaurant)
 
 
 class UserFavRestrs(models.Model):

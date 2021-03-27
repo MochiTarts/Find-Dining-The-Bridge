@@ -67,4 +67,4 @@ def validate_profane_content(content):
     """
     print(ProfanityFilter().is_clean(content))
     if not ProfanityFilter().is_clean(content):
-        raise ValidationError(None)
+        raise ValidationError("Content contains profane language")
