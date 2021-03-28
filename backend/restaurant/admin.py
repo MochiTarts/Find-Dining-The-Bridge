@@ -10,7 +10,7 @@ from utils.admin import InputFilter, OwnerNameFilter, NameFilter, PriceMaxFilter
 from restaurant.utils import send_approval_email, send_reject_email, send_unpublish_email
 from django.contrib import messages
 from utils.geo_controller import geocode
-# from cloud_storage import cloud_controller
+from utils.cloud_storage import delete
 import ast
 # from decimal import Decimal
 #from django.contrib.admin.actions import delete_selected
@@ -114,13 +114,13 @@ def approve_restr(model_admin, request, queryset):
 
         if r.status == Status.Pending.value:
             count += 1
-            #if old_restaurant:
-            #    if old_restaurant.logo_url != r.logo_url:
-            #        cloud_controller.delete(old_restaurant.logo_url)
-            #    if old_restaurant.cover_photo_url != r.cover_photo_url:
-            #        cloud_controller.delete(old_restaurant.cover_photo_url)
-            #    if old_restaurant.restaurant_video_url != r.restaurant_video_url and 'youtube' not in old_restaurant.restaurant_video_url:
-            #        cloud_controller.delete(old_restaurant.restaurant_video_url)
+            if old_restaurant:
+                if old_restaurant.logo_url != r.logo_url:
+                    delete(old_restaurant.logo_url)
+                if old_restaurant.cover_photo_url != r.cover_photo_url:
+                    delete(old_restaurant.cover_photo_url)
+                if old_restaurant.restaurant_video_url != r.restaurant_video_url and 'youtube' not in old_restaurant.restaurant_video_url:
+                    delete(old_restaurant.restaurant_video_url)
             edit_model(restaurant, {"status": Status.Approved.value, "approved_once": True}, ["status", "approved_once"])
             save_and_clean(restaurant)
             owner_prefer_names = r.owner_preferred_name
@@ -233,7 +233,7 @@ def approve_food(model_admin, request, queryset):
             send_approval_email(owner_prefer_names, email, food_name, 'food')
             if old_food:
                 if old_food.picture != f.picture:
-                    cloud_controller.delete(old_food.picture)
+                    delete(old_food.picture)
             food.status = Status.Approved.value
             save_and_clean(food)
     queryset.update(status=Status.Approved.value)
