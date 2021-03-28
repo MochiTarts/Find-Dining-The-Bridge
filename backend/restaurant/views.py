@@ -523,18 +523,7 @@ class RestaurantDraftView(APIView):
                     schema=restaurant_edit_draft_schema)
         body = request.data
         PendingRestaurant.field_validate_draft(body)
-
-        restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError('restaurant with owner user id '+user_id+' does not exist')
-
-        body["status"] = Status.In_Progress.value
-        body["modified_time"] = timezone.now()
-        edit_model(restaurant, body, restaurant_editable)
-        if address_changed(body):
-            address = restaurant.address + ', ' + restaurant.postalCode + ', Ontario'
-            update_model_geo(restaurant, address)
-        restaurant = save_and_clean(restaurant)
+        restaurant = PendingRestaurant.edit_draft(user_id, body)
         return JsonResponse(model_to_json(restaurant))
 
 # insert_restaurant_for_approval_page
@@ -560,24 +549,8 @@ class RestaurantForApprovalView(APIView):
             body['status'] = Status.Pending.value
             restaurant = PendingRestaurant.insert(body)
         else:
-            restaurant = rest_filter.first()
-            body['status'] = Status.Pending.value
-            body["modified_time"] = timezone.now()
-            edit_model(restaurant, body, restaurant_editable)
-            if address_changed(body):
-                address = restaurant.address + ', ' + restaurant.postalCode + ', Ontario'
-                update_model_geo(restaurant, address)
-            restaurant = save_and_clean(restaurant)
+            restaurant = PendingRestaurant.edit_approval(user_id, body)
         return JsonResponse(model_to_json(restaurant))
-
-
-def address_changed(body):
-    """
-    return if address has changed
-    @param body: edited fields
-    @return: boolean
-    """
-    return 'address' in body
 
 
 def category_is_changed(body):
@@ -631,27 +604,16 @@ class PostView(APIView):
         if not user:
             raise PermissionDenied("Failed to obtain user")
         user_id = user['user_id']
-        posts = list(RestaurantPost.objects.filter(owner_user_id=user_id))
-        response = {"Posts": []}
-        for post in posts:
-            time_stamp = {"Timestamp": post.timestamp.strftime("%b %d, %Y %H:%M")}
-            response["Posts"].append(model_to_json(post, time_stamp))
-        return JsonResponse(response)
+        posts = RestaurantPost.get_by_user_id(user_id)
+        return JsonResponse(posts)
 
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
         user = get_user(request)
         if not user:
             raise PermissionDenied("Failed to obtain user")
-
-        post_filter = RestaurantPost.objects.filter(_id=post_id)
-        post = post_filter.first()
-        if not post:
-            raise IntegrityError("No posts found with this _id: "+post_id)
-
-        post_deleted = model_to_json(post)
-        post_filter.delete()
-        return JsonResponse({"Deleted post": post_deleted})
+        post_deleted = RestaurantPost.remove_post(post_id)
+        return JsonResponse({"Deleted post": model_to_json(post_deleted)})
 
 
 class RestaurantMediaView(APIView):
