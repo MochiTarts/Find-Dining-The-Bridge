@@ -2,13 +2,14 @@
 from djongo import models
 from django.utils import timezone
 from django.core.validators import URLValidator, validate_email
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 
 from utils.validators import (
     check_script_injections, validate_url, validate_name, validate_postal_code, validate_profane_content
 )
-from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json
+from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json, edit_model
 from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 from restaurant.cuisine_dict import load_dict
 from restaurant.fields import StringListField, CustomListField
@@ -103,30 +104,112 @@ class PendingFood(models.Model):
         :type food_data: json
         :param: rest_id: id of the restaurant the dish is associated with
         :type rest_id: ObjectId string
+        :raises: IntegrityError upon any violation of business logic
         :return: PendingFood object of the newly inserted record
         :rtype: PendingFood object
         """
         if not PendingRestaurant.objects.filter(_id=rest_id).exists():
-            raise ValueError("The restaurant does not exist")
+            raise IntegrityError("The restaurant does not exist")
 
         if cls.objects.filter(name=food_data['name'], restaurant_id=rest_id, category=food_data['category']).exists():
-            raise ValueError(
+            raise IntegrityError(
                 "Cannot insert dish, this already exists for this restaurant")
-        else:
-            dish = cls(
-                name=food_data['name'],
-                restaurant_id=rest_id,
-                description=food_data['description'],
-                price=food_data['price'],
-                specials=food_data['specials'],
-                category=food_data['category'],
-            )
-            save_and_clean(dish)
-            restaurant = PendingRestaurant.objects.get(_id=rest_id)
-            if not restaurant.category_exists(food_data['category']):
-                restaurant.categories.append(food_data['category'])
-                restaurant.save(update_fields=['categories'])
-            return dish
+
+        if PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').count() == 6 and food_data['category'] == 'Popular Dish':
+            raise IntegrityError("You can only have up to a maximum of 6 popular dishes.")
+        if PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').count() == 1 and food_data['category'] == 'Signature Dish':
+            raise IntegrityError("You can only have 1 signature dish.")
+
+        dish = cls(
+            name=food_data['name'],
+            restaurant_id=rest_id,
+            description=food_data['description'],
+            price=food_data['price'],
+            specials=food_data['specials'],
+            category=food_data['category'],
+        )
+        save_and_clean(dish)
+        restaurant = PendingRestaurant.objects.get(_id=rest_id)
+        if not restaurant.category_exists(food_data['category']):
+            restaurant.categories.append(food_data['category'])
+            restaurant.save(update_fields=['categories'])
+        return dish
+
+    @classmethod
+    def edit_dish(cls, dish_id, food_data, rest_id):
+        """ Updates a dish given its _id, updated fields and its
+        associated restaurant id
+
+        :param dish_id: the id of the dish
+        :type dish_id: ObjectId str
+        :param food_data: the dish fields containing the updated values
+        :type food_data: dict
+        :param rest_id: the id of the restaurant the dish belongs to
+        :type rest_id: ObjectId str
+        :raises IntegrityError: when there are business logic violations
+        :return: updated PendingDish object
+        :rtype: :class: `PendingDish`
+        """
+        dish = PendingFood.objects.filter(_id=dish_id).first()
+        if not dish:
+            raise IntegrityError("The dish with this _id: "+dish_id+" does not exist")
+        restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
+        if cls.should_add_category(food_data, dish.category, restaurant):
+            cls.add_cateogory(dish.category, restaurant)
+
+        restaurant_editable = ["status"]
+        restaurant_editable_values = {'status': Status.In_Progress.value}
+
+        if 'category' in food_data and PendingFood.objects.filter(restaurant_id=rest_id, category=food_data['category']).exists():
+            if (food_data['category'] == 'Popular Dish' and PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').count() == 6):
+                if ObjectId(dish_id) not in list(PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').values_list('_id', flat=True)):
+                    raise IntegrityError("You can only have up to a maximum of 6 popular dishes.")
+            if (food_data['category'] == 'Signature Dish' and PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').count() == 1):
+                if dish_id != str(PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').first()._id):
+                    raise IntegrityError("You can only have 1 signature dish.")
+            restaurant_editable.append("categories")
+
+        food_data["status"] = Status.Pending.value
+        dish_editable = [field for field in food_data.keys()]
+        edit_model(dish, food_data, dish_editable)
+        dish = save_and_clean(dish, dish_editable)
+
+        if 'categories' in restaurant_editable:
+            restaurant_editable_values['categories'] = PendingFood.get_all_categories(restaurant._id)
+        edit_model(restaurant, restaurant_editable_values, restaurant_editable)
+        save_and_clean(restaurant)
+        return dish
+
+    @classmethod
+    def remove_dish(cls, food_data, rest_id):
+        """ Deletes a dish and its approved version (if it exists) from
+        the database, given data about it. Updates the categories of its associated
+        restaurant given the rest_id if necessary
+
+        :param food_data: the name and category of the dish
+        :type food_data: dict
+        :param rest_id: the id of the associated restaurant
+        :type rest_id: ObjectId str
+        :raises IntegrityError: when there are violations in business logic
+        :return: the deleted dish record
+        :rtype: :class: `PendingDish`
+        """
+        food = PendingFood.objects.filter(
+            name=food_data["name"], category=food_data['category'], restaurant_id=rest_id)
+        if not food.first():
+            raise IntegrityError("The food to be deleted does not exist")
+        deleted_food = food.first()
+        food.delete()
+
+        Food.objects.filter(
+            name=food_data['name'], category=food_data['category'], restaurant_id=rest_id).delete()
+
+        restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
+        restaurant_categories = PendingFood.get_all_categories(rest_id)
+        restaurant_editable = ['categories']
+        edit_model(restaurant, {'categories': restaurant_categories}, restaurant_editable)
+        save_and_clean(restaurant)
+        return deleted_food
 
     @classmethod
     def get_by_restaurant(cls, rest_id):
@@ -151,11 +234,44 @@ class PendingFood(models.Model):
         return list(set(PendingFood.objects.filter(restaurant_id=rest_id).values_list('category', flat=True)))
 
     @classmethod
+    def new_category(cls, category, restaurant):
+        """
+        check if category is new to restaurant
+        @param category: restaurant category
+        @param restaurant: referenced restaurant
+        @return: boolean
+        """
+        return category not in restaurant.categories
+
+    @classmethod
+    def should_add_category(cls, body, category, restaurant):
+        """
+        check if should add category
+        @param body:
+        @param category:
+        @param restaurant:
+        @return:
+        """
+        return cls.new_category(category, restaurant)
+
+    @classmethod
+    def add_cateogory(cls, category, restaurant):
+        """
+        add new category to restaurant
+        @param category:
+        @param restaurant:
+        @return:
+        """
+        restaurant.categories.append(category)
+        restaurant.save(update_fields=['categories'])
+
+    @classmethod
     def field_validate(self, fields):
         """ Validates fields
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
+        :raises: ValidationError when there are any invalid field(s)
         :return: A list of fields that were invalid. Returns None if all fields are valid
         :type: json object
         """
@@ -169,10 +285,8 @@ class PendingFood(models.Model):
                 except (requests.ConnectionError, requests.exceptions.MissingSchema):
                     invalid['Invalid'].append(field)
 
-        if not invalid['Invalid']:
-            return None
-        else:
-            return invalid
+        if invalid['Invalid']:
+            raise ValidationError(message=invalid, code="invalid_input")
 
     def clean_description(self):
         description = {food for food in self.description.split(' ')}
@@ -399,15 +513,20 @@ class PendingRestaurant(models.Model):
 
         :param _id: id of restaurant
         :type _id: ObjectId string
-        :return: restaurant json or None
-        :rtype: json object or None
+        :raises: ObjectDoesNotExist if record of given _id cannot be found
+                MultipleObjectsReturned if there are several records of given _id
+        :return: PendingRestaurant record of given _id
+        :rtype: :class: `PendingRestaurant`
         """
         restasurant_filter = cls.objects.filter(_id=_id)
-        if restasurant_filter.exists() and restasurant_filter.count() == 1:
-            restaurant = restasurant_filter.first()
-            return restaurant
-        else:
-            return None
+        if not restasurant_filter.exists():
+            raise ObjectDoesNotExist(
+                "Cannot find PendingRestaurant with _id: "+_id)
+        if restasurant_filter.count() > 1:
+            raise MultipleObjectsReturned(
+                "Received multiple records of PendingRestaurant with _id: "+_id)
+        restaurant = restasurant_filter.first()
+        return restaurant
 
     @classmethod
     def insert(cls, restaurant_data):
@@ -415,12 +534,12 @@ class PendingRestaurant(models.Model):
 
         :param restaurant_data: json data of restaurant
         :type restaurant_data: json
-        :raises ValueError: if the pending restaurant already exists in the database
+        :raises IntegrityError: if the pending restaurant already exists in the database
         :return: restaurant object representing sent data
         :rtype: :class:`PendingRestaurant` object
         """
         if cls.objects.filter(email=restaurant_data['email']).exists():
-            raise ValueError(
+            raise IntegrityError(
                 'Cannot insert pending restaurant object, an object with this email already exists')
         else:
             restaurant = cls(
@@ -448,8 +567,9 @@ class PendingRestaurant(models.Model):
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
-        :return: A list of fields that were invalid. Returns None if all fields are valid
-        :rtype: json object
+        :raises: ValidationError when there are invalid(s)
+        :return: Returns None if all fields are valid
+        :rtype: None
         """
         invalid = {'Invalid': []}
 
@@ -493,10 +613,8 @@ class PendingRestaurant(models.Model):
             except ValidationError as e:
                 invalid['Invalid'].append('owner_last_name')
 
-        if len(invalid['Invalid']) == 0:
-            return None
-        else:
-            return invalid
+        if len(invalid['Invalid']):
+            raise ValidationError(invalid)
 
     @classmethod
     def field_validate(self, fields):
@@ -504,8 +622,9 @@ class PendingRestaurant(models.Model):
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
-        :return: A list of fields that were invalid. Returns None if all fields are valid
-        :rtype: json object
+        :raises: ValidationError when field(s) is invalid
+        :return: Returns None if all fields are valid
+        :rtype: None
         """
         invalid = {'Invalid': []}
 
@@ -626,10 +745,8 @@ class PendingRestaurant(models.Model):
             except ValidationError as e:
                 invalid['Invalid'].append('full_menu_url')
 
-        if len(invalid['Invalid']) == 0:
-            return None
-        else:
-            return invalid
+        if len(invalid['Invalid']):
+            raise ValidationError(invalid)
 
     @classmethod
     def delete_media(self, restaurant, form_data):
@@ -676,6 +793,7 @@ class PendingRestaurant(models.Model):
         :type form_data: QueryDict
         :param form_file: the file(s) to be uploaded
         :type form_file: File or Array of Files
+        :raises: ValidationError upon any invalid field values or violations against business logic
         :return: the updated PendingRestaurant object
         :rtype: :class: `PendingRestaurant`
         """
@@ -686,7 +804,7 @@ class PendingRestaurant(models.Model):
 
         if media_type == MediaType.IMAGE.name:
             if save_location == 'restaurant_video_url':
-                return JsonResponse({"message": "Invalid save_location for media_type"}, status=400)
+                raise ValidationError("Invalid save_location for media_type")
 
             if save_location == RestaurantSaveLocations.restaurant_image_url.name:
                 media_files_list = form_file.getlist('media_file')
@@ -701,7 +819,7 @@ class PendingRestaurant(models.Model):
                 file_path = upload(media_file, DEV_BUCKET, IMAGE)
         else:
             if save_location != 'restaurant_video_url':
-                return JsonResponse({"message": "Invalid save_location for media_type"}, status=400)
+                raise ValidationError("Invalid save_location for media_type")
 
             if media_link:
                 file_path = media_link
@@ -738,7 +856,7 @@ class UserFavRestrs(models.Model):
         :type user_id: int
         :param rest_id: the id of the restaurant for this user-restaurant favourite relation
         :type rest_id: ObjectId string
-        :raises ValueError: if the relation already exists, or the user or restaurant does not exist
+        :raises IntegrityError: if the relation already exists, or the user or restaurant does not exist
         :return: user-restaurant-favourite relation object with actual restaurant data of
                  the favourite restaurant
         :rtype: json object
@@ -748,21 +866,21 @@ class UserFavRestrs(models.Model):
         user = {}
         restaurant = {}
         if not user_filter.exists():
-            raise ValueError('The user does not exist')
+            raise IntegrityError('The user does not exist')
         elif user_filter.count() > 1:
-            raise ValueError('There are more than one user with this user_id')
+            raise MultipleObjectsReturned('There are more than one user with this user_id')
         else:
             user = user_filter.first()
 
         if not restaurant_filter.filter(_id=rest_id).exists():
-            raise ValueError('The restaurant does not exist')
+            raise IntegrityError('The restaurant does not exist')
         elif restaurant_filter.count() > 1:
-            raise ValueError('There are more than one restaurant with this restaurant_id')
+            raise MultipleObjectsReturned('There are more than one restaurant with this restaurant_id')
         else:
             restaurant = restaurant_filter.first()
 
         if cls.objects.filter(user_id=user_id, restaurant=rest_id).exists():
-            raise ValueError('Cannot insert new user-restaurant-favourite relation, this relation already exists')
+            raise IntegrityError('Cannot insert new user-restaurant-favourite relation, this relation already exists')
         userFaveRest = cls(user_id=user_id, restaurant=rest_id)
         userFaveRest = save_and_clean(userFaveRest)
         response = model_to_json(userFaveRest)
@@ -776,7 +894,7 @@ class UserFavRestrs(models.Model):
 
         :param user_id: id of user to retrieve list of favourited restaurants
         :type user_id: int
-        :raises ValueError: if one of the restaurants in the list of user's favourites does not exist
+        :raises IntegrityError: if one of the restaurants in the list of user's favourites does not exist
         :return: list of restaurants in json format
         :rtype: list of json objects
         """
@@ -787,7 +905,7 @@ class UserFavRestrs(models.Model):
         if user_filter.exists() and user_filter.count() == 1:
             user = user_filter.first()
         else:
-            raise ValueError('The user does not exist')
+            raise IntegrityError('The user does not exist')
 
         favourites = UserFavRestrs.objects.filter(user_id=user_id)
         if not favourites:
@@ -798,7 +916,7 @@ class UserFavRestrs(models.Model):
                 restaurant.offer_options = ast.literal_eval(restaurant.offer_options)
                 restaurants.append(model_to_json(restaurant))
             except ObjectDoesNotExist:
-                raise ValueError(
+                raise IntegrityError(
                     'One of the restaurants in the list of favourites does not appear to exist: '+record.restaurant)
         return restaurants
 
@@ -808,7 +926,7 @@ class UserFavRestrs(models.Model):
 
         :param restaurant_id: id of the restaurant whose list of favourited users to retrieve
         :type restaurant_id: ObjectId string
-        :raises ValueError: if the restaurant does not exist, 
+        :raises IntegrityError: if the restaurant does not exist, 
                             or one of the users who favourited this restaurant does not exist
         :return: list of users who favourited this restaurant
         :rtype: list of json objects
@@ -816,7 +934,7 @@ class UserFavRestrs(models.Model):
         users = []
 
         if not Restaurant.objects.filter(_id=restaurant_id).exists():
-            raise ValueError('The restaurant associated with id '+restaurant_id+' does not exist')
+            raise IntegrityError('The restaurant associated with id '+restaurant_id+' does not exist')
 
         favouriteds = UserFavRestrs.objects.filter(restaurant=restaurant_id)
         if not favouriteds:
@@ -827,7 +945,7 @@ class UserFavRestrs(models.Model):
                 user = user_filter.first()
                 users.append(model_to_json(user))
             else:
-                raise ValueError('One of the users in the list of favourites does not appear to exist: '+record.user)
+                raise IntegrityError('One of the users in the list of favourites does not appear to exist: '+record.user)
         return users
 
     @classmethod
@@ -838,8 +956,8 @@ class UserFavRestrs(models.Model):
         :type user_id: int
         :param rest_id: the id of the restaurant to be removed from the user's list
         :type rest_id: ObjectId string
-        :raises ValueError: if the user does not exist or the user-restaurant favourite relation does not exist
-        :return: Message with success or raise ValueError upon exceptions
+        :raises IntegrityError: if the user does not exist or the user-restaurant favourite relation does not exist
+        :return: Message with success or raise IntegrityError upon exceptions
         :rtype: json object
         """
         user_filter = User.objects.filter(id=user_id)
@@ -847,7 +965,7 @@ class UserFavRestrs(models.Model):
         if user_filter.exists():
             user = user_filter.first()
         else:
-            raise ValueError('The user does not exist')
+            raise IntegrityError('The user does not exist')
 
         user_fav_filter = UserFavRestrs.objects.filter(user_id=user_id, restaurant=rest_id)
         if user_fav_filter.exists():
@@ -857,7 +975,7 @@ class UserFavRestrs(models.Model):
             }
             return response
         else:
-            raise ValueError('This user-restaurant favourite relation does not exist')
+            raise IntegrityError('This user-restaurant favourite relation does not exist')
 
     @classmethod
     def field_validate(self, fields):
@@ -865,6 +983,7 @@ class UserFavRestrs(models.Model):
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
+        :raises: ValidationError when field(s) is invalid
         :return: A list of fields that were invalid. Returns None if all fields are valid
         :rtype: list
         """
@@ -878,16 +997,14 @@ class UserFavRestrs(models.Model):
             else:
                 invalid['Invalid'].append('user_id')
 
-        if 'restaurant_id' in fields:
+        if 'restaurant' in fields:
             try:
-                ObjectId(fields['restaurant_id'])
+                ObjectId(fields['restaurant'])
             except Exception:
-                invalid['Invalid'].append('restaurant_id')
+                invalid['Invalid'].append('restaurant')
 
-        if len(invalid['Invalid']) == 0:
-            return None
-        else:
-            return invalid
+        if len(invalid['Invalid']):
+            raise ValidationError(invalid)
 
 
 class RestaurantPost(models.Model):
@@ -917,8 +1034,9 @@ class RestaurantPost(models.Model):
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
-        :return: A list of fields that were invalid. Returns None if all fields are valid
-        :rtype: list
+        :raises ValidationError when there are invalid fields
+        :return: Returns None if all fields are valid
+        :rtype: None
         """
 
         invalid = {'Invalid': []}
@@ -938,7 +1056,5 @@ class RestaurantPost(models.Model):
             except ValidationError:
                 invalid['Invalid'].append('content')
 
-        if len(invalid['Invalid']) == 0:
-            return None
-        else:
-            return invalid
+        if len(invalid['Invalid']):
+            raise ValidationError(invalid)

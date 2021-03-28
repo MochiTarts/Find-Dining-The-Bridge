@@ -24,7 +24,7 @@ def save_and_clean(model, updated_fields=None):
 
 def get_user(request):
     header = request.META.get('HTTP_AUTHORIZATION')
-    print(header)
+    #print(header)
     if header and header.startswith('Bearer'):
         token = header.split(' ')[1]
         return jwt_decode(token)

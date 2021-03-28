@@ -177,6 +177,7 @@ REST_FRAMEWORK = {
         'anon': '100/hour',
         'user': '100/hour'
     },
+    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler'
 }
 # doesn't work right now because Djongo can't translate aggregation functions in sql
 
