@@ -68,8 +68,8 @@ class SignUp(APIView):
 
 class RestaurantOwnerView(APIView):
     """ Restaurant Owner view """
-    #permission_classes = [ROPermission]
-    permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
+    #permission_classes = (AllowAny,)
 
     def get(self, request):
         """ Retrieves a restaurant owner profile """
