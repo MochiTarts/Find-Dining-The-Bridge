@@ -27,7 +27,6 @@ def get_user(request):
         return False
 
     header = request.META.get('HTTP_AUTHORIZATION')
-
     if header and header.startswith('Bearer'):
         token = header.split(' ')[1]
         print(jwt_decode(token))
