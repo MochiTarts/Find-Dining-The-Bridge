@@ -23,7 +23,6 @@ from restaurant.models import (
 from google.analytics import get_access_token, get_analytics_data
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
-from utils.common import get_user
 from utils.permissions import ROPermission
 
 from bson import ObjectId
@@ -280,10 +279,10 @@ class PendingDishView(APIView):
 
     def get(self, request):
         """Retrieve all dishes from a restaurant"""
-        user = get_user(request)
+        user = request.user
         if not user:
             return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-        user_id = user['user_id']
+        user_id = user.id
 
         restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
         if not restaurant:
@@ -296,10 +295,10 @@ class PendingDishView(APIView):
     def post(self, request, dish_id=''):
         """ Insert dish into database """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data, schema=food_schema)
             body = request.data
@@ -339,10 +338,10 @@ class PendingDishView(APIView):
     def put(self, request, dish_id):
         """ Update Dish data """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data,
                      schema=food_edit_schema)
@@ -401,10 +400,10 @@ class PendingDishView(APIView):
     def delete(self, request):
         """ Deletes dish from database """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data, schema=food_delete_schema)
             body = request.data
@@ -471,10 +470,10 @@ class UserFavView(APIView):
     def post(self, request):
         """ Add a new user-restaurant-favourite relation """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data, schema=user_fav_schema)
             body = request.data
@@ -505,10 +504,10 @@ class UserFavView(APIView):
     def get(self, request):
         """ Get all restaurants favourited by a user """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             response = UserFavRestrs.getUserFavourites(user_id)
             return JsonResponse(response, safe=False)
@@ -554,10 +553,10 @@ class FavRelationView(APIView):
     def delete(self, request, rest_id):
         """ Remove a new user-restaurant-favourite relation """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             body = {'user_id': user_id, 'restaurant_id': rest_id}
             invalid = UserFavRestrs.field_validate(body)
@@ -622,10 +621,10 @@ class PendingRestaurantView(APIView):
     def get(self, request):
         """ Retrieve restaurant from pending collection by the owner's user_id """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
             if restaurant:
@@ -679,7 +678,7 @@ class RestaurantDraftView(APIView):
     def post(self, request):
         """Insert new restaurant as a draft into database"""
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
 
@@ -717,10 +716,10 @@ class RestaurantDraftView(APIView):
     def put(self, request):
         """Edit a restaurant profile and save it as a draft in the database"""
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data,
                      schema=restaurant_edit_draft_schema)
@@ -772,10 +771,10 @@ class RestaurantForApprovalView(APIView):
     def put(self, request):
         """ Insert or update a restaurant record for admin approval """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data,
                      schema=restaurant_insert_for_approval_schema)
@@ -903,10 +902,10 @@ class PostView(APIView):
     def post(self, request):
         """ Insert a new post for a restaurant """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data, schema=post_schema)
             body = request.data
@@ -935,10 +934,10 @@ class PostView(APIView):
     def get(self, request):
         """ Get all posts for a restaurant """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
             posts = list(RestaurantPost.objects.filter(owner_user_id=user_id))
             response = {"Posts": []}
             for post in posts:
@@ -957,7 +956,7 @@ class PostView(APIView):
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
 

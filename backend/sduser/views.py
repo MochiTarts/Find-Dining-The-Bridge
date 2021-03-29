@@ -8,7 +8,6 @@ from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from utils.common import get_user
 from utils.math import calculate_distance
 
 from subscriber_profile.models import SubscriberProfile
@@ -32,11 +31,12 @@ class deactivateView(APIView):
     def post(self, request):
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
-        current_user = get_user(request)
+        current_user = request.user
+
         if not current_user:
             return JsonResponse({'message': 'fail to obtain user', 'code': 'deactivation_fail'}, status=405)
 
-        if current_user['user_id'] is not user_id:
+        if current_user.id is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
 
         try:
@@ -57,10 +57,10 @@ class editView(APIView):
     def put(self, request):
         try:
             body = request.data
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user = User.objects.get(id=user['user_id'])
+
             for field in body:
                 setattr(user, field, body[field])
             user.save()
@@ -84,11 +84,11 @@ class NearbyRestaurantsView(APIView):
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
         try:
-            user = get_user(request)
+            user = user.request
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
-            role = user['role']
+            user_id = user.id
+            role = user.role
             user = None
 
             if role == 'BU':
