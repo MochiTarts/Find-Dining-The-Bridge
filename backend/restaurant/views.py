@@ -101,8 +101,6 @@ restaurant_insert_for_approval_schema = {
         "owner_first_name": {"type": "array"},
         "owner_last_name": {"type": "array"},
         "owner_preferred_name": {"type": "array"},
-        "owner_story": {"type": "string"},
-        "owner_picture_url": {"type": "string"},
 
         "sysAdminComments": {"type": "string"},
         "categories": {"type": "array"},
@@ -153,8 +151,6 @@ restaurant_insert_draft_schema = {
         "owner_first_name": {"type": "array"},
         "owner_last_name": {"type": "array"},
         "owner_preferred_name": {"type": "array"},
-        "owner_story": {"type": "string"},
-        "owner_picture_url": {"type": "string"},
 
         "sysAdminComments": {"type": "string"},
         "categories": {"type": "array"},
@@ -203,8 +199,6 @@ restaurant_edit_draft_schema = {
         "owner_first_name": {"type": "array"},
         "owner_last_name": {"type": "array"},
         "owner_preferred_name": {"type": "array"},
-        "owner_story": {"type": "string"},
-        "owner_picture_url": {"type": "string"},
 
         "sysAdminComments": {"type": "string"},
         "categories": {"type": "array"},
@@ -245,7 +239,6 @@ restaurant_editable = [
     "web_url", "facebook", "twitter", "instagram",
     "bio", "cover_photo_url", "logo_url", "restaurant_video_url", "restaurant_image_url",
     "owner_first_name", "owner_last_name", "owner_preferred_name",
-    "owner_story", "owner_picture_url",
     "status", "modified_time", "sysAdminComments",
     "open_hours", "payment_methods", "full_menu_url"
 ]

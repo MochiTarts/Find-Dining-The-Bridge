@@ -8,7 +8,7 @@ from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from .utils import get_nearby_restaurants
+from utils.math import get_nearby_restaurants
 
 import json
 import ast

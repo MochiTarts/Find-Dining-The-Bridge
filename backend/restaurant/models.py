@@ -405,8 +405,6 @@ class Restaurant(models.Model):
     owner_first_name = CustomListField(default=[], blank=True)
     owner_last_name = CustomListField(default=[], blank=True)
     owner_preferred_name = CustomListField(default=[], blank=True)
-    owner_story = models.CharField(max_length=2000, blank=True)
-    owner_picture_url = models.CharField(max_length=200, blank=True)
 
     categories = CustomListField(default=[], blank=True)
     status = models.CharField(
@@ -471,7 +469,7 @@ class PendingRestaurant(models.Model):
         'name', 'phone', 'web_url', 'years',
         'address', 'streetAddress2', 'streetAddress3',
         'postalCode', 'owner_first_name', 'owner_last_name',
-        'owner_preferred_name', 'owner_story',
+        'owner_preferred_name',
         'email', 'locationNotes', 'facebook', 'twitter',
         'instagram', 'bio', 'dineinPickupDetails', 'restaurant_video_url',
         'restaurant_image_url', 'full_menu_url',
@@ -517,8 +515,6 @@ class PendingRestaurant(models.Model):
     owner_first_name = CustomListField(default=[], blank=True)
     owner_last_name = CustomListField(default=[], blank=True)
     owner_preferred_name = CustomListField(default=[], blank=True)
-    owner_story = models.CharField(max_length=3000, blank=True)
-    owner_picture_url = models.CharField(max_length=200, blank=True)
 
     categories = CustomListField(default=[], blank=True)
     status = models.CharField(
