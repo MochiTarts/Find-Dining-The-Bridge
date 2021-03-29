@@ -336,7 +336,7 @@ class PendingDishView(APIView):
         """ Deletes dish from database """
         user = request.user
         if not user:
-            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
         user_id = user.id
         validate(instance=request.data, schema=food_delete_schema)
@@ -610,7 +610,7 @@ class PostView(APIView):
         """ Get all posts for a restaurant """
         user = request.user
         if not user:
-            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
         user_id = user.id
         posts = RestaurantPost.get_by_user_id(user_id)
         return JsonResponse(posts)
@@ -619,7 +619,7 @@ class PostView(APIView):
         """ Deletes a single restaurant post """
         user = request.user
         if not user:
-            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
         post_deleted = RestaurantPost.remove_post(post_id)
         return JsonResponse({"Deleted post": model_to_json(post_deleted)})
 
@@ -675,7 +675,7 @@ class DishMediaView(APIView):
         """ For inserting or updating restaurant media """
         user = request.user
         if not user:
-            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
         user_id = user.id
         dish = PendingFood.objects.filter(_id=dish_id).first()
