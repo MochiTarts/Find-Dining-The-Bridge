@@ -873,7 +873,7 @@ class PendingRestaurant(models.Model):
 
         if media_type == MediaType.IMAGE.name:
             if save_location == 'restaurant_video_url':
-                raise ValidationError("Invalid save_location for media_type")
+                raise ValidationError(message="Invalid save_location for media_type", code="invalid_input")
 
             if save_location == RestaurantSaveLocations.restaurant_image_url.name:
                 media_files_list = form_file.getlist('media_file')
@@ -888,9 +888,12 @@ class PendingRestaurant(models.Model):
                 file_path = upload(media_file, DEV_BUCKET, IMAGE)
         else:
             if save_location != 'restaurant_video_url':
-                raise ValidationError("Invalid save_location for media_type")
+                raise ValidationError(message="Invalid save_location for media_type", code="invalid_input")
 
             if media_link:
+                youtube_url_check = re.compile("^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$")
+                if not youtube_url_check.match(media_link):
+                    raise ValidationError(message="Invalid YouTube url", code="invalid_input")
                 file_path = media_link
             else:
                 media_file = form_file['media_file']

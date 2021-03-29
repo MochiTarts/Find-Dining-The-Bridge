@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, QueryDict
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import IntegrityError
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from jsonschema import validate
-from jsonschema.exceptions import ValidationError
 
 from restaurant.enum import Status, MediaType, RestaurantSaveLocations, FoodSaveLocations
 from restaurant.models import (
@@ -618,22 +617,23 @@ class PostView(APIView):
 
 class RestaurantMediaView(APIView):
     """ Restaurant media (image/video) view """
-    #permission_classes = (AllowAny,)
+    permission_classes = (AllowAny,)
 
     def put(self, request):
         """ For inserting or updating restaurant media """
-        user = get_user(request)
-        if not user:
-            raise PermissionDenied("Failed to obtain user")
+        #user = get_user(request)
+        #if not user:
+        #    raise PermissionDenied("Failed to obtain user")
         
-        user_id = user['user_id']
+        #user_id = user['user_id']
+        user_id = 0
         restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
         if not restaurant:
             raise IntegrityError("Could not find restaurant owned by this user")
 
         form = RestaurantMediaForm(request.data, request.FILES)
         if not form.is_valid():
-            raise ValidationError(form.errors)
+            raise ValidationError(message=form.errors, code="invalid_input")
 
         restaurant = PendingRestaurant.upload_media(restaurant, request.data, request.FILES)
         return JsonResponse(model_to_json(restaurant))
@@ -651,7 +651,7 @@ class RestaurantMediaView(APIView):
 
         form = RestaurantImageDeleteForm(request.data, request.FILES)
         if not form.is_valid():
-            raise ValidationError(form.errors)
+            raise ValidationError(message=form.errors, code="invalid_input")
 
         restaurant = PendingRestaurant.delete_media(restaurant, request.data)
         return JsonResponse(model_to_json(restaurant))
@@ -674,7 +674,7 @@ class DishMediaView(APIView):
 
         form = FoodMediaForm(request.data, request.FILES)
         if not form.is_valid():
-            raise ValidationError(form.errors)
+            raise ValidationError(message=form.errors, code="invalid_input")
 
         dish = PendingFood.upload_media(dish, request.data, request.FILES)
         return JsonResponse(model_to_json(dish))
