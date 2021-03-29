@@ -407,23 +407,6 @@
       </div>
 
       <div class="form-group">
-        <label for="owner-story">Owner Story</label>
-        <textarea
-          class="form-control"
-          id="owner-story"
-          rows="7"
-          placeholder="Tell customers the story of your culinary joruney towards opening your restaurant..."
-          value="{{ profileId ? restaurantDetails.owner_story : '' }}"
-        ></textarea>
-        <app-dynamic-label
-          class="error-label"
-          [name]="'errorStory'"
-          [message]="validator.errors['owner_story']"
-          tabindex="0"
-        ></app-dynamic-label>
-      </div>
-
-      <div class="form-group">
         <label for="open_hours">Open Hours <app-required-star></app-required-star></label>
         <textarea
           class="form-control"
@@ -488,18 +471,6 @@
             name="logo"
             id="logo"
             (change)="onFileSelect($event)"
-          />
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-md-6">
-          <label for="avatar">Add owner image:</label>
-          <input
-            type="file"
-            name="owner"
-            id="owner"
-            (change)="onOwnerImageSelect($event)"
           />
         </div>
       </div>

@@ -16,6 +16,7 @@ import { formValidation } from '../../_validation/forms';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { MediaService } from '../../_services/media.service';
 
 @Component({
   selector: 'app-restaurant-setup',
@@ -26,7 +27,6 @@ export class RestaurantSetupComponent implements OnInit {
   // role: string = '';
   email: string = '';
   userId: string = '';
-  // username: string = '';
   profileId: string = '';
   restaurantDetails: any;
 
@@ -40,7 +40,6 @@ export class RestaurantSetupComponent implements OnInit {
   validator: formValidator = new restaurantValidator();
   draftValidator: formValidator = new draftValidator();
   newImage: boolean = false;
-  newOwnerImage: boolean = false;
 
   faEdit = faEdit;
 
@@ -52,6 +51,7 @@ export class RestaurantSetupComponent implements OnInit {
     private restaurantService: RestaurantService,
     private authService: AuthService,
     private userService: UserService,
+    private mediaService: MediaService,
   ) { }
 
   ngOnInit(): void {
@@ -59,15 +59,12 @@ export class RestaurantSetupComponent implements OnInit {
       const user = this.tokenStorage.getUser();
       // this.role = user.role;
       this.email = user.email;
-      // this.username = user.username;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
-      // this.profileId = '1';
     }
 
     this.uploadForm = this.formBuilder.group({
       file: [''],
-      owner_image: [''],
       owner_names: this.formBuilder.array([]),
       cuisines: [[]],
       payments: [[]],
@@ -147,28 +144,11 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
-  onOwnerImageSelect(event) {
-    if (event.target.files.length > 0) {
-      this.newOwnerImage = true;
-      const file = event.target.files[0];
-      this.uploadForm.get('owner_image').setValue(file);
-    }
-  }
-
-  onSubmit() {
-    // const formData = new FormData();
-    // formData.append('file', this.uploadForm.get('file').value);
-    // return this.restaurantsService
-    //   .uploadRestaurantMedia(formData, this.profileId, 'logo')
-    // //this.newImage = false;
-  }
-
-  onSubmitOwnerImage() {
-    // const formData = new FormData();
-    // formData.append('file', this.uploadForm.get('owner_image').value);
-    // return this.restaurantsService
-    //   .uploadRestaurantMedia(formData, this.profileId, 'owner')
-    // //this.newOwnerImage = false;
+  onSubmit(option) {
+    const formData = new FormData();
+    formData.append('media_file', this.uploadForm.get('file').value);
+    return this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'logo_url', option.includes('SETUP') ? 'True' : 'False');
+    // this.newImage = false;
   }
 
   getAnswer() {
@@ -223,7 +203,6 @@ export class RestaurantSetupComponent implements OnInit {
       locationNotes: (<HTMLInputElement>document.getElementById('location-notes')).value,
 
       bio: (<HTMLInputElement>document.getElementById('restaurant-bio')).value,
-      owner_story: (<HTMLInputElement>document.getElementById('owner-story')).value,
       web_url: (<HTMLInputElement>document.getElementById('web_url')).value,
       facebook: (<HTMLInputElement>document.getElementById('facebook')).value,
       twitter: (<HTMLInputElement>document.getElementById('twitter')).value,
@@ -328,18 +307,29 @@ export class RestaurantSetupComponent implements OnInit {
           formValidation.HandleInvalid(data, (key) => this.validator.setError(key))
         } else {
 
+          if (this.newImage) {
+            this.onSubmit(option).subscribe(() => {
+              this.newImage = false;
+            })
+          }
+
           if (option.includes('SETUP')) {
             let roInfo = {
               restaurant_id: data._id,
             };
-            this.restaurantService.roSignup(roInfo).subscribe(() => {
-              this.authService.refreshToken().subscribe((token) => {
-                this.tokenStorage.updateTokenAndUser(token.access);
-                this.router.navigate(['/restaurant']).then(() => {
-                  this.chooseAlert(option);
-                  this.reload();
+            this.restaurantService.roSignup(roInfo).subscribe((profile) => {
+              var sduserInfo = {
+                profile_id: profile.id,
+              };
+              this.userService.editAccountUser(sduserInfo).subscribe(() => {
+                this.authService.refreshToken().subscribe((token) => {
+                  this.tokenStorage.updateTokenAndUser(token.access);
+                  this.router.navigate(['/restaurant']).then(() => {
+                    this.chooseAlert(option);
+                    this.reload();
+                  });
                 });
-              })
+              });
             });
 
           } else {
