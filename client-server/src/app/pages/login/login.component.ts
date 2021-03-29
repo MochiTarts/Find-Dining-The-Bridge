@@ -12,6 +12,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -60,7 +61,8 @@ export class LoginComponent implements OnInit {
     private socialAuth: SocialAuthService,
     private ref: ChangeDetectorRef,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private titleService: Title,
   ) { }
 
   ngAfterViewInit(): void {
@@ -79,6 +81,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle("Login In / Register | Find Dining Scarborough");
     // if token is already present then the user is logged in using basic credentials
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;

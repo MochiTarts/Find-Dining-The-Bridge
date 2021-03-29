@@ -38,14 +38,14 @@ export class AllRestaurantsComponent implements OnInit {
 
   constructor(
     private restaurantService: RestaurantService,
-    private titleService: Title 
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
     this.loadRestaurants();
-    //this.loadDishes();
+    this.loadDishes();
     this.allCuisines = cuisinesStr;
-    this.titleService.setTitle("Browse | Find Dining Scarborough"); 
+    this.titleService.setTitle("Browse | Find Dining Scarborough");
   }
 
   loadRestaurants() {
@@ -244,7 +244,7 @@ export class AllRestaurantsComponent implements OnInit {
             .includes(this.inputRestaurant.toLowerCase()) ||
           query.pricepoint
             .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) 
+            .includes(this.inputRestaurant.toLowerCase())
         ) {
           this.searchedRestaurants.push(query);
         }
