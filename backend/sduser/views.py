@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
 #from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from utils.math import get_nearby_restaurants
