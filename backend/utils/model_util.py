@@ -48,10 +48,7 @@ def edit_model(model, body, editable):
 
 
 def update_model_geo(model, address):
-    try:
-        model.GEO_location = geocode(address)
-    except ValueError:
-        pass
+    model.GEO_location = geocode(address)
     return model
 
 
