@@ -315,6 +315,8 @@ RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAP_PUB_KEY')
 
 GEOCODE_API_KEY = os.environ.get('GEOCODE_API_KEY')
 
+GA_VIEW_ID = os.environ.get('GA_VIEW_ID')
+
 GOOGLE_OAUTH2_CLIENT_EMAIL = os.environ.get('GOOGLE_OAUTH2_CLIENT_EMAIL')
 # note that the replace is required after reading
 GOOGLE_OAUTH2_PRIVATE_KEY = os.environ.get('GOOGLE_OAUTH2_PRIVATE_KEY').replace('\\n', '\n')

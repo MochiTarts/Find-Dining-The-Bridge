@@ -432,7 +432,7 @@ class RestaurantView(APIView):
 
     def get(self, request, rest_id):
         """ Retrieve approved restaurant by id """
-        restaurant = Restaurant.get(_id)
+        restaurant = Restaurant.get(rest_id)
         restaurant_image_url = ast.literal_eval(
             restaurant.restaurant_image_url)
         offer_options = ast.literal_eval(restaurant.offer_options)
@@ -571,6 +571,7 @@ class AnalyticsAccessTokenView(APIView):
 
 class AnalyticsDataView(APIView):
     """ analytics data view """
+    permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
         """ Retrieves analytics data for a restaurant page given restaurant id """

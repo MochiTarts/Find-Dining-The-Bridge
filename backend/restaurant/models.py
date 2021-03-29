@@ -452,13 +452,13 @@ class Restaurant(models.Model):
         :rtype: :class: `Restaurant`
         """
         restaurant_filter = cls.objects.filter(_id=_id)
-        if not restasurant_filter.exists():
+        if not restaurant_filter.exists():
             raise NotFound(
                 "Cannot find Restaurant with _id: "+_id)
-        if restasurant_filter.count() > 1:
+        if restaurant_filter.count() > 1:
             raise MultipleObjectsReturned(
                 "Received multiple records of Restaurant with _id: "+_id)
-        restaurant = restasurant_filter.first()
+        restaurant = restaurant_filter.first()
         return restaurant
 
 
@@ -576,14 +576,14 @@ class PendingRestaurant(models.Model):
         :return: PendingRestaurant record of given _id
         :rtype: :class: `PendingRestaurant`
         """
-        restasurant_filter = cls.objects.filter(_id=_id)
-        if not restasurant_filter.exists():
+        restaurant_filter = cls.objects.filter(_id=_id)
+        if not restaurant_filter.exists():
             raise NotFound(
                 "Cannot find PendingRestaurant with _id: "+_id)
-        if restasurant_filter.count() > 1:
+        if restaurant_filter.count() > 1:
             raise MultipleObjectsReturned(
                 "Received multiple records of PendingRestaurant with _id: "+_id)
-        restaurant = restasurant_filter.first()
+        restaurant = restaurant_filter.first()
         return restaurant
 
     @classmethod

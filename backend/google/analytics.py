@@ -1,6 +1,7 @@
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from django.conf import settings
+from datetime import date
 
 credentials = service_account.Credentials.from_service_account_info({
     "client_email": settings.GOOGLE_ANALYTICS_CLIENT_EMAIL,
@@ -41,3 +42,5 @@ def get_analytics_data(restaurant_id):
         filters='ga:pagePath==/restaurant?restaurantId='+restaurant_id,
         dimensions='ga:date',
         prettyPrint=True).execute()
+
+#print(get_analytics_data('60305a70ad235a859cfe8731'))
