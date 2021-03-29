@@ -25,7 +25,6 @@ from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, Foo
 from google.analytics import get_access_token, get_analytics_data
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
-from utils.common import get_user
 from utils.permissions import ROPermission
 
 from bson import ObjectId
@@ -281,11 +280,11 @@ class PendingDishView(APIView):
 
     def get(self, request):
         """Retrieve all dishes from a restaurant"""
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
-
-        user_id = user['user_id']
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+            
+        user_id = user.id
         restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
         if not restaurant:
             raise IntegrityError("The restaurant with owner_user_id: "+user_id+" does not exist")
@@ -296,11 +295,11 @@ class PendingDishView(APIView):
 
     def post(self, request):
         """ Insert dish into database """
-        user = get_user(request)
+        user = request.user
         if not user:
             raise PermissionDenied(detail="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         validate(instance=request.data, schema=food_schema)
         body = request.data
         PendingFood.field_validate(body)
@@ -315,11 +314,11 @@ class PendingDishView(APIView):
 
     def put(self, request, dish_id):
         """ Update Dish data """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         validate(instance=request.data,
                     schema=food_edit_schema)
         body = request.data
@@ -335,11 +334,11 @@ class PendingDishView(APIView):
 
     def delete(self, request):
         """ Deletes dish from database """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         validate(instance=request.data, schema=food_delete_schema)
         body = request.data
         restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
@@ -374,15 +373,15 @@ def category_exists(restaurant_id, category):
 class UserFavView(APIView):
     """ user fav view """
     #permission_classes = (AllowAny,)
-    permission_classes = [ROPermission]
+    #permission_classes = [ROPermission]
 
     def post(self, request):
         """ Add a new user-restaurant-favourite relation """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         validate(instance=request.data, schema=user_fav_schema)
         body = request.data
         body['user_id'] = user_id
@@ -393,11 +392,11 @@ class UserFavView(APIView):
 
     def get(self, request):
         """ Get all restaurants favourited by a user """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         response = UserFavRestrs.getUserFavourites(user_id)
         return JsonResponse(response, safe=False)
 
@@ -406,7 +405,7 @@ class UserFavView(APIView):
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
     #permission_classes = (AllowAny,)
-    permission_classes = [ROPermission]
+    #permission_classes = [ROPermission]
 
     def get(self, request, rest_id):
         """ Get all users who favourited the requested restaurant """
@@ -418,15 +417,15 @@ class UserFavRestaurantView(APIView):
 class FavRelationView(APIView):
     """ remove fav relation view """
     #permission_classes = (AllowAny,)
-    permission_classes = [ROPermission]
+    #permission_classes = [ROPermission]
 
     def delete(self, request, rest_id):
         """ Remove a new user-restaurant-favourite relation """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         body = {'user_id': user_id, 'restaurant_id': rest_id}
         UserFavRestrs.field_validate(body)
         response = UserFavRestrs.remove_fav(user_id, rest_id)
@@ -436,7 +435,7 @@ class FavRelationView(APIView):
 class RestaurantView(APIView):
     """ get restaurant view """
     permission_classes = (AllowAny,)
-    permission_classes = [ROPermission]
+    #permission_classes = [ROPermission]
 
     def get(self, request, rest_id):
         """ Retrieve approved restaurant by id """
@@ -460,11 +459,11 @@ class PendingRestaurantView(APIView):
 
     def get(self, request):
         """ Retrieve restaurant from pending collection by the owner's user_id """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
         if not restaurant:
             raise ObjectDoesNotExist('No pending restaurant found with owner user id of this: '+_id)
@@ -508,9 +507,9 @@ class RestaurantDraftView(APIView):
 
     def post(self, request):
         """Insert new restaurant as a draft into database"""
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
         validate(instance=request.data,
                     schema=restaurant_insert_draft_schema)
@@ -521,11 +520,11 @@ class RestaurantDraftView(APIView):
 
     def put(self, request):
         """Edit a restaurant profile and save it as a draft in the database"""
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         validate(instance=request.data,
                     schema=restaurant_edit_draft_schema)
         body = request.data
@@ -542,11 +541,11 @@ class RestaurantForApprovalView(APIView):
 
     def put(self, request):
         """ Insert or update a restaurant record for admin approval """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         validate(instance=request.data,
                     schema=restaurant_insert_for_approval_schema)
         body = request.data
@@ -594,11 +593,11 @@ class PostView(APIView):
 
     def post(self, request):
         """ Insert a new post for a restaurant """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         validate(instance=request.data, schema=post_schema)
         body = request.data
         body['owner_user_id'] = user_id
@@ -609,34 +608,34 @@ class PostView(APIView):
 
     def get(self, request):
         """ Get all posts for a restaurant """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
-        user_id = user['user_id']
+            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+        user_id = user.id
         posts = RestaurantPost.get_by_user_id(user_id)
         return JsonResponse(posts)
 
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
         post_deleted = RestaurantPost.remove_post(post_id)
         return JsonResponse({"Deleted post": model_to_json(post_deleted)})
 
 
 class RestaurantMediaView(APIView):
     """ Restaurant media (image/video) view """
-    permission_classes = (AllowAny,)
+    #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def put(self, request):
         """ For inserting or updating restaurant media """
-        #user = get_user(request)
-        #if not user:
-        #    raise PermissionDenied("Failed to obtain user")
+        user = request.user
+        if not user:
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
         
-        #user_id = user['user_id']
-        user_id = 0
+        user_id = user.id
         restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
         if not restaurant:
             raise IntegrityError("Could not find restaurant owned by this user")
@@ -650,11 +649,11 @@ class RestaurantMediaView(APIView):
 
     def delete(self, request):
         """ For removing image(s) from the restaurant_image_url field and Google Cloud bucket """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
         if not restaurant:
             raise IntegrityError("Could not find restaurant owned by this user")
@@ -670,14 +669,15 @@ class RestaurantMediaView(APIView):
 class DishMediaView(APIView):
     """ Dish media (image) view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def put(self, request, dish_id):
         """ For inserting or updating restaurant media """
-        user = get_user(request)
+        user = request.user
         if not user:
-            raise PermissionDenied("Failed to obtain user")
+            raise raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        user_id = user['user_id']
+        user_id = user.id
         dish = PendingFood.objects.filter(_id=dish_id).first()
         if not dish:
             raise IntegrityError("Could not find the dish with id: "+dish_id)

@@ -1,0 +1,25 @@
+@import "src/styles";
+
+.cardBox {
+  max-width: 300px;
+  height: 250px;
+  flex: 0 0 auto;
+  background-color: $background-color2;
+  border: 0px;
+}
+
+.cardBox::-webkit-scrollbar {
+  display: none;
+}
+
+img {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 0px;
+}
+
+p {
+  padding: 10px 0px;
+  color: $navigation-color;
+}

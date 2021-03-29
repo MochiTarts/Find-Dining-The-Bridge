@@ -59,11 +59,12 @@ export class GetInvolvedComponent implements OnInit {
     }
 
     this.emailService.sendEmail(emailInfo).subscribe((data) => {
-      console.log(data.message);
+      alert("Your message is submitted!");
+      window.location.reload();
     },
     err => {
-      console.log(err.error.message);
-    })
+      alert(err.error.message);
+    });
   }
 
 }

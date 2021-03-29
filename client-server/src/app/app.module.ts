@@ -51,6 +51,7 @@ import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-servi
 import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page.component';
 import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
 import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
+import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -70,7 +71,8 @@ import { RestaurantProfileFormComponent } from './components/restaurant-profile-
 import { PageErrorComponent } from './components/page-error/page-error.component';
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 import { PostComponent } from './components/post/post.component';
-import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
+import { PartnerCardComponent } from './components/partner-card/partner-card.component';
+
 
 @NgModule({
   declarations: [
@@ -105,6 +107,7 @@ import { GetInvolvedComponent } from './pages/get-involved/get-involved.componen
     PostComponent,
     MenuEditComponent,
     GetInvolvedComponent,
+    PartnerCardComponent,
   ],
   imports: [
     BrowserModule,
