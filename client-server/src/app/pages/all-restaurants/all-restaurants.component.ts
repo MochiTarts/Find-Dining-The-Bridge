@@ -43,7 +43,7 @@ export class AllRestaurantsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadRestaurants();
-    this.loadDishes();
+    // this.loadDishes();
     this.allCuisines = cuisinesStr;
     this.titleService.setTitle("Browse | Find Dining Scarborough");
   }

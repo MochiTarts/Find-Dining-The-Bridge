@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   loginErrorMessage: string = '';
-  signupErrorMessage: string = '';
+
   infoMessage = '';
   role: string = 'BU';
   user = {};
@@ -48,6 +48,15 @@ export class LoginComponent implements OnInit {
   };
   isSignupSuccessful = false;
   isSignUpFailed = false;
+  signupErrorMessage: string = '';
+
+  resetForm: any = {
+    email: null,
+  };
+  resetSuccessful = false;
+  resetFailed = false;
+  resetErrorMessage: string = '';
+
 
   showDetails: boolean = true;
   hide: boolean = true;
@@ -139,83 +148,111 @@ export class LoginComponent implements OnInit {
   // signup or login form on submit
   onSubmit(type: string): void {
 
-    if (type == 'login') {
-      const { username, password } = this.loginForm;
+    switch (type) {
+      case 'login': {
+        const { username, password } = this.loginForm;
 
-      this.authService.login(username, password).subscribe(
-        data => {
+        this.authService.login(username, password).subscribe(
+          data => {
 
-          var token = data.access;
-          var errors = [];
+            var token = data.access;
+            var errors = [];
 
-          this.tokenStorage.updateTokenAndUser(token);
-          this.authService.updateLoginStatus(true);
-          this.isLoginFailed = false;
-          this.isLoggedIn = true;
-          this.role = this.tokenStorage.getUser().role;
-          let profileId = this.tokenStorage.getUser().profile_id;
+            this.tokenStorage.updateTokenAndUser(token);
+            this.authService.updateLoginStatus(true);
+            this.isLoginFailed = false;
+            this.isLoggedIn = true;
+            this.role = this.tokenStorage.getUser().role;
+            let profileId = this.tokenStorage.getUser().profile_id;
 
-          if (this.role == 'RO') {
-            if (profileId == null)
-              this.router.navigate(['/restaurant-setup']);
-            else
-              this.router.navigate(['/restaurant']);
-          } else {
-            this.router.navigate(['/']);
-          }
-
-        },
-        // login failed
-        error => {
-          this.authService.updateLoginStatus(false);
-          var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
-          if (error.error) {
-            switch (error.error.code) {
-              case 'user_disabled':
-                this.infoMessage = verifyEmailInfoMessage;
-                break;
-              default:
-                if (error.error.detail == "No active account found with the given credentials"){
-                  this.loginErrorMessage = "Incorrect username or password";
-                } else {
-                  this.loginErrorMessage = error.error.detail;
-                }
+            if (this.role == 'RO') {
+              if (profileId == null)
+                this.router.navigate(['/restaurant-setup']);
+              else
+                this.router.navigate(['/restaurant']);
+            } else {
+              this.router.navigate(['/']);
             }
-          }
-          this.isLoginFailed = true;
-          // manually trigger change detection to have error messages render
-          this.ref.detectChanges();
-        }
-      );
-    } else if (type == 'signup') {
-      const { username, email, password1, password2, role } = this.signupForm;
 
-      if (password1 == password2) {
-        this.authService.register(username, email, password1, role).subscribe(
+          },
+          // login failed
+          error => {
+            this.authService.updateLoginStatus(false);
+            var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
+            if (error.error) {
+              switch (error.error.code) {
+                case 'user_disabled':
+                  this.infoMessage = verifyEmailInfoMessage;
+                  break;
+                default:
+                  if (error.error.detail == "No active account found with the given credentials") {
+                    this.loginErrorMessage = "Incorrect username or password";
+                  } else {
+                    this.loginErrorMessage = error.error.detail;
+                  }
+              }
+            }
+            this.isLoginFailed = true;
+            // manually trigger change detection to have error messages render
+            this.ref.detectChanges();
+          }
+        );
+        break;
+      }
+      case 'signup': {
+        const { username, email, password1, password2, role } = this.signupForm;
+
+        if (password1 == password2) {
+          this.authService.register(username, email, password1, role).subscribe(
+            data => {
+              console.log(data);
+              this.isSignupSuccessful = true;
+              this.isSignUpFailed = false;
+              this.ref.detectChanges();
+              //let curTab = document.getElementsByClassName("tab-header")[0];
+              //let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
+              // switch to login tab
+              //tabPanes[1].click();
+
+            },
+            // signup failed
+            err => {
+              console.log(err)
+              this.isSignUpFailed = true;
+              this.signupErrorMessage = err.error.message;
+              // manually trigger change detection to have error messages render
+              this.ref.detectChanges();
+            }
+          );
+        } else {
+          this.signupErrorMessage = "password did not match!";
+          this.isSignUpFailed = true;
+        }
+        break;
+      }
+      case 'reset': {
+        const { email } = this.resetForm;
+        this.authService.resetPasswordEmail(email).subscribe(
           data => {
             console.log(data);
-            this.isSignupSuccessful = true;
-            this.isSignUpFailed = false;
+            this.resetSuccessful = true;
+            this.resetFailed = false;
             this.ref.detectChanges();
-            //let curTab = document.getElementsByClassName("tab-header")[0];
-            //let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
-            // switch to login tab
-            //tabPanes[1].click();
 
           },
           // signup failed
           err => {
             console.log(err)
-            this.isSignUpFailed = true;
-            this.signupErrorMessage = err.error.message;
+            this.resetFailed = true;
+            this.resetErrorMessage = err.error.message;
             // manually trigger change detection to have error messages render
             this.ref.detectChanges();
           }
         );
-      } else {
-        this.signupErrorMessage = "password did not match!";
-        this.isSignUpFailed = true;
+        break;
       }
+      default:
+        console.log('unrecognized submission');
     }
 
   }
@@ -240,10 +277,10 @@ export class LoginComponent implements OnInit {
   }
 
   googleRoleSelectPopup(googleSignUp): void {
-    this.modalService.open(googleSignUp, {ariaLabelledBy: 'modal-basic-title', size: 'sm'});
+    this.modalService.open(googleSignUp, { ariaLabelledBy: 'modal-basic-title', size: 'sm' });
   }
   facebookRoleSelectPopup(facebookSignUp): void {
-    this.modalService.open(facebookSignUp, {ariaLabelledBy: 'modal-basic-title', size: 'sm'});
+    this.modalService.open(facebookSignUp, { ariaLabelledBy: 'modal-basic-title', size: 'sm' });
   }
 
   onStrengthChanged(strength: number) {

@@ -1,3 +1,7 @@
+from django.contrib.auth.forms import PasswordResetForm
+from django.core.mail import BadHeaderError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from django.shortcuts import render, redirect
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth import get_user_model
 from django.forms import model_to_dict
@@ -9,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from utils.math import get_nearby_restaurants
+from sduser.utils import send_email_password_reset
 
 import json
 import ast
@@ -17,6 +22,10 @@ User = get_user_model()
 
 
 class AdminPasswordResetView(PasswordResetView):
+    email_template_name = 'registration/password_reset_email_admin.html'
+
+
+class SDUserPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email_admin.html'
 
 
@@ -81,9 +90,31 @@ class NearbyRestaurantsView(APIView):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
         user = request.user
         if not user:
-            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+            raise PermissionDenied(
+                message="Failed to obtain user", code="fail_obtain_user")
 
         user_id = user.id
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
         return JsonResponse(nearest, safe=False)
+
+class SDUserPasswordResetView(APIView):
+    """ password reset view """
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        email = request.data.get('email')
+        associated_users = User.objects.filter(Q(email=email))
+        
+        if not associated_users.exists():
+            raise ObjectDoesNotExist("No user associated with email: " + email)
+        if associated_users.count() > 1:
+            raise MultipleObjectsReturned("There are more than one User associated with email: " + email)
+        user = associated_users.first()
+        try:
+            send_email_password_reset(user=user, request=request)
+        except BadHeaderError:
+            return JsonResponse({'message':'Invalid header found.'}, status=400)
+
+        return JsonResponse({'message': 'Password reset email has been sent'})
+

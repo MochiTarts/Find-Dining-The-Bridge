@@ -21,6 +21,7 @@ import { RestaurantService } from '../../_services/restaurant.service';
 import { MediaService } from '../../_services/media.service';
 import { Observable } from 'rxjs';
 import { formValidation } from '../../_validation/forms';
+import { UserService } from '../../_services/user.service';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -98,6 +99,7 @@ export class RestaurantPageComponent implements OnInit {
     private restaurantService: RestaurantService,
     private route: ActivatedRoute,
     private mediaService: MediaService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -116,6 +118,8 @@ export class RestaurantPageComponent implements OnInit {
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
+
+      this.getNearbyRestaurants();
     }
 
     this.restaurantId = this.route.snapshot.queryParams.restaurantId || this.userId;
@@ -403,6 +407,23 @@ export class RestaurantPageComponent implements OnInit {
         linkInfo['offer_options'] = this.restaurantDetails.offer_options;
         return this.restaurantService.insertRestaurantApproval(linkInfo);
     }
+  }
+
+  getNearbyRestaurants() {
+    this.userService.getNearbyRestaurants().subscribe((restaurants) => {
+      console.log(restaurants);
+      for (let restaurant of restaurants) {
+        this.restaurantService.getApprovedRestaurant(restaurant.restaurant).subscribe((data) => {
+          let price = this.getPricepoint(String(data.pricepoint));
+          this.nearbyRestaurants.push({
+            name: data.name,
+            cuisinePrice: data.cuisines[0] + " - " + price,
+            imgUrl: data.logo_url,
+            _id: restaurant.restaurant
+          });
+        })
+      }
+    });
   }
 
 }

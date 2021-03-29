@@ -347,6 +347,43 @@
   
         </div>
       </mat-tab>
+
+      <mat-tab label="Forgot Password">
+        <mat-card class="reset-card mat-elevation-z8">
+          <mat-card-title>Resetting Password</mat-card-title>
+          <mat-card-content>
+            <div class="alert alert-success" *ngIf="resetSuccessful">
+              We've emailed you instructions for setting your password, if an account exists with the email you entered. You should receive them shortly.
+              If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.
+            </div>
+            <form *ngIf="!resetSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('reset')" #f="ngForm"
+            novalidate>
+              <div class="form-element">
+                <div class="alert alert-warning" *ngIf="f.submitted && resetFailed && resetErrorMessage">
+                  {{ resetErrorMessage }}
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field>
+                  <mat-label>Email</mat-label>
+                  <input matInput name="email" [(ngModel)]="resetForm.email" required email #email="ngModel" autocomplete="email" />
+                  <mat-icon matSuffix>email</mat-icon>
+                  <mat-error *ngIf="email.errors && f.submitted">Email is required</mat-error>
+                  <mat-error *ngIf="email.errors && email.errors.email">Email must be a valid email address</mat-error>
+                </mat-form-field>
+
+                <button
+                    style="margin-top: 10px;"
+                    color="primary"
+                    mat-raised-button
+                    type="submit">
+                  Reset my password
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
     </mat-tab-group>
   </mat-card>
 </div>
