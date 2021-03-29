@@ -37,7 +37,7 @@ export class FavouritesComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private spinner: SpinnerVisibilityService,
-    private titleService: Title
+    private titleService: Title,
   ) { }
 
   ngOnInit(): void {
@@ -94,7 +94,7 @@ export class FavouritesComponent implements OnInit {
             .includes(this.inputRestaurant.toLowerCase()) ||
           query.pricepoint
             .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) 
+            .includes(this.inputRestaurant.toLowerCase())
         ) {
           this.searchedRestaurants.push(query);
         }

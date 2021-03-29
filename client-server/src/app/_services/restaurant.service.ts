@@ -217,46 +217,4 @@ export class RestaurantService {
     this.http.delete<any>(endpoint, options).subscribe((data) => {});
   }
 
-  uploadRestaurantMedia(formData, id, location): Observable<any> {
-    const endpoint = UPLOAD_ENDPOINT;
-
-    if (location == 'cover') {
-      formData.append('save_location', 'cover_photo_url');
-    } else if (location == 'logo') {
-      formData.append('save_location', 'logo_url');
-    } else if (location == 'owner') {
-      formData.append('save_location', 'owner_picture_url');
-    } else if (location == 'video') {
-      formData.append('save_location', 'restaurant_video_url');
-    } else if (location == 'image') {
-      formData.append('save_location', 'restaurant_image_url');
-    }
-
-    formData.append('app', 'restaurant_RestaurantMedia');
-    formData.append('_id', id);
-
-    return this.http.post<any>(endpoint, formData);
-  }
-
-  uploadFoodMedia(formData, id): Observable<any> {
-    const endpoint = UPLOAD_ENDPOINT;
-
-    formData.append('save_location', 'picture');
-    formData.append('app', 'restaurant_FoodMedia');
-    formData.append('_id', id);
-
-    return this.http.post<any>(endpoint, formData);
-  }
-
-  removeRestaurantImage(formData, id, location): Observable<any> {
-    const endpoint = REMOVE_ENDPOINT;
-    if (location == 'image') {
-      formData.append('save_location', 'restaurant_image_url');
-    }
-
-    formData.append('app', 'restaurant_RestaurantMedia');
-    formData.append('_id', id);
-
-    return this.http.post<any>(endpoint, formData);
-  }
 }

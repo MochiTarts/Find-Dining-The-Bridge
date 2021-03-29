@@ -10,6 +10,7 @@ import { formValidator } from '../../_validation/formValidator';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
+import { MediaService } from '../../_services/media.service';
 
 @Component({
   selector: 'app-menu-edit',
@@ -52,6 +53,7 @@ export class MenuEditComponent implements OnInit {
     private titleService: Title,
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
+    private mediaService: MediaService,
   ) { }
 
   ngOnInit(): void {
@@ -206,18 +208,17 @@ export class MenuEditComponent implements OnInit {
   }
 
   onSubmit(id: string) {
-    // const formData = new FormData();
-    // formData.append('file', this.uploadForm.get('file').value);
-    // this.restaurantsService.uploadFoodMedia(formData, id).subscribe((data) => {
-    //   if (this.dishEdit) {
-    //     this.dishes[this.dishIndex] = data;
-    //     this.dishIndex = 0;
-    //   } else {
-    //     this.dishes.push(data);
-    //   }
-    //   this.dishEdit = false;
-    // });
-    this.dishEdit = false;
+    const formData = new FormData();
+    formData.append('media_file', this.uploadForm.get('file').value);
+    this.mediaService.uploadDishMedia(formData, id).subscribe((data) => {
+      if (this.dishEdit) {
+        this.dishes[this.dishIndex] = data;
+        this.dishIndex = 0;
+      } else {
+        this.dishes.push(data);
+      }
+      this.dishEdit = false;
+    });
 
     this.uploadForm = this.formBuilder.group({
       file: [''],

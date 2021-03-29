@@ -20,6 +20,7 @@ import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-pr
 import { RestaurantCardComponent } from 'src/app/components/restaurant-card/restaurant-card.component';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -93,10 +94,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private tokenStorageService: TokenStorageService,
     private userService: UserService,
     private modalService: NgbModal,
-    private router: Router
-    ) { }
+    private router: Router,
+    private titleService: Title
+  ) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle("Home | Find Dining Scarborough");
     AOS.init({
       delay: 300,
       duration: 1500,

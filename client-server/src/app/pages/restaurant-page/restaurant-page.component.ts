@@ -18,6 +18,10 @@ import getVideoId from 'get-video-id';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { RestaurantService } from '../../_services/restaurant.service';
+import { MediaService } from '../../_services/media.service';
+import { Observable } from 'rxjs';
+import { formValidation } from '../../_validation/forms';
+import { UserService } from '../../_services/user.service';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -94,6 +98,8 @@ export class RestaurantPageComponent implements OnInit {
     private tokenStorage: TokenStorageService,
     private restaurantService: RestaurantService,
     private route: ActivatedRoute,
+    private mediaService: MediaService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -112,6 +118,8 @@ export class RestaurantPageComponent implements OnInit {
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
+
+      this.getNearbyRestaurants();
     }
 
     this.restaurantId = this.route.snapshot.queryParams.restaurantId || this.userId;
@@ -178,18 +186,31 @@ export class RestaurantPageComponent implements OnInit {
       }
 
       this.videoId = this.getVideoId(this.restaurantDetails.restaurant_video_url);
-
-      this.getPendingOrApprovedDishes(this.restaurantId).subscribe((data) => {
-        this.restaurantMenu = data.Dishes;
-        for (let dish of data.Dishes) {
-          if (dish.category == "Popular Dish") {
-            this.popularDish.push(dish)
-          } else if (dish.category == "Special") {
-            this.specialDish.push(dish);
-          }
-        }
-      })
+    }, (error) => {
+      this.error = true;
     });
+
+    this.getPendingOrApprovedDishes(this.restaurantId).subscribe((data) => {
+      this.restaurantMenu = data.Dishes;
+      for (let dish of data.Dishes) {
+        if (dish.category == "Popular Dish") {
+          this.popularDish.push(dish)
+        } else if (dish.category == "Special") {
+          this.specialDish.push(dish);
+        }
+      }
+    }, (error) => {
+      this.error = true;
+    });
+
+    if (!this.apiLoaded) {
+      // This code loads the IFrame Player API code asynchronously, according to the instructions at
+      // https://developers.google.com/youtube/iframe_api_reference#Getting_Started
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+      this.apiLoaded = true;
+    }
 
   }
 
@@ -264,23 +285,80 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   onSubmitStoryImg() {
+    const formData = new FormData();
+    formData.append('media_file', this.uploadStoryImgForm.get('file').value);
+
+    this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'cover_photo_url', 'False').subscribe((data) => {
+      this.reload();
+    })
     this.modalRef.close();
-    console.log("story image submitted");
   }
 
   onSubmitFullMenu() {
-    this.modalRef.close();
-    console.log("full menu url submitted");
+    let linkInfo = {
+      full_menu_url: (<HTMLInputElement>document.getElementById('full_menu_url')).value,
+    }
+    this.validator.clearAllErrors();
+    let failFlag = this.validator.validateAll(linkInfo, (key) => this.validator.setError(key));
+    if (!failFlag) {
+      this.chooseUpdateAPI(this.restaurantDetails.status, linkInfo).subscribe((data) => {
+        this.modalRef.close();
+        this.reload();
+      }, (error) => {
+        if (error.error && formValidation.isInvalidResponse(error.error)) {
+          formValidation.HandleInvalid(error.error, (key) =>
+            this.validator.setError(key)
+          );
+        }
+      });
+    } else {
+      alert("Please ensure all fields are entered in correctly");
+    }
   }
 
   onSubmitVideo() {
-    this.modalRef.close();
-    console.log("video submitted");
+    const formData = new FormData();
+    formData.append('media_type', 'VIDEO');
+    formData.append('save_location', 'restaurant_video_url');
+    formData.append('first_time_submission', 'False');
+    if (this.uploadMethod == 'Upload .mp4 video file') {
+      formData.append('media_file', this.uploadVideoForm.get('file').value);
+      this.mediaService.uploadRestaurantMedia(formData, 'VIDEO', 'restaurant_video_url', 'False').subscribe((data) => {
+        this.reload();
+      });
+      this.modalRef.close();
+    } else if (this.uploadMethod == 'YouTube video link') {
+      let linkInfo = {
+        link: (<HTMLInputElement>document.getElementById('youtube_link')).value
+      };
+      this.validator.clearAllErrors();
+      let failFlag = this.validator.validateAll(linkInfo, (key) => this.validator.setError(key));
+      if (!failFlag) {
+        formData.append('media_link', linkInfo.link);
+        this.mediaService.uploadRestaurantMedia(formData, 'VIDEO', 'restaurant_video_url', 'False').subscribe((data) => {
+          this.reload();
+        });
+        this.modalRef.close();
+      }
+    }
   }
 
   onSubmitImage() {
+    const formData = new FormData();
+    if (this.addOrRemove == 'Upload new images') {
+      for (let i = 0; i < this.uploadImageForm.get('file').value.length; i++) {
+        formData.append('media_file', this.uploadImageForm.get('file').value[i]);
+      }
+      this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'restaurant_image_url', 'False').subscribe((data) => {
+        this.reload();
+      });
+    } else if (this.addOrRemove == 'Delete from existing images') {
+      formData.append('restaurant_images', JSON.stringify(this.imageUrlsToDelete));
+      this.mediaService.deleteRestaurantMedia(formData).subscribe(() => {
+        this.reload();
+      });
+    }
     this.modalRef.close();
-    console.log("restaurant images submitted");
   }
 
   updateUploadMethod() {
@@ -307,6 +385,45 @@ export class RestaurantPageComponent implements OnInit {
         if (url == imgUrl) delete this.imageUrls[index];
       });
     }
+  }
+
+  chooseUpdateAPI(status: string, linkInfo: Object): Observable<any> {
+    linkInfo['name'] = this.restaurantDetails.name;
+    linkInfo['address'] = this.restaurantDetails.address;
+    linkInfo['postalCode'] = this.restaurantDetails.postalCode;
+    linkInfo['owner_first_name'] = this.restaurantDetails.owner_first_name;
+    linkInfo['owner_last_name'] = this.restaurantDetails.owner_last_name;
+
+    switch (status) {
+      case 'In_Progress':
+        return this.restaurantService.updateRestaurantDraft(linkInfo);
+      default:
+        linkInfo['years'] = this.restaurantDetails.years;
+        linkInfo['phone'] = this.restaurantDetails.phone;
+        linkInfo['pricepoint'] = this.restaurantDetails.pricepoint;
+        linkInfo['bio'] = this.restaurantDetails.bio;
+        linkInfo['open_hours'] = this.restaurantDetails.open_hours;
+        linkInfo['payment_methods'] = this.restaurantDetails.payment_methods;
+        linkInfo['offer_options'] = this.restaurantDetails.offer_options;
+        return this.restaurantService.insertRestaurantApproval(linkInfo);
+    }
+  }
+
+  getNearbyRestaurants() {
+    this.userService.getNearbyRestaurants().subscribe((restaurants) => {
+      console.log(restaurants);
+      for (let restaurant of restaurants) {
+        this.restaurantService.getApprovedRestaurant(restaurant.restaurant).subscribe((data) => {
+          let price = this.getPricepoint(String(data.pricepoint));
+          this.nearbyRestaurants.push({
+            name: data.name,
+            cuisinePrice: data.cuisines[0] + " - " + price,
+            imgUrl: data.logo_url,
+            _id: restaurant.restaurant
+          });
+        })
+      }
+    });
   }
 
 }

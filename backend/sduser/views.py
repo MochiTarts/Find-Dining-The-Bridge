@@ -84,11 +84,11 @@ class editView(APIView):
 
 class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
-    #permission_classes = (AllowAny,)
+    permission_classes = (AllowAny,)
 
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
-        user = user.request
+        user = request.user
         if not user:
             raise PermissionDenied(
                 message="Failed to obtain user", code="fail_obtain_user")
