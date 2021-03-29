@@ -64,8 +64,8 @@ def get_nearby_restaurants(user_id, role):
     for restaurant in restaurants:
         if role == 'RO' and restaurant._id == user._id:
             continue
-        user_location = ast.literal_eval(restaurant.GEO_location)
-        distance = calculate_distance(user_location, user_location)
+        restaurant_location = ast.literal_eval(restaurant.GEO_location)
+        distance = calculate_distance(user_location, restaurant_location)
         nearest.append(
             {"restaurant": str(restaurant._id), "distance": distance})
 
