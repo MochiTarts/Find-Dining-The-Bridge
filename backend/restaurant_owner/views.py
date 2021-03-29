@@ -12,7 +12,7 @@ from jsonschema.exceptions import ValidationError
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
-from utils.common import get_user
+
 from .models import RestaurantOwner
 from restaurant.models import PendingRestaurant
 
@@ -57,10 +57,10 @@ class SignUp(APIView):
     def post(self, request):
         """ Inserts a new restaurant profile record into the database and attaches user_id to restaurant """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data, schema=restaurant_owner_signup_schema)
             body = request.data
@@ -103,10 +103,10 @@ class RestaurantOwnerView(APIView):
     def get(self, request):
         """ Retrieves a restaurant owner profile """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             ro_filter = RestaurantOwner.objects.filter(user_id=user_id)
             if ro_filter.exists():
@@ -125,10 +125,10 @@ class RestaurantOwnerView(APIView):
     def put(self, request):
         """ Updates a restaurant owner profile """
         try:
-            user = get_user(request)
+            user = request.user
             if not user:
                 return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+            user_id = user.id
 
             validate(instance=request.data, schema=restaurant_owner_edit_schema)
             body = request.data
