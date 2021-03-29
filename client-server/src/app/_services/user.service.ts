@@ -128,7 +128,7 @@ export class UserService {
   List is ordered from nearest to furthest
   */
   getNearbyRestaurants(): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/nearby/`
+    const endpoint = SDUSER_ENDPOINT + `nearby/`
     return this.http.get(endpoint);
   }
 
