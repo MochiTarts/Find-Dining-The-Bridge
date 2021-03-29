@@ -72,6 +72,12 @@ export class AuthService {
     }), httpOptions);
   }
 
+  resetPasswordEmail(email: string){
+    return this.http.post(AUTH_API + 'password_reset/', JSON.stringify({
+      email
+    }), httpOptions);
+  }
+
   // only used (for user) to verify token, not validate
   verify(token: string): Observable<any> {
     return this.http.post(AUTH_API + 'verify/', JSON.stringify({
