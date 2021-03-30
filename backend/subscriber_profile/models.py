@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import model_to_dict
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from utils.common import save_and_clean
 from utils.validators import check_script_injections, validate_postal_code, validate_name
 from utils.geo_controller import geocode
@@ -83,13 +84,11 @@ class SubscriberProfile(models.Model):
             except ValidationError as e:
                 invalid['Invalid'].append('postalCode')
 
-        if not invalid['Invalid']:
-            return None
-        else:
-            return invalid
+        if invalid['Invalid']:
+            raise ValidationError(message=invalid, code="invalid_input")
 
     @classmethod
-    def signup(cls, subscriber_data:dict):
+    def signup(cls, subscriber_data):
         """ Constructs and saves SubscriberProfile to database returning the newly created profile
 
         :param subscriber_data: data of the subscriber
@@ -97,17 +96,14 @@ class SubscriberProfile(models.Model):
         :return: SubscriberProfile Object
         :rtype: :class:`SubscriberProfile`
         """
-        invalid = SubscriberProfile.field_validate(subscriber_data)
-        if not invalid:
-            if "consent_status" in subscriber_data:
-                subscriber_data.update(handleConsentStatus(subscriber_data['consent_status']))
-            profile = cls(**subscriber_data)
-            profile.GEO_location = geocode(profile.postalCode)
-            profile = save_and_clean(profile)
-            return profile
-        else:
-            raise ValidationError(
-                'Validation error. Please check the following: ' + str(print(invalid)))
+        SubscriberProfile.field_validate(subscriber_data)
+        
+        if "consent_status" in subscriber_data:
+            subscriber_data.update(handleConsentStatus(subscriber_data['consent_status']))
+        profile = cls(**subscriber_data)
+        profile.GEO_location = geocode(profile.postalCode)
+        profile = save_and_clean(profile)
+        return profile
 
     @classmethod
     def edit(cls, subscriber_data):
@@ -116,22 +112,20 @@ class SubscriberProfile(models.Model):
         :param subscriber_data: json data of the subscriber
         :return: SubscriberProfile Object
         """
-        invalid = SubscriberProfile.field_validate(subscriber_data)
+        SubscriberProfile.field_validate(subscriber_data)
+        profile = SubscriberProfile.objects.get(user_id=subscriber_data['user_id'])
+        if not profile:
+            raise ObjectDoesNotExist('No subscriber profile found with owner user id of this: ' + subscriber_data['user_id'])
 
-        if not invalid:
-            profile = SubscriberProfile.objects.get(user_id=subscriber_data['user_id'])
-            for field in subscriber_data:
-                setattr(profile, field, subscriber_data[field])
-            profile.GEO_location = geocode(profile.postalCode)
-            if "consent_status" in subscriber_data:
-                consent_data = handleConsentStatus(subscriber_data["consent_status"])
-                for field in consent_data:
-                    setattr(profile, field, consent_data[field])
-            profile = save_and_clean(profile)
-            return profile
-        else:
-            raise ValidationError(
-                'Validation error. Please check the following: ' + str(print(invalid)))
+        for field in subscriber_data:
+            setattr(profile, field, subscriber_data[field])
+        profile.GEO_location = geocode(profile.postalCode)
+        if "consent_status" in subscriber_data:
+            consent_data = handleConsentStatus(subscriber_data["consent_status"])
+            for field in consent_data:
+                setattr(profile, field, consent_data[field])
+        profile = save_and_clean(profile)
+        return profile
 
 def handleConsentStatus(consent_status):
     profile = {}

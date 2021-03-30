@@ -37,7 +37,7 @@ export class NewsletterComponent implements OnInit {
       user_id: this.userId,
       consent_status: "EXPRESSED"
     }
-    this.userService.editConsentStatus(userInfo).subscribe(() => {
+    this.userService.editSubscriberProfile(userInfo).subscribe(() => {
       this.subscribed = true;
       alert("You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.");
       this.reload();
@@ -49,7 +49,7 @@ export class NewsletterComponent implements OnInit {
       user_id: this.userId,
       consent_status: "UNSUBSCRIBED",
     }
-    this.userService.editConsentStatus(userInfo).subscribe(() => {
+    this.userService.editSubscriberProfile(userInfo).subscribe(() => {
       this.unsubscribed = true;
       alert("You have successfully unsubscribed.");
       this.reload();

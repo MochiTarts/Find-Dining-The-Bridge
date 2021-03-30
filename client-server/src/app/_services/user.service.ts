@@ -81,16 +81,6 @@ export class UserService {
   }
 
   /*
-  @Input: JSON object containing userID and fields of subscriber profile to be modified
-  @Output: JSON object representing the updated subscriber profile
-  Edit consumer's consent status
-  */
-  editConsentStatus(userData): Observable<any> {
-    const endpoint = SUBSCRIBER_ENDPOINT + 'consent_status/';
-    return this.http.put<any>(endpoint, userData, httpOptions);
-  }
-
-  /*
   @Input: JSON object containing restaurant_id of restaurant that will be part of this new relation
   @Output: Message from request or error
   Add a new restaurant to a user's list of favourites
