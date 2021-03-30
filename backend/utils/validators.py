@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from collections import Iterable
 from django.core.validators import URLValidator, RegexValidator
-from profanityfilter import ProfanityFilter
+from better_profanity import profanity
 #from django.core import validators
 
 def check_script_injections(value):
@@ -65,6 +65,9 @@ def validate_profane_content(content):
     :return: None
     :rtype: None
     """
-    print(ProfanityFilter().is_clean(content))
-    if not ProfanityFilter().is_clean(content):
+    with open('utils/more_profanity.txt', 'r') as f:
+        additional_words = [line.strip() for line in f]
+
+    profanity.add_censor_words(additional_words)
+    if profanity.contains_profanity(content):
         raise ValidationError("Content contains profane language")
