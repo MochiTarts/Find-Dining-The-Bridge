@@ -493,14 +493,14 @@ class AllRestaurantList(APIView):
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
-    permission_classes = (AllowAny,)
-    #permission_classes = [ROPermission]
+    #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def post(self, request):
         """Insert new restaurant as a draft into database"""
-        #user = request.user
-        #if not user:
-        #    raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+        user = request.user
+        if not user:
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
         validate(instance=request.data,
                     schema=restaurant_insert_draft_schema)
@@ -511,12 +511,11 @@ class RestaurantDraftView(APIView):
 
     def put(self, request):
         """Edit a restaurant profile and save it as a draft in the database"""
-        #user = request.user
-        #if not user:
-        #    raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+        user = request.user
+        if not user:
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-        #user_id = user.id
-        user_id = 400
+        user_id = user.id
         validate(instance=request.data,
                     schema=restaurant_edit_draft_schema)
         body = request.data
