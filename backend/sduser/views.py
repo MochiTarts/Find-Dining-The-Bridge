@@ -2,9 +2,10 @@ from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import BadHeaderError
 from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
 from django.shortcuts import render, redirect
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth import get_user_model
 from django.forms import model_to_dict
+from django.urls import reverse_lazy
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
@@ -25,10 +26,14 @@ User = get_user_model()
 class AdminPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email_admin.html'
 
+class SDUserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'registration/password_reset_confirm_user.html'
+    extra_context = {'home_url': '/'}
+    success_url = reverse_lazy('password_reset_complete_user')
 
-class SDUserPasswordResetView(PasswordResetView):
-    email_template_name = 'registration/password_reset_email_admin.html'
-
+class SDUserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'registration/password_reset_complete_user.html'
+    extra_context = {'home_url': '/', 'login_redirect_url': '/login',}
 
 class DeactivateView(APIView):
     """ Deactivate user """
