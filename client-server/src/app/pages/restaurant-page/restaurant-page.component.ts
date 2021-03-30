@@ -126,7 +126,12 @@ export class RestaurantPageComponent implements OnInit {
 
     this.restaurantId = this.route.snapshot.queryParams.restaurantId;
 
-    if (this.restaurantId == this.route.snapshot.queryParams.restaurantId) this.isQueryRestaurant = true;
+    if (this.restaurantId) this.isQueryRestaurant = true;
+
+    if (!this.restaurantId && !this.role) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
     this.getPendingOrApprovedRestaurant(this.restaurantId).subscribe((data) => {
       this.restaurantDetails = data;
@@ -217,7 +222,7 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   getPendingOrApprovedRestaurant(id) {
-    if (this.authService.isLoggedIn && this.role == 'RO' && !this.isQueryRestaurant) {
+    if (this.role == 'RO' && !id) {
       return this.restaurantService.getPendingRestaurant();
     } else {
       return this.restaurantService.getApprovedRestaurant(id);
@@ -225,7 +230,7 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   getPendingOrApprovedDishes(id) {
-    if (this.authService.isLoggedIn && this.role == 'RO' && !this.isQueryRestaurant) {
+    if (this.role == 'RO' && !id) {
       return this.restaurantService.getPendingRestaurantFood();
     } else {
       return this.restaurantService.getApprovedRestaurantFood(id);
