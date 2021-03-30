@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '../../_services/user.service';
 import { AuthService } from '../../_services/auth.service';
 import { Router } from "@angular/router";
 import { Title } from '@angular/platform-browser';
 import { TokenStorageService } from '../../_services/token-storage.service';
+import { PasswordChangeFormComponent } from '../../components/password-change-form/password-change-form.component';
 
 @Component({
   selector: 'app-account-setting',
@@ -14,8 +15,8 @@ import { TokenStorageService } from '../../_services/token-storage.service';
 export class AccountSettingComponent implements OnInit {
   modalRef: any;
   userId: string;
-  idToken: string = '';
-
+  @ViewChild('changePassword') changePassword: PasswordChangeFormComponent;
+  
   constructor(
     private modalService: NgbModal,
     private userService: UserService,

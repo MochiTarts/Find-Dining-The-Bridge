@@ -27,19 +27,6 @@ export class UserService {
     return this.http.get(API_URL + 'admin', { responseType: 'text' });
   }
 
-  // below are just testing for getting contents from the backend
-  getPublicContent(): Observable<any> {
-    return this.http.get(API_URL + 'all', { responseType: 'text' });
-  }
-
-  getUserBoard(): Observable<any> {
-    return this.http.get(API_URL + 'user', { responseType: 'text' });
-  }
-
-  getROBoard(): Observable<any> {
-    return this.http.get(API_URL + 'ro', { responseType: 'text' });
-  }
-
   /*
   @Input: JSON object containing fields to be modified for an sduser
   @Ouput: JSON object representing the updated sduser
@@ -214,13 +201,23 @@ export class UserService {
 
 
   /*
-  @Input: None
-  @Output: None
+  @Input: user id
+  @Output: Observable
   Deactivate the user account
   */
   deactivateUser(id: string): Observable<any> {
     const endpoint = API_URL + 'user/deactivate/';
     return this.http.post<any>(endpoint, JSON.stringify({ 'id': id }), httpOptions);
+  }
+
+  /*
+  @Input: None
+  @Output: Observable
+  Deactivate the user account
+  */
+  changeUserPassword(passwordData: any): Observable<any> {
+    const endpoint = API_URL + 'user/change_password/';
+    return this.http.post<any>(endpoint, passwordData, httpOptions);
   }
 
 }

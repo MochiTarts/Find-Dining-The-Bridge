@@ -2,11 +2,19 @@
   <h2>Account Settings</h2>
 
   <button
+  class="btn change-password"
+  (click)="changePassword.open(false)"
+>
+  Change Password
+</button>
+
+  <button
     class="btn deactivate"
     (click)="openConfirmModal(confirmDeact)"
   >
     Deactivate Account
   </button>
+  <app-password-change-form #changePassword role="form"></app-password-change-form>
 
   <ng-template #confirmDeact let-modal>
     <div class="modal-header">
@@ -16,7 +24,7 @@
       class="close"
       aria-label="Close"
       (click)="modal.dismiss('Cross click')"
-    >
+      >
       <span aria-hidden="true">&times;</span>
     </button>
     </div>

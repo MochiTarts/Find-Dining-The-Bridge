@@ -72,7 +72,8 @@ import { PageErrorComponent } from './components/page-error/page-error.component
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 import { PostComponent } from './components/post/post.component';
 import { PartnerCardComponent } from './components/partner-card/partner-card.component';
-
+import { PasswordChangeFormComponent } from './components/password-change-form/password-change-form.component';
+import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,8 @@ import { PartnerCardComponent } from './components/partner-card/partner-card.com
     MenuEditComponent,
     GetInvolvedComponent,
     PartnerCardComponent,
+    PasswordChangeFormComponent,
+    AccountSettingComponent,
   ],
   imports: [
     BrowserModule,

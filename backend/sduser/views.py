@@ -14,6 +14,7 @@ from rest_framework.views import APIView
 
 from utils.math import get_nearby_restaurants
 from sduser.utils import send_email_password_reset
+from sduser.forms import SDPasswordChangeForm
 
 import json
 import ast
@@ -29,7 +30,7 @@ class SDUserPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email_admin.html'
 
 
-class deactivateView(APIView):
+class DeactivateView(APIView):
     """ Deactivate user """
     #authentication_classes = [JWTAuthentication]
 
@@ -117,4 +118,30 @@ class SDUserPasswordResetView(APIView):
             return JsonResponse({'message':'Invalid header found.'}, status=400)
 
         return JsonResponse({'message': 'Password reset email has been sent'})
+
+class SDUserChangePasswordView(APIView):
+    """ password change view """
+
+    def post(self, request):
+        passwords = request.data
+        old_password = passwords.get('old_password')
+        new_password1 = passwords.get('new_password1')
+        new_password2 = passwords.get('new_password2')
+
+        user = request.user
+
+        #if not user.check_password(old_password):
+
+
+        # Django way of validation
+        form = SDPasswordChangeForm(user=user, data=passwords)
+
+        if form.is_valid():
+            form.save()
+            #user.set_password(form.cleaned_data['new_password2'])
+            #user.save()
+            return JsonResponse({'message': 'Password have been changed'})
+        else:
+            return JsonResponse(form.errors.get_json_data(escape_html=True), status=400)
+        
 
