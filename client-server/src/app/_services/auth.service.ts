@@ -41,7 +41,6 @@ export class AuthService {
     // get client ip address and pass it to backend (along with the credentials)
     return this.http.get<{ip:string}>('https://jsonip.com').pipe(
       switchMap(data => {
-        console.log('ip address', data.ip);
         this.ip = data.ip;
         return this.http.post(AUTH_API + 'signin/', JSON.stringify({
           username,
@@ -51,7 +50,6 @@ export class AuthService {
       }),
       catchError(error => {
         this.ip = '';
-        console.log(error);
         return this.http.post(AUTH_API + 'signin/', JSON.stringify({
           username,
           password,

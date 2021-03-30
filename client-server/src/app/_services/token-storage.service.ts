@@ -64,9 +64,7 @@ export class TokenStorageService {
 
   // save user to session storage
   public saveUser(user: any): void {
-    console.log(user);
     this.RO = user.role == "RO";
-    console.log(this.RO);
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
@@ -75,7 +73,6 @@ export class TokenStorageService {
     const user = window.sessionStorage.getItem(USER_KEY);
 
     if (user) {
-      console.log(user)
       return JSON.parse(user);
     }
 

@@ -32,7 +32,6 @@ export class ProfileComponent implements OnInit {
       this.currentUser.phone = phone != 'null' ? "(" + phone.slice(0, 3) + ") " + phone.slice(3, 6) + " " + phone.slice(6, 10) : '';
     },
       err => {
-        console.log(err);
         if (err.error && err.error.code == 'no_profile_found') {
           // redirect to home page to fill the profile
           this.router.navigate(['/']);

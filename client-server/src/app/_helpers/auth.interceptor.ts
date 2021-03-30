@@ -20,16 +20,13 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authReq = req;
     const token = this.tokenStorage.getToken();
-    //console.log(token);
     // add access token to the header
     if (token != null) {
       authReq = this.addToken(req, token);
     }
 
     return next.handle(authReq).pipe(catchError(error => {
-      console.log(error);
       if (error instanceof HttpErrorResponse && [401, 403, 405].includes(error.status)) {
-        console.log(error.error);
 
         var user = this.tokenStorage.getUser();
         /*
@@ -40,7 +37,6 @@ export class AuthInterceptor implements HttpInterceptor {
             this.isCheckingRefreshToken = true;
             // the current request is due to a fail login
           } else if (!user || !user.role){
-            console.log('fail login?')
             // propogate error for error catching and displays
             return throwError(error);
           }
@@ -48,7 +44,6 @@ export class AuthInterceptor implements HttpInterceptor {
         // auto logout if refresh token expired or 403 response returned from api
         //if (this.isCheckingRefreshToken || error.status === 403 && this.tokenStorage.getUser()) {
         else if (this.isCheckingRefreshToken) {
-          console.log('why');
           //this.isCheckingRefreshToken = false;
           //this.logout();
           //this.router.navigate(['login']);
@@ -56,7 +51,6 @@ export class AuthInterceptor implements HttpInterceptor {
         */
        var err = error.error;
        if (err && err.detail == "Token is invalid or expired"){
-         console.log('refresh token expired');
          this.logout();
          return throwError(error);
        } else if (!user && !user.role){
@@ -94,7 +88,7 @@ export class AuthInterceptor implements HttpInterceptor {
   Handles 401 error by attempting to refresh the tokens (assuming the old token expired)
   while blocking all requests in between and retry after refresh returns
 
-  BehaviorSubject is used as a semaphore (to block and release requests during the refreshing) 
+  BehaviorSubject is used as a semaphore (to block and release requests during the refreshing)
   */
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
 
@@ -108,7 +102,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
       return this.authService.refreshToken().pipe(
         switchMap((token: any) => {
-          //console.log(token);
           this.isRefreshing = false;
           //this.isCheckingRefreshToken = true;
           this.tokenStorage.updateTokenAndUser(token.access);
@@ -116,7 +109,6 @@ export class AuthInterceptor implements HttpInterceptor {
           return next.handle(this.addToken(request, token.access));
         }),
         catchError(error => {
-          console.log(error.error);
           return throwError(error);
         }),
       );
@@ -129,7 +121,6 @@ export class AuthInterceptor implements HttpInterceptor {
           return next.handle(this.addToken(request, JWT));
         }),
         catchError(error => {
-          console.log(error.error);
           return throwError(error);
         }));
     }

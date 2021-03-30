@@ -207,7 +207,6 @@ export class RestaurantSetupComponent implements OnInit {
       facebook: (<HTMLInputElement>document.getElementById('facebook')).value,
       twitter: (<HTMLInputElement>document.getElementById('twitter')).value,
       instagram: (<HTMLInputElement>document.getElementById('instagram')).value,
-      GEO_location: 'blank',
       open_hours: (<HTMLInputElement>document.getElementById('open_hours')).value,
       payment_methods: this.uploadForm.get('payments').value,
     };
@@ -284,8 +283,6 @@ export class RestaurantSetupComponent implements OnInit {
       restaurantInfo = this.improveDraftAnswer(restaurantInfo);
     }
 
-    // console.log(restaurantInfo);
-
     let validator = this.chooseValidator(option);
     this.validator.clearAllErrors();
     let failFlag = validator.validateAll(restaurantInfo, (key) => {
@@ -307,12 +304,6 @@ export class RestaurantSetupComponent implements OnInit {
           formValidation.HandleInvalid(data, (key) => this.validator.setError(key))
         } else {
 
-          if (this.newImage) {
-            this.onSubmit(option).subscribe(() => {
-              this.newImage = false;
-            })
-          }
-
           if (option.includes('SETUP')) {
             let roInfo = {
               restaurant_id: data._id,
@@ -323,6 +314,11 @@ export class RestaurantSetupComponent implements OnInit {
               };
               this.userService.editAccountUser(sduserInfo).subscribe(() => {
                 this.authService.refreshToken().subscribe((token) => {
+                  if (this.newImage) {
+                    this.onSubmit(option).subscribe(() => {
+                      this.newImage = false;
+                    })
+                  }
                   this.tokenStorage.updateTokenAndUser(token.access);
                   this.router.navigate(['/restaurant']).then(() => {
                     this.chooseAlert(option);
@@ -333,6 +329,11 @@ export class RestaurantSetupComponent implements OnInit {
             });
 
           } else {
+            if (this.newImage) {
+              this.onSubmit(option).subscribe(() => {
+                this.newImage = false;
+              })
+            }
             this.router.navigate(['/restaurant']).then(() => {
               this.chooseAlert(option);
               this.reload();

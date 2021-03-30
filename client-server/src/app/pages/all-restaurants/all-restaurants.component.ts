@@ -3,6 +3,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { geolocation } from '../../utils/geolocation';
 import { cuisinesStr } from '../../_constants/cuisines';
+import { servicesStr } from '../../_constants/services';
 import { Title } from '@angular/platform-browser';
 
 
@@ -19,11 +20,13 @@ export class AllRestaurantsComponent implements OnInit {
   allRestaurants: any[];
   allDishes: any[];
   allCuisines: any[];
+  allServices: any[];
   restaurants_total;
 
   priceFilterRestaurants: any[];
   deliveryFilterRestaurants: any[];
   cuisineFilterRestaurants: any[];
+  serviceFilterRestaurants: any[];
   searchedRestaurants: any[];
 
   restaurants: any[];
@@ -45,6 +48,7 @@ export class AllRestaurantsComponent implements OnInit {
     this.loadRestaurants();
     // this.loadDishes();
     this.allCuisines = cuisinesStr;
+    this.allServices = servicesStr;
     this.titleService.setTitle("Browse | Find Dining Scarborough");
   }
 
@@ -75,12 +79,8 @@ export class AllRestaurantsComponent implements OnInit {
         }
         this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
         this.allRestaurants = this.restaurants;
+        this.initializeRestaurants();
       });
-      this.restaurants_total = this.allRestaurants.length;
-      this.priceFilterRestaurants = this.allRestaurants;
-      this.deliveryFilterRestaurants = this.allRestaurants;
-      this.cuisineFilterRestaurants = this.allRestaurants;
-      this.searchedRestaurants = this.allRestaurants;
     });
   }
 
@@ -91,13 +91,22 @@ export class AllRestaurantsComponent implements OnInit {
     });
   }
 
+  initializeRestaurants() {
+    this.restaurants_total = this.allRestaurants.length;
+    this.priceFilterRestaurants = this.allRestaurants;
+    this.deliveryFilterRestaurants = this.allRestaurants;
+    this.cuisineFilterRestaurants = this.allRestaurants;
+    this.serviceFilterRestaurants = this.allRestaurants;
+    this.searchedRestaurants = this.allRestaurants;
+  }
+
   updateRestarants() {
     this.restaurants = [];
-    console.log(this.priceFilterRestaurants)
     for (var i = 0; i < this.priceFilterRestaurants.length; i++) {
       var current = this.priceFilterRestaurants[i];
       if (this.deliveryFilterRestaurants.includes(current)
           && this.cuisineFilterRestaurants.includes(current)
+          && this.serviceFilterRestaurants.includes(current)
           && this.searchedRestaurants.includes(current))
       {
         this.restaurants.push(current);
@@ -200,6 +209,25 @@ export class AllRestaurantsComponent implements OnInit {
     this.updateRestarants();
   }
 
+  filterService(list) {
+    const isFalse = (currentValue) => !currentValue;
+
+    if (list.every(isFalse)) {
+      this.serviceFilterRestaurants = this.allRestaurants;
+    } else {
+      this.serviceFilterRestaurants = [];
+      for (let res of this.allRestaurants) {
+        for (var j = 0; j < this.allServices.length; j++) {
+          if (list[j] && res.offer_options.includes(this.allServices[j])) {
+            this.serviceFilterRestaurants.push(res);
+            break;
+          }
+        }
+      }
+    }
+    this.updateRestarants();
+  }
+
   filterPrice(list) {
     this.dishes = [];
     const isFalse = (currentValue) => !currentValue;
@@ -240,6 +268,9 @@ export class AllRestaurantsComponent implements OnInit {
             .toLowerCase()
             .includes(this.inputRestaurant.toLowerCase()) ||
           query.cuisines.toString()
+            .toLowerCase()
+            .includes(this.inputRestaurant.toLowerCase()) ||
+          query.offer_options.toString()
             .toLowerCase()
             .includes(this.inputRestaurant.toLowerCase()) ||
           query.pricepoint

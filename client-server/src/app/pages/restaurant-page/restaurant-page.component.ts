@@ -411,7 +411,6 @@ export class RestaurantPageComponent implements OnInit {
 
   getNearbyRestaurants() {
     this.userService.getNearbyRestaurants().subscribe((restaurants) => {
-      console.log(restaurants);
       for (let restaurant of restaurants) {
         this.restaurantService.getApprovedRestaurant(restaurant.restaurant).subscribe((data) => {
           let price = this.getPricepoint(String(data.pricepoint));
