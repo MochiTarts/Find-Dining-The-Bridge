@@ -351,10 +351,13 @@ export class RestaurantSetupComponent implements OnInit {
   }
 
   reload() {
-    let currentUrl = this.router.url;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([currentUrl]);
+    this.authService.refreshToken().subscribe((token) => {
+      this.tokenStorage.updateTokenAndUser(token.access);
+      let currentUrl = this.router.url;
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.onSameUrlNavigation = 'reload';
+      this.router.navigate([currentUrl]);
+    });
   }
 
   cancel() {

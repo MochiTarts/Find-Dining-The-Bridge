@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuard] },
   { path: 'restaurant-setup', component: RestaurantSetupComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'terms-of-service', component: TermsOfServiceComponent },
-  { path: 'restaurant', component: RestaurantPageComponent, canActivate: [AuthGuard] },
+  { path: 'restaurant', component: RestaurantPageComponent },
   { path: 'edit-posts', component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'get-involved', component: GetInvolvedComponent,  },
