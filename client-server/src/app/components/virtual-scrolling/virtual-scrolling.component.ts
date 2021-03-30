@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { PostService } from 'src/app/_services/post.service';
 import { BehaviorSubject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-virtual-scrolling',
@@ -18,6 +19,7 @@ export class VirtualScrollingComponent implements OnInit {
 
   constructor(
     private postService: PostService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
@@ -25,10 +27,19 @@ export class VirtualScrollingComponent implements OnInit {
   }
 
   loadPosts() {
-    this.postService.getRestaurantPosts().subscribe((data) => {
-      this.posts = data.Posts;
-      this.lstPosts.next(this.posts);
-    })
+    this.restaurantId = this.route.snapshot.queryParams.restaurantId;
+    if (this.restaurantId) {
+      this.postService.getRestaurantPostsById(this.restaurantId).subscribe((data) => {
+        this.posts = data.Posts;
+        this.lstPosts.next(this.posts);
+      })
+    } else {
+      this.postService.getRestaurantPosts().subscribe((data) => {
+        this.posts = data.Posts;
+        this.lstPosts.next(this.posts);
+      });
+    }
+
   }
 
 }
