@@ -18,6 +18,7 @@ urlpatterns = [
     path('analytics/access_token/', views.AnalyticsAccessTokenView.as_view(), name='analytics_access_token'),
     path('restaurant/post/', views.PostView.as_view(), name='restaurant_post'),
     path('restaurant/post/<str:post_id>/', views.PostView.as_view(), name='restaurant_post_delete'),
+    path('restaurant/public/post/<str:rest_id>/', views.PublicPostView.as_view(), name='restaurant_public_post'),
     path('restaurant/media/', views.RestaurantMediaView.as_view(), name='restaurant_media'),
     path('dish/media/<str:dish_id>/', views.DishMediaView.as_view(), name='dish_media'),
 ]

@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit {
     } else {
       this.socialAuth.authState.subscribe((user) => {
         this.user = user;
-        console.log(user);
+        // console.log(user);
         // we'll get a SocialUser object with the following properties:
         // id, idToken, authToken, email, firstName, lastName, name, photoUrl, provider
         this.isLoggedIn = (user != null);
@@ -116,7 +116,7 @@ export class LoginComponent implements OnInit {
                 this.router.navigate(['']);
               }, err => {
                 this.authService.updateLoginStatus(false);
-                console.log(err);
+                // console.log(err);
               })
               break;
             case 'FACEBOOK':
@@ -127,11 +127,11 @@ export class LoginComponent implements OnInit {
                 this.router.navigate(['']);
               }, err => {
                 this.authService.updateLoginStatus(false);
-                console.log(err);
+                // console.log(err);
               })
               break;
             default:
-              console.log('unrecognized provider: ' + user.provider);
+              // console.log('unrecognized provider: ' + user.provider);
               this.authService.updateLoginStatus(false);
               this.tokenStorage.signOut();
               this.reloadPage();
@@ -140,7 +140,7 @@ export class LoginComponent implements OnInit {
         }
       }, (err) => {
         this.authService.updateLoginStatus(false);
-        console.log(err);
+        // console.log(err);
       });
     }
   }
@@ -205,7 +205,7 @@ export class LoginComponent implements OnInit {
         if (password1 == password2) {
           this.authService.register(username, email, password1, role).subscribe(
             data => {
-              console.log(data);
+              // console.log(data);
               this.isSignupSuccessful = true;
               this.isSignUpFailed = false;
               this.ref.detectChanges();
@@ -217,7 +217,7 @@ export class LoginComponent implements OnInit {
             },
             // signup failed
             err => {
-              console.log(err)
+              // console.log(err)
               this.isSignUpFailed = true;
               this.signupErrorMessage = err.error.message;
               // manually trigger change detection to have error messages render
@@ -234,7 +234,7 @@ export class LoginComponent implements OnInit {
         const { email } = this.resetForm;
         this.authService.resetPasswordEmail(email).subscribe(
           data => {
-            console.log(data);
+            // console.log(data);
             this.resetSuccessful = true;
             this.resetFailed = false;
             this.ref.detectChanges();
@@ -242,7 +242,7 @@ export class LoginComponent implements OnInit {
           },
           // signup failed
           err => {
-            console.log(err)
+            // console.log(err)
             this.resetFailed = true;
             this.resetErrorMessage = err.error.message;
             // manually trigger change detection to have error messages render

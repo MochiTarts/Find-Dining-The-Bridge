@@ -73,7 +73,7 @@ export class UserService {
   Add a new restaurant to a user's list of favourites
   */
   addFavouriteRestaurant(data): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/favourite/`
+    const endpoint = SDUSER_ENDPOINT + `favourite/`
     return this.http.post<any>(endpoint, data)
   }
 
@@ -83,7 +83,7 @@ export class UserService {
   Get all restaurants favourited by a user
   */
   getFavouriteRestaurants(): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/favourite/`
+    const endpoint = SDUSER_ENDPOINT + `favourite/`
     return this.http.get(endpoint)
   }
 
@@ -93,7 +93,7 @@ export class UserService {
   Removes a restaurant from a user's list of favourites
   */
   removeFavRestaurant(restaurant_id): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/favourite/${restaurant_id}/`
+    const endpoint = SDUSER_ENDPOINT + `favourite/${restaurant_id}/`
     return this.http.delete<any>(endpoint)
   }
 

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 const AUTH_API = '/api';
 const POST_API = AUTH_API + '/restaurant/post/'
+const PUBLIC_POST_API = AUTH_API + '/restaurant/public/post/'
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +17,21 @@ export class PostService {
   @Input: None
   @Output: List of all posts by a restaurant
 
-  Retrieves all posts from a restaurant in the database.
+  Retrieves all posts from a restaurant in the database (for RO).
   */
   getRestaurantPosts(): Observable<any> {
     const endpoint = POST_API;
+    return this.http.get(endpoint);
+  }
+
+  /*
+  @Input: restaurant_id
+  @Output: List of all posts by a restaurant
+
+  Retrieves all posts from a restaurant in the database (for public and BU user).
+  */
+  getRestaurantPostsById(restaurant_id): Observable<any> {
+    const endpoint = PUBLIC_POST_API + `${restaurant_id}/`;
     return this.http.get(endpoint);
   }
 

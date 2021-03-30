@@ -42,7 +42,7 @@ restaurant_editable = [
     "owner_first_name", "owner_last_name", "owner_preferred_name",
     "owner_story", "owner_picture_url",
     "status", "modified_time", "sysAdminComments",
-    "open_hours", "payment_methods", "full_menu_url"
+    "open_hours", "payment_methods", "full_menu_url", "restaurant_video_desc"
 ]
 
 User = get_user_model()
@@ -419,6 +419,7 @@ class Restaurant(models.Model):
 
     full_menu_url = models.CharField(max_length=200, blank=True)
     approved_once = models.BooleanField(default=False, blank=True)
+    restaurant_video_desc = models.TextField(default='', blank=True)
 
     # for display (default was "objectname object (object_id)")
     def __str__(self):
@@ -532,6 +533,7 @@ class PendingRestaurant(models.Model):
 
     full_menu_url = models.CharField(max_length=200, blank=True)
     approved_once = models.BooleanField(default=False, blank=True)
+    restaurant_video_desc = models.TextField(default='', blank=True)
 
     # for display (default was "objectname object (object_id)")
     def __str__(self):
@@ -1146,6 +1148,33 @@ class RestaurantPost(models.Model):
             raise MultipleObjectsReturned("There are more than one sduser record for the user with id: "+user_id)
 
         posts = list(RestaurantPost.objects.filter(owner_user_id=user_id))
+        response = {"Posts": []}
+        for post in posts:
+            time_stamp = {"Timestamp": post.timestamp.strftime("%b %d, %Y %H:%M")}
+            response["Posts"].append(model_to_json(post, time_stamp))
+        return response
+
+    @classmethod
+    def get_by_rest_id(cls, rest_id):
+        """ Retrieves a list of all posts
+        posted by a restaurant owner given the restaurant's
+        _id
+
+        :param rest_id: the _id of the restaurant
+        :type rest_id: ObjectId str
+        :raises ObjectDoesNotExist: when the restaurant does not exist
+        :raises MultipleObjectsReturned: when there are more than one restaurant
+                                        of the given rest_id
+        :return: list of post records
+        :rtype: list of :class: `RestaurantPost`
+        """
+        rest_filter = PendingRestaurant.objects.filter(_id=rest_id)
+        if not rest_filter.exists:
+            raise ObjectDoesNotExist("The restaurant with _id: "+rest_id+" does not exist")
+        if rest_filter.count() > 1:
+            raise MultipleObjectsReturned("There are more than one restaurant record with _id: "+rest_id)
+
+        posts = list(RestaurantPost.objects.filter(restaurant_id=rest_id))
         response = {"Posts": []}
         for post in posts:
             time_stamp = {"Timestamp": post.timestamp.strftime("%b %d, %Y %H:%M")}

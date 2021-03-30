@@ -23,7 +23,7 @@ export class AccountSettingComponent implements OnInit {
     private tokenStorage: TokenStorageService,
     public authService: AuthService,
     public router: Router,
-    private titleService: Title 
+    private titleService: Title
   ) { }
 
   ngOnInit(): void {
@@ -43,9 +43,9 @@ export class AccountSettingComponent implements OnInit {
       this.authService.updateLoginStatus(false);
       this.router.navigate([''])
     }, err => {
-      console.log(err);
+      // console.log(err);
     });
-    
+
   }
 
   reload() {

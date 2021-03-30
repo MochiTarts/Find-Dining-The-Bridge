@@ -63,7 +63,6 @@ export class SubscriberProfileFormComponent implements OnInit {
           this.phone = data.phone;
         },
           err => {
-            console.log(err);
             if (err.error && err.error.code == 'no_profile_found') {
               // redirect to home page to fill the profile
               this.router.navigate(['/']);
@@ -117,7 +116,6 @@ export class SubscriberProfileFormComponent implements OnInit {
     if (!this.profileId) {
       subscriberInfo["consent_status"] = ((<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED")
     }
-    console.log(subscriberInfo)
 
     // clear formErrors
     this.validator.clearAllErrors();
@@ -139,7 +137,6 @@ export class SubscriberProfileFormComponent implements OnInit {
         })
       } else {
         this.userService.createSubscriberProfile(subscriberInfo).subscribe((profile) => {
-          console.log(profile)
           var sduserInfo = {
             profile_id: profile.id,
           };

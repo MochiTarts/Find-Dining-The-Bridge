@@ -118,13 +118,20 @@ export class RestaurantPageComponent implements OnInit {
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
+    }
 
+    if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
       this.getNearbyRestaurants();
     }
 
-    this.restaurantId = this.route.snapshot.queryParams.restaurantId || this.userId;
+    this.restaurantId = this.route.snapshot.queryParams.restaurantId;
 
-    if (this.restaurantId == this.route.snapshot.queryParams.restaurantId) this.isQueryRestaurant = true;
+    if (this.restaurantId) this.isQueryRestaurant = true;
+
+    if (!this.restaurantId && !this.role) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
     this.getPendingOrApprovedRestaurant(this.restaurantId).subscribe((data) => {
       this.restaurantDetails = data;
@@ -215,7 +222,7 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   getPendingOrApprovedRestaurant(id) {
-    if (this.authService.isLoggedIn && this.role == 'RO' && !this.isQueryRestaurant) {
+    if (this.role == 'RO' && !id) {
       return this.restaurantService.getPendingRestaurant();
     } else {
       return this.restaurantService.getApprovedRestaurant(id);
@@ -223,7 +230,7 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   getPendingOrApprovedDishes(id) {
-    if (this.authService.isLoggedIn && this.role == 'RO' && !this.isQueryRestaurant) {
+    if (this.role == 'RO' && !id) {
       return this.restaurantService.getPendingRestaurantFood();
     } else {
       return this.restaurantService.getApprovedRestaurantFood(id);
@@ -249,10 +256,13 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   reload() {
-    let currentUrl = this.router.url;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([currentUrl]);
+    this.authService.refreshToken().subscribe((token) => {
+      this.tokenStorage.updateTokenAndUser(token.access);
+      let currentUrl = this.router.url;
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.onSameUrlNavigation = 'reload';
+      this.router.navigate([currentUrl]);
+    });
   }
 
   openEditModal(content) {
@@ -411,7 +421,6 @@ export class RestaurantPageComponent implements OnInit {
 
   getNearbyRestaurants() {
     this.userService.getNearbyRestaurants().subscribe((restaurants) => {
-      console.log(restaurants);
       for (let restaurant of restaurants) {
         this.restaurantService.getApprovedRestaurant(restaurant.restaurant).subscribe((data) => {
           let price = this.getPricepoint(String(data.pricepoint));
