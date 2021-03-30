@@ -42,7 +42,7 @@ restaurant_editable = [
     "owner_first_name", "owner_last_name", "owner_preferred_name",
     "owner_story", "owner_picture_url",
     "status", "modified_time", "sysAdminComments",
-    "open_hours", "payment_methods", "full_menu_url"
+    "open_hours", "payment_methods", "full_menu_url", "restaurant_video_desc"
 ]
 
 User = get_user_model()
@@ -419,6 +419,7 @@ class Restaurant(models.Model):
 
     full_menu_url = models.CharField(max_length=200, blank=True)
     approved_once = models.BooleanField(default=False, blank=True)
+    restaurant_video_desc = models.TextField(default='', blank=True)
 
     # for display (default was "objectname object (object_id)")
     def __str__(self):
@@ -532,6 +533,7 @@ class PendingRestaurant(models.Model):
 
     full_menu_url = models.CharField(max_length=200, blank=True)
     approved_once = models.BooleanField(default=False, blank=True)
+    restaurant_video_desc = models.TextField(default='', blank=True)
 
     # for display (default was "objectname object (object_id)")
     def __str__(self):
