@@ -72,7 +72,7 @@ export class RestaurantSetupComponent implements OnInit {
       terms: ['', Validators.requiredTrue],
     });
 
-    if (this.authService.isLoggedIn && this.profileId) {
+    if (this.profileId) {
       this.titleService.setTitle("Edit Restaurant Profile | Find Dining Scarborough");
       var draft_btn = document.getElementById('draft-btn');
       var submit_btn = document.getElementById('submit-btn');
