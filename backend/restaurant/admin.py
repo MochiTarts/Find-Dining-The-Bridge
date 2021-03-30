@@ -3,6 +3,7 @@ from django.contrib.admin import SimpleListFilter
 from django.utils.html import format_html
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.http import HttpResponse, HttpResponseRedirect
 
 from utils.geo_controller import geocode
 from utils.model_util import save_and_clean, model_to_json, edit_model
@@ -296,6 +297,17 @@ class PendingRestrAdmin(admin.ModelAdmin):
     coverPhotoUrl.short_description = "cover_photo_url"
     logoUrl.short_description = "logo_url"
 
+    def response_change(self, request, obj):
+        if "_approve" in request.POST:
+            approve_restr(self, request, PendingRestaurant.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        if "_reject" in request.POST:
+            reject_restr(self, request, PendingRestaurant.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
+
 
 class RestaurantFilter(admin.SimpleListFilter):
     """ Filter by Restaurant for PendingFood Admin Model """
@@ -383,6 +395,17 @@ class PendingFoodAdmin(admin.ModelAdmin):
     pictureUrl.short_description = "picture"
     link_to_restaurant.short_description = 'restaurant_id'
 
+    def response_change(self, request, obj):
+        if "_approve" in request.POST:
+            approve_restr(self, request, PendingFood.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        if "_reject" in request.POST:
+            reject_restr(self, request, PendingFood.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
+
 
 class RestrAdmin(admin.ModelAdmin):
     """ Admin Model for Restaurant """
@@ -391,6 +414,7 @@ class RestrAdmin(admin.ModelAdmin):
                     'cuisines', 'address', 'categories', 'coverPhotoUrl', 'logoUrl')
     actions = (unpublish_restr,)
     readonly_fields = ('status', 'GEO_location',)
+
 
     def save_model(self, request, obj, form, change):
         """
@@ -434,6 +458,13 @@ class RestrAdmin(admin.ModelAdmin):
     coverPhotoUrl.short_description = "cover_photo_url"
     logoUrl.short_description = "logo_url"
 
+    def response_change(self, request, obj):
+        if "_unpublish" in request.POST:
+            unpublish_restr(self, request, Restaurant.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
+
 
 class FoodAdmin(admin.ModelAdmin):
     """ Admin Model for Food """
@@ -441,6 +472,13 @@ class FoodAdmin(admin.ModelAdmin):
     list_display = ('name', 'restaurant', 'description', 'pictureUrl', 'price', 'specials', 'category', 'status', 'link_to_restaurant',)
     readonly_fields = ('restaurant_id', 'status')
     actions = (unpublish_food,)
+
+    def response_change(self, request, obj):
+        if "_unpublish" in request.POST:
+            unpublish_food(self, request, Food.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
 
     def save_model(self, request, obj, form, change):
         """
@@ -501,9 +539,40 @@ class FoodAdmin(admin.ModelAdmin):
     pictureUrl.short_description = "picture"
     link_to_restaurant.short_description = 'restaurant_id'
 
+    def response_change(self, request, obj):
+        if "_unpublish" in request.POST:
+            unpublish_restr(self, request, Food.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
+
 
 class RestPostAdmin(admin.ModelAdmin):
-    list_filter = ('restaurant_id', 'timestamp',)
+    list_filter = (RestaurantFilter, 'timestamp',)
+    list_display = ('restaurant_name', 'link_to_restaurant', 'owner_user_id', 'timestamp',)
+
+    def restaurant_name(self, obj):
+        if not obj.restaurant_id:
+            return ""
+        return PendingRestaurant.objects.filter(_id=obj.restaurant_id).first().name
+
+    def link_to_post_edit(self, obj):
+        link = reverse("admin:restaurant_restaurantpost_change", args=[obj._id])
+        return format_html("<a href='{}' target='_blank' rel='noopener'>{}</a>", link, obj.restaurant_id)
+
+    def link_to_restaurant(self, obj):
+        # link to edit restaurant associated with restaurant id
+        # first argument of reverse takes a string (all lowercase) in the form of "admin:appname_modelname_change" for edit
+        # target='_blank' has no effect, open new tab doesn't work at the moment, ignore it for now
+        try:
+            if not obj.restaurant_id:
+                return ""
+            link = reverse("admin:restaurant_pendingrestaurant_change", args=[obj.restaurant_id])
+            return format_html("<a href='{}' target='_blank' rel='noopener'>{}</a>", link, obj.restaurant_id)
+        except NoReverseMatch as e:
+            return str(obj.restaurant_id)
+        except Exception as e:
+            return str(obj.restaurant_id)
 
 
 admin.site.register(PendingRestaurant, PendingRestrAdmin)

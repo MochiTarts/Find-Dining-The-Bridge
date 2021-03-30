@@ -1,24 +1,35 @@
 from django.conf import settings
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.contrib.auth import get_user_model
+from restaurant.models import RestaurantPost
 
 User = get_user_model()
 
-def send_posts_notify_email(post):
+def send_posts_notify_email(post, restaurant_name):
     """ Send email to all admins, notifying
     them of a new restaurant post
 
     :param post: the newly created post by a restaurant owner
-    :type post: dict
+    :type post: :class: `RestaurantPost`
+    :param restaurant_name: the name of the restaurant that made this post
+    :type restaurant_name: str
     """
     subject = "New Restaurant Post on Find Dining"
     admins = list(User.objects.filter(is_superuser=True).values_list('email', flat=True))
-    content = "<p>New restaurant post</p>"
+
+    link = settings.SITE_URL + "/api/admin/restaurant/restaurantpost/" + \
+            str(post._id) + "/change/"
+            
+    content = "<p>New restaurant post posted by: {}</p>".format(restaurant_name) + \
+              "<a href={}>Link to post</a>".format(link)
     
     send_mail(subject, strip_tags(content), from_email="admin@finddining.ca",
               recipient_list=admins, html_message=content)
 
+#post = RestaurantPost.objects.filter(_id="605cfca4fb767cc1fbc8ff1b").first()
+#send_posts_notify_email(post, "q")
 
 def send_approval_email(names, receiver, profile_title, profile_type):
     # if names list is empty
