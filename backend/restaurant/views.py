@@ -619,6 +619,16 @@ class PostView(APIView):
         return JsonResponse({"Deleted post": model_to_json(post_deleted)})
 
 
+class PublicPostView(APIView):
+    """ Restaurant posts view for all viewers """
+    permission_classes = (AllowAny,)
+
+    def get(self, request, rest_id):
+        """ Get all posts for a restaurant """
+        posts = RestaurantPost.get_by_rest_id(rest_id)
+        return JsonResponse(posts)
+
+
 class RestaurantMediaView(APIView):
     """ Restaurant media (image/video) view """
     #permission_classes = (AllowAny,)

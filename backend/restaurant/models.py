@@ -1155,6 +1155,33 @@ class RestaurantPost(models.Model):
         return response
 
     @classmethod
+    def get_by_rest_id(cls, rest_id):
+        """ Retrieves a list of all posts
+        posted by a restaurant owner given the restaurant's
+        _id
+
+        :param rest_id: the _id of the restaurant
+        :type rest_id: ObjectId str
+        :raises ObjectDoesNotExist: when the restaurant does not exist
+        :raises MultipleObjectsReturned: when there are more than one restaurant
+                                        of the given rest_id
+        :return: list of post records
+        :rtype: list of :class: `RestaurantPost`
+        """
+        rest_filter = PendingRestaurant.objects.filter(_id=rest_id)
+        if not rest_filter.exists:
+            raise ObjectDoesNotExist("The restaurant with _id: "+rest_id+" does not exist")
+        if rest_filter.count() > 1:
+            raise MultipleObjectsReturned("There are more than one restaurant record with _id: "+rest_id)
+
+        posts = list(RestaurantPost.objects.filter(restaurant_id=rest_id))
+        response = {"Posts": []}
+        for post in posts:
+            time_stamp = {"Timestamp": post.timestamp.strftime("%b %d, %Y %H:%M")}
+            response["Posts"].append(model_to_json(post, time_stamp))
+        return response
+
+    @classmethod
     def remove_post(cls, post_id):
         """ Removes a post from the database given
         the post's id

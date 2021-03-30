@@ -10,7 +10,7 @@ from utils.admin import InputFilter, OwnerNameFilter, NameFilter, PriceMaxFilter
 
 from restaurant.enum import Status
 from restaurant.forms import RestaurantAdminForm
-from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs
+from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs, RestaurantPost
 from restaurant.utils import send_approval_email, send_reject_email, send_unpublish_email
 
 from django.contrib import messages
@@ -501,7 +501,13 @@ class FoodAdmin(admin.ModelAdmin):
     pictureUrl.short_description = "picture"
     link_to_restaurant.short_description = 'restaurant_id'
 
+
+class RestPostAdmin(admin.ModelAdmin):
+    list_filter = ('restaurant_id', 'timestamp',)
+
+
 admin.site.register(PendingRestaurant, PendingRestrAdmin)
 admin.site.register(PendingFood, PendingFoodAdmin)
 admin.site.register(Restaurant, RestrAdmin)
 admin.site.register(Food, FoodAdmin)
+admin.site.register(RestaurantPost, RestPostAdmin)
