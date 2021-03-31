@@ -282,14 +282,11 @@
         </div>
         <div class="form-group col-md-8">
           <label for="restaurant-cuisine">Type(s) of Cuisine <app-required-star></app-required-star></label>
-          <kendo-multiselect
-            class="form-control"
-            [placeholder]="'Select your cuisine!'"
-            [data]="cuisineItems"
-            formControlName="cuisines"
-            aria-required="true"
-            id="cuisineList"
-          ></kendo-multiselect>
+          <app-multiselect-checkbox-dropdown
+            [list]="cuisineItems"
+            [initialCheckedList]="restaurantDetails ? restaurantDetails.cuisines : []"
+            (shareCheckedList)="updateCuisineList($event)" >
+          </app-multiselect-checkbox-dropdown>
           <app-dynamic-label
             class="error-label"
             [name]="'errorCuisine'"
@@ -301,14 +298,11 @@
 
       <div class="form-group">
         <label for="payment-methods">Accepted Payment Methods <app-required-star></app-required-star></label>
-          <kendo-multiselect
-            class="form-control"
-            [placeholder]="'Select accepted payment methods'"
-            [data]="paymentItems"
-            formControlName="payments"
-            aria-required="true"
-            id="paymentList"
-          ></kendo-multiselect>
+        <app-multiselect-checkbox-dropdown
+          [list]="paymentItems"
+          [initialCheckedList]="restaurantDetails ? restaurantDetails.payment_methods : []"
+          (shareCheckedList)="updatePaymentList($event)" >
+        </app-multiselect-checkbox-dropdown>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPayment'"
@@ -319,14 +313,11 @@
 
       <div class="form-group">
         <label for="restaurant-service">General Services</label>
-        <kendo-multiselect
-          class="form-control"
-          [placeholder]="'Select general services'"
-          [data]="serviceItems"
-          formControlName="services"
-          aria-required="true"
-          id="service-list"
-        ></kendo-multiselect>
+        <app-multiselect-checkbox-dropdown
+          [list]="serviceItems"
+          [initialCheckedList]="restaurantDetails ? restaurantDetails.offer_options : []"
+          (shareCheckedList)="updateServiceList($event)" >
+        </app-multiselect-checkbox-dropdown>
         <app-dynamic-label
           class="error-label"
           [name]="'errorServices'"

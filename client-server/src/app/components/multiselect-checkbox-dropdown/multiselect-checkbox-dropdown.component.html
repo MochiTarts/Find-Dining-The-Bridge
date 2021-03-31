@@ -1,0 +1,27 @@
+<div #dropdownContainer>
+  <div (mouseleave)="showDropDown = false">
+    <button class="drop-toggle form-control flat" (click)="toggleDropdown($event)" (focus)="isFocused=true" (blur)="isFocused=false">
+      <span *ngIf="checkedList.length<=0">Select</span>
+      <span *ngIf="checkedList.length>0">{{checkedList.join(', ')}}</span>
+      <i class="fa fa-angle-down"></i>
+    </button>
+    <cdk-virtual-scroll-viewport
+      itemSize="initialList.length"
+      minBufferPx="200"
+      maxBufferPx="400"
+      class="example-viewport"
+      [style.width]="containerWidth + 'px'"
+      *ngIf="showDropDown"
+    >
+      <label *cdkVirtualFor="let a of initialList">
+        <input
+          type="checkbox"
+          [(ngModel)]="a.checked"
+          (change)="getSelectedValue(a.checked,a.name)"
+          (keyup.enter)="a.checked = !a.checked; getSelectedValue(a.checked,a.name)"
+        />
+        <span>{{a.name}}</span>
+      </label>
+    </cdk-virtual-scroll-viewport>
+  </div>
+</div>

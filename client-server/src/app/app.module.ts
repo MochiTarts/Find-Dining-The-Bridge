@@ -37,7 +37,6 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
-import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { LoginComponent } from './pages/login/login.component';
@@ -52,6 +51,7 @@ import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page
 import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
 import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
+import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -72,8 +72,9 @@ import { PageErrorComponent } from './components/page-error/page-error.component
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 import { PostComponent } from './components/post/post.component';
 import { PartnerCardComponent } from './components/partner-card/partner-card.component';
+import { MultiselectCheckboxDropdownComponent } from './components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component';
 import { PasswordChangeFormComponent } from './components/password-change-form/password-change-form.component';
-import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
+
 
 @NgModule({
   declarations: [
@@ -109,6 +110,7 @@ import { AccountSettingComponent } from './pages/account-setting/account-setting
     MenuEditComponent,
     GetInvolvedComponent,
     PartnerCardComponent,
+    MultiselectCheckboxDropdownComponent,
     PasswordChangeFormComponent,
     AccountSettingComponent,
   ],
@@ -142,7 +144,6 @@ import { AccountSettingComponent } from './pages/account-setting/account-setting
     LightboxModule,
     ScrollingModule,
     MatPasswordStrengthModule.forRoot(),
-    DropDownsModule,
   ],
   providers: [authInterceptorProviders, {
     provide: 'SocialAuthServiceConfig',

@@ -99,7 +99,7 @@ export class RestaurantSetupComponent implements OnInit {
     }
 
     this.pricepoints = pricepointsObj
-    // dropdown for cuisine
+    // dropdown
     this.cuisineItems = cuisinesStr;
     this.serviceItems = servicesStr;
     this.paymentItems = paymentsStr;
@@ -369,6 +369,18 @@ export class RestaurantSetupComponent implements OnInit {
 
   gotoEditPosts() {
     this.router.navigate(['/edit-posts']);
+  }
+
+  updateCuisineList(cuisines: any[]) {
+    this.uploadForm.get('cuisines').setValue(cuisines);
+  }
+
+  updatePaymentList(payments: any[]) {
+    this.uploadForm.get('payments').setValue(payments);
+  }
+
+  updateServiceList(services: any[]) {
+    this.uploadForm.get('services').setValue(services);
   }
 
 }
