@@ -38,7 +38,13 @@
             class="error-label"
             [name]="'errorName'"
             [message]="validator.errors['name']"
-            tabindex="0"
+            tabindex="validator.errors['name'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorName'"
+            [message]="validator.errors['name_p']"
+            tabindex="validator.errors['name_p'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
         <div class="form-group col-md-4">
@@ -54,7 +60,7 @@
             class="error-label"
             [name]="'errorYears'"
             [message]="validator.errors['years']"
-            tabindex="0"
+            tabindex="validator.errors['years'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -132,22 +138,38 @@
       <div class="row">
         <div class="form-group col-md-3">
           <app-dynamic-label class="error-label"
-          [name]="'errorOwnerFirstName'"
-          [message]="validator.errors['owner_first_name']"
-          tabindex="0" ></app-dynamic-label>
+            [name]="'errorOwnerFirstName'"
+            [message]="validator.errors['owner_first_name']"
+            tabindex="validator.errors['owner_first_name'] ? 0 : -1" ></app-dynamic-label>
+          <app-dynamic-label class="error-label"
+            [name]="'errorOwnerFirstName'"
+            [message]="validator.errors['owner_first_name_p']"
+            tabindex="validator.errors['owner_first_name_p'] ? 0 : -1" ></app-dynamic-label>
         </div>
+
         <div class="form-group col-md-3">
           <app-dynamic-label class="error-label"
-          [name]="'errorOwnerLastName'"
-          [message]="validator.errors['owner_last_name']"
-          tabindex="0" ></app-dynamic-label>
+            [name]="'errorOwnerLastName'"
+            [message]="validator.errors['owner_last_name']"
+            tabindex="validator.errors['owner_last_name'] ? 0 : -1" ></app-dynamic-label>
+          <app-dynamic-label class="error-label"
+            [name]="'errorOwnerLastName'"
+            [message]="validator.errors['owner_last_name_p']"
+            tabindex="validator.errors['owner_last_name_p'] ? 0 : -1" ></app-dynamic-label>
         </div>
+
         <div class="form-group col-md-3">
           <app-dynamic-label
             class="error-label"
             [name]="'errorOwnerPreferredName'"
             [message]="validator.errors['owner_preferred_name']"
-            tabindex="0"
+            tabindex="validator.errors['owner_preferred_name'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorOwnerPreferredName'"
+            [message]="validator.errors['owner_preferred_name_p']"
+            tabindex="validator.errors['owner_preferred_name_p'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -166,7 +188,13 @@
           class="error-label"
           [name]="'errorAddress'"
           [message]="validator.errors['address']"
-          tabindex="0"
+          tabindex="validator.errors['address'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorAddress'"
+          [message]="validator.errors['address_p']"
+          tabindex="validator.errors['address_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -183,7 +211,13 @@
             class="error-label"
             [name]="'errorAddress2'"
             [message]="validator.errors['streetAddress2']"
-            tabindex="0"
+            tabindex="validator.errors['streetAddress2'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorAddress2'"
+            [message]="validator.errors['streetAddress2_p']"
+            tabindex="validator.errors['streetAddress2_p'] ? 0 : -1"
           ></app-dynamic-label>
       </div>
 
@@ -201,7 +235,13 @@
             class="error-label"
             [name]="'errorAddress3'"
             [message]="validator.errors['streetAddress3']"
-            tabindex="0"
+            tabindex="validator.errors['streetAddress3'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorAddress3'"
+            [message]="validator.errors['streetAddress3_p']"
+            tabindex="validator.errors['streetAddress3_p'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
         <div class = "form-group col-md-4">
@@ -218,7 +258,7 @@
             class="error-label"
             [name]="'postalCode'"
             [message]="validator.errors['postalCode']"
-            tabindex="0"
+            tabindex="validator.errors['postalCode'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -237,7 +277,7 @@
           <app-dynamic-label class="error-label"
           [name]="'errorPhone'"
           [message]="validator.errors['phone']"
-          tabindex="0"></app-dynamic-label>
+          tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-8">
           <label for="restaurant-email">Email Address</label>
@@ -253,7 +293,7 @@
             class="error-label"
             [name]="'errorEmail'"
             [message]="validator.errors['email']"
-            tabindex="0"
+            tabindex="validator.errors['email'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -277,7 +317,7 @@
             class="error-label"
             [name]="'errorPrice'"
             [message]="validator.errors['pricepoint']"
-            tabindex="0"
+            tabindex="validator.errors['pricepoint'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
         <div class="form-group col-md-8">
@@ -291,7 +331,7 @@
             class="error-label"
             [name]="'errorCuisine'"
             [message]="validator.errors['cuisines']"
-            tabindex="0"
+            tabindex="validator.errors['cuisines'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -307,7 +347,7 @@
           class="error-label"
           [name]="'errorPayment'"
           [message]="validator.errors['payment_methods']"
-          tabindex="0"
+          tabindex="validator.errors['payment_methods'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -322,7 +362,7 @@
           class="error-label"
           [name]="'errorServices'"
           [message]="validator.errors['offer_options']"
-          tabindex="0"
+          tabindex="validator.errors['offer_options'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -339,7 +379,13 @@
           class="error-label"
           [name]="'errorDeliveryDetails'"
           [message]="validator.errors['deliveryDetails']"
-          tabindex="0"
+          tabindex="validator.errors['deliveryDetails'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorDeliveryDetails'"
+          [message]="validator.errors['deliveryDetails_p']"
+          tabindex="validator.errors['deliveryDetails_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -356,7 +402,13 @@
           class="error-label"
           [name]="'errorDineinPickupDetails'"
           [message]="validator.errors['dineinPickupDetails']"
-          tabindex="0"
+          tabindex="validator.errors['dineinPickupDetails'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorDineinPickupDetails'"
+          [message]="validator.errors['dineinPickupDetails_p']"
+          tabindex="validator.errors['dineinPickupDetails_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -373,7 +425,13 @@
           class="error-label"
           [name]="'errorLocationNotes'"
           [message]="validator.errors['locationNotes']"
-          tabindex="0"
+          tabindex="validator.errors['locationNotes'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorLocationNotes'"
+          [message]="validator.errors['locationNotes_p']"
+          tabindex="validator.errors['locationNotes_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -393,7 +451,13 @@
           class="error-label"
           [name]="'errorBio'"
           [message]="validator.errors['bio']"
-          tabindex="0"
+          tabindex="validator.errors['bio'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorBio'"
+          [message]="validator.errors['bio_p']"
+          tabindex="validator.errors['bio_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -411,7 +475,13 @@
           class="error-label"
           [name]="'errorOpenHours'"
           [message]="validator.errors['open_hours']"
-          tabindex="0"
+          tabindex="validator.errors['open_hours'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorOpenHours'"
+          [message]="validator.errors['open_hours_p']"
+          tabindex="validator.errors['open_hours_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 

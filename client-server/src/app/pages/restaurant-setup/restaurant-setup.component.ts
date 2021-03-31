@@ -214,6 +214,23 @@ export class RestaurantSetupComponent implements OnInit {
     return restaurantInfo;
   }
 
+  getAnswerForProfanityCheck(restaurantInfo) {
+    let newRestaurantInfo = Object.assign({}, restaurantInfo);
+    newRestaurantInfo['name_p'] = restaurantInfo.name;
+    newRestaurantInfo['owner_first_name_p'] = String(restaurantInfo.owner_first_name);
+    newRestaurantInfo['owner_last_name_p'] = String(restaurantInfo.owner_last_name);
+    newRestaurantInfo['owner_preferred_name_p'] = String(restaurantInfo.owner_preferred_name);
+    newRestaurantInfo['address_p'] = restaurantInfo.address;
+    newRestaurantInfo['streetAddress2_p'] = restaurantInfo.streetAddress2;
+    newRestaurantInfo['streetAddress3_p'] = restaurantInfo.streetAddress3;
+    newRestaurantInfo['deliveryDetails_p'] = restaurantInfo.deliveryDetails;
+    newRestaurantInfo['dineinPickupDetails_p'] = restaurantInfo.dineinPickupDetails;
+    newRestaurantInfo['locationNotes_p'] = restaurantInfo.locationNotes;
+    newRestaurantInfo['bio_p'] = restaurantInfo.bio;
+    newRestaurantInfo['open_hours_p'] = restaurantInfo.open_hours;
+    return newRestaurantInfo;
+  }
+
   chooseAPI(option: string, restaurantInfo: Object): Observable<any> {
     switch (option) {
       case 'SETUP-DRAFT':
@@ -283,9 +300,11 @@ export class RestaurantSetupComponent implements OnInit {
       restaurantInfo = this.improveDraftAnswer(restaurantInfo);
     }
 
+    let restaurantInfoForProfanityCheck = this.getAnswerForProfanityCheck(restaurantInfo);
+
     let validator = this.chooseValidator(option);
     this.validator.clearAllErrors();
-    let failFlag = validator.validateAll(restaurantInfo, (key) => {
+    let failFlag = validator.validateAll(restaurantInfoForProfanityCheck, (key) => {
       this.validator.setError(key);
     });
 
