@@ -22,6 +22,7 @@ import { MediaService } from '../../_services/media.service';
 import { Observable } from 'rxjs';
 import { formValidation } from '../../_validation/forms';
 import { UserService } from '../../_services/user.service';
+import { draftValidator } from '../../_validation/draftValidator';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -67,6 +68,7 @@ export class RestaurantPageComponent implements OnInit {
 
   videoId:string = '';
   validator: formValidator = new linkValidator();
+  draftValidator: formValidator = new draftValidator();
   apiLoaded = false;
   uploadMethod: string = '';
   submitVideoAllowed: boolean = false;
@@ -266,6 +268,8 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   openEditModal(content) {
+    this.validator.clearAllErrors();
+    this.draftValidator.clearAllErrors();
     this.modalRef = this.modalService.open(content, { size: 's' });
     this.newFile = false;
   }
@@ -331,24 +335,49 @@ export class RestaurantPageComponent implements OnInit {
     formData.append('media_type', 'VIDEO');
     formData.append('save_location', 'restaurant_video_url');
     formData.append('first_time_submission', 'False');
+
+    let info = {
+      restaurant_video_desc: (<HTMLInputElement>document.getElementById('video_desc')).value,
+    }
+    this.draftValidator.clearAllErrors();
+    var failFlag = this.draftValidator.validateAll(info, (key) => {
+      this.draftValidator.setError(key)
+    });
+
     if (this.uploadMethod == 'Upload .mp4 video file') {
-      formData.append('media_file', this.uploadVideoForm.get('file').value);
-      this.mediaService.uploadRestaurantMedia(formData, 'VIDEO', 'restaurant_video_url', 'False').subscribe((data) => {
-        this.reload();
-      });
-      this.modalRef.close();
+
+      if (!failFlag) {
+        formData.append('media_file', this.uploadVideoForm.get('file').value);
+        this.mediaService.uploadRestaurantMedia(formData, 'VIDEO', 'restaurant_video_url', 'False').subscribe((data) => {
+          this.chooseUpdateAPI(this.restaurantDetails.status, info).subscribe((data) => {
+            this.modalRef.close();
+            alert("Changes to restaurant are now saved as draft");
+            this.reload();
+          });
+        });
+      } else {
+        alert("Please ensure all fields are entered in correctly");
+      }
+
     } else if (this.uploadMethod == 'YouTube video link') {
       let linkInfo = {
         link: (<HTMLInputElement>document.getElementById('youtube_link')).value
       };
+
       this.validator.clearAllErrors();
-      let failFlag = this.validator.validateAll(linkInfo, (key) => this.validator.setError(key));
+      failFlag = failFlag || this.validator.validateAll(linkInfo, (key) => this.validator.setError(key));
+
       if (!failFlag) {
         formData.append('media_link', linkInfo.link);
         this.mediaService.uploadRestaurantMedia(formData, 'VIDEO', 'restaurant_video_url', 'False').subscribe((data) => {
-          this.reload();
+          this.chooseUpdateAPI(this.restaurantDetails.status, info).subscribe((data) => {
+            this.modalRef.close();
+            alert("Changes to restaurant are now saved as draft");
+            this.reload();
+          });
         });
-        this.modalRef.close();
+      } else {
+        alert("Please ensure all fields are entered in correctly");
       }
     }
   }
@@ -397,26 +426,27 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
-  chooseUpdateAPI(status: string, linkInfo: Object): Observable<any> {
-    linkInfo['name'] = this.restaurantDetails.name;
-    linkInfo['address'] = this.restaurantDetails.address;
-    linkInfo['postalCode'] = this.restaurantDetails.postalCode;
-    linkInfo['owner_first_name'] = this.restaurantDetails.owner_first_name;
-    linkInfo['owner_last_name'] = this.restaurantDetails.owner_last_name;
+  chooseUpdateAPI(status: string, info: Object): Observable<any> {
+    info['name'] = this.restaurantDetails.name;
+    info['address'] = this.restaurantDetails.address;
+    info['postalCode'] = this.restaurantDetails.postalCode;
+    info['owner_first_name'] = this.restaurantDetails.owner_first_name;
+    info['owner_last_name'] = this.restaurantDetails.owner_last_name;
+    return this.restaurantService.updateRestaurantDraft(info);
 
-    switch (status) {
-      case 'In_Progress':
-        return this.restaurantService.updateRestaurantDraft(linkInfo);
-      default:
-        linkInfo['years'] = this.restaurantDetails.years;
-        linkInfo['phone'] = this.restaurantDetails.phone;
-        linkInfo['pricepoint'] = this.restaurantDetails.pricepoint;
-        linkInfo['bio'] = this.restaurantDetails.bio;
-        linkInfo['open_hours'] = this.restaurantDetails.open_hours;
-        linkInfo['payment_methods'] = this.restaurantDetails.payment_methods;
-        linkInfo['offer_options'] = this.restaurantDetails.offer_options;
-        return this.restaurantService.insertRestaurantApproval(linkInfo);
-    }
+    // switch (status) {
+    //   case 'In_Progress':
+    //     return this.restaurantService.updateRestaurantDraft(info);
+    //   default:
+    //     info['years'] = this.restaurantDetails.years;
+    //     info['phone'] = this.restaurantDetails.phone;
+    //     info['pricepoint'] = this.restaurantDetails.pricepoint;
+    //     info['bio'] = this.restaurantDetails.bio;
+    //     info['open_hours'] = this.restaurantDetails.open_hours;
+    //     info['payment_methods'] = this.restaurantDetails.payment_methods;
+    //     info['offer_options'] = this.restaurantDetails.offer_options;
+    //     return this.restaurantService.insertRestaurantApproval(info);
+    // }
   }
 
   getNearbyRestaurants() {
