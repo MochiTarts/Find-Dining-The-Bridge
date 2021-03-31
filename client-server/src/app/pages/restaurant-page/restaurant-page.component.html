@@ -21,8 +21,7 @@
           <div class="row">
             <div class="col-md-6">
               <p>
-                {{ cuisineList | titlecase }} -
-                {{ pricepoint | titlecase }}
+                <span *ngIf="cuisineList">{{ cuisineList | titlecase }}</span><span *ngIf="pricepoint"> - {{ pricepoint | titlecase }}</span>
               </p>
               <p *ngIf="expandService">
                 {{ serviceList }} <span (click)="expandService = false" style="color: gray; cursor: pointer;">show less...</span>
@@ -41,18 +40,18 @@
               <div class="row info-item-child">
                 <fa-icon class="contact-icon" [icon]="faMapMarker"></fa-icon>
                 <p>
-                  <a 
-                    [routerLink]="['/all-listings']" 
+                  <a
+                    [routerLink]="['/all-listings']"
                     [queryParams]="{GEO_location: restaurantDetails.GEO_location}"
                     target="_blank"
-                    placement="bottom" 
+                    placement="bottom"
                     ngbTooltip="Visit Restaurant Page"
                     style="color: black;"
                   >
                     {{ restaurantDetails.address }} <br> Scarborough, ON {{ restaurantDetails.postalCode }}
                   </a>
                 </p>
-                
+
               </div>
               <div class="row info-item-child">
                 <fa-icon class="contact-icon" [icon]="faPhone"></fa-icon>
@@ -70,7 +69,7 @@
                   </p>
                 </div>
               </div>
-  
+
               <div class="row info-item-child" style="margin-top: 10px;">
                 <a
                   *ngIf="restaurantDetails.web_url != ''"
@@ -109,8 +108,8 @@
           </div>
         </div>
       </div>
-      
-      <!-- 
+
+      <!--
           <div class="media-icons">
             <fa-icon class="media-icon" [icon]="faHeartLine"></fa-icon>
           </div>
@@ -144,7 +143,8 @@
             <b>Restaurant Owners: </b><br />
             <div *ngFor="let owner of restaurantDetails.owner_first_name; let i=index;">
               <div>
-                {{ restaurantDetails.owner_first_name[i] + ' ' + restaurantDetails.owner_last_name[i] }} ( {{ restaurantDetails.owner_preferred_name[i] }} )
+                {{ restaurantDetails.owner_first_name[i] + ' ' + restaurantDetails.owner_last_name[i] }}
+                <span *ngIf="restaurantDetails.owner_preferred_name[i]">( {{ restaurantDetails.owner_preferred_name[i] }} )</span>
               </div>
             </div>
           </div>
@@ -171,11 +171,11 @@
         </div>
       </div>
       <div style="text-align: center; padding-bottom: 50px;">
-        <button 
-          *ngIf="role == 'RO' && !isQueryRestaurant" 
-          class="btn editBtn" 
-          (click)="openEditModal(storyImageModal)" 
-          placement="bottom" 
+        <button
+          *ngIf="role == 'RO' && !isQueryRestaurant"
+          class="btn editBtn"
+          (click)="openEditModal(storyImageModal)"
+          placement="bottom"
           ngbTooltip="Upload an Image for Our Story"
           aria-label="Upload an Image for Our Story"
         >
@@ -201,7 +201,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="tab-info-menu">
           <h1 class="section-title" *ngIf="popularDish.length != 0" style="text-align: center;">Popular Dishes</h1>
           <div class="row justify-content-center">
@@ -216,10 +216,10 @@
 
       <div style="text-align: center; padding-bottom: 30px;">
         <button
-          *ngIf="role == 'RO' && !isQueryRestaurant" 
-          class="btn editBtn" 
-          (click)="editMenu()" 
-          placement="bottom" 
+          *ngIf="role == 'RO' && !isQueryRestaurant"
+          class="btn editBtn"
+          (click)="editMenu()"
+          placement="bottom"
           ngbTooltip="Update Your Menu"
           aria-label="Update Your Menu"
         >
@@ -233,10 +233,10 @@
       </div>
       <div style="text-align: center; padding-bottom: 50px;">
         <button
-          *ngIf="role == 'RO' && !isQueryRestaurant" 
-          class="btn editBtn" 
-          (click)="openEditModal(fullMenuModal)" 
-          placement="bottom" 
+          *ngIf="role == 'RO' && !isQueryRestaurant"
+          class="btn editBtn"
+          (click)="openEditModal(fullMenuModal)"
+          placement="bottom"
           ngbTooltip="Add/Update URL of Your Full Menu"
         >
           <fa-icon [icon]="faEdit"></fa-icon>
@@ -302,10 +302,10 @@
         </div>
         <div class="col-md-8">
           <div class="tab-info-right tab-detail-right">
-            <ngb-alert 
+            <ngb-alert
               *ngIf="restaurantDetails.deliveryDetails.length == 0
                       && restaurantDetails.dineinPickupDetails.length == 0
-                      && restaurantDetails.locationNotes.length == 0" 
+                      && restaurantDetails.locationNotes.length == 0"
               [dismissible]="false"
             >
               No updates available. Please check again at a later time.
@@ -332,14 +332,14 @@
 
     <mat-tab label="Photo & Videos">
       <div class="tab-info">
-        <app-carousel-with-thumbnail 
+        <app-carousel-with-thumbnail
           *ngIf="restaurantDetails.restaurant_image_url[0] != '/'"
-          [autoPlayDuration]="5000" 
-          animation="slide" 
-          [isNavigationVisible]="true" 
+          [autoPlayDuration]="5000"
+          animation="slide"
+          [isNavigationVisible]="true"
           [isThumbnailsVisible]="true"
           [slides]="slides"
-          [slideTemplateRef]="slide" 
+          [slideTemplateRef]="slide"
           [thumbnailTemplateRef]="thumbnail"
         ></app-carousel-with-thumbnail>
         <ng-template #slide let-slide>
@@ -377,11 +377,11 @@
           Your browser does not support the video.
         </video>
       </div>
-      
+
       <div #youtubeContainer class="tab-info" *ngIf="videoId != undefined">
         <youtube-player videoId="{{ videoId }}" [width]="youtubeContainer.offsetWidth"></youtube-player>
       </div>
-  
+
       <div style="text-align: center; padding-bottom: 50px;">
         <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
           <fa-icon [icon]="faEdit"></fa-icon>
@@ -394,8 +394,8 @@
   <div class="nearby" *ngIf="role == 'BU' || role == 'RO'">
     <p class="nearby_text">Nearby Restaurants</p>
     <div class="row  justify-content-center">
-      <app-restaurant-nearby-card 
-        *ngFor="let restaurant of nearbyRestaurants" 
+      <app-restaurant-nearby-card
+        *ngFor="let restaurant of nearbyRestaurants"
         [restaurant]="restaurant">
       </app-restaurant-nearby-card>
     </div>
@@ -469,7 +469,7 @@
           ></textarea>
           <app-dynamic-label class="error-label"
             [name]="'errorMenuLink'"
-            [message]="validator.errors['full_menu_url']" 
+            [message]="validator.errors['full_menu_url']"
             tabindex="0"
           ></app-dynamic-label>
         </div>
@@ -530,7 +530,7 @@
           ></textarea>
           <app-dynamic-label class="error-label"
             [name]="'errorLink'"
-            [message]="validator.errors['link']" 
+            [message]="validator.errors['link']"
             tabindex="0"
           ></app-dynamic-label>
         </div>
@@ -555,10 +555,10 @@
       <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
         CANCEL
       </button>
-      <button 
-        class="btn saveBtn" 
-        type="submit" 
-        (click)="onSubmitVideo()" 
+      <button
+        class="btn saveBtn"
+        type="submit"
+        (click)="onSubmitVideo()"
         [disabled]="uploadMethod == '' || (uploadMethod == 'Upload .mp4 video file' && !submitVideoAllowed)"
       >
         CONFIRM
@@ -637,9 +637,9 @@
       <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
         CANCEL
       </button>
-      <button 
-        class="btn saveBtn" 
-        type="submit" 
+      <button
+        class="btn saveBtn"
+        type="submit"
         (click)="onSubmitImage(); modal.dismiss('Cross click')"
         [disabled]="addOrRemove == '' || (addOrRemove == 'Upload new images' && !newFile)"
       >
