@@ -1,5 +1,6 @@
 from django.core.validators import validate_email, RegexValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 
 def validate_signup_user(user):
     invalid = []
@@ -8,6 +9,12 @@ def validate_signup_user(user):
 
     if not validate_username(user['username']):
         invalid.append('username')
+    
+    try:
+        # validate password against auth AUTH_PASSWORD_VALIDATORS
+        validate_password(user['password'])
+    except ValidationError:
+        invalid.append('password')
 
     return invalid
 

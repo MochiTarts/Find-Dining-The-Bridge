@@ -112,8 +112,7 @@ class SDPasswordChangeForm(PasswordChangeForm):
     def clean_new_password1(self):
         password0 = self.cleaned_data.get('old_password')
         password1 = self.cleaned_data.get('new_password1')
-        #logger.info(password0)
-        #logger.info(password1)
+
         if password0 and password1:
             if password0 == password1:
                 raise forms.ValidationError("You may not use the same old password!",code='password_incorrect')

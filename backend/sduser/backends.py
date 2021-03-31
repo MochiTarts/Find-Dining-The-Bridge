@@ -104,7 +104,7 @@ def create_disable_user_and_send_verification_email(user, password, request):
         try:
             send_email_verification(user, request)
             # send a signal to frontend to ask them to verify email before log in
-            return JsonResponse({'message': 'verification email has been sent. Please activate your account before sign in.'})
+            return JsonResponse({'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
         except (BadHeaderError, SMTPException):
             user.delete()
             return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact find dining support.'}, status=503)
