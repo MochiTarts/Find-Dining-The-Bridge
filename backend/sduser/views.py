@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from utils.math import get_nearby_restaurants
-from sduser.utils import send_email_password_reset
+from sduser.utils import send_email_password_reset, send_email_deactivate
 from sduser.forms import SDPasswordChangeForm
 
 import json
@@ -55,6 +55,7 @@ class DeactivateView(APIView):
             if refresh_token == user.refresh_token:
                 user.is_active = False
                 user.save()
+                send_email_deactivate(user=user, request=request)
                 return JsonResponse(model_to_dict(user))
             else:
                 return JsonResponse({'message': 'deactivation failed: token mismatch', 'code': 'deactivation_fail'}, status=400)
