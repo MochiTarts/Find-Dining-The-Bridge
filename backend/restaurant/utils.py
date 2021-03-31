@@ -30,9 +30,7 @@ def send_posts_notify_email(post, restaurant_name):
     
     send_mail(subject, strip_tags(content), from_email="admin@finddining.ca",
               recipient_list=admins, html_message=content)
-
-#post = RestaurantPost.objects.filter(_id="605cfca4fb767cc1fbc8ff1b").first()
-#send_posts_notify_email(post, "q")
+              
 
 def send_approval_email(names, receiver, profile_title, profile_type):
     # if names list is empty
