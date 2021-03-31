@@ -39,6 +39,7 @@ export class draftValidator extends formValidator{
             'locationNotes_p': '',
             'bio_p': '',
             'open_hours_p': '',
+            'restaurant_video_desc': '',
         }
     }
 
@@ -82,6 +83,7 @@ export class draftValidator extends formValidator{
         'locationNotes_p': this.profaneError,
         'bio_p': this.profaneError,
         'open_hours_p': this.profaneError,
+        'restaurant_video_desc': this.profaneError,
     }
 
     validationFuncs = formValidator.replaceDefaults({
@@ -113,6 +115,7 @@ export class draftValidator extends formValidator{
         'locationNotes_p': (locationNotes_p) => formValidation.isNotProfane(locationNotes_p),
         'bio_p': (bio_p) => formValidation.isNotProfane(bio_p),
         'open_hours_p': (open_hours_p) => formValidation.isNotProfane(open_hours_p),
+        'restaurant_video_desc': (restaurant_video_desc) => formValidation.isNotProfane(restaurant_video_desc),
     })
 
 }

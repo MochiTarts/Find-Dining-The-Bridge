@@ -382,6 +382,10 @@
         <youtube-player videoId="{{ videoId }}" [width]="youtubeContainer.offsetWidth"></youtube-player>
       </div>
 
+      <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_desc">
+        <p class="section_p"><b>Video Description: </b>{{ restaurantDetails.restaurant_video_desc }}</p>
+      </div>
+
       <div style="text-align: center; padding-bottom: 50px;">
         <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
           <fa-icon [icon]="faEdit"></fa-icon>
@@ -527,11 +531,12 @@
             id="youtube_link"
             placeholder="Copy and paste the YouTube link here"
             rows="2"
+            [value]="videoId ? restaurantDetails.restaurant_video_url : ''"
           ></textarea>
           <app-dynamic-label class="error-label"
             [name]="'errorLink'"
             [message]="validator.errors['link']"
-            tabindex="0"
+            tabindex="validator.errors['link'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -546,6 +551,22 @@
             (change)="onVideoFileSelect($event)"
             accept="video/*"
           />
+        </div>
+      </div>
+      <div class="row" *ngIf="uploadMethod">
+        <div class="form-group col-md-12">
+          <label for="video_desc">Add description for your video: </label>
+          <textarea
+            class="form-control"
+            id="video_desc"
+            rows="7"
+            [value]="restaurantDetails.restaurant_video_desc"
+          ></textarea>
+          <app-dynamic-label class="error-label"
+            [name]="'errorVideoDesc'"
+            [message]="draftValidator.errors['restaurant_video_desc']"
+            tabindex="draftValidator.errors['restaurant_video_desc'] ? 0 : -1"
+          ></app-dynamic-label>
         </div>
       </div>
     </form>
