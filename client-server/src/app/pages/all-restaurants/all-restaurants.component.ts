@@ -5,7 +5,8 @@ import { geolocation } from '../../utils/geolocation';
 import { cuisinesStr } from '../../_constants/cuisines';
 import { servicesStr } from '../../_constants/services';
 import { Title } from '@angular/platform-browser';
-
+import { TokenStorageService } from '../../_services/token-storage.service';
+import { UserService } from '../../_services/user.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class AllRestaurantsComponent implements OnInit {
   allCuisines: any[];
   allServices: any[];
   restaurants_total;
+  favList: any[] = [];
 
   priceFilterRestaurants: any[];
   deliveryFilterRestaurants: any[];
@@ -41,12 +43,25 @@ export class AllRestaurantsComponent implements OnInit {
 
   constructor(
     private restaurantService: RestaurantService,
-    private titleService: Title
+    private titleService: Title,
+    private tokenStorage: TokenStorageService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
+    var user = this.tokenStorage.getUser();
+    this.userId = user.user_id
+    this.role = user.role
+
     this.loadRestaurants();
     // this.loadDishes();
+
+    if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
+      this.userService.getFavouriteRestaurants().subscribe((favs) => {
+        this.favList = favs;
+      })
+    }
+
     this.allCuisines = cuisinesStr;
     this.allServices = servicesStr;
     this.titleService.setTitle("Browse | Find Dining Scarborough");

@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   formBuilder: any;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private tokenStorageService: TokenStorageService,
     private userService: UserService,
     private modalService: NgbModal,

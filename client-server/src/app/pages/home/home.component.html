@@ -10,7 +10,38 @@
 
 <div id="scroll"></div>
 
-<div class="row overview-grid" data-aos="fade-right">
+<div class="bg1" style="text-align: center;">
+  <h2 class="heading">Ready to explore?</h2>
+  <br />
+  <button
+    (click)="onLoginRegisterClicked()"
+    class="btn get-started-btn"
+    placement="top"
+    ngbTooltip="Create/Login to An Account"
+    *ngIf="!authService.isLoggedIn()"
+  >
+    LOGIN/SIGNUP
+  </button>
+  <button
+    (click)="browseListings()"
+    class="btn get-started-btn"
+    placement="top"
+    ngbTooltip="Explore Available Restaurants"
+  >
+    GO FIND DINING
+  </button>
+  <button
+    (click)="restaurant()"
+    class="btn get-started-btn"
+    placement="top"
+    ngbTooltip="Explore Available Restaurants"
+    *ngIf="!loggedOut && role == 'RO'"
+  >
+    RESTAURANT PAGE
+  </button>
+</div>
+
+<!-- <div class="row overview-grid" data-aos="fade-right">
   <div class="col-lg-4 overview-item">
     <img
       src="assets/images/undraw_chef.png"
@@ -56,7 +87,7 @@
       Sign Up →
     </button>
   </div>
-</div>
+</div> -->
 
 <carousel [isAnimated]="true" [interval]="5000">
   <slide>
@@ -119,7 +150,37 @@
   </div>
 </div>
 
-<div class="row overview-grid" data-aos="fade-right">
+<div class="box-2">
+  <div class="flex-container">
+    <div class="flex-item" tabindex="0">
+      <app-info-card [imgUrl]="'assets/images/connect.png'" [title]="'CONNECT'"></app-info-card>
+      <p class="info-description">
+        Connect your business with an online
+        <strong>community</strong>
+        that supports
+        <strong>Scarborough</strong>
+        restaurants
+      </p>
+    </div>
+    <div class="flex-item" tabindex="0">
+      <app-info-card [imgUrl]="'assets/images/celebrate.png'" [title]="'CELEBRATE'"></app-info-card>
+      <p class="info-description">
+        Celebrate your unique
+        <strong>history</strong> and
+        <strong>stories</strong>
+      </p>
+    </div>
+    <div class="flex-item" tabindex="0">
+      <app-info-card [imgUrl]="'assets/images/promote.png'" [title]="'PROMOTE'"></app-info-card>
+      <p class="info-description">
+        Promote your restaurant through our
+        <strong>FREE</strong> platform
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="row overview-grid" data-aos="fade-right">
   <div class="col-lg-4 overview-item">
     <img
       src="assets/images/undraw_book.png"
@@ -158,7 +219,7 @@
       cuisines, restaurants, you name it!
     </p>
   </div>
-</div>
+</div> -->
 
 <div class="bg2">
   <div class="cuisine-carousel" data-aos="fade-right">
@@ -181,37 +242,6 @@
     >
     </ivy-carousel>
   </div>
-</div>
-
-<div class="bg1" style="text-align: center;">
-  <h2 class="heading">Ready to explore?</h2>
-  <br />
-  <button
-    (click)="onLoginRegisterClicked()"
-    class="btn get-started-btn"
-    placement="top"
-    ngbTooltip="Create/Login to An Account"
-    *ngIf="loggedOut"
-  >
-    LOGIN/SIGNUP
-  </button>
-  <button
-    (click)="browseListings()"
-    class="btn get-started-btn"
-    placement="top"
-    ngbTooltip="Explore Available Restaurants"
-  >
-    GO FIND DINING
-  </button>
-  <button
-    (click)="restaurant()"
-    class="btn get-started-btn"
-    placement="top"
-    ngbTooltip="Explore Available Restaurants"
-    *ngIf="!loggedOut && role == 'RO'"
-  >
-    RESTAURANT PAGE
-  </button>
 </div>
 
 <button *ngIf="isShow" class="scroll-top-btn" (click)="gotoTop()" aria-label="Go to top" >
