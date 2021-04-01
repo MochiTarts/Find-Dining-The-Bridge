@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
 
@@ -7,8 +7,9 @@ import { UserService } from '../../_services/user.service';
   templateUrl: './restaurant-card.component.html',
   styleUrls: ['./restaurant-card.component.scss'],
 })
-export class RestaurantCardComponent implements OnInit {
+export class RestaurantCardComponent implements OnInit, OnChanges {
   @Input() restaurant: any;
+  @Input() favList: any;
 
   favourited: boolean = false;
   userId: string = '';
@@ -17,7 +18,6 @@ export class RestaurantCardComponent implements OnInit {
   pricepoints: any = [];
   pricepoint: string = '';
   serviceList: string = '';
-  totalStars = 5;
 
   constructor(
     private userService: UserService,
@@ -35,7 +35,7 @@ export class RestaurantCardComponent implements OnInit {
         {key: "$$$", value: "HIGH"},
         {key: "$$$$", value: "EXHIGH"}
       ]
-  
+
       for (let cuisine of this.restaurant.cuisines) {
         if (this.cuisineList == '') {
           this.cuisineList = String(cuisine);
@@ -43,14 +43,14 @@ export class RestaurantCardComponent implements OnInit {
           this.cuisineList = this.cuisineList + ", " + String(cuisine);
         }
       }
-  
+
       let price = String(this.restaurant.pricepoint);
       for (let p of this.pricepoints) {
         if (p["value"] == price) {
           this.pricepoint = p["key"];
         }
       }
-      
+
       for (let service of this.restaurant.offer_options) {
         if (this.serviceList == '') {
           this.serviceList = String(service);
@@ -58,21 +58,19 @@ export class RestaurantCardComponent implements OnInit {
           this.serviceList = this.serviceList + " | " + String(service);
         }
       }
+  }
 
-      if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
-        this.userService.getFavouriteRestaurants().subscribe((favs) => {
-          if (typeof favs !== 'undefined' && favs.length > 0) {
-            for (const fav of favs) {
-              if (fav._id == this.restaurant._id) {
-                this.favourited = true
-                break;
-              } else {
-                this.favourited = false
-              }
-            }
-          }
-        })
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['favList']) {
+      for (let fav of this.favList) {
+        if (fav._id == this.restaurant._id) {
+          this.favourited = true;
+          break;
+        } else {
+          this.favourited = false;
+        }
       }
+    }
   }
 
   addFavourite(restaurnt_id) {
@@ -81,6 +79,7 @@ export class RestaurantCardComponent implements OnInit {
     }
     this.userService.addFavouriteRestaurant(data).subscribe(() => {
       this.favourited = true
+      this.favList.push(this.restaurant);
     },(error) => {
       alert(error.error.message)
     })

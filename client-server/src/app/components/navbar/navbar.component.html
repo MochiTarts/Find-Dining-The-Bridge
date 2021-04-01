@@ -85,7 +85,7 @@
           </a>
         </li>
         <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="tokenStorageService.RO">
-          <a class="nav-link" (click)="favourites()">
+          <a routerLink="/favourites" routerLinkActive="active" class="nav-link" (click)="favourites()">
             Favourites
           </a>
         </li>
