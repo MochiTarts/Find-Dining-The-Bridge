@@ -216,10 +216,21 @@
                   <mat-error *ngIf="password.errors && password.errors.required">Password is required</mat-error>
                   <mat-error *ngIf="password.errors && password.errors.minlength">Password must be at least 8 characters</mat-error>
                 </mat-form-field>
+                <button
+                  (click)="reCaptchaPopup(reCaptcha)"
+                  style="margin-bottom: 10px;"
+                  color="seconary"
+                  type="button"
+                  *ngIf="recaptchaForm.invalid"
+                  mat-button>
+                  I am a human
+                  <mat-icon matSuffix>mood</mat-icon>
+                </button>
 
                 <button
                   style="margin-top: 10px;"
                   color="primary"
+                  [disabled]="recaptchaForm.invalid"
                   mat-raised-button
                   type="submit">
                   Login
@@ -234,11 +245,11 @@
           fxLayoutAlign="center"
           fxLayout="row"
           fxLayout.xs="column">
-          <button mat-button (click)="signInWithGoogle()" *ngIf="!isLoggedIn">
+          <button mat-button (click)="signInWithGoogle()">
             <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
             Google
           </button>
-          <button mat-button (click)="signInWithFB()" *ngIf="!isLoggedIn">
+          <button mat-button (click)="signInWithFB()">
             <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
             Facebook
           </button>
@@ -319,8 +330,20 @@
                 </mat-form-field>
 
                 <button
+                (click)="reCaptchaPopup(reCaptcha)"
+                style="margin-bottom: 10px;"
+                color="seconary"
+                type="button"
+                *ngIf="recaptchaForm.invalid"
+                mat-button>
+                I am a human
+                <mat-icon matSuffix>mood</mat-icon>
+                </button>
+
+                <button
                     style="margin-top: 10px;"
                     color="primary"
+                    [disabled]="recaptchaForm.invalid"
                     mat-raised-button
                     type="submit">
                   Register
@@ -335,7 +358,7 @@
           fxLayoutAlign="center"
           fxLayout="row"
           fxLayout.xs="column">
-          <button mat-button (click)="googleRoleSelectPopup(googleSignUp)" *ngIf="!isLoggedIn">
+          <button mat-button (click)="googleRoleSelectPopup(googleSignUp)">
             <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
             Google
           </button>
@@ -373,8 +396,20 @@
                 </mat-form-field>
 
                 <button
+                (click)="reCaptchaPopup(reCaptcha)"
+                style="margin-bottom: 10px;"
+                color="seconary"
+                type="button"
+                *ngIf="recaptchaForm.invalid"
+                mat-button>
+                I am a human
+                <mat-icon matSuffix>mood</mat-icon>
+                </button>
+
+                <button
                     style="margin-top: 10px;"
                     color="primary"
+                    [disabled]="recaptchaForm.invalid"
                     mat-raised-button
                     type="submit">
                   Reset my password
@@ -387,6 +422,20 @@
     </mat-tab-group>
   </mat-card>
 </div>
+
+<!-- Popup reCaptcha -->
+<ng-template #reCaptcha let-modal role="form">
+<form [formGroup]="recaptchaForm">
+  <div class="form-group" style="margin-top: 20px;">
+    <ngx-recaptcha2 
+      #captchaElem
+      [siteKey]="siteKey"
+      formControlName="recaptcha"
+    ></ngx-recaptcha2>
+  </div>
+</form>
+</ng-template>
+
 
 <!-- Popup option for registering with Google -->
 <ng-template #googleSignUp let-modal role="form">

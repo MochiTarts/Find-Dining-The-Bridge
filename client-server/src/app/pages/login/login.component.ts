@@ -13,6 +13,8 @@ import {
 import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Title } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +27,8 @@ export class LoginComponent implements OnInit {
   faGoogle = faGoogle;
   faFacebook = faFacebook;
   selectedValue: string;
+ 
+  public recaptchaForm: FormGroup;
 
   loginForm: any = {
     username: null,
@@ -61,6 +65,7 @@ export class LoginComponent implements OnInit {
   showDetails: boolean = true;
   hide: boolean = true;
   strength: number = 0;
+  siteKey: string;
 
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
@@ -72,7 +77,13 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private titleService: Title,
-  ) { }
+    private formBuilder: FormBuilder,
+  ) {
+    this.siteKey = `${environment.captcha.siteKey}`;
+    this.recaptchaForm = this.formBuilder.group({
+      recaptcha: [null, Validators.required]
+    });
+   }
 
   ngAfterViewInit(): void {
     let curTab = document.getElementsByClassName("tab-header")[0];
@@ -281,6 +292,14 @@ export class LoginComponent implements OnInit {
   }
   facebookRoleSelectPopup(facebookSignUp): void {
     this.modalService.open(facebookSignUp, { ariaLabelledBy: 'modal-basic-title', size: 'sm' });
+  }
+  reCaptchaPopup(reCaptcha): void {
+    const modalRef = this.modalService.open(reCaptcha, { ariaLabelledBy: 'modal-basic-title', size: 'sm', keyboard: false, centered: true});
+    modalRef.result.then((result) => {
+    }, (reason) => {
+      // manually trigger changes so that the form logic for the reCaptcha button can be applied immediately
+      this.ref.detectChanges();
+    });
   }
 
   onStrengthChanged(strength: number) {
