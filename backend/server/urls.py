@@ -23,6 +23,7 @@ from server.admin import admin_site
 from sduser.forms import SDPasswordChangeForm, SDPasswordResetForm
 
 import restaurant
+import article
 import index
 import auth
 
@@ -52,6 +53,7 @@ urlpatterns = [
     path('user/', include('sduser.urls')),
     path('subscriber/', include('subscriber_profile.urls')),
     path('owner/', include('restaurant_owner.urls')),
+    path('article/', include('article.urls')),
     path('', include('restaurant.urls')),
 ]
 
@@ -75,5 +77,5 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 if settings.DEBUG:
     #urlpatterns += staticfiles_urlpatterns()
-    static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 '''
