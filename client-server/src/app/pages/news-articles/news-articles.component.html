@@ -1,1 +1,20 @@
-<div [innerHTML]="htmlString"></div>
+<!--<div [innerHTML]="htmlString"></div>-->
+
+
+<div class="row featured-row">
+    <div class="col-lg-4 mx-auto" *ngFor="let article of featuredArticles">
+        <div class="card">
+            <img class="card-img-top" src="{{ article.thumbnail }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{ article.title }}</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row articles-row">
+    <div class="col-lg-3 mx-auto" *ngFor="let article of displayedArticles">
+        <app-article-single-card></app-article-single-card>
+    </div>
+</div>

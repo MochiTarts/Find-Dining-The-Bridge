@@ -60,6 +60,14 @@ export class NewsArticlesComponent implements OnInit {
 
     this.articleService.getArticles().subscribe((data) => {
       // Call endpoint to retrieve articles and set the variables as needed
+      this.allArticles = data.articles;
+      this.displayedArticles = data.articles;
+      this.featuredArticles = this.allArticles.slice(0, 3);
+      this.featuredArticles.push(this.featuredArticles[0])
+      this.featuredArticles.push(this.featuredArticles[0])
+
+      console.log(this.allArticles)
+      //this.htmlString = data.articles[0].content
     })
   }
 

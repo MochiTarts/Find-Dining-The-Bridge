@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 const AUTH_API = '/api';
-const ARTICLE_API = AUTH_API + '/'
+const ARTICLE_API = AUTH_API + '/article/all/'
 
 @Injectable({
   providedIn: 'root'
