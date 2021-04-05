@@ -53,7 +53,7 @@ export class AuthInterceptor implements HttpInterceptor {
        if (err && err.detail == "Token is invalid or expired"){
          this.logout();
          return throwError(error);
-       } else if (!user && !user.role){
+       } else if (!user || (user && !user.role)){
           // propogate error for error catching and displays
           return throwError(error);
        }
@@ -76,7 +76,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private logout(): void {
     this.tokenStorage.signOut();
-    window.location.reload();
+    //window.location.reload();
   }
 
   // add access token to the header
