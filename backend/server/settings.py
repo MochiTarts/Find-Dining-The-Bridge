@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'subscriber_profile',
     'restaurant_owner',
     'restaurant',
+    'ckeditor',
+    'article',
     
     #'user.apps.SDUserConfig',
 ]
@@ -149,6 +151,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = ''
 
 # Override default user model
 AUTH_USER_MODEL = 'sduser.SDUser'
