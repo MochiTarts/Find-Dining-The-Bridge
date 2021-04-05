@@ -75,6 +75,7 @@ import { PartnerCardComponent } from './components/partner-card/partner-card.com
 import { MultiselectCheckboxDropdownComponent } from './components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component';
 import { PasswordChangeFormComponent } from './components/password-change-form/password-change-form.component';
 import { InfoCardComponent } from './components/info-card/info-card.component';
+import { NewsArticlesComponent } from './news-articles/news-articles.component';
 
 
 @NgModule({
@@ -115,6 +116,7 @@ import { InfoCardComponent } from './components/info-card/info-card.component';
     PasswordChangeFormComponent,
     AccountSettingComponent,
     InfoCardComponent,
+    NewsArticlesComponent,
   ],
   imports: [
     BrowserModule,
