@@ -199,7 +199,8 @@ export class LoginComponent implements OnInit {
                   if (error.error.detail == "No active account found with the given credentials") {
                     this.loginErrorMessage = "Incorrect username or password";
                   } else {
-                    this.loginErrorMessage = error.error.detail;
+                    //this.loginErrorMessage = error.error.detail;
+                    this.loginErrorMessage = "Your username or password is incorrect"
                   }
               }
             }

@@ -83,7 +83,7 @@
           <mat-card-title>Signing Up</mat-card-title>
           <mat-card-content>
             <div class="alert alert-success" *ngIf="isSignupSuccessful">
-              A verification email has been sent. Please activate your account before sign in.
+              A verification email has been sent. Please activate your account before sign in. If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.
             </div>
             <form *ngIf="!isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('signup')" #f="ngForm"
             novalidate>
