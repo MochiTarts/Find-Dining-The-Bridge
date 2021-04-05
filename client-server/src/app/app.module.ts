@@ -52,6 +52,7 @@ import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
 import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
 import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
+import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -75,7 +76,6 @@ import { PartnerCardComponent } from './components/partner-card/partner-card.com
 import { MultiselectCheckboxDropdownComponent } from './components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component';
 import { PasswordChangeFormComponent } from './components/password-change-form/password-change-form.component';
 import { InfoCardComponent } from './components/info-card/info-card.component';
-import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
 
 
 @NgModule({

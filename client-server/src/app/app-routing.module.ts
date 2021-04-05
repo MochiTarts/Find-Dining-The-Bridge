@@ -18,6 +18,7 @@ import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page
 import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
 import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
+import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'edit-posts', component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'get-involved', component: GetInvolvedComponent,  },
+  { path: 'articles', component: NewsArticlesComponent, },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {
