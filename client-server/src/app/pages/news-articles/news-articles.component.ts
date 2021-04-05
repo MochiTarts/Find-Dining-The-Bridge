@@ -38,16 +38,16 @@ export class NewsArticlesComponent implements OnInit {
   constructor(
     private articleService: ArticleService,
     private userService: UserService,
-    private tokenService: TokenStorageService,
+    private tokenStorage: TokenStorageService,
     private titleService: Title,
   ) {
     this.months = [
       "Jan", "Feb", "Mar", "Apr", "May", "June",
       "July", "Aug", "Sept", "Oct", "Nov", "Dec"
     ];
-    
+
     var currentYear = new Date().getFullYear()
-    var minYear = currentYear - 5
+    var minYear = currentYear - 5 // Subject to change
     for (var year = currentYear; year >= minYear; year--) {
       this.years.push(year);
     }
@@ -62,13 +62,25 @@ export class NewsArticlesComponent implements OnInit {
   }
 
   // For filtering by month
-  filterMonth() {
+  filterMonth(list) {
+    const isFalse = (currentValue) => !currentValue;
 
+    if (list.every(isFalse)) {
+      // If every option is unchecked
+    } else {
+      // If some option(s) are checked
+    }
   }
 
   // For filtering by year
-  filterYear() {
+  filterYear(list) {
+    const isFalse = (currentValue) => !currentValue;
 
+    if (list.every(isFalse)) {
+
+    } else {
+
+    }
   }
 
 }
