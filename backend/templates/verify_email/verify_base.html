@@ -10,18 +10,56 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,wght@700,&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+    
+    <!-- CSS for navbar and footer -->
+    <link rel="stylesheet" type="text/css" href="{% static "css/navbar.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/footer.css" %}">
+
+    <!-- Find Dining Icon -->
+    <link rel="icon" type="image/x-icon" href="{% static "images/favicon.ico" %}">
 
     <title>{{status}}</title>
   </head>
-  <style>
-    body {
-        background-image: linear-gradient(to right, rgb(218, 28, 123) , rgb(0, 110, 253));
-        /* background-image: linear-gradient(rgb(117, 224, 67), rgb(15, 231, 247)); */
-
-    }
-</style>
   <body>
+    {% block nav %}
+    <nav class="navbar navbar-expand-lg" role="navigation">
+      <a href="/">
+        <img src="{% static 'images/find_dining_logo.png' %}" class="logo" alt="Find Dining logo, click to go to home page" />
+      </a>
+      
+      <a class="word" href="/">
+        <span class="find">FIND </span>
+        <span class="dining">DINING </span> <br />
+        <span class="scarborough">SCARBOROUGH</span>
+      </a>
+
+      <div class="navbar-nav ml-auto" >
+        <div class="nav-item" tabindex="0">
+          <a class="nav-link" href="/" >
+            Home
+          </a>
+        </div>
+        <p class="nav-item separator">|</p>
+        <div data-toggle="collapse" data-target=".navbar-collapse.show" class="nav-item">
+          <a href="https://www.facebook.com/finddiningscarborough/" target="_blank"  tabindex="0">
+            <img src="{% static 'images/facebook_icon.png' %}" class="icon" alt="Facebook"  />
+          </a>
+          <a href="https://twitter.com/FDscarborough" target="_blank" tabindex="0">
+            <img src="{% static 'images/twitter_icon.png' %}" class="icon" alt="Twitter" />
+          </a>
+          <a href="https://www.instagram.com/finddiningscarborough/" target="_blank"  tabindex="0">
+            <img src="{% static 'images/instagram_icon.png' %}" class="icon" alt="Instagram"  />
+          </a>
+        </div>
+      </div>
+    </nav>
+    {% endblock %}
+
     {% if messages%}
       {% for message in messages %}
         <div class="alert alert-{{message.tags}}">
@@ -39,4 +77,59 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
   </body>
+  <footer role="contentinfo">
+    <div class="footer-content">
+      <div id="footer-main-links" class="row">
+        <div class="col">
+          <img
+              src="{% static 'images/scarborough_dining_dark.png' %}"
+              class="footer-logo"
+              alt="Find Dining Scarborough footer logo"
+            />
+            <p>&copy; 2021 Find Dining</p>
+        </div>
+        <div class="col-2">
+          <p class="footer-title"><b>Navigate</b></p> <br>
+          <a class="footer-links" href="/terms-of-service">Terms of Service</a><br>
+          <a class="footer-links" href="/privacy-policy">Privacy Policy</a><br>
+          <a class="footer-links" href="/get-involved">Get Involved</a>
+        </div>
+        <div class="col-2">
+          <p class="footer-title-2"><b>Find Us</b></p> <br>
+          <div class="row" style="padding-left: 6px;">
+            <a href="https://www.facebook.com/finddiningscarborough/" target="_blank"  tabindex="0">
+              <img src="{% static 'images/facebook_icon.png' %}" class="icon" alt="Facebook" ngbTooltip="View Find Dining Facebook Page" />
+            </a>
+            <a href="https://twitter.com/FDscarborough" target="_blank" tabindex="0">
+              <img src="{% static 'images/twitter_icon.png' %}" class="icon" alt="Twitter" ngbTooltip="View Find Dining Twitter Page" />
+            </a>
+            <a href="https://www.instagram.com/finddiningscarborough/" target="_blank"  tabindex="0">
+              <img src="{% static 'images/instagram_icon.png' %}" class="icon" alt="Instagram" ngbTooltip="View Find Dining Instagram Page" />
+            </a>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="flex-container">
+            <div>
+              <p tabindex="0">
+                Find Dining is a program to promote independent restaurants in Scarborough and is supported by the City of
+                Toronto, in partnership with the University of Toronto Scarborough and Centennial College
+              </p>
+            </div>
+            <div class="sub-container">
+              <a href="https://www.toronto.ca/" target="_blank">
+                <img src="{% static 'images/sponsor_toronto.png' %}" class="sponsor" alt="Sponsor: City of Toronto" />
+              </a>
+              <a href="https://www.utsc.utoronto.ca/home/" target="_blank">
+                <img src="{% static 'images/sponsor_uoft.png' %}" class="sponsor" alt="Sponsor: University of Toronto" />
+              </a>
+              <a href="https://www.centennialcollege.ca/" target="_blank">
+                <img src="{% static 'images/sponsor_centennial.png' %}" class="sponsor"  alt="Centennial College" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
 </html>
