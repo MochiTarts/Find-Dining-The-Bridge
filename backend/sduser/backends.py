@@ -17,6 +17,7 @@ from sduser.forms import SDUserCreateForm
 
 from smtplib import SMTPException
 
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -39,13 +40,17 @@ class EmailBackend(ModelBackend):
     """
 
     def authenticate(self, request, username=None, password=None, **kwargs):
+
         try:
             user = UserModel.objects.get(
                 Q(username__iexact=username) | Q(email__iexact=username))
+            print(user)
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
-            return UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            user = UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            if user.check_password(password) and self.user_can_authenticate(user):
+                return user
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
@@ -135,6 +140,8 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Token Obtain Pair Serializer
     """
+    # need to allow unauthorized sign in request because we authenticate them afterwards
+    permission_classes = (AllowAny,)
 
     def validate(self, attrs):
         """
@@ -180,7 +187,7 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
 
     def finalize_response(self, request, response, *args, **kwargs):
 
-        if response.data.get('refresh'):
+        if hasattr(response, 'data') and response.data.get('refresh'):
             # 1 day
             cookie_max_age = 3600 * 24
             refresh_token = response.data['refresh']
