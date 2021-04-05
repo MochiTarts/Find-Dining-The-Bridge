@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'restaurant',
     'ckeditor',
     'article',
+    'image',
     
     #'user.apps.SDUserConfig',
 ]
