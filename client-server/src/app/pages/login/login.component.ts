@@ -224,7 +224,6 @@ export class LoginComponent implements OnInit {
               //let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
               // switch to login tab
               //tabPanes[1].click();
-
             },
             // signup failed
             err => {
