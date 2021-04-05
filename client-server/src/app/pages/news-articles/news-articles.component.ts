@@ -35,6 +35,8 @@ export class NewsArticlesComponent implements OnInit {
 
   faSearch = faSearch;
 
+  htmlString = '<h1>Hello gowtham</h1><p>This is a string</p>'
+
   constructor(
     private articleService: ArticleService,
     private userService: UserService,
