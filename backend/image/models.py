@@ -7,21 +7,26 @@ from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 
 class Image(models.Model):
     name = models.CharField(
-        max_length=512,
+        max_length=128,
         blank=True,
         null=True
     )
 
-    url = models.SlugField(
+    url = models.URLField(
         unique=True,
         max_length=512,
         editable=False
     )
 
-    image = models.FileField()
+    image = models.ImageField()
 
     uploaded_at = models.DateTimeField(editable=False, null=True)
 
+    labels = models.CharField(
+        max_length=512,
+        blank=True,
+        null=True
+    )
     
 
     def __str__(self):
