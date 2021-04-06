@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
 import { ArticleService } from '../../_services/article.service';
 import { Title } from '@angular/platform-browser';
 import { TokenStorageService } from '../../_services/token-storage.service';
@@ -34,6 +36,7 @@ export class NewsArticlesComponent implements OnInit {
   filterYearArticles: any[];
 
   faSearch = faSearch;
+  faStar = faStar;
 
   htmlString = '<h1>Hello gowtham</h1><p>This is a string</p>'
 
@@ -57,14 +60,26 @@ export class NewsArticlesComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Articles | Find Dining Scarborough");
+    AOS.init({
+      delay: 300,
+      duration: 1500,
+      once: true,
+      anchorPlacement: 'top-bottom',
+    });
 
     this.articleService.getArticles().subscribe((data) => {
       // Call endpoint to retrieve articles and set the variables as needed
       this.allArticles = data.articles;
       this.displayedArticles = data.articles;
+
       this.featuredArticles = this.allArticles.slice(0, 3);
       this.featuredArticles.push(this.featuredArticles[0])
       this.featuredArticles.push(this.featuredArticles[0])
+
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
 
       console.log(this.allArticles)
       //this.htmlString = data.articles[0].content
