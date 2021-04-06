@@ -40,9 +40,7 @@ class EmailFilter(InputFilter):
                 Q(email__icontains=email)
             )
 
-# email filter (not exact match but 'contains' for wider usability)
-
-
+# username filter (not exact match but 'contains' for wider usability)
 class UsernameFilter(InputFilter):
     parameter_name = 'username'
     title = _('username')
@@ -83,6 +81,19 @@ class NameFilter(InputFilter):
 
             return queryset.filter(
                 Q(name__icontains=name)
+            )
+
+# title filter (not exact match but 'contains' for wider usability)
+class TitleFilter(InputFilter):
+    parameter_name = 'title'
+    title = _('title')
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            title = self.value()
+
+            return queryset.filter(
+                Q(title__icontains=title)
             )
 
 # user id filter (exact match)
