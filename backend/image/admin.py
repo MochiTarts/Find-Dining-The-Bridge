@@ -2,7 +2,7 @@ from django.contrib import admin, messages
 from django.contrib.admin import DateFieldListFilter
 from django.contrib.admin.widgets import AdminURLFieldWidget
 from django.utils.html import format_html
-from django.db import models
+from django.db.models import Q
 
 from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 from utils.filters import NameFilter
@@ -13,7 +13,7 @@ class imageAdmin(admin.ModelAdmin):
     list_display = ('name', 'imageUrl', 'imagePreview', 'uploaded_at', 'labels',)
     list_filter = (NameFilter, ('uploaded_at', DateFieldListFilter),)
 
-    search_fields = ('labels','name',)
+    search_fields = ('labels',)
 
     readonly_fields = (
         "uploaded_at",
@@ -25,9 +25,22 @@ class imageAdmin(admin.ModelAdmin):
 
     change_list_template = "admin/change_list_image.html"
 
+    # override get_search_results to search by csv labels
+    def get_search_results(self, request, queryset, search_term):
+        #queryset, use_distinct = super(imageAdmin, self).get_search_results(request, queryset, search_term)
+        use_distinct = False
+        labels = search_term.split(',')
+        qs = Q(labels__icontains=labels[0].strip())
+        for label in labels[1:]:
+            qs |= Q(labels__icontains=label.strip())
+        queryset = self.model.objects.filter(qs)
+
+        return queryset, use_distinct
+
     def remove_selected(self, request, obj):
         for o in obj.all():
-            delete(o.url)
+            if o.url:
+                delete(o.url)
             o.delete()
 
     #delete_selected.short_description = 'remove image'
@@ -55,6 +68,7 @@ class imageAdmin(admin.ModelAdmin):
         return format_html("<button class='plus-collapsible' type='button' onclick='toggleImage({id})'>+</button><img class='img-preview' id='{id}' src='{url}'>", url=obj.url, id='img' + str(self.image_id))
 
     imagePreview.short_description = 'image preview'
+
 
 
 admin.site.register(Image, imageAdmin)
