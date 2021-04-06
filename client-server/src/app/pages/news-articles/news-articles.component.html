@@ -10,9 +10,30 @@
 </div>
 
 <div class="displayed-container">
-    <div class="row no-gutters articles-row">
-        <div class="col-md-4" *ngFor="let article of displayedArticles" data-aos="fade-up">
-            <app-article-common-card [article]="article"></app-article-common-card>
+    <div class="row no-gutters">
+        <div class="col-lg-3">
+            <div class="row no-gutters">
+                <div class="col-lg-6 filter-wrapper">
+                    <app-filterlist-card [category]="'Month'" [subcategories]="months"
+                    [length]="months.length" (keyup.enter)="filterEnter($event)" (events)="filterMonth($event)">
+                    </app-filterlist-card>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-lg-6 filter-wrapper">
+                    <app-filterlist-card [category]="'Year'" [subcategories]="years"
+                    [length]="years.length" (keyup.enter)="filterEnter($event)" (events)="filterYear($event)">
+                    </app-filterlist-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row no-gutters articles-row">
+                <div class="col-md-4" *ngFor="let article of displayedArticles" data-aos="fade-up">
+                    <app-article-common-card [article]="article"></app-article-common-card>
+                </div>
+            </div>
         </div>
     </div>
 </div>

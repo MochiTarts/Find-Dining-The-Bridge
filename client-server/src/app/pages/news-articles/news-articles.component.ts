@@ -86,6 +86,10 @@ export class NewsArticlesComponent implements OnInit {
     })
   }
 
+  filterEnter(event){
+    event.srcElement.click();
+  }
+
   // For filtering by month
   filterMonth(list) {
     const isFalse = (currentValue) => !currentValue;
