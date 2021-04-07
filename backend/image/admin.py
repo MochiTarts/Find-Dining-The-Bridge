@@ -29,11 +29,12 @@ class imageAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         #queryset, use_distinct = super(imageAdmin, self).get_search_results(request, queryset, search_term)
         use_distinct = False
-        labels = search_term.split(',')
-        qs = Q(labels__icontains=labels[0].strip())
-        for label in labels[1:]:
-            qs |= Q(labels__icontains=label.strip())
-        queryset = self.model.objects.filter(qs)
+        if search_term != '':
+            labels = search_term.split(',')
+            qs = Q(labels__icontains=labels[0].strip())
+            for label in labels[1:]:
+                qs |= Q(labels__icontains=label.strip())
+            queryset |= self.model.objects.filter(qs)
 
         return queryset, use_distinct
 
