@@ -4,11 +4,11 @@ import { UserService } from '../../_services/user.service';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-article-featured-card',
-  templateUrl: './article-featured-card.component.html',
-  styleUrls: ['./article-featured-card.component.scss']
+  selector: 'app-article-latest-card',
+  templateUrl: './article-latest-card.component.html',
+  styleUrls: ['./article-latest-card.component.scss']
 })
-export class ArticleFeaturedCardComponent implements OnInit {
+export class ArticleLatestCardComponent implements OnInit {
   @Input() article: any;
 
   faStar = faStar;

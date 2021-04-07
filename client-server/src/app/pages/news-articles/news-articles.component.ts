@@ -69,6 +69,7 @@ export class NewsArticlesComponent implements OnInit {
 
     this.articleService.getArticles().subscribe((data) => {
       // Call endpoint to retrieve articles and set the variables as needed
+      console.log(data.articles)
       this.allArticles = data.articles;
       this.displayedArticles = data.articles;
 
@@ -81,7 +82,6 @@ export class NewsArticlesComponent implements OnInit {
       this.displayedArticles.push(this.displayedArticles[0])
       this.displayedArticles.push(this.displayedArticles[0])
 
-      console.log(this.allArticles)
       //this.htmlString = data.articles[0].content
     })
   }

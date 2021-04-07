@@ -3,8 +3,8 @@
 <div class="featured-container">
     <h2 class="header-title">Featured</h2>
     <div class="row no-gutters featured-row">
-        <div class="col-md-4 mx-auto" *ngFor="let article of featuredArticles" data-aos="fade-right">
-            <app-article-featured-card [article]="article"></app-article-featured-card>
+        <div class="col-md-4 d-flex justify-content-center" *ngFor="let article of featuredArticles" data-aos="fade-right">
+            <app-article-latest-card [article]="article"></app-article-latest-card>
         </div>
     </div>
 </div>

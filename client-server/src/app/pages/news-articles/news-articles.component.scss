@@ -1,5 +1,9 @@
 @import "src/styles";
 
+html, body {
+    overflow: hidden;
+}
+
 /* COMMON TO ALL */
 .header-title {
     text-align: center;
@@ -14,13 +18,12 @@
 
 /* FEATRUED */
 .featured-container {
-    margin: 100px 0px;
+    margin: 100px auto;
+    max-width: 1200px;
 }
 
 .featured-row {
-    margin: auto;
     padding: 0px 50px;
-    max-width: 1200px;
 }
 
 .featured-row .col-md-4 {
