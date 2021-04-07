@@ -270,9 +270,9 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = ''
+#STATIC_ROOT = ''
 import sys
-if sys.argv[1] != 'runserver':
+if sys.argv[1] not in ['runserver', 'makemigrations', 'migrate']:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),

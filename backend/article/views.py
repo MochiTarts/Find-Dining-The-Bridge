@@ -14,8 +14,8 @@ from jsonschema import validate
 from article.enum import Visibility
 from article.models import Article
 
-from utils.model_util import models_to_json
-
+from utils.model_util import models_to_json,model_to_json
+import json
 
 class ArticleList(APIView):
     """ article list """
@@ -25,8 +25,9 @@ class ArticleList(APIView):
         """ Retrieve all articles from the database (depending on user visibility) """
         user = request.user
         if user.is_anonymous:
-            articles = Article.objects.filter(visibility="ALL")
+            articles = Article.objects.filter(visibility="ALL").values()
         else:
-            articles = Article.objects.filter(visibility=user.role)
-        response = {'articles': models_to_json(articles)}
-        return JsonResponse(response)
+            articles = Article.objects.filter(visibility=user.role).values()
+
+        response = {'articles': articles}
+        return Response(response)
