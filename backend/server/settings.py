@@ -234,7 +234,7 @@ JWT_ALGORITHM = 'HS256'
 # JWT settings
 SIMPLE_JWT = {
     # for testing
-    #'ACCESS_TOKEN_LIFETIME': timedelta(seconds=15),
+    #'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
     #'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),

@@ -24,6 +24,7 @@ class imageAdmin(admin.ModelAdmin):
     image_id = 0
 
     change_list_template = "admin/change_list_image.html"
+    change_form_template = "admin/change_form_image.html"
 
     # override get_search_results to search by csv labels
     def get_search_results(self, request, queryset, search_term):

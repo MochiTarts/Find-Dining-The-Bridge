@@ -22,8 +22,6 @@ class ArticleAdmin(admin.ModelAdmin):
         "modified_at",
     )
 
-    search_param = None
-
     change_form_template = "admin/change_form_article.html"
 
     '''
