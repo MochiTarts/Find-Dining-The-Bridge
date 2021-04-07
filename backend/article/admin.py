@@ -7,8 +7,8 @@ from article.models import Article
 from image.models import Image
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'visibility', 'created_at', 'modified_at')
-    list_filter = (TitleFilter, 'visibility',('created_at', DateFieldListFilter), ('modified_at', DateFieldListFilter))
+    list_display = ('title', 'visibility', 'created_at', 'modified_at', 'published',)
+    list_filter = (TitleFilter, 'visibility', 'published', ('created_at', DateFieldListFilter), ('modified_at', DateFieldListFilter))
 
     #search_fields = ('title',)
 

@@ -12,6 +12,7 @@ class Article(models.Model):
     visibility = models.CharField(max_length=30, choices=Visibility.choices())
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(editable=False, null=True)
+    published = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
