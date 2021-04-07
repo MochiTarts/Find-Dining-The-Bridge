@@ -58,7 +58,8 @@ class imageAdmin(admin.ModelAdmin):
         return False
 
     def imageUrl(self, obj):
-        return format_html("<a target='_blank' href='{url}'>{url}</a>", url=obj.url)
+        # clickable url (for download) with clickboard symbol (for copy)
+        return format_html("<a target='_blank' href='{url}'>{url}</a> <span class='clickboard' onclick='copyToClipboard(\"{url}\")'>&#128203;</span>", url=obj.url)
 
     imageUrl.short_description = 'image url (click to download)'
 

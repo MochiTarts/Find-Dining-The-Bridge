@@ -6,7 +6,10 @@
 {{ media }}
 {% endblock %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">{% endblock %}
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
+{% endblock %}
 
 {% block coltype %}colM{% endblock %}
 
@@ -23,60 +26,16 @@
 {% endblock %}
 {% endif %}
 
-{% block content %}<div id="content-main">
+{% block content %}
 
-    <div id="toolbar"><form id="changelist-search" name="image_search_form" method="get">
-        <div><!-- DIV needed for valid HTML -->
-        <label for="searchbar"><img src="{% static "admin/img/search.svg" %}" alt="Search"> Search image by labels: </label>
-        <input type="text" size="40" name="labels" id="searchbar" value="{{ search_param }}" autofocus>
-        <input onclick="setImageFilter();" type="submit" value="{% trans 'Search' %}">
-        
-        </div>
-    </form></div>
-  
-    <table id="result_list">
-      <thead>
-      <tr>
-        <th scope="col" >Name</th>
-        <th scope="col" >URL (click to copy)</th>
-        <th scope="col" >Labels</th>
-      </tr>
-      </thead>
-      <tbody>
-    {% for img in images %}
-    {% if forloop.counter < 11 %}
-    <tr>
-    <td>({{ img.name }})</td>
-    <td> <div onclick="copyToClipboard('{{ img.url }}')">{{ img.url }}</div></td>
-    <td>{{ img.labels }}</td>
-    </tr>
-    <br>
-    {% endif %}
-    {% if forloop.counter == 11 %}
-    <td>...</td>
-    {% endif %}
-    {% empty %}
-    <td><p>No image found</p></td>
-    {% endfor %}
-    </tbody>
-  </table>
-  <br>
-  <br>
-  <br>
-    
-    <script>
-      function copyToClipboard(text) {
-      var inputc = document.body.appendChild(document.createElement("input"));
-      inputc.value = text;
-      inputc.select();
-      document.execCommand('copy');
-      inputc.parentNode.removeChild(inputc);
-      }
-      function setImageFilter(){
-        document.getElementById('searchbar').value;
-      }
-    </script>
+<button class='iframe-collapsible button' type='button' onclick='toggleIframe()'>Show Image Collection</button>
+<iframe style="display: none;" id="image_search_iframe" height="500px" width="100%" src="/api/admin/image/image">
+</iframe>
+<br>
+<br>
 
+
+<div id="content-main">
 
 {% block object-tools %}
 {% if change %}{% if not is_popup %}
@@ -132,4 +91,17 @@
 
 </div>
 </form></div>
+<script>
+    function toggleIframe() {
+        var iframe = document.getElementById('image_search_iframe');
+        var display = 'block';
+        var link_display = 'none';
+        if (iframe.style.display == display){
+            display = 'none';
+            link_display = 'block';
+        }
+        iframe.style.display = display;
+        document.getElementsByClassName('historylink')[0].style.display = link_display;
+    }
+</script>
 {% endblock %}

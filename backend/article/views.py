@@ -22,12 +22,14 @@ class ArticleList(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        """ Retrieve all articles from the database (depending on user visibility) """
+        """ Retrieve all intend-for-publish articles from the database (restricted by user's visibility) """
         user = request.user
         if user.is_anonymous:
-            articles = Article.objects.filter(visibility="ALL").values()
+            articles = Article.objects.filter(visibility="ALL", published=True).values()
         else:
-            articles = Article.objects.filter(visibility=user.role).values()
+            articles = Article.objects.filter(visibility=user.role, published=True).values()
 
         response = {'articles': articles}
+        # model to dict (and therefore model to json) does not work for date fields
+        # so we get the queryset by calling values() and let DRF handles the serialization (Response)
         return Response(response)
