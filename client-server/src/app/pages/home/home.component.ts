@@ -21,6 +21,7 @@ import { RestaurantCardComponent } from 'src/app/components/restaurant-card/rest
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Title } from '@angular/platform-browser';
+import { RestaurantService } from '../../_services/restaurant.service';
 
 @Component({
   selector: 'app-home',
@@ -95,7 +96,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private modalService: NgbModal,
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
+    private restaurantsService: RestaurantService,
   ) { }
 
   ngOnInit(): void {
@@ -116,6 +118,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.userId = user.user_id;
       this.profileId = user.profile_id;
     }
+
+    this.restaurantsService.getDishes().subscribe((data) => {
+      const len = data.Dishes.length < 5 ? data.Dishes.length : 5;
+      for (let i = 0; i < len; i++) {
+        data.Dishes[i].type = 'dish';
+        this.dishes[i] = data.Dishes[i];
+      }
+    });
   }
 
   ngAfterViewInit(): void {

@@ -1,0 +1,83 @@
+@import "src/styles";
+
+hr {
+  border: 1px solid #ddd;
+}
+
+.cardBox {
+  width: 100%;
+  margin: 0;
+  padding: 5px;
+  border: none !important;
+  background-color: white;
+}
+
+.cardBox::-webkit-scrollbar {
+  display: none;
+}
+
+.card-body {
+  padding: 15px 5px;
+  text-align: left;
+  width: 100%;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-check-input {
+  margin-top: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+.form-check-label {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  padding-bottom: 1rem;
+}
+
+.btn {
+  margin: 0;
+  color: #00a4e5;
+  height: 100%;
+  background-color: white;
+  width: 75%;
+}
+
+.btn:focus {
+  box-shadow: none !important;
+}
+
+.btn-reset {
+  float: right;
+  border: #00a4e5 solid 2px;
+}
+
+.btn-reset:hover {
+  background-color: #00a4e5;
+  color: white;
+}
+
+.btn-select-all {
+  text-align: left;
+  padding-left: 0;
+  border: none;
+  white-space: nowrap;
+}
+
+.btn-select-all:hover {
+  border: none;
+}
+
+.btn-apply {
+  background-color: #00a4e5;
+  color: white;
+}
+
+.btn-apply:hover {
+  background-color: white;
+  color: #00a4e5;
+}
