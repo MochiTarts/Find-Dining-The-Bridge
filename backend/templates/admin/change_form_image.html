@@ -67,7 +67,7 @@
     {{ adminform.form.non_field_errors }}
 {% endif %}
       
-
+{% if change %}
 <div class="form-row field-original_url">      
     <div>
         <label for="id_original_url">Original URL:</label>
@@ -80,6 +80,7 @@
         <button class='plus-collapsible' type='button' onclick='toggleImage(original_image_preview)'>+</button><img class='img-preview' id='original_image_preview' src='{{ original.url }}'>
     </div>
 </div>
+{% endif %}
 
 {% block field_sets %}
 {% for fieldset in adminform %}

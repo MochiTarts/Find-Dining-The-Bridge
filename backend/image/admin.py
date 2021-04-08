@@ -40,12 +40,20 @@ class imageAdmin(admin.ModelAdmin):
         return queryset, use_distinct
 
     def remove_selected(self, request, obj):
+        count = 0
         for o in obj.all():
             if o.url:
                 delete(o.url)
             o.delete()
-
-    #delete_selected.short_description = 'remove image'
+            count += 1
+        if count > 1:
+            messages.success(request, "Successfully removed " + str(count) + " images.")
+        elif count == 1:
+            messages.success(request, "Successfully removed " + str(count) + " image.")
+        else:
+            messages.info(request, 'No image has been removed')
+    
+    remove_selected.short_description = 'remove selected image(s)'
 
 
     def get_actions(self, request):
