@@ -4,12 +4,31 @@
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
 {{ media }}
+
+<style>
+    .plus-collapsible {
+        border: none;
+        cursor: pointer;
+        font-size: 25px;
+        border-radius:50%;
+    }
+
+    .img-preview {
+        display: none;
+        margin: auto;
+        max-height: 500px;
+        max-width: 500px;
+        width: auto;
+        height: auto;
+    }
+    .clickboard {
+        cursor: pointer;
+        font-size: 20px;
+    }
+</style>
 {% endblock %}
 
-{% block extrastyle %}
-{{ block.super }}
-<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">
-{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">{% endblock %}
 
 {% block coltype %}colM{% endblock %}
 
@@ -26,17 +45,7 @@
 {% endblock %}
 {% endif %}
 
-{% block content %}
-
-<button class='iframe-collapsible button' type='button' onclick='toggleIframe()'>Show Image Collection</button>
-<iframe style="display: none;" id="image_search_iframe" height="500px" width="100%" src="/api/admin/image/image">
-</iframe>
-<br>
-<br>
-
-
-<div id="content-main">
-
+{% block content %}<div id="content-main">
 {% block object-tools %}
 {% if change %}{% if not is_popup %}
   <ul class="object-tools">
@@ -57,6 +66,20 @@
     </p>
     {{ adminform.form.non_field_errors }}
 {% endif %}
+      
+
+<div class="form-row field-original_url">      
+    <div>
+        <label for="id_original_url">Original URL:</label>
+        <a id='original_url' target='_blank' href='{{ original.url }}'>{{ original.url }}</a> <span class='clickboard' onclick='copyToClipboard("{{ original.url }}")'>&#128203;</span>
+    </div>
+</div>
+<div class="form-row field-original_image_preview">      
+    <div>
+        <label for="id_original_image_preview">Original Image Preview:</label>
+        <button class='plus-collapsible' type='button' onclick='toggleImage(original_image_preview)'>+</button><img class='img-preview' id='original_image_preview' src='{{ original.url }}'>
+    </div>
+</div>
 
 {% block field_sets %}
 {% for fieldset in adminform %}
@@ -84,6 +107,23 @@
                 data-model-name="{{ opts.model_name }}"
             {% endif %}>
     </script>
+    <script>
+        function toggleImage(img) {
+            //var img = document.getElementById(id);
+            var display = 'block';
+            if (img.style.display == display){
+                display = 'none';
+            }
+            img.style.display = display;
+        }
+        function copyToClipboard(text) {
+            var inputc = document.body.appendChild(document.createElement("input"));
+            inputc.value = text;
+            inputc.select();
+            document.execCommand('copy');
+            inputc.parentNode.removeChild(inputc);
+        }
+    </script>
 {% endblock %}
 
 {# JavaScript for prepopulated fields #}
@@ -91,17 +131,4 @@
 
 </div>
 </form></div>
-<script>
-    function toggleIframe() {
-        var iframe = document.getElementById('image_search_iframe');
-        var display = 'block';
-        var link_display = 'none';
-        if (iframe.style.display == display){
-            display = 'none';
-            link_display = 'block';
-        }
-        iframe.style.display = display;
-        document.getElementsByClassName('historylink')[0].style.display = link_display;
-    }
-</script>
 {% endblock %}

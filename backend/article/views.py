@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, QueryDict
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import IntegrityError
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied
 from rest_framework.permissions import AllowAny
 
 from rest_framework.utils import json
@@ -22,12 +22,34 @@ class ArticleList(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        """ Retrieve all articles from the database (depending on user visibility) """
+        """ Retrieve all intend-for-publish articles from the database (restricted by user's visibility) """
         user = request.user
         if user.is_anonymous:
-            articles = Article.objects.filter(visibility="ALL").values()
+            articles = Article.objects.filter(visibility="ALL", published=True).values()
         else:
-            articles = Article.objects.filter(visibility=user.role).values()
+            articles = Article.objects.filter(visibility=user.role, published=True).values()
 
         response = {'articles': articles}
+        # model to dict (and therefore model to json) does not work for date fields
+        # so we get the queryset by calling values() and let DRF handles the serialization (Response)
+        return Response(response)
+
+class ArticleView(APIView):
+    """ article view """
+    permission_classes = (AllowAny,)
+
+    def get(self, request, id):
+        """ Retrieve an article given id (restricted by user's visibility) """
+        user = request.user
+
+        if user.is_anonymous:
+            article = Article.objects.filter(visibility="ALL", published=True, id=id).values()
+        else:
+            article = Article.objects.filter(visibility=user.role, published=True, id=id).values()
+        if article.exists():
+            response = {'article': article[0]}
+        else:
+            raise NotFound('Cannot find article with id: ' + str(id))
+        # model to dict (and therefore model to json) does not work for date fields
+        # so we get the queryset by calling values() and let DRF handles the serialization (Response)
         return Response(response)

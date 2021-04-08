@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 #from django.core.files.storage import FileSystemStorage
 
 from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
@@ -18,7 +19,10 @@ class Image(models.Model):
         editable=False
     )
 
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, help_text=_(
+            'Click save to upload the image to the cloud and see the new url with image preview<br>'
+            '(note that original image will be deleted if a new image is provided)'
+        ))
 
     uploaded_at = models.DateTimeField(editable=False, null=True)
 
@@ -41,6 +45,9 @@ class Image(models.Model):
         if self.image:
             self.uploaded_at = timezone.now()
             file_path = upload(self.image, DEV_BUCKET, IMAGE)
+            # override image == delete old image and upload new image
+            if self.url:
+                delete(self.url)
             self.url = file_path
             self.image = None
             if not self.name:

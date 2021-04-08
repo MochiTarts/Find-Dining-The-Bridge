@@ -24,16 +24,18 @@ class imageAdmin(admin.ModelAdmin):
     image_id = 0
 
     change_list_template = "admin/change_list_image.html"
+    change_form_template = "admin/change_form_image.html"
 
     # override get_search_results to search by csv labels
     def get_search_results(self, request, queryset, search_term):
         #queryset, use_distinct = super(imageAdmin, self).get_search_results(request, queryset, search_term)
         use_distinct = False
-        labels = search_term.split(',')
-        qs = Q(labels__icontains=labels[0].strip())
-        for label in labels[1:]:
-            qs |= Q(labels__icontains=label.strip())
-        queryset = self.model.objects.filter(qs)
+        if search_term != '':
+            labels = search_term.split(',')
+            qs = Q(labels__icontains=labels[0].strip())
+            for label in labels[1:]:
+                qs |= Q(labels__icontains=label.strip())
+            queryset |= self.model.objects.filter(qs)
 
         return queryset, use_distinct
 
@@ -58,7 +60,8 @@ class imageAdmin(admin.ModelAdmin):
         return False
 
     def imageUrl(self, obj):
-        return format_html("<a target='_blank' href='{url}'>{url}</a>", url=obj.url)
+        # clickable url (for download) with clickboard symbol (for copy)
+        return format_html("<a target='_blank' href='{url}'>{url}</a> <span class='clickboard' onclick='copyToClipboard(\"{url}\")'>&#128203;</span>", url=obj.url)
 
     imageUrl.short_description = 'image url (click to download)'
 

@@ -9,6 +9,7 @@
         font-size: 15px;
         border-radius:50%;
     }
+
     .img-preview {
         display: none;
         margin: auto;
@@ -23,6 +24,11 @@
         max-width: 400px;
         width: auto;
         height: auto;
+    }
+
+    .clickboard {
+        cursor: pointer;
+        font-size: 20px;
     }
 </style>
   {{ block.super }}
@@ -110,6 +116,13 @@
             display = 'none';
         }
         img.style.display = display;
+    }
+    function copyToClipboard(text) {
+        var inputc = document.body.appendChild(document.createElement("input"));
+        inputc.value = text;
+        inputc.select();
+        document.execCommand('copy');
+        inputc.parentNode.removeChild(inputc);
     }
   </script>
 {% endblock %}
