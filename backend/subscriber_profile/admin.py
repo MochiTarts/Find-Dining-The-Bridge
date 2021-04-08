@@ -15,6 +15,8 @@ class SubscriberProfileAdmin(admin.ModelAdmin):
                     'last_updated', 'consent_status', 'subscribed_at', 'expired_at', 'unsubscribed_at',)
     list_display_links = ('user_id',)
 
+    readonly_fields = ('user_id',)
+
     def link_to_user(self, obj):
         try:
             user_id = obj.user_id

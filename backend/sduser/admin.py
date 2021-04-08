@@ -20,7 +20,7 @@ User = get_user_model()
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'activated', 'is_blocked', 'role',
+    list_display = ('username', 'email', 'activated', 'is_active', 'is_blocked', 'role',
                     'is_staff', 'is_superuser', 'last_login', 'pwd_update_time')
     list_filter = (EmailFilter, UsernameFilter, 'is_staff',
                    'is_superuser', 'is_blocked',)

@@ -29,6 +29,9 @@ class SubscriberProfile(models.Model):
     
     class Meta:
         db_table = 'subscriber_profile'
+    
+    def __str__(self):
+        return str(self.id)
 
     @classmethod
     def field_validate(self, fields):
