@@ -7,7 +7,7 @@ from django.urls import reverse
 from django import forms
 
 from sduser.forms import AdminForm
-from sduser.utils import send_email_verification
+from sduser.utils import send_email_verification, send_email_deactivate_notify
 from utils.filters import InputFilter, EmailFilter, UsernameFilter
 from utils.model_util import model_to_json
 
@@ -25,7 +25,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = (EmailFilter, UsernameFilter, 'is_staff',
                    'is_superuser', 'is_blocked',)
     # note that the order of actions will be reversed (in get_actions)
-    actions = ('email_verification', 'unblock_user', 'block_user',)
+    actions = ('disable_user','disable_user_notify','enable_user','email_verification', 'unblock_user', 'block_user',)
     # list_per_page=200
 
     readonly_fields = (
@@ -93,6 +93,50 @@ class UserAdmin(admin.ModelAdmin):
             messages.error(request, msg)
 
     unblock_user.short_description = "Unblock selected Users"
+
+    def enable_user(self, request, queryset):
+        try:
+            count = queryset.update(is_active=True)
+            if count > 1:
+                msg = "Selected " + str(count) + " Users have been enabled."
+            else:
+                msg = "Selected User has been enabled."
+            messages.success(request, msg)
+        except Exception:
+            msg = "Fail to enable one or more Users"
+            messages.error(request, msg)
+
+    enable_user.short_description = "Enable selected Users to access the site (skip email verification)"
+
+    def disable_user_notify(self, request, queryset):
+        try:
+            for user in queryset:
+                send_email_deactivate_notify(user, request)
+            count = queryset.update(is_active=False)
+            if count > 1:
+                msg = "Selected " + str(count) + " Users have been disabled."
+            else:
+                msg = "Selected User has been disabled."
+            messages.success(request, msg)
+        except Exception:
+            msg = "Fail to disable one or more Users"
+            messages.error(request, msg)
+
+    disable_user_notify.short_description = "Disable selected Users (will send notification email)"
+
+    def disable_user(self, request, queryset):
+        try:
+            count = queryset.update(is_active=False)
+            if count > 1:
+                msg = "Selected " + str(count) + " Users have been disabled."
+            else:
+                msg = "Selected User has been disabled."
+            messages.success(request, msg)
+        except Exception:
+            msg = "Fail to disable one or more Users"
+            messages.error(request, msg)
+
+    disable_user.short_description = "Disable selected Users (without sending notification email)"
 
     def email_verification(self, request, queryset):
         """
