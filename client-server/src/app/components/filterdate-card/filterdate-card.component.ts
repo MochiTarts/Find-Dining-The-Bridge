@@ -31,30 +31,42 @@ export class FilterdateCardComponent implements OnInit {
   }
 
   selectAll() {
+    this.monthCheckMap = [];
+    this.yearCheckMap = [];
     var inputs = document.getElementsByTagName("input");
     for (var i = 0; i < inputs.length; i++) { 
         if (inputs[i].type == "checkbox") { 
             inputs[i].checked = true;
-        }  
-    } 
+        }
+        if (inputs[i].name == "months") {
+          this.monthCheckMap.push(true);
+        }
+        if (inputs[i].name == "years") {
+          this.yearCheckMap.push(true);
+        }
+    }
   }
 
   reset() {
+    this.monthCheckMap = [];
+    this.yearCheckMap = [];
     var inputs = document.getElementsByTagName("input");
     for (var i = 0; i < inputs.length; i++) { 
         if (inputs[i].type == "checkbox") { 
             inputs[i].checked = false;
-        }  
-    } 
+        }
+        if (inputs[i].name == "months") {
+          this.monthCheckMap.push(false);
+        }
+        if (inputs[i].name == "years") {
+          this.yearCheckMap.push(false);
+        }
+    }
   }
 
   sendList() {
-    if (this.monthCheckMap.includes(true)) {
-      this.monthEvents.emit(this.monthCheckMap);
-    }
-    if (this.yearCheckMap.includes(true)) {
-      this.yearEvents.emit(this.yearCheckMap);
-    }
+    this.monthEvents.emit(this.monthCheckMap);
+    this.yearEvents.emit(this.yearCheckMap);
   }
 
 }

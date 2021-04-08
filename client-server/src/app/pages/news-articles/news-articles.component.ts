@@ -39,11 +39,8 @@ export class NewsArticlesComponent implements OnInit {
   faSearch = faSearch;
   faStar = faStar;
 
-  htmlString = '<h1>Hello gowtham</h1><p>This is a string</p>';
-  articleContent = "";
-
   constructor(
-    private articleService: ArticleService,
+    public articleService: ArticleService,
     private userService: UserService,
     private tokenStorage: TokenStorageService,
     private titleService: Title,
@@ -87,11 +84,9 @@ export class NewsArticlesComponent implements OnInit {
         this.displayedArticles[i].type = 'article';
       }
 
-      this.articleContent = this.displayedArticles[0].content;
+      this.articleService.openArticle(this.displayedArticles[0]);
 
       console.log(this.displayedArticles)
-
-      //this.htmlString = data.articles[0].content
     })
   }
 
@@ -105,8 +100,19 @@ export class NewsArticlesComponent implements OnInit {
 
     if (list.every(isFalse)) {
       // If every option is unchecked
+      this.displayedArticles = this.allArticles;
     } else {
       // If some option(s) are checked
+      this.displayedArticles = [];
+      for (let article of this.allArticles) {
+        var date = new Date(article.modified_at);
+        var monthNumber = date.getMonth();
+        for (var i = 0; i < this.months.length; i++) {
+          if (list[i] && i == monthNumber) {
+            this.displayedArticles.push(article);
+          }
+        }
+      }
     }
   }
 
@@ -115,9 +121,18 @@ export class NewsArticlesComponent implements OnInit {
     const isFalse = (currentValue) => !currentValue;
 
     if (list.every(isFalse)) {
-
+      this.displayedArticles = this.allArticles;
     } else {
-
+      this.displayedArticles = [];
+      for (let article of this.allArticles) {
+        var date = new Date(article.modified_at);
+        var year = date.getFullYear();
+        for (var i = 0; i < this.years.length; i++) {
+          if (list[i] && this.years[i] == year) {
+            this.displayedArticles.push(article);
+          }
+        }
+      }
     }
   }
 

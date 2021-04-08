@@ -34,9 +34,9 @@
 <div class="displayed-container">
     <div class="row no-gutters article-row">
         <div class="col-lg-10 article-container">
-            <h1 class="article-title">{{ displayedArticles[0].title }}</h1>
-            <h3 class="article-subtitle">Last Updated {{ displayedArticles[0].modified_at | date:'mediumDate' }}</h3>
-            <div class="article-content" [innerHTML]="articleContent"></div>
+            <h1 class="article-title">{{ articleService.articleTitle }}</h1>
+            <h3 class="article-subtitle">Last Updated {{ articleService.articleModifiedDate | date:'mediumDate' }}</h3>
+            <div class="article-content" [innerHTML]="articleService.articleContentString"></div>
         </div>
 
         <div class="col-lg-2" style="min-width: 250px;">
