@@ -9,18 +9,15 @@ p {
 
 .card {
     width: 100%;
-    height: 328px;
     transition: all 0.2s ease-in-out;
     border: none !important;
 }
 
 .card:hover {
     cursor: pointer;
-    transform: scale(1.025);
+    transform: scale(1.01);
 }
 
-.card-img-top {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+.card-title {
+    margin: 0;
 }

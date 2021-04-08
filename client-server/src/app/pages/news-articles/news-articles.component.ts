@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
@@ -30,8 +30,9 @@ export class NewsArticlesComponent implements OnInit {
   Will always update to contain the articles according
   to the filter option(s)
   */
-  displayedArticles: any[];
-  featuredArticles: any[];
+  displayedArticles: any[] = [];
+  featuredArticles: any[] = [];
+  filteredArticles: any[] = [];
 
   filterMonthArticles: any[];
   filterYearArticles: any[];
@@ -39,11 +40,15 @@ export class NewsArticlesComponent implements OnInit {
   faSearch = faSearch;
   faStar = faStar;
 
+  selectedArticle: any = Object;
+  totalTabs: any[] = [];
+
   constructor(
     public articleService: ArticleService,
     private userService: UserService,
     private tokenStorage: TokenStorageService,
     private titleService: Title,
+    private changeDetection: ChangeDetectorRef,
   ) {
     this.months = [
       "January", "February", "March", "April", "May", "June",
@@ -79,15 +84,29 @@ export class NewsArticlesComponent implements OnInit {
       this.displayedArticles.push(this.displayedArticles[0])
       this.displayedArticles.push(this.displayedArticles[0])
       this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
+      this.displayedArticles.push(this.displayedArticles[0])
 
       for (let i = 0; i < this.displayedArticles.length; i++) {
         this.displayedArticles[i].type = 'article';
       }
 
-      this.articleService.openArticle(this.displayedArticles[0]);
+      this.filteredArticles = this.displayedArticles;
 
+      //this.selectedArticle = this.displayedArticles[0];
+      length = Math.ceil(this.displayedArticles.length/10);
+      this.totalTabs = Array(length);
       console.log(this.displayedArticles)
     })
+  }
+
+  openArticle(article) {
+    alert(article.id);
+    this.selectedArticle = article;
   }
 
   filterEnter(event){
@@ -100,16 +119,16 @@ export class NewsArticlesComponent implements OnInit {
 
     if (list.every(isFalse)) {
       // If every option is unchecked
-      this.displayedArticles = this.allArticles;
+      this.filteredArticles = this.allArticles;
     } else {
       // If some option(s) are checked
-      this.displayedArticles = [];
+      this.filteredArticles = [];
       for (let article of this.allArticles) {
         var date = new Date(article.modified_at);
         var monthNumber = date.getMonth();
         for (var i = 0; i < this.months.length; i++) {
           if (list[i] && i == monthNumber) {
-            this.displayedArticles.push(article);
+            this.filteredArticles.push(article)
           }
         }
       }

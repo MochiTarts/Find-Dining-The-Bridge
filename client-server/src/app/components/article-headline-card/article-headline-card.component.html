@@ -1,0 +1,9 @@
+<div class="card mat-elevation-z8" (click)="openArticle()">
+    <div class="card-body">
+        <h2 class="card-title">{{ article.title }}</h2>
+        <h4 class="card-subtitle text-muted">{{ article.modified_at | date:'mediumDate' }}</h4>
+        <p class="card-text">
+            {{ (articleTextPreview.length > 200) ? (articleTextPreview | slice:0:200)+'...':(articleTextPreview) }}
+        </p>
+    </div>
+</div>

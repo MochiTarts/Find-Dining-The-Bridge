@@ -1,53 +1,92 @@
-<div class="header-container">
-    <div class="title-row">
-        <div class="title">
-            <h1>Find Dining News</h1>
-            <div class="underline"></div>
+<div class="article-body">
+    <div class="header-container">
+        <div class="title-row">
+            <div class="title">
+                <h1>Find Dining News</h1>
+                <div class="underline"></div>
+            </div>
+            <nav class="nav nav-header justify-content-end">
+                <span class="nav-item">
+                    <a class="nav-link">Most Recent</a>
+                </span>
+                <span class="nav-item">
+                    <a class="nav-link">See All</a>
+                </span>
+            </nav>
         </div>
-        <nav class="nav nav-header justify-content-end">
-            <span class="nav-item">
-                <a class="nav-link">Most Recent</a>
-            </span>
-            <span class="nav-item">
-                <a class="nav-link">See All</a>
-            </span>
-        </nav>
+    
+        <div class="carousel-row">
+            <div class="carousel">
+                <ivy-carousel
+                style="width: 68%;"
+                *ngIf="filteredArticles.length >= 1"
+                [images]="filteredArticles"
+                [margin]="30"
+                [arrowsOutside]="true"
+                [cellWidth]="300"
+                [height]="400"
+                [arrowsTheme]="dark"
+                (selectedArticle)="openArticle($event)"
+                >
+                </ivy-carousel>
+            </div>
+        </div>
     </div>
 
-    <div class="carousel-row">
-        <div class="carousel">
-            <ivy-carousel
-            style="width: 68%;"
-            *ngIf="displayedArticles.length >= 1"
-            [images]="displayedArticles"
-            [margin]="30"
-            [arrowsOutside]="true"
-            [cellWidth]="300"
-            [height]="400"
-            [arrowsTheme]="dark"
-            >
-            </ivy-carousel>
+    <div class="main-container">
+        <div class="row no-gutters article-row">
+            <div class="col-lg-10 article-list">
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+                        <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">
+                            <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">
+                        <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">
+                            <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">
+                    <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">
+                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>
+
+                        <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-lg-10 article-container" style="display: none;">
+                <h1 class="article-title">{{ selectedArticle.title }}</h1>
+                <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:'mediumDate' }}</h3>
+                <div class="article-content" [innerHTML]="selectedArticle.content"></div>
+            </div>
+    
+            <div class="col-lg-2 filter">
+                <app-filterdate-card [months]="months" [years]="years" [monthsLength]="months.length"
+                (keyup.enter)="filterEnter($event)" (monthEvents)="filterMonth($event)" (yearEvents)="filterYear($event)">
+                </app-filterdate-card>
+            </div>
+
+            <div class="col-lg-12 article-full-container">
+                <h1 class="article-title">{{ articleService.articleTitle }}</h1>
+                <h3 class="article-subtitle">Last Updated {{ articleService.articleModifiedDate | date:'mediumDate' }}</h3>
+                <div class="article-content" [innerHTML]="articleService.articleContentString"></div>
+            </div>
+
+            <div class="side-filter">
+                <app-filterdate-card [months]="months" [years]="years" [monthsLength]="months.length"
+                (keyup.enter)="filterEnter($event)" (monthEvents)="filterMonth($event)" (yearEvents)="filterYear($event)">
+                </app-filterdate-card>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="displayed-container">
-    <div class="row no-gutters article-row">
-        <div class="col-lg-10 article-container">
-            <h1 class="article-title">{{ articleService.articleTitle }}</h1>
-            <h3 class="article-subtitle">Last Updated {{ articleService.articleModifiedDate | date:'mediumDate' }}</h3>
-            <div class="article-content" [innerHTML]="articleService.articleContentString"></div>
-        </div>
-
-        <div class="col-lg-2" style="min-width: 200px;">
-            <app-filterdate-card [months]="months" [years]="years" [monthsLength]="months.length"
-            (keyup.enter)="filterEnter($event)" (monthEvents)="filterMonth($event)" (yearEvents)="filterYear($event)">
-            </app-filterdate-card>
-        </div>
-    </div>
-</div>
-
-<div class="spacing" style="background-color: #eee; height: 25px;"></div>
+<!--<div class="spacing" style="background-color: #eee; height: 25px;"></div>
 
 <div class="featured-container">
     <div class="title-row">
@@ -108,4 +147,4 @@
     </div>
 </div>
 
-<div class="spacing" style="background-color: #eee; height: 25px;"></div>
+<div class="spacing" style="background-color: #eee; height: 25px;"></div>-->
