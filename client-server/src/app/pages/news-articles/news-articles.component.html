@@ -1,39 +1,111 @@
-<!--<div [innerHTML]="htmlString"></div>-->
+<div class="header-container">
+    <div class="title-row">
+        <div class="title">
+            <h1>Find Dining News</h1>
+            <div class="underline"></div>
+        </div>
+        <nav class="nav nav-header justify-content-end">
+            <span class="nav-item">
+                <a class="nav-link">Most Recent</a>
+            </span>
+            <span class="nav-item">
+                <a class="nav-link">See All</a>
+            </span>
+        </nav>
+    </div>
 
-<div class="featured-container">
-    <h2 class="header-title">Featured</h2>
-    <div class="row no-gutters featured-row">
-        <div class="col-md-4 d-flex justify-content-center" *ngFor="let article of featuredArticles" data-aos="fade-right">
-            <app-article-latest-card [article]="article"></app-article-latest-card>
+    <div class="carousel-row">
+        <div class="carousel">
+            <ivy-carousel
+            style="width: 68%;"
+            *ngIf="displayedArticles.length >= 1"
+            [images]="displayedArticles"
+            [margin]="30"
+            [arrowsOutside]="true"
+            [cellWidth]="300"
+            [height]="400"
+            [arrowsTheme]="dark"
+            >
+            </ivy-carousel>
         </div>
     </div>
 </div>
 
 <div class="displayed-container">
-    <div class="row no-gutters">
-        <div class="col-lg-3">
-            <div class="row no-gutters">
-                <div class="col-lg-6 filter-wrapper">
-                    <app-filterlist-card [category]="'Month'" [subcategories]="months"
-                    [length]="months.length" (keyup.enter)="filterEnter($event)" (events)="filterMonth($event)">
-                    </app-filterlist-card>
-                </div>
-            </div>
-            <div class="row no-gutters">
-                <div class="col-lg-6 filter-wrapper">
-                    <app-filterlist-card [category]="'Year'" [subcategories]="years"
-                    [length]="years.length" (keyup.enter)="filterEnter($event)" (events)="filterYear($event)">
-                    </app-filterlist-card>
+    <div class="row no-gutters article-row">
+        <div class="col-lg-10 article-container">
+            <h1 class="article-title">{{ displayedArticles[0].title }}</h1>
+            <h3 class="article-subtitle">Last Updated {{ displayedArticles[0].modified_at | date:'mediumDate' }}</h3>
+            <div class="article-content" [innerHTML]="articleContent"></div>
+        </div>
+
+        <div class="col-lg-2" style="min-width: 250px;">
+            <app-filterdate-card [months]="months" [years]="years" [monthsLength]="months.length"
+            (keyup.enter)="filterEnter($event)" (monthEvents)="filterMonth($event)" (yearEvents)="filterYear($event)">
+            </app-filterdate-card>
+        </div>
+    </div>
+</div>
+
+<div class="spacing" style="background-color: #eee; height: 25px;"></div>
+
+<div class="featured-container">
+    <div class="title-row">
+        <div class="title">
+            <h1 style="color: black;">Welcome to Find Dining</h1>
+            <div class="underline"></div>
+        </div>
+    </div>
+
+    <div class="row no-gutters featured-row">
+        <div class="col-lg-8 featured-article">
+            <div class="featured-article-text-container col-container">
+                <h5 class="featured-tag">Featured</h5>
+    
+                <div class="featured-article-text">
+                    <h2>New restaurant sharing platform aims to promote and support local</h2>
+                    <h3>Find Dining Scarborough is a free platform that Scarborough restaurants can use to promote their businesses</h3>
+                    <h3 style="margin-bottom: 0;">{{ featuredArticles[0].modified_at | date:'mediumDate' }}</h3>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-9">
-            <div class="row no-gutters articles-row">
-                <div class="col-md-4" *ngFor="let article of displayedArticles" data-aos="fade-up">
-                    <app-article-common-card [article]="article"></app-article-common-card>
+        <div class="col-lg-4 latest-news">
+            <div class="latest-news-container col-container">
+                <h2>Latest News</h2>
+
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                        <div *ngFor="let article of displayedArticles.slice(0, 3)" class="latest-article-card">
+                            <app-article-latest-card [article]="article"></app-article-latest-card>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <div *ngFor="let article of displayedArticles.slice(4, 7)" class="latest-article-card">
+                            <app-article-latest-card [article]="article"></app-article-latest-card>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        <div *ngFor="let article of displayedArticles.slice(8, 11)" class="latest-article-card">
+                            <app-article-latest-card [article]="article"></app-article-latest-card>
+                        </div>
+                    </div>
                 </div>
+
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">1</a>
+                    </li>
+                    <li class="nav-item" *ngIf="displayedArticles.length >= 4">
+                      <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">2</a>
+                    </li>
+                    <li class="nav-item" *ngIf="displayedArticles.length >= 7">
+                      <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">3</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
+
+<div class="spacing" style="background-color: #eee; height: 25px;"></div>

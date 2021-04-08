@@ -50,6 +50,16 @@
       >
         <app-partner-card [partner]="getFile(i)['image']"></app-partner-card>
       </div>
+
+      <div
+        class="carousel-cell carousel-cell-cards"
+        *ngIf="getFile(i) && getFile(i)['image']['type'] === 'article'"
+        [style.width]="getCellWidth() + 'px'"
+        [style.border-radius]="borderRadius + 'px'"
+        style="text-align: left;"
+      >
+        <app-article-common-card [article]="getFile(i)['image']"></app-article-common-card>
+      </div>
     </ng-template>
   </div>
 </div>

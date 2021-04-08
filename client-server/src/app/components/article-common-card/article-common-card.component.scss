@@ -10,6 +10,7 @@ p {
 .card {
     width: 100%;
     transition: all 0.2s ease-in-out;
+    border: none !important;
 }
 
 .card:hover {

@@ -5,8 +5,8 @@
 
 .card {
     width: 325px;
+    height: 75px;
     transition: all 0.2s ease-in-out;
-    min-height: 50px;
     background: transparent;
     border: none !important;
 }
@@ -27,5 +27,6 @@
 }
 
 .card-title, .card-subtitle {
+    margin: 0;
     padding-left: 10px;
 }

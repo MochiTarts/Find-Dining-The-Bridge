@@ -21,4 +21,8 @@ export class ArticleLatestCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  openArticle() {
+    alert(this.article.id)
+  }
+
 }

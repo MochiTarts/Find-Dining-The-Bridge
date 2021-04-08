@@ -23,6 +23,7 @@ export class NewsArticlesComponent implements OnInit {
 
   months: any[];
   years: any[] = [];
+  dark = "dark";
 
   /*
   Array that contains all articles viewable and filtered
@@ -38,7 +39,8 @@ export class NewsArticlesComponent implements OnInit {
   faSearch = faSearch;
   faStar = faStar;
 
-  htmlString = '<h1>Hello gowtham</h1><p>This is a string</p>'
+  htmlString = '<h1>Hello gowtham</h1><p>This is a string</p>';
+  articleContent = "";
 
   constructor(
     private articleService: ArticleService,
@@ -47,8 +49,8 @@ export class NewsArticlesComponent implements OnInit {
     private titleService: Title,
   ) {
     this.months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "June",
-      "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
     ];
 
     var currentYear = new Date().getFullYear()
@@ -69,7 +71,7 @@ export class NewsArticlesComponent implements OnInit {
 
     this.articleService.getArticles().subscribe((data) => {
       // Call endpoint to retrieve articles and set the variables as needed
-      console.log(data.articles)
+      //console.log(data.articles)
       this.allArticles = data.articles;
       this.displayedArticles = data.articles;
 
@@ -80,7 +82,14 @@ export class NewsArticlesComponent implements OnInit {
       this.displayedArticles.push(this.displayedArticles[0])
       this.displayedArticles.push(this.displayedArticles[0])
       this.displayedArticles.push(this.displayedArticles[0])
-      this.displayedArticles.push(this.displayedArticles[0])
+
+      for (let i = 0; i < this.displayedArticles.length; i++) {
+        this.displayedArticles[i].type = 'article';
+      }
+
+      this.articleContent = this.displayedArticles[0].content;
+
+      console.log(this.displayedArticles)
 
       //this.htmlString = data.articles[0].content
     })
