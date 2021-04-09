@@ -69,8 +69,13 @@ h1, h2, h3, h4, h5, h6 {
     background-color: rgba($color: #fff, $alpha: 0.75);
 }
 
+.carousel-row-mobile {
+    display: none;
+}
+
 .carousel {
     margin: auto;
+    padding: 0px 5rem;
 }
 
 /* DISPLAYED ARTICLES */
@@ -169,7 +174,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* MEDIA QUERIES */
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1301px) {
 
 .main-container {
     position: relative;
@@ -220,6 +225,32 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-transition: 1s;
     transition: 1s;
     margin-right: -400px;
+}
+
+}
+
+@media screen and (max-width: 945px) {
+    
+.carousel-row {
+    display: none;
+}
+
+.carousel-row-mobile {
+    display: block;
+    min-height: 400px;
+    background-color: rgba($color: #fff, $alpha: 0.75);
+}
+
+.carousel {
+    padding: 0 0rem;
+}
+
+}
+
+@media screen and (max-width: 839px) {
+
+.underline {
+    padding-top: 0px;
 }
 
 }

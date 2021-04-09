@@ -6,6 +6,7 @@ import { ArticleService } from '../../_services/article.service';
 import { Title } from '@angular/platform-browser';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
+import { RestaurantService } from 'src/app/_services/restaurant.service';
 
 @Component({
   selector: 'app-news-articles',
@@ -42,12 +43,49 @@ export class NewsArticlesComponent implements OnInit {
   selectedArticle: any = Object;
   totalTabs: any[] = [];
 
+  dishes: any[] = [];
+
+  cuisines = [
+    {
+      type: 'image',
+      path: 'assets/images/cuisines/chinese.jpg',
+      caption: 'Chinese',
+    },
+    {
+      type: 'image',
+      path: 'assets/images/cuisines/greek.jpg',
+      caption: 'Greek',
+    },
+    {
+      type: 'image',
+      path: 'assets/images/cuisines/indian.jpg',
+      caption: 'Indian',
+    },
+    {
+      type: 'image',
+      path: 'assets/images/cuisines/italian.jpg',
+      caption: 'Italian',
+    },
+    {
+      type: 'image',
+      path: 'assets/images/cuisines/japanese.jpg',
+      caption: 'Japanese',
+    },
+    { type: 'image', path: 'assets/images/cuisines/thai.jpg', caption: 'Thai' },
+    {
+      type: 'image',
+      path: 'assets/images/cuisines/vietnamese.jpg',
+      caption: 'Vietnamese',
+    },
+  ];
+
   constructor(
     public articleService: ArticleService,
     private userService: UserService,
     private tokenStorage: TokenStorageService,
     private titleService: Title,
     private changeDetection: ChangeDetectorRef,
+    private restaurantsService: RestaurantService,
   ) {
     this.months = [
       "January", "February", "March", "April", "May", "June",
@@ -74,6 +112,23 @@ export class NewsArticlesComponent implements OnInit {
       this.allArticles = data.articles;
       this.filteredArticles = data.articles;
 
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+      this.filteredArticles.push(this.filteredArticles[0])
+
       for (let i = 0; i < this.allArticles.length; i++) {
         this.filteredArticles[i].type = 'article';
       }
@@ -83,6 +138,14 @@ export class NewsArticlesComponent implements OnInit {
       length = Math.ceil(this.filteredArticles.length/10);
       this.totalTabs = Array(length);
     })
+
+    this.restaurantsService.getDishes().subscribe((data) => {
+      const len = data.Dishes.length < 5 ? data.Dishes.length : 5;
+      for (let i = 0; i < len; i++) {
+        data.Dishes[i].type = 'dish';
+        this.dishes[i] = data.Dishes[i];
+      }
+    });
   }
 
   openArticle(article) {
