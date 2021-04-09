@@ -31,7 +31,7 @@ export class NewsArticlesComponent implements OnInit {
   to the filter option(s)
   */
   filteredArticles: any[] = [];
-  featuredArticles: any[] = [];
+  latestArticles: any[] = [];
 
   filterMonthArticles: any[];
   filterYearArticles: any[];
@@ -71,18 +71,13 @@ export class NewsArticlesComponent implements OnInit {
     });
 
     this.articleService.getArticles().subscribe((data) => {
-      // Call endpoint to retrieve articles and set the variables as needed
-      //console.log(data.articles)
       this.allArticles = data.articles;
       this.filteredArticles = data.articles;
-
-      this.featuredArticles = this.allArticles.slice(0, 3);
-      this.featuredArticles.push(this.featuredArticles[0])
-      this.featuredArticles.push(this.featuredArticles[0])
 
       for (let i = 0; i < this.allArticles.length; i++) {
         this.filteredArticles[i].type = 'article';
       }
+      this.latestArticles = this.filteredArticles.slice(0, 8);
 
       this.selectedArticle = this.filteredArticles[1];
       length = Math.ceil(this.filteredArticles.length/10);
@@ -142,19 +137,15 @@ export class NewsArticlesComponent implements OnInit {
     }, 10);
   }
 
-  openFilter() {
+  toggleFilter() {
     var mobileFilterDiv = document.getElementById("mobile-filter");
 
-    if (mobileFilterDiv.style.display === "none") {
-      mobileFilterDiv.style.display = "block";
-      setTimeout(() => {
-        mobileFilterDiv.style.opacity = "0";
-        mobileFilterDiv.style.width = "18rem";
-      }, 10);
-    } else {
-      mobileFilterDiv.style.display = "none";
+    if (mobileFilterDiv.style.opacity === "0") {
       mobileFilterDiv.style.opacity = "1";
-      mobileFilterDiv.style.width = "0";
+      mobileFilterDiv.style.marginRight = "0";
+    } else {
+      mobileFilterDiv.style.opacity = "0";
+      mobileFilterDiv.style.marginRight = "-400px";
     }
   }
 
@@ -208,8 +199,19 @@ export class NewsArticlesComponent implements OnInit {
           this.filteredArticles.push(article);
         }
       }
-      
     }
+
+    this.latestArticles = this.filteredArticles;
+  }
+
+  seeAll() {
+    this.filteredArticles = this.allArticles;
+    this.latestArticles = this.allArticles;
+  }
+
+  seeMostRecent() {
+    this.filteredArticles = this.allArticles.slice(0, 8);
+    this.latestArticles = this.allArticles.slice(0, 8);
   }
 
 }

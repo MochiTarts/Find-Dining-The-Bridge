@@ -7,6 +7,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .article-body {
     height: fit-content;
+    overflow: hidden;
 }
 
 /* HEADER */
@@ -188,12 +189,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .article-mobile {
     display: block;
-    position: static;
+    position: relative;
 }
 
 .article-list-mobile {
     min-height: 620px;
-    position: relative;
     -webkit-transition: 1s;
     transition: 1s;
     display: block;
@@ -210,13 +210,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .side-filter {
     position: absolute;
-    margin-top: 100px;
-    background-color: green;
+    margin-top: 75px;
+    top: 0;
     right: 0;
     height: 100%;
     width: 18rem;
     opacity: 1;
     display: block;
+    -webkit-transition: 1s;
+    transition: 1s;
+    margin-right: -400px;
 }
 
 }
