@@ -46,7 +46,8 @@ class ArticleView(APIView):
             article = Article.objects.filter(visibility="ALL", published=True, id=id).values()
         else:
             article = Article.objects.filter(visibility=user.role, published=True, id=id).values()
-        if article.exists():
+        # evaluate it instead of calling exists() because we need the cached result in response
+        if article:
             response = {'article': article[0]}
         else:
             raise NotFound('Cannot find article with id: ' + str(id))
