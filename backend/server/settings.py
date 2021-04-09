@@ -106,7 +106,7 @@ DATABASES = {
         'ENGINE': os.environ.get('DB_ENGINE'),
         'NAME': os.environ.get('DB_NAME'),
         'HOST': 'mongo',
-        'PORT': 27017,
+        'PORT': 27018,
     }
 }
 
