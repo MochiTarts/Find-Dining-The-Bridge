@@ -1,13 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
+import { ArticleService } from '../../_services/article.service';
 
 @Component({
-  selector: 'app-article-common-card',
-  templateUrl: './article-common-card.component.html',
-  styleUrls: ['./article-common-card.component.scss']
+  selector: 'app-article-headline-card',
+  templateUrl: './article-headline-card.component.html',
+  styleUrls: ['./article-headline-card.component.scss']
 })
-export class ArticleCommonCardComponent implements OnInit {
+export class ArticleHeadlineCardComponent implements OnInit {
   @Input() article: any;
 
   @Output() articleOutput: EventEmitter<any> = new EventEmitter<any>();
@@ -17,6 +18,7 @@ export class ArticleCommonCardComponent implements OnInit {
   constructor(
     private userService: UserService,
     private tokenStorage: TokenStorageService,
+    private articleService: ArticleService,
   ) { }
 
   ngOnInit(): void {
@@ -26,6 +28,7 @@ export class ArticleCommonCardComponent implements OnInit {
   }
 
   openArticle() {
+    //this.articleService.openArticle(this.article);
     this.articleOutput.emit(this.article);
   }
 

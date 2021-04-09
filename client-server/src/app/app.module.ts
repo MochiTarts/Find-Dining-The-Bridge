@@ -81,6 +81,7 @@ import { FilterdateCardComponent } from './components/filterdate-card/filterdate
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
+import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
 
 
 @NgModule({
@@ -127,6 +128,7 @@ import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-pa
     PrivacyPolicyComponent,
     AboutUsComponent,
     AboutOurPartnerComponent,
+    ArticleHeadlineCardComponent,
   ],
   imports: [
     BrowserModule,

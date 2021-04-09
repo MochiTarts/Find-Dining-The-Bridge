@@ -70,6 +70,7 @@ export class IvyCarouselComponent implements OnDestroy {
   }
 
   @Output() events: EventEmitter<any> = new EventEmitter<any>();
+  @Output() selectedArticle: EventEmitter<any> = new EventEmitter<any>();
 
   @Input() height: number = 200;
   @Input() width: number;
@@ -176,6 +177,10 @@ export class IvyCarouselComponent implements OnDestroy {
       transitionTimingFunction: this.transitionTimingFunction,
       videoProperties: this.videoProperties,
     });
+  }
+
+  sendArticleForOpen(article) {
+    this.selectedArticle.emit(article);
   }
 
   setDimensions() {

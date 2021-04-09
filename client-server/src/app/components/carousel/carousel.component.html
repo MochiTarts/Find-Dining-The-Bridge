@@ -67,7 +67,7 @@
         [style.border-radius]="borderRadius + 'px'"
         style="text-align: left;"
       >
-        <app-article-common-card [article]="getFile(i)['image']"></app-article-common-card>
+        <app-article-common-card [article]="getFile(i)['image']" (articleOutput)="sendArticleForOpen($event)"></app-article-common-card>
       </div>
     </ng-template>
   </div>
