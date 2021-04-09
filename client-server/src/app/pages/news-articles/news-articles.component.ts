@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,7 @@ import { ArticleService } from '../../_services/article.service';
 import { Title } from '@angular/platform-browser';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
+import { RestaurantService } from 'src/app/_services/restaurant.service';
 
 @Component({
   selector: 'app-news-articles',
@@ -30,8 +31,8 @@ export class NewsArticlesComponent implements OnInit {
   Will always update to contain the articles according
   to the filter option(s)
   */
-  displayedArticles: any[];
-  featuredArticles: any[];
+  filteredArticles: any[] = [];
+  latestArticles: any[] = [];
 
   filterMonthArticles: any[];
   filterYearArticles: any[];
@@ -39,11 +40,16 @@ export class NewsArticlesComponent implements OnInit {
   faSearch = faSearch;
   faStar = faStar;
 
+  selectedArticle: any = Object;
+  totalTabs: any[] = [];
+
   constructor(
     public articleService: ArticleService,
     private userService: UserService,
     private tokenStorage: TokenStorageService,
     private titleService: Title,
+    private changeDetection: ChangeDetectorRef,
+    private restaurantsService: RestaurantService,
   ) {
     this.months = [
       "January", "February", "March", "April", "May", "June",
@@ -67,73 +73,147 @@ export class NewsArticlesComponent implements OnInit {
     });
 
     this.articleService.getArticles().subscribe((data) => {
-      // Call endpoint to retrieve articles and set the variables as needed
-      //console.log(data.articles)
       this.allArticles = data.articles;
-      this.displayedArticles = data.articles;
+      this.filteredArticles = data.articles;
 
-      this.featuredArticles = this.allArticles.slice(0, 3);
-      this.featuredArticles.push(this.featuredArticles[0])
-      this.featuredArticles.push(this.featuredArticles[0])
-
-      this.displayedArticles.push(this.displayedArticles[0])
-      this.displayedArticles.push(this.displayedArticles[0])
-      this.displayedArticles.push(this.displayedArticles[0])
-
-      for (let i = 0; i < this.displayedArticles.length; i++) {
-        this.displayedArticles[i].type = 'article';
+      for (let i = 0; i < this.allArticles.length; i++) {
+        this.filteredArticles[i].type = 'article';
       }
+      this.latestArticles = this.filteredArticles.slice(0, 8);
 
-      this.articleService.openArticle(this.displayedArticles[0]);
-
-      console.log(this.displayedArticles)
+      this.selectedArticle = this.filteredArticles[1];
+      length = Math.ceil(this.filteredArticles.length/10);
+      this.totalTabs = Array(length);
     })
+  }
+
+  openArticle(article) {
+    this.selectedArticle = article;
+
+    var articleListDiv = document.getElementById("article-list");
+    articleListDiv.style.display = "none";
+    articleListDiv.style.opacity = "0";
+
+    var articleDiv = document.getElementById("article-container");
+    articleDiv.style.display = "block";
+    setTimeout(() => {
+      articleDiv.style.opacity = "1";
+    }, 10);
+  }
+
+  closeArticle() {
+    var articleDiv = document.getElementById("article-container");
+    articleDiv.style.display = "none";
+    articleDiv.style.opacity = "0";
+
+    var articleListDiv = document.getElementById("article-list");
+    articleListDiv.style.display = "block";
+    setTimeout(() => {
+      articleListDiv.style.opacity = "1";
+    }, 10);
+  }
+
+  openArticleMobile(article) {
+    this.selectedArticle = article;
+
+    var articleListDiv = document.getElementById("article-list-mobile");
+    articleListDiv.style.display = "none";
+    articleListDiv.style.opacity = "0";
+
+    var articleDiv = document.getElementById("article-container-mobile");
+    articleDiv.style.display = "block";
+    setTimeout(() => {
+      articleDiv.style.opacity = "1";
+    }, 10);
+  }
+
+  closeArticleMobile() {
+    var articleDiv = document.getElementById("article-container-mobile");
+    articleDiv.style.display = "none";
+    articleDiv.style.opacity = "0";
+
+    var articleListDiv = document.getElementById("article-list-mobile");
+    articleListDiv.style.display = "block";
+    setTimeout(() => {
+      articleListDiv.style.opacity = "1";
+    }, 10);
+  }
+
+  toggleFilter() {
+    var mobileFilterDiv = document.getElementById("mobile-filter");
+
+    if (mobileFilterDiv.style.opacity === "0") {
+      mobileFilterDiv.style.opacity = "1";
+      mobileFilterDiv.style.marginRight = "0";
+    } else {
+      mobileFilterDiv.style.opacity = "0";
+      mobileFilterDiv.style.marginRight = "-400px";
+    }
   }
 
   filterEnter(event){
     event.srcElement.click();
   }
 
-  // For filtering by month
-  filterMonth(list) {
+  filterDate(map) {
     const isFalse = (currentValue) => !currentValue;
 
-    if (list.every(isFalse)) {
+    var monthList = map.month;
+    var yearList = map.year;
+
+    var monthsFilter = [];
+    var yearsFilter = [];
+
+    if (monthList.every(isFalse) && yearList.every(isFalse)) {
       // If every option is unchecked
-      this.displayedArticles = this.allArticles;
+      this.filteredArticles = this.allArticles;
     } else {
       // If some option(s) are checked
-      this.displayedArticles = [];
       for (let article of this.allArticles) {
-        var date = new Date(article.modified_at);
-        var monthNumber = date.getMonth();
-        for (var i = 0; i < this.months.length; i++) {
-          if (list[i] && i == monthNumber) {
-            this.displayedArticles.push(article);
+        if (monthList.every(isFalse)) {
+          monthsFilter = this.allArticles;
+        } else {
+          var date = new Date(article.modified_at);
+          var monthNumber = date.getMonth();
+          for (var i = 0; i < this.months.length; i++) {
+            if (monthList[i] && i == monthNumber) {
+              monthsFilter.push(article)
+            }
+          }
+        }
+
+        if (yearList.every(isFalse)) {
+          yearsFilter = this.allArticles;
+        } else {
+          var date = new Date(article.modified_at);
+          var year = date.getFullYear();
+          for (var i = 0; i < this.years.length; i++) {
+            if (yearList[i] && this.years[i] == year) {
+              yearsFilter.push(article);
+            }
           }
         }
       }
+
+      this.filteredArticles = [];
+      for (let article of this.allArticles) {
+        if (monthsFilter.includes(article) && yearsFilter.includes(article)) {
+          this.filteredArticles.push(article);
+        }
+      }
     }
+
+    this.latestArticles = this.filteredArticles;
   }
 
-  // For filtering by year
-  filterYear(list) {
-    const isFalse = (currentValue) => !currentValue;
+  seeAll() {
+    this.filteredArticles = this.allArticles;
+    this.latestArticles = this.allArticles;
+  }
 
-    if (list.every(isFalse)) {
-      this.displayedArticles = this.allArticles;
-    } else {
-      this.displayedArticles = [];
-      for (let article of this.allArticles) {
-        var date = new Date(article.modified_at);
-        var year = date.getFullYear();
-        for (var i = 0; i < this.years.length; i++) {
-          if (list[i] && this.years[i] == year) {
-            this.displayedArticles.push(article);
-          }
-        }
-      }
-    }
+  seeMostRecent() {
+    this.filteredArticles = this.allArticles.slice(0, 8);
+    this.latestArticles = this.allArticles.slice(0, 8);
   }
 
 }

@@ -2,6 +2,8 @@
     <img class="card-img-top" src="../../../assets/images/food/indian.jpg" alt="Card image cap">
     <div class="card-body">
         <h2 class="card-title">{{ article.modified_at | date:'mediumDate' }}</h2>
-        <p class="card-text">One of the many articles to be displayed on the website...</p>
+        <p class="card-text">
+            {{ (articleTextPreview.replace(' ','').length > 50) ? (articleTextPreview | slice:0:50)+'...':(articleTextPreview) }}
+        </p>
     </div>
 </div>

@@ -2,6 +2,8 @@ import { environment } from '../../../environments/environment';
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as mapboxgl from 'mapbox-gl';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -23,8 +25,11 @@ export class MapComponent implements OnInit, OnChanges {
 
   currentMarkers = [];
 
+  location: string = '';
+
   constructor(
     private route: ActivatedRoute,
+    private http: HttpClient,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -36,10 +41,15 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    let GEO_location = {lat: null, lng: null};
+    let GEO_location = { lat: null, lng: null };
     if (this.route.snapshot.queryParams.GEO_location) {
       GEO_location = JSON.parse(this.route.snapshot.queryParams.GEO_location.replace(/\'/g, '"'));
     }
+
+    if (this.route.snapshot.queryParams.location) {
+      this.location = this.route.snapshot.queryParams.location;
+    }
+
     let centered_lat = GEO_location.lat || this.sc_lat;
     let centered_lng = GEO_location.lng || this.sc_lng;
 
@@ -75,9 +85,42 @@ export class MapComponent implements OnInit, OnChanges {
 
     popup.on('close', () => {
       marker.getElement().focus();
-    })
+    });
+
+    if (this.location) {
+
+      this.getGeoCode(this.location).subscribe((data) => {
+        let selectedLocation = data["features"][0];
+        let newCenter = {
+          longitude: selectedLocation.center[0],
+          latitude: selectedLocation.center[1],
+        };
+
+        var queryLocationPopup = new mapboxgl.Popup().setHTML(`<p tabindex="0">${selectedLocation.place_name}</p>`);
+
+        // Add map markers
+        var queryLocationMarker = new mapboxgl.Marker({ color: '#027bff' })
+          .setLngLat([newCenter.longitude, newCenter.latitude])
+          .setPopup(queryLocationPopup)
+          .addTo(this.map);
+
+        queryLocationPopup.on('close', () => {
+          queryLocationMarker.getElement().focus();
+        });
+
+        // Set query location as center of map
+        this.map.setCenter(new mapboxgl.LngLat(newCenter.longitude, newCenter.latitude));
+      })
+
+    }
+
 
     this.updateMap(this.restaurants);
+  }
+
+  getGeoCode(searchText: string): Observable<any> {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json?country=ca&types=place,address,neighborhood,locality&access_token=${environment.mapbox.accessToken}`;
+    return this.http.get(url);
   }
 
   updateMap(restaurants) {

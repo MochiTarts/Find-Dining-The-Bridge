@@ -68,7 +68,6 @@ import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-ca
 import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.component';
 import { RequiredStarComponent } from './components/required-star/required-star.component';
 import { SubscriberProfileFormComponent } from './components/subscriber-profile-form/subscriber-profile-form.component';
-import { RestaurantProfileFormComponent } from './components/restaurant-profile-form/restaurant-profile-form.component';
 import { PageErrorComponent } from './components/page-error/page-error.component';
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 import { PostComponent } from './components/post/post.component';
@@ -79,6 +78,10 @@ import { InfoCardComponent } from './components/info-card/info-card.component';
 import { ArticleLatestCardComponent } from './components/article-latest-card/article-latest-card.component';
 import { ArticleCommonCardComponent } from './components/article-common-card/article-common-card.component';
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
+import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
 
 
 @NgModule({
@@ -106,7 +109,6 @@ import { FilterdateCardComponent } from './components/filterdate-card/filterdate
     RequiredStarComponent,
     TermsOfServiceComponent,
     SubscriberProfileFormComponent,
-    RestaurantProfileFormComponent,
     RestaurantPageComponent,
     PageErrorComponent,
     VirtualScrollingComponent,
@@ -123,6 +125,10 @@ import { FilterdateCardComponent } from './components/filterdate-card/filterdate
     ArticleLatestCardComponent,
     ArticleCommonCardComponent,
     FilterdateCardComponent,
+    PrivacyPolicyComponent,
+    AboutUsComponent,
+    AboutOurPartnerComponent,
+    ArticleHeadlineCardComponent,
   ],
   imports: [
     BrowserModule,
