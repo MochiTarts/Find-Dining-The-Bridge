@@ -620,24 +620,25 @@ class RestaurantsAnalyticsDataView(APIView):
 
 class PostView(APIView):
     """ Restaurant posts view """
-    #permission_classes = (AllowAny,)
-    permission_classes = [ROPermission]
+    permission_classes = (AllowAny,)
+    #permission_classes = [ROPermission]
 
     def post(self, request):
         """ Insert a new post for a restaurant """
-        user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        #user = request.user
+        #if not user:
+        #    raise PermissionDenied(
+        #        message="Failed to obtain user",
+        #        code="fail_obtain_user")
 
-        user_id = user.id
+        #user_id = user.id
+        user_id = 0
         validate(instance=request.data, schema=post_schema)
         body = request.data
         body['owner_user_id'] = user_id
         RestaurantPost.field_validate(body)
 
-        post = RestaurantPost.insert(body)
+        post = RestaurantPost.insert(body, request)
         return JsonResponse(model_to_json(post))
 
     def get(self, request):
