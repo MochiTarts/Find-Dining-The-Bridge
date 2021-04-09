@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
   faUserCircle = faUserCircle;
   faMapMarkerAlt = faMapMarkerAlt;
 
-  private role: string = 'BU';
+  private role: string = '';
   username?: string;
 
   constructor(
@@ -43,6 +43,12 @@ export class NavbarComponent implements OnInit {
       const user = this.tokenStorageService.getUser();
       this.role = user.role;
       this.username = user.username;
+
+      if (this.role == 'BU') {
+        this.userService.getSubscriberProfile().subscribe((data) => {
+          this.userAddress = data.postalCode;
+        });
+      }
     }
   }
 
@@ -133,12 +139,12 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-logout(): void {
-  this.authService.updateLoginStatus(false);
-  this.tokenStorageService.signOut();
-  this.router.navigate(['/']).then(() => {
-    window.location.reload()
-  });
-}
+  logout(): void {
+    this.authService.updateLoginStatus(false);
+    this.tokenStorageService.signOut();
+    this.router.navigate(['/']).then(() => {
+      window.location.reload()
+    });
+  }
 
 }
