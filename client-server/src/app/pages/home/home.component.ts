@@ -1,25 +1,17 @@
 import {
   AfterViewInit,
-  TemplateRef,
   Component,
   OnInit,
   ViewChild
 } from '@angular/core';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { FormGroup, Validators } from '@angular/forms';
-import { faArrowCircleDown, faArrowCircleUp, faCalendar } from '@fortawesome/free-solid-svg-icons';
-import { formValidator } from '../../_validation/formValidator'
-import { userValidator } from '../../_validation/userValidator';
-import { UserService } from '../../_services/user.service';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { environment } from 'src/environments/environment';
-import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
-import { RestaurantCardComponent } from 'src/app/components/restaurant-card/restaurant-card.component';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import { Title } from '@angular/platform-browser';
+import { RestaurantService } from '../../_services/restaurant.service';
 
 @Component({
   selector: 'app-home',
@@ -38,71 +30,41 @@ export class HomeComponent implements OnInit, AfterViewInit {
   siteKey: string;
   loggedOut: boolean = true;
 
-  @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
+  faMapMarkerAlt = faMapMarkerAlt;
 
-  isShow: boolean;
-  topPosToStartShowing = 100;
-  faArrowCircleUp = faArrowCircleUp;
-  faArrowCircleDown = faArrowCircleDown;
-  arrowsOutside = true;
-  faCalendar = faCalendar;
+  arrowsOutside = window.innerWidth < 1020 ? false : true;
 
   modalRef: any;
 
-  totalStars: number = 5;
-  dishes: any[] = [];
-  stories: any[] = [];
+  restaurants: any[] = [];
+  pricepoints: any[] = [];
 
-  cuisines = [
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/chinese.jpg',
-      caption: 'Chinese',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/greek.jpg',
-      caption: 'Greek',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/indian.jpg',
-      caption: 'Indian',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/italian.jpg',
-      caption: 'Italian',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/japanese.jpg',
-      caption: 'Japanese',
-    },
-    { type: 'image', path: 'assets/images/cuisines/thai.jpg', caption: 'Thai' },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/vietnamese.jpg',
-      caption: 'Vietnamese',
-    },
-  ];
   formBuilder: any;
+
+  photoCourtesy: string = 'Restaurant A';
+  spotlight: any;
+
+  location: string = '';
+  find: string = '';
 
   constructor(
     private authService: AuthService,
     private tokenStorageService: TokenStorageService,
-    private userService: UserService,
-    private modalService: NgbModal,
-    private router: Router
-    ) { }
+    private restaurantService: RestaurantService,
+    private router: Router,
+    private titleService: Title,
+  ) { }
 
   ngOnInit(): void {
-    AOS.init({
-      delay: 300,
-      duration: 1500,
-      once: false,
-      anchorPlacement: 'top-bottom',
-    });
+    this.titleService.setTitle("Home | Find Dining Scarborough");
+
+    this.pricepoints = [
+      { key: "$", value: "LOW" },
+      { key: "$$", value: "MID" },
+      { key: "$$$", value: "HIGH" },
+      { key: "$$$$", value: "EXHIGH" }
+    ]
+
     this.publicContent = "public content";
     if (this.authService.isLoggedIn) {
       this.loggedOut = false;
@@ -113,56 +75,73 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.userId = user.user_id;
       this.profileId = user.profile_id;
     }
+
+    this.getRestaurants();
   }
 
   ngAfterViewInit(): void {
-    // Add one more '&&' statement to see if profile_id is null
-    if (this.role && this.role == 'BU' && this.profileId == null) {
-      this.userInfo.open(false);
-    }
+
   }
 
-  @HostListener('window:scroll')
-  checkScroll() {
-    const scrollPosition =
-      window.pageYOffset ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
-      0;
-
-    if (scrollPosition >= this.topPosToStartShowing) {
-      this.isShow = true;
-    } else {
-      this.isShow = false;
-    }
-  }
-
-  gotoTop() {
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-  }
-
-  scrollDown() {
-    const newPosition = document.getElementById('scroll').offsetTop;
-    window.scroll({
-      top: newPosition,
-      left: 0,
-      behavior: 'smooth',
-    });
-  }
-
-  onLoginRegisterClicked(): void {
+  gotoRegister(): void {
     this.router.navigate(['/login']);
+  }
+
+  getRestaurants() {
+    this.restaurantService.listRestaurants().subscribe((data) => {
+      // Shuffle the order of restaurants
+      this.shuffle(data.Restaurants)
+      for (let restaurant of data.Restaurants) {
+        let price = this.getPricepoint(String(restaurant.pricepoint));
+        this.restaurants.push({
+          type: 'restaurant',
+          name: restaurant.name,
+          cuisinePrice: restaurant.cuisines[0] + " - " + price,
+          imgUrl: restaurant.logo_url,
+          _id: restaurant._id
+        });
+      }
+
+      // Pick a random restaurant for spotlight
+      this.spotlight = data.Restaurants[0];
+    });
+  }
+
+  getPricepoint(priceLevel: string) {
+    // priceLevels: LOW, MID, HIGH, EXHIGH
+    // return: $, $$, $$$, $$$$
+    for (let p of this.pricepoints) {
+      if (p["value"] == priceLevel) {
+        return p["key"];
+      }
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.arrowsOutside = window.innerWidth < 1020 ? false : true;
   }
 
   browseListings(): void {
     this.router.navigate(['/all-listings']);
   }
 
-  restaurant(): void {}
+  shuffle(list: any[]) {
+    // Reference: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 
-  browseStories(): void {}
+    var currentIndex = list.length, temporaryValue, randomIndex;
+
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = list[currentIndex];
+      list[currentIndex] = list[randomIndex];
+      list[randomIndex] = temporaryValue;
+    }
+
+    return list;
+  }
 }

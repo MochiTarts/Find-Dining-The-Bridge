@@ -17,6 +17,7 @@ from sduser.forms import SDUserCreateForm
 
 from smtplib import SMTPException
 
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -39,13 +40,17 @@ class EmailBackend(ModelBackend):
     """
 
     def authenticate(self, request, username=None, password=None, **kwargs):
+
         try:
             user = UserModel.objects.get(
                 Q(username__iexact=username) | Q(email__iexact=username))
+            print(user)
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
-            return UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            user = UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            if user.check_password(password) and self.user_can_authenticate(user):
+                return user
         else:
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
@@ -104,7 +109,7 @@ def create_disable_user_and_send_verification_email(user, password, request):
         try:
             send_email_verification(user, request)
             # send a signal to frontend to ask them to verify email before log in
-            return JsonResponse({'message': 'verification email has been sent. Please activate your account before sign in.'})
+            return JsonResponse({'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
         except (BadHeaderError, SMTPException):
             user.delete()
             return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact find dining support.'}, status=503)
@@ -135,6 +140,8 @@ class SDUserCookieTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Token Obtain Pair Serializer
     """
+    # need to allow unauthorized sign in request because we authenticate them afterwards
+    permission_classes = (AllowAny,)
 
     def validate(self, attrs):
         """
@@ -180,7 +187,7 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
 
     def finalize_response(self, request, response, *args, **kwargs):
 
-        if response.data.get('refresh'):
+        if hasattr(response, 'data') and response.data.get('refresh'):
             # 1 day
             cookie_max_age = 3600 * 24
             refresh_token = response.data['refresh']

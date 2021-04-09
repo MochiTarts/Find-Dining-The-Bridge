@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from 'src/app/_services/user.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-newsletter',
@@ -19,6 +20,7 @@ export class NewsletterComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private tokenStorageService: TokenStorageService,
+    private titleService: Title,
   ) { }
 
   ngOnInit(): void {
@@ -30,11 +32,12 @@ export class NewsletterComponent implements OnInit {
   }
 
   subscribeNewsletter() {
+    this.titleService.setTitle("Newsletter | Find Dining Scarborough");
     var userInfo = {
       user_id: this.userId,
       consent_status: "EXPRESSED"
     }
-    this.userService.editConsentStatus(userInfo).subscribe(() => {
+    this.userService.editSubscriberProfile(userInfo).subscribe(() => {
       this.subscribed = true;
       alert("You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.");
       this.reload();
@@ -46,7 +49,7 @@ export class NewsletterComponent implements OnInit {
       user_id: this.userId,
       consent_status: "UNSUBSCRIBED",
     }
-    this.userService.editConsentStatus(userInfo).subscribe(() => {
+    this.userService.editSubscriberProfile(userInfo).subscribe(() => {
       this.unsubscribed = true;
       alert("You have successfully unsubscribed.");
       this.reload();

@@ -3,6 +3,7 @@ from django.contrib.admin import SimpleListFilter
 from django.utils.html import format_html
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.http import HttpResponse, HttpResponseRedirect
 
 from utils.geo_controller import geocode
 from utils.model_util import save_and_clean, model_to_json, edit_model
@@ -10,15 +11,16 @@ from utils.admin import InputFilter, OwnerNameFilter, NameFilter, PriceMaxFilter
 
 from restaurant.enum import Status
 from restaurant.forms import RestaurantAdminForm
-from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs
+from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs, RestaurantPost
 from restaurant.utils import send_approval_email, send_reject_email, send_unpublish_email
 
 from django.contrib import messages
-
-# from cloud_storage import cloud_controller
+from utils.geo_controller import geocode
+from utils.cloud_storage import delete
 import ast
 # from decimal import Decimal
 #from django.contrib.admin.actions import delete_selected
+
 
 def reject_restr(model_admin, request, queryset):
     """
@@ -33,14 +35,19 @@ def reject_restr(model_admin, request, queryset):
         total += 1
         res_dict = model_to_json(r)
         res_status = res_dict['status']
-        # note that if the submission is already rejected then it will not be on the live site
+        # note that if the submission is already rejected then it will not be
+        # on the live site
         if res_status != Status.Rejected.value:
             count += 1
             restaurant_name = res_dict.get('name', "")
             restaurant_id = res_dict["_id"]
             owner_prefer_names = res_dict.get('owner_preferred_name', "")
             email = res_dict.get('email', "")
-            send_reject_email(owner_prefer_names, email, restaurant_name, 'restaurant')
+            send_reject_email(
+                owner_prefer_names,
+                email,
+                restaurant_name,
+                'restaurant')
             # restaurant that is being displayed on the live site
             restaurant = Restaurant.objects.get(_id=restaurant_id)
             if restaurant:
@@ -48,10 +55,19 @@ def reject_restr(model_admin, request, queryset):
     # change status to reject
     queryset.update(status=Status.Rejected.value)
     if count > 1:
-        messages.success(request, "Successfully rejected " + str(count) + " restaurant profiles.")
+        messages.success(
+            request,
+            "Successfully rejected " +
+            str(count) +
+            " restaurant profiles.")
     elif count == 1:
-        link = reverse("admin:restaurant_pendingrestaurant_change", args=[restaurant_id])
-        msg = format_html("Successfully rejected restaurant profile for <a href='{}' target='_blank' rel='noopener'>{}</a>", link, restaurant_name)
+        link = reverse(
+            "admin:restaurant_pendingrestaurant_change",
+            args=[restaurant_id])
+        msg = format_html(
+            "Successfully rejected restaurant profile for <a href='{}' target='_blank' rel='noopener'>{}</a>",
+            link,
+            restaurant_name)
         messages.success(request, msg)
     else:
         if total > 1:
@@ -59,6 +75,7 @@ def reject_restr(model_admin, request, queryset):
         else:
             msg = "The selected restaurant profile has been rejected already."
         messages.error(request, msg)
+
 
 reject_restr.short_description = "Reject a restaurant submission (and unpublish from live site if the submission was in approved state)"
 
@@ -78,21 +95,32 @@ def unpublish_restr(model_admin, request, queryset):
         owner_prefer_names = res_dict.get('owner_preferred_name', "")
         restaurant_name = res_dict.get('name', "")
         email = res_dict.get('email', "")
-        send_unpublish_email(owner_prefer_names, email, restaurant_name, 'restaurant')
+        send_unpublish_email(
+            owner_prefer_names,
+            email,
+            restaurant_name,
+            'restaurant')
         restaurant_id = res_dict["_id"]
         pendingRestaurant = PendingRestaurant.objects.get(_id=restaurant_id)
-        # change approved pendingRestaurant to rejected as the profile is being unpublished
+        # change approved pendingRestaurant to rejected as the profile is being
+        # unpublished
         if pendingRestaurant.status == Status.Approved.value:
-            pendingRestaurant.status=Status.Rejected.value
+            pendingRestaurant.status = Status.Rejected.value
             pendingRestaurant.save()
-        # Remove all user-restaurant favourites for the restaurant to be unpublished
-        UserFavRestrs.objects.filter(restaurant=restaurant_id).delete()         
+        # Remove all user-restaurant favourites for the restaurant to be
+        # unpublished
+        UserFavRestrs.objects.filter(restaurant=restaurant_id).delete()
     queryset.delete()
     if count > 1:
-        messages.success(request, "Successfully unpublished " + str(count) + " restaurant profiles.")
+        messages.success(
+            request,
+            "Successfully unpublished " +
+            str(count) +
+            " restaurant profiles.")
     elif count == 1:
         msg = "Successfully unpublished restaurant profile for " + restaurant_name
         messages.success(request, msg)
+
 
 unpublish_restr.short_description = "Unpublish a restaurant (remove it from live site and change the status of its corresponding submission)"
 
@@ -114,28 +142,45 @@ def approve_restr(model_admin, request, queryset):
 
         if r.status == Status.Pending.value:
             count += 1
-            #if old_restaurant:
-            #    if old_restaurant.logo_url != r.logo_url:
-            #        cloud_controller.delete(old_restaurant.logo_url)
-            #    if old_restaurant.cover_photo_url != r.cover_photo_url:
-            #        cloud_controller.delete(old_restaurant.cover_photo_url)
-            #    if old_restaurant.restaurant_video_url != r.restaurant_video_url and 'youtube' not in old_restaurant.restaurant_video_url:
-            #        cloud_controller.delete(old_restaurant.restaurant_video_url)
-            edit_model(restaurant, {"status": Status.Approved.value, "approved_once": True}, ["status", "approved_once"])
+            if old_restaurant:
+                if old_restaurant.logo_url != r.logo_url:
+                    delete(old_restaurant.logo_url)
+                if old_restaurant.cover_photo_url != r.cover_photo_url:
+                    delete(old_restaurant.cover_photo_url)
+                if old_restaurant.restaurant_video_url != r.restaurant_video_url and 'youtube' not in old_restaurant.restaurant_video_url:
+                    delete(old_restaurant.restaurant_video_url)
+            edit_model(
+                restaurant, {
+                    "status": Status.Approved.value, "approved_once": True}, [
+                    "status", "approved_once"])
             save_and_clean(restaurant)
             owner_prefer_names = r.owner_preferred_name
             restaurant_name = r.name
             email = r.email
             restaurant_id = r._id
-            send_approval_email(owner_prefer_names, email, restaurant_name, 'restaurant')
+            send_approval_email(
+                owner_prefer_names,
+                email,
+                restaurant_name,
+                'restaurant')
         else:
-            messages.error(request, "You can only approve of 'Pending' restaurants")
+            messages.error(
+                request, "You can only approve of 'Pending' restaurants")
     queryset.update(status=Status.Approved.value, approved_once=True)
     if count > 1:
-        messages.success(request, "Successfully approved " + str(count) + " restaurant profiles.")
+        messages.success(
+            request,
+            "Successfully approved " +
+            str(count) +
+            " restaurant profiles.")
     elif count == 1:
-        link = reverse("admin:restaurant_pendingrestaurant_change", args=[restaurant_id])
-        msg = format_html("Successfully approved restaurant profile for <a href='{}' target='_blank' rel='noopener'>{}</a>", link, restaurant_name)
+        link = reverse(
+            "admin:restaurant_pendingrestaurant_change",
+            args=[restaurant_id])
+        msg = format_html(
+            "Successfully approved restaurant profile for <a href='{}' target='_blank' rel='noopener'>{}</a>",
+            link,
+            restaurant_name)
         messages.success(request, msg)
     else:
         if total > 1:
@@ -143,6 +188,7 @@ def approve_restr(model_admin, request, queryset):
         else:
             msg = "The selected restaurant profile has been approved already."
         messages.error(request, msg)
+
 
 approve_restr.short_description = "Approve of restaurant info to be displayed on website"
 
@@ -157,7 +203,8 @@ def reject_food(model_admin, request, queryset):
     for f in queryset:
         total += 1
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
-        # note that if the submission is already rejected then it will not be on the live site
+        # note that if the submission is already rejected then it will not be
+        # on the live site
         if f.status != Status.Rejected.value:
             count += 1
             restr = restaurant.first()
@@ -172,10 +219,17 @@ def reject_food(model_admin, request, queryset):
     # change status to reject
     queryset.update(status=Status.Rejected.value)
     if count > 1:
-        messages.success(request, "Successfully rejected " + str(count) + " food profiles.")
+        messages.success(
+            request,
+            "Successfully rejected " +
+            str(count) +
+            " food profiles.")
     elif count == 1:
         link = reverse("admin:restaurant_pendingfood_change", args=[f._id])
-        msg = format_html("Successfully rejected food profile for <a href='{}' target='_blank' rel='noopener'>{}</a>", link, f.name)
+        msg = format_html(
+            "Successfully rejected food profile for <a href='{}' target='_blank' rel='noopener'>{}</a>",
+            link,
+            f.name)
         messages.success(request, msg)
     else:
         if total > 1:
@@ -183,6 +237,7 @@ def reject_food(model_admin, request, queryset):
         else:
             msg = "The selected food profile has been rejected already."
         messages.error(request, msg)
+
 
 reject_food.short_description = "Reject a food submission (and unpublish from live site if the submission was in approved state)"
 
@@ -207,10 +262,15 @@ def unpublish_food(model_admin, request, queryset):
             save_and_clean(pendingFood)
     queryset.delete()
     if count > 1:
-        messages.success(request, "Successfully unpublished " + str(count) + " food profiles.")
+        messages.success(
+            request,
+            "Successfully unpublished " +
+            str(count) +
+            " food profiles.")
     elif count == 1:
         msg = "Successfully unpublished food profile for " + f.name
         messages.success(request, msg)
+
 
 unpublish_food.short_description = "Unpublish a food (remove it from live site and change the status of its corresponding submission)"
 
@@ -233,15 +293,22 @@ def approve_food(model_admin, request, queryset):
             send_approval_email(owner_prefer_names, email, food_name, 'food')
             if old_food:
                 if old_food.picture != f.picture:
-                    cloud_controller.delete(old_food.picture)
+                    delete(old_food.picture)
             food.status = Status.Approved.value
             save_and_clean(food)
     queryset.update(status=Status.Approved.value)
     if count > 1:
-        messages.success(request, "Successfully approved " + str(count) + " food profiles.")
+        messages.success(
+            request,
+            "Successfully approved " +
+            str(count) +
+            " food profiles.")
     elif count == 1:
         link = reverse("admin:restaurant_pendingfood_change", args=[f._id])
-        msg = format_html("Successfully approved restaurant profile for <a href='{}' target='_blank' rel='noopener'>{}</a>", link, f.name)
+        msg = format_html(
+            "Successfully approved restaurant profile for <a href='{}' target='_blank' rel='noopener'>{}</a>",
+            link,
+            f.name)
         messages.success(request, msg)
     else:
         if total > 1:
@@ -250,6 +317,7 @@ def approve_food(model_admin, request, queryset):
             msg = "The selected food profile has been approved already."
         messages.error(request, msg)
 
+
 approve_food.short_description = "Approve of restaurant dish to be displayed on website"
 
 
@@ -257,9 +325,18 @@ class PendingRestrAdmin(admin.ModelAdmin):
     """ Admin Model for PendingRestaurant """
 
     list_filter = ('status', NameFilter, OwnerNameFilter)
-    list_display = ('name', 'status', 'owner_first_name', 'owner_last_name', 'owner_preferred_name', \
-                    'cuisines', 'address', 'categories', 'coverPhotoUrl', 'logoUrl', \
-                    'modified_time')
+    list_display = (
+        'name',
+        'status',
+        'owner_first_name',
+        'owner_last_name',
+        'owner_preferred_name',
+        'cuisines',
+        'address',
+        'categories',
+        'coverPhotoUrl',
+        'logoUrl',
+        'modified_time')
     actions = (approve_restr, reject_restr)
     readonly_fields = ('status', 'GEO_location',)
 
@@ -276,7 +353,8 @@ class PendingRestrAdmin(admin.ModelAdmin):
 
     def get_actions(self, request):
         actions = super().get_actions(request)
-        # unpublish will take care the deletion (because it will update the corresponding Restaurant)
+        # unpublish will take care the deletion (because it will update the
+        # corresponding Restaurant)
         if 'delete_selected' in actions:
             del actions['delete_selected']
         return actions
@@ -288,13 +366,34 @@ class PendingRestrAdmin(admin.ModelAdmin):
         return ', '.join(obj.categories)
 
     def coverPhotoUrl(self, obj):
-        return format_html("<a href='{url}'>{url}</a>", url=obj.cover_photo_url)
+        return format_html(
+            "<a href='{url}'>{url}</a>",
+            url=obj.cover_photo_url)
 
     def logoUrl(self, obj):
         return format_html("<a href='{url}'>{url}</a>", url=obj.logo_url)
 
     coverPhotoUrl.short_description = "cover_photo_url"
     logoUrl.short_description = "logo_url"
+
+    def response_change(self, request, obj):
+        if "_approve" in request.POST:
+            approve_restr(
+                self,
+                request,
+                PendingRestaurant.objects.filter(
+                    _id=obj._id))
+            return HttpResponseRedirect(".")
+
+        if "_reject" in request.POST:
+            reject_restr(
+                self,
+                request,
+                PendingRestaurant.objects.filter(
+                    _id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
 
 
 class RestaurantFilter(admin.SimpleListFilter):
@@ -319,8 +418,18 @@ class RestaurantFilter(admin.SimpleListFilter):
 
 class PendingFoodAdmin(admin.ModelAdmin):
     """ Admin Model for PendingFood """
-    list_filter = (RestaurantFilter, 'status', NameFilter)
-    list_display = ('name', 'restaurant', 'description', 'pictureUrl', 'price', 'specials', 'category', 'status', 'link_to_restaurant',)
+    list_filter = ('status', NameFilter, RestaurantFilter,)
+    list_display = (
+        'name',
+        'restaurant',
+        'description',
+        'pictureUrl',
+        'price',
+        'specials',
+        'category',
+        'status',
+        'link_to_restaurant',
+    )
     readonly_fields = ('restaurant_id', 'status')
     actions = (approve_food, reject_food,)
 
@@ -331,21 +440,30 @@ class PendingFoodAdmin(admin.ModelAdmin):
         signature dish and popular dish limits are obeyed
         """
         food = obj
-        restaurant = PendingRestaurant.objects.filter(_id=food.restaurant_id).first()
-        if (food.category == 'Signature Dish' and
-            PendingFood.objects.filter(restaurant_id=food.restaurant_id, category='Signature Dish').count() == 1):
+        restaurant = PendingRestaurant.objects.filter(
+            _id=food.restaurant_id).first()
+        if (food.category == 'Signature Dish' and PendingFood.objects.filter(
+                restaurant_id=food.restaurant_id, category='Signature Dish').count() == 1):
             messages.set_level(request, messages.ERROR)
-            messages.error(request, 'A restaurant can only have 1 signature dish.')
+            messages.error(
+                request, 'A restaurant can only have 1 signature dish.')
         elif (food.category == 'Popular Dish' and
-            PendingFood.objects.filter(restaurant_id=food.restaurant_id, category='Popular Dish').count() == 6):
-            if food._id not in list(PendingFood.objects.filter(restaurant_id=food.restaurant_id, category='Popular Dish').values_list('_id', flat=True)):
+              PendingFood.objects.filter(restaurant_id=food.restaurant_id, category='Popular Dish').count() == 6):
+            if food._id not in list(
+                PendingFood.objects.filter(
+                    restaurant_id=food.restaurant_id,
+                    category='Popular Dish').values_list(
+                    '_id',
+                    flat=True)):
                 messages.set_level(request, messages.ERROR)
-                messages.error(request, 'A restaurant can only have up to 6 popular dishes.')
+                messages.error(
+                    request, 'A restaurant can only have up to 6 popular dishes.')
         else:
             food.clean()
             food.clean_fields()
             food.save()
-            restaurant.categories = PendingFood.get_all_categories(food.restaurant_id)
+            restaurant.categories = PendingFood.get_all_categories(
+                food.restaurant_id)
             restaurant.clean()
             restaurant.clean_fields()
             restaurant.save()
@@ -369,12 +487,18 @@ class PendingFoodAdmin(admin.ModelAdmin):
     def link_to_restaurant(self, obj):
         # link to edit restaurant associated with restaurant id
         # first argument of reverse takes a string (all lowercase) in the form of "admin:appname_modelname_change" for edit
-        # target='_blank' has no effect, open new tab doesn't work at the moment, ignore it for now
+        # target='_blank' has no effect, open new tab doesn't work at the
+        # moment, ignore it for now
         try:
             if not obj.restaurant_id:
                 return ""
-            link = reverse("admin:restaurant_pendingrestaurant_change", args=[obj.restaurant_id])
-            return format_html("<a href='{}' target='_blank' rel='noopener'>{}</a>", link, obj.restaurant_id)
+            link = reverse(
+                "admin:restaurant_pendingrestaurant_change", args=[
+                    obj.restaurant_id])
+            return format_html(
+                "<a href='{}' target='_blank' rel='noopener'>{}</a>",
+                link,
+                obj.restaurant_id)
         except NoReverseMatch as e:
             return str(obj.restaurant_id)
         except Exception as e:
@@ -383,14 +507,43 @@ class PendingFoodAdmin(admin.ModelAdmin):
     pictureUrl.short_description = "picture"
     link_to_restaurant.short_description = 'restaurant_id'
 
+    def response_change(self, request, obj):
+        if "_approve" in request.POST:
+            approve_restr(
+                self,
+                request,
+                PendingFood.objects.filter(
+                    _id=obj._id))
+            return HttpResponseRedirect(".")
+
+        if "_reject" in request.POST:
+            reject_restr(
+                self,
+                request,
+                PendingFood.objects.filter(
+                    _id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
+
 
 class RestrAdmin(admin.ModelAdmin):
     """ Admin Model for Restaurant """
     list_filter = ('status', NameFilter, OwnerNameFilter)
-    list_display = ('name', 'owner_first_name', 'owner_last_name', 'owner_preferred_name', \
-                    'cuisines', 'address', 'categories', 'coverPhotoUrl', 'logoUrl')
+    list_display = (
+        'name',
+        'owner_first_name',
+        'owner_last_name',
+        'owner_preferred_name',
+        'cuisines',
+        'address',
+        'categories',
+        'coverPhotoUrl',
+        'logoUrl')
     actions = (unpublish_restr,)
     readonly_fields = ('status', 'GEO_location',)
+    change_list_template = 'restaurant/change_list_graph.html'
+    change_form_template = 'restaurant/change_form_graph.html'
 
     def save_model(self, request, obj, form, change):
         """
@@ -406,7 +559,8 @@ class RestrAdmin(admin.ModelAdmin):
     def get_actions(self, request):
         actions = super().get_actions(request)
         delete_action = 'delete_selected'
-        # unpublish will take care the deletion (because it will update the corresponding pendingRestaurant)
+        # unpublish will take care the deletion (because it will update the
+        # corresponding pendingRestaurant)
         if delete_action in actions:
             del actions[delete_action]
         return actions
@@ -421,12 +575,14 @@ class RestrAdmin(admin.ModelAdmin):
 
         kwargs['form'] = RestaurantAdminForm
         return super().get_form(request, obj, **kwargs)
-    
+
     def categories(self, obj):
         return ', '.join(obj.categories)
 
     def coverPhotoUrl(self, obj):
-        return format_html("<a href='{url}'>{url}</a>", url=obj.cover_photo_url)
+        return format_html(
+            "<a href='{url}'>{url}</a>",
+            url=obj.cover_photo_url)
 
     def logoUrl(self, obj):
         return format_html("<a href='{url}'>{url}</a>", url=obj.logo_url)
@@ -434,13 +590,41 @@ class RestrAdmin(admin.ModelAdmin):
     coverPhotoUrl.short_description = "cover_photo_url"
     logoUrl.short_description = "logo_url"
 
+    def response_change(self, request, obj):
+        if "_unpublish" in request.POST:
+            unpublish_restr(
+                self,
+                request,
+                Restaurant.objects.filter(
+                    _id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
+
 
 class FoodAdmin(admin.ModelAdmin):
     """ Admin Model for Food """
-    list_filter = (RestaurantFilter, 'status', NameFilter)
-    list_display = ('name', 'restaurant', 'description', 'pictureUrl', 'price', 'specials', 'category', 'status', 'link_to_restaurant',)
+    list_filter = ('status', NameFilter, RestaurantFilter,)
+    list_display = (
+        'name',
+        'restaurant',
+        'description',
+        'pictureUrl',
+        'price',
+        'specials',
+        'category',
+        'status',
+        'link_to_restaurant',
+    )
     readonly_fields = ('restaurant_id', 'status')
     actions = (unpublish_food,)
+
+    def response_change(self, request, obj):
+        if "_unpublish" in request.POST:
+            unpublish_food(self, request, Food.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
 
     def save_model(self, request, obj, form, change):
         """
@@ -450,15 +634,22 @@ class FoodAdmin(admin.ModelAdmin):
         """
         food = obj
         restaurant = Restaurant.objects.filter(_id=food.restaurant_id).first()
-        if (food.category == 'Signature Dish' and
-            Food.objects.filter(restaurant_id=food.restaurant_id, category='Signature Dish').count() == 1):
+        if (food.category == 'Signature Dish' and Food.objects.filter(
+                restaurant_id=food.restaurant_id, category='Signature Dish').count() == 1):
             messages.set_level(request, messages.ERROR)
-            messages.error(request, 'A restaurant can only have 1 signature dish.')
+            messages.error(
+                request, 'A restaurant can only have 1 signature dish.')
         elif (food.category == 'Popular Dish' and
-            Food.objects.filter(restaurant_id=food.restaurant_id, category='Popular Dish').count() == 6):
-            if food._id not in list(Food.objects.filter(restaurant_id=food.restaurant_id, category='Popular Dish').values_list('_id', flat=True)):
+              Food.objects.filter(restaurant_id=food.restaurant_id, category='Popular Dish').count() == 6):
+            if food._id not in list(
+                Food.objects.filter(
+                    restaurant_id=food.restaurant_id,
+                    category='Popular Dish').values_list(
+                    '_id',
+                    flat=True)):
                 messages.set_level(request, messages.ERROR)
-                messages.error(request, 'A restaurant can only have up to 6 popular dishes.')
+                messages.error(
+                    request, 'A restaurant can only have up to 6 popular dishes.')
         else:
             food.clean()
             food.clean_fields()
@@ -487,12 +678,18 @@ class FoodAdmin(admin.ModelAdmin):
     def link_to_restaurant(self, obj):
         # link to edit restaurant associated with restaurant id
         # first argument of reverse takes a string (all lowercase) in the form of "admin:appname_modelname_change" for edit
-        # target='_blank' has no effect, open new tab doesn't work at the moment, ignore it for now
+        # target='_blank' has no effect, open new tab doesn't work at the
+        # moment, ignore it for now
         try:
             if not obj.restaurant_id:
                 return ""
-            link = reverse("admin:restaurant_pendingrestaurant_change", args=[obj.restaurant_id])
-            return format_html("<a href='{}' target='_blank' rel='noopener'>{}</a>", link, obj.restaurant_id)
+            link = reverse(
+                "admin:restaurant_pendingrestaurant_change", args=[
+                    obj.restaurant_id])
+            return format_html(
+                "<a href='{}' target='_blank' rel='noopener'>{}</a>",
+                link,
+                obj.restaurant_id)
         except NoReverseMatch as e:
             return str(obj.restaurant_id)
         except Exception as e:
@@ -501,7 +698,64 @@ class FoodAdmin(admin.ModelAdmin):
     pictureUrl.short_description = "picture"
     link_to_restaurant.short_description = 'restaurant_id'
 
+    def response_change(self, request, obj):
+        if "_unpublish" in request.POST:
+            unpublish_restr(self, request, Food.objects.filter(_id=obj._id))
+            return HttpResponseRedirect(".")
+
+        return super().response_change(request, obj)
+
+
+class RestPostAdmin(admin.ModelAdmin):
+    list_filter = (RestaurantFilter, 'timestamp',)
+    list_display = (
+        'restaurant_name',
+        'link_to_restaurant',
+        'owner_user_id',
+        'timestamp',
+    )
+
+    readonly_fields = ('restaurant_id',)
+
+    def restaurant_name(self, obj):
+        if not obj.restaurant_id:
+            return ""
+        return PendingRestaurant.objects.filter(
+            _id=obj.restaurant_id).first().name
+
+    def link_to_post_edit(self, obj):
+        link = reverse(
+            "admin:restaurant_restaurantpost_change",
+            args=[
+                obj._id])
+        return format_html(
+            "<a href='{}' target='_blank' rel='noopener'>{}</a>",
+            link,
+            obj.restaurant_id)
+
+    def link_to_restaurant(self, obj):
+        # link to edit restaurant associated with restaurant id
+        # first argument of reverse takes a string (all lowercase) in the form of "admin:appname_modelname_change" for edit
+        # target='_blank' has no effect, open new tab doesn't work at the
+        # moment, ignore it for now
+        try:
+            if not obj.restaurant_id:
+                return ""
+            link = reverse(
+                "admin:restaurant_pendingrestaurant_change", args=[
+                    obj.restaurant_id])
+            return format_html(
+                "<a href='{}' target='_blank' rel='noopener'>{}</a>",
+                link,
+                obj.restaurant_id)
+        except NoReverseMatch as e:
+            return str(obj.restaurant_id)
+        except Exception as e:
+            return str(obj.restaurant_id)
+
+
 admin.site.register(PendingRestaurant, PendingRestrAdmin)
 admin.site.register(PendingFood, PendingFoodAdmin)
 admin.site.register(Restaurant, RestrAdmin)
 admin.site.register(Food, FoodAdmin)
+admin.site.register(RestaurantPost, RestPostAdmin)

@@ -1,183 +1,3 @@
-<!-- <div class="container">
-  <div class="form" *ngIf="!isLoggedIn">
-    <img src="assets/images/find_dining_logo_small.png" />
-    <div class="tab-header">
-      <div>Sign Up</div>
-      <div class="active">Sign In</div>
-    </div>
-    <div class="tab-content">
-      <div class="tab-body">
-
-        <div class="alert alert-success" *ngIf="isSignupSuccessful">
-          A verification email has been sent. Please activate your account before sign in.
-        </div>
-        <form *ngIf="!isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('signup')" #f="ngForm"
-          novalidate>
-          <div class="form-element">
-            <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed && signupErrorMessage">
-              {{ signupErrorMessage }}
-            </div>
-          </div>
-          <div class="form-element">
-            <input type="text" class="form-control" name="username" [(ngModel)]="signupForm.username" required
-              minlength="3" maxlength="20" #username="ngModel" placeholder="Username" />
-            <div class="alert-danger" *ngIf="username.errors && f.submitted">
-              <div *ngIf="username.errors.required">Username is required</div>
-              <div *ngIf="username.errors.minlength">
-                Username must be at least 3 characters
-              </div>
-              <div *ngIf="username.errors.maxlength">
-                Username must be at most 20 characters
-              </div>
-            </div>
-          </div>
-          <div class="form-element">
-            <input type="email" class="form-control" name="email" [(ngModel)]="signupForm.email" required email
-              #email="ngModel" placeholder="Email" />
-            <div class="alert-danger" *ngIf="email.errors && f.submitted">
-              <div *ngIf="email.errors.required">Email is required</div>
-              <div *ngIf="email.errors.email">
-                Email must be a valid email address
-              </div>
-            </div>
-          </div>
-          <div class="form-element">
-            <select class="form-control" name="role" [(ngModel)]="signupForm.role" required role #role="ngModel">
-              <option value="role" selected disabled>Role</option>
-              <option value="BU">Basic User</option>
-              <option value="RO">Restaurant Owner</option>
-            </select>
-            <div class="alert-danger" *ngIf="role.errors && f.submitted">
-              <div *ngIf="role.errors.required">Role is required</div>
-            </div>
-          </div>
-          <div class="form-element mat-password">
-            <mat-form-field style="width: 100%" floatLabel='always'>
-              <mat-label>Password</mat-label>
-              <div class="input-group">
-                <input matInput #password [type]="hide ? 'password' : 'text'" class="form-control mat-password"
-                  name="password1" [(ngModel)]="signupForm.password1" minlength="8" #password1="ngModel"
-                  placeholder="Password" />
-                <button class="mat-password mat-password-button" type="button" mat-icon-button matSuffix
-                  (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-              </div>
-              <mat-hint align="end" aria-live="polite" *ngIf="password1.value">
-                {{password1.value.length}} / {{passwordComponent.max}}
-              </mat-hint>
-              <!--@angular-material-extensions/password-strength's main component-->
-              <!-- <mat-password-strength #passwordComponent (onStrengthChanged)="onStrengthChanged($event)"
-                [password]="password1.value">
-              </mat-password-strength>
-            </mat-form-field>
-            <div class="alert-danger" *ngIf="password1.errors && f.submitted">
-              <div *ngIf="password1.errors.required">Password is required</div>
-              <div *ngIf="password1.errors.minlength">
-                Password must be at least 8 characters
-              </div>
-            </div>
-            <!--Password's strength info-->
-            <!-- <mat-password-strength-info *ngIf="showDetails && strength < 100" [passwordComponent]="passwordComponent">
-            </mat-password-strength-info>
-          </div>
-          <div class="form-element">
-            <input type="password" class="form-control" name="password-confirm" [(ngModel)]="signupForm.password2"
-              required minlength="8" #password2="ngModel" placeholder="Confirm Password" />
-            <div class="alert-danger" *ngIf="password2.errors && f.submitted">
-              <div *ngIf="password2.errors.required">Password confirmation is required</div>
-              <div *ngIf="password2.errors.minlength">
-                Password must be at least 8 characters
-              </div>
-            </div>
-          </div>
-          <div class="form-element">
-            <button class="btn btn-primary btn-block">Sign Up</button>
-          </div>
-        </form>
-        <div *ngIf="!isSignupSuccessful">
-          <p>OR</p>
-          <div id="facebookPopup" class="facebookPopup btn btn-primary btn-block" (click)="facebookRoleSelectPopup()">
-            Sign Up With Facebook
-            <div class="facebookPopupPanel">
-              <p>I want to sign up for...</p>
-              <div class="close">×</div>
-              <div class="btn-group" role="group">
-                <button class="btn btn-primary" type="button" (click)="signInWithFB('BU')" *ngIf="!isLoggedIn">
-                  Basic User
-                </button>
-                <button class="btn btn-secondary" type="button" (click)="signInWithFB('RO')" *ngIf="!isLoggedIn">
-                  Restaurant Owner
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="googlePopup btn btn-primary btn-block" (click)="googleRoleSelectPopup()">Sign Up With Google
-            <div class="googlePopupPanel">
-              <p>I want to sign up for...</p>
-              <div class="close">×</div>
-              <div class="btn-group" role="group">
-                <button class="btn btn-primary" type="button" (click)="signInWithGoogle('BU')" *ngIf="!isLoggedIn">
-                  Basic User
-                </button>
-                <button class="btn btn-secondary" type="button" (click)="signInWithGoogle('RO')" *ngIf="!isLoggedIn">
-                  Restaurant Owner
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-body active">
-        <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit('login')" #f="ngForm" novalidate>
-          <div class="form-element">
-            <div class="alert alert-primary" role="alert" *ngIf="f.submitted && isLoginFailed && infoMessage">
-              {{ infoMessage }}
-            </div>
-          </div>
-          <div class="form-element">
-            <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed && loginErrorMessage">
-              {{ loginErrorMessage }}
-            </div>
-          </div>
-          <div class="form-element">
-            <input type="text" class="form-control" name="username" [(ngModel)]="loginForm.username" required
-              #username="ngModel" placeholder="Email / Username" />
-            <div class="alert alert-danger" role="alert" *ngIf="username.errors && f.submitted">
-              Username/Email is required!
-            </div>
-          </div>
-          <div class="form-element">
-            <input type="password" class="form-control" name="password" [(ngModel)]="loginForm.password" required
-              minlength="8" #password="ngModel" placeholder="Password" />
-            <div class="alert alert-danger" role="alert" *ngIf="password.errors && f.submitted">
-              <div *ngIf="password.errors.required">Password is required</div>
-              <div *ngIf="password.errors.minlength">
-                Password must be at least 8 characters
-              </div>
-            </div>
-          </div>
-          <div class="form-element">
-            <button class="btn btn-primary btn-block">
-              Login
-            </button>
-          </div>
-        </form>
-
-        <div>
-          <button class="btn btn-primary btn-block" type="button" (click)="signInWithFB()" *ngIf="!isLoggedIn">
-            Sign In With Facebook
-          </button>
-          <button class="btn btn-primary btn-block" type="button" (click)="signInWithGoogle()" *ngIf="!isLoggedIn">
-            Sign In With Google
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="card-container" *ngIf="!isLoggedIn">
   <mat-card class="login-register-container mat-elevation-z8">
     <img src="assets/images/find_dining_logo_small.png" class="login-image"/>
@@ -216,10 +36,21 @@
                   <mat-error *ngIf="password.errors && password.errors.required">Password is required</mat-error>
                   <mat-error *ngIf="password.errors && password.errors.minlength">Password must be at least 8 characters</mat-error>
                 </mat-form-field>
+                <button
+                  (click)="reCaptchaPopup(reCaptcha)"
+                  style="margin-bottom: 10px;"
+                  color="seconary"
+                  type="button"
+                  *ngIf="recaptchaForm.invalid"
+                  mat-button>
+                  I am a human
+                  <mat-icon matSuffix>mood</mat-icon>
+                </button>
 
                 <button
                   style="margin-top: 10px;"
                   color="primary"
+                  [disabled]="recaptchaForm.invalid"
                   mat-raised-button
                   type="submit">
                   Login
@@ -234,11 +65,11 @@
           fxLayoutAlign="center"
           fxLayout="row"
           fxLayout.xs="column">
-          <button mat-button (click)="signInWithGoogle()" *ngIf="!isLoggedIn">
+          <button mat-button (click)="signInWithGoogle()">
             <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
             Google
           </button>
-          <button mat-button (click)="signInWithFB()" *ngIf="!isLoggedIn">
+          <button mat-button (click)="signInWithFB()">
             <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
             Facebook
           </button>
@@ -252,7 +83,7 @@
           <mat-card-title>Signing Up</mat-card-title>
           <mat-card-content>
             <div class="alert alert-success" *ngIf="isSignupSuccessful">
-              A verification email has been sent. Please activate your account before sign in.
+              A verification email has been sent. Please activate your account before sign in. If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.
             </div>
             <form *ngIf="!isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('signup')" #f="ngForm"
             novalidate>
@@ -319,8 +150,20 @@
                 </mat-form-field>
 
                 <button
+                (click)="reCaptchaPopup(reCaptcha)"
+                style="margin-bottom: 10px;"
+                color="seconary"
+                type="button"
+                *ngIf="recaptchaForm.invalid"
+                mat-button>
+                I am a human
+                <mat-icon matSuffix>mood</mat-icon>
+                </button>
+
+                <button
                     style="margin-top: 10px;"
                     color="primary"
+                    [disabled]="recaptchaForm.invalid"
                     mat-raised-button
                     type="submit">
                   Register
@@ -335,7 +178,7 @@
           fxLayoutAlign="center"
           fxLayout="row"
           fxLayout.xs="column">
-          <button mat-button (click)="googleRoleSelectPopup(googleSignUp)" *ngIf="!isLoggedIn">
+          <button mat-button (click)="googleRoleSelectPopup(googleSignUp)">
             <fa-icon [icon]="faGoogle" class="icons"></fa-icon>
             Google
           </button>
@@ -347,9 +190,72 @@
   
         </div>
       </mat-tab>
+
+      <mat-tab label="Forgot Password">
+        <mat-card class="reset-card mat-elevation-z8">
+          <mat-card-title>Resetting Password</mat-card-title>
+          <mat-card-content>
+            <div class="alert alert-success" *ngIf="resetSuccessful">
+              We've emailed you instructions for setting your password, if an account exists with the email you entered. You should receive them shortly.
+              If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.
+            </div>
+            <form *ngIf="!resetSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('reset')" #f="ngForm"
+            novalidate>
+              <div class="form-element">
+                <div class="alert alert-warning" *ngIf="f.submitted && resetFailed && resetErrorMessage">
+                  {{ resetErrorMessage }}
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field>
+                  <mat-label>Email</mat-label>
+                  <input matInput name="email" [(ngModel)]="resetForm.email" required email #email="ngModel" autocomplete="email" />
+                  <mat-icon matSuffix>email</mat-icon>
+                  <mat-error *ngIf="email.errors && f.submitted">Email is required</mat-error>
+                  <mat-error *ngIf="email.errors && email.errors.email">Email must be a valid email address</mat-error>
+                </mat-form-field>
+
+                <button
+                (click)="reCaptchaPopup(reCaptcha)"
+                style="margin-bottom: 10px;"
+                color="seconary"
+                type="button"
+                *ngIf="recaptchaForm.invalid"
+                mat-button>
+                I am a human
+                <mat-icon matSuffix>mood</mat-icon>
+                </button>
+
+                <button
+                    style="margin-top: 10px;"
+                    color="primary"
+                    [disabled]="recaptchaForm.invalid"
+                    mat-raised-button
+                    type="submit">
+                  Reset my password
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
     </mat-tab-group>
   </mat-card>
 </div>
+
+<!-- Popup reCaptcha -->
+<ng-template #reCaptcha let-modal role="form">
+<form [formGroup]="recaptchaForm">
+  <div class="form-group" style="margin-top: 20px;">
+    <ngx-recaptcha2 
+      #captchaElem
+      [siteKey]="siteKey"
+      formControlName="recaptcha"
+    ></ngx-recaptcha2>
+  </div>
+</form>
+</ng-template>
+
 
 <!-- Popup option for registering with Google -->
 <ng-template #googleSignUp let-modal role="form">

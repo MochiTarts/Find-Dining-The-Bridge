@@ -1,11 +1,59 @@
 version: "3.8"
 
 services:
-  server:
+  # server-prod:
+  #   build:
+  #     context: ./backend
+  #     args: 
+  #       - DEBUG=True
+  #       - SSL_REDIRECT=True
+  #       - CORS_ALLOWED=https://142.1.166.180,https://finddining.utsc.utoronto.ca,https://finddining.ca
+  #       - ALLOWED_HOSTS=142.1.166.180,finddining.utsc.utoronto.ca,finddining.ca
+  #       - SECRET_KEY=${SECRET_KEY}
+  #       - DB_ENGINE=${DB_ENGINE}
+  #       - DB_NAME=${DB_NAME}
+  #       - DB_HOST=${DB_HOST}
+  #       - DB_USER=${DB_USER}
+  #       - DB_PASS=${DB_PASS}
+  #       - GMAIL_API_CLIENT_ID=${GMAIL_API_CLIENT_ID}
+  #       - GMAIL_API_CLIENT_SECRET=${GMAIL_API_CLIENT_SECRET}
+  #       - GMAIL_API_REFRESH_TOKEN=${GMAIL_API_REFRESH_TOKEN}
+  #       - GOOGLE_OAUTH2_CLIENT_ID=${GOOGLE_OAUTH2_CLIENT_ID}
+  #       - GOOGLE_OAUTH2_CLIENT_SECRET=${GOOGLE_OAUTH2_CLIENT_SECRET}
+  #       - VIEW_REDIRECT_URL=${VIEW_REDIRECT_URL}
+  #       - RECAP_PRIV_KEY=${RECAP_PRIV_KEY}
+  #       - RECAP_PUB_KEY=${RECAP_PUB_KEY}
+  #       - GEOCODE_API_KEY=${GEOCODE_API_KEY}
+  #       - GA_VIEW_ID=${GA_VIEW_ID}
+  #       - GOOGLE_OAUTH2_CLIENT_EMAIL=${GOOGLE_OAUTH2_CLIENT_EMAIL}
+  #       - GOOGLE_OAUTH2_PRIVATE_KEY=${GOOGLE_OAUTH2_PRIVATE_KEY}
+  #       - GOOGLE_ANALYTICS_PRIVATE_KEY=${GOOGLE_ANALYTICS_PRIVATE_KEY}
+  #       - GOOGLE_ANALYTICS_CLIENT_EMAIL=${GOOGLE_ANALYTICS_CLIENT_EMAIL}
+  #     dockerfile: Dockerfile
+  #   image: finddiningutsc/revamp:latest-server-prod
+  #   ports: 
+  #     - "8000:8000"
+  # client-prod:
+  #   build:
+  #     context: ./client-server
+  #     args:
+  #       - CONFIG=production
+  #       - HTTP_PORT=80
+  #       - HTTPS_PORT=443
+  #     dockerfile: Dockerfile
+  #   image: finddiningutsc/revamp:latest-client-prod
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+
+  server-test:
     build:
       context: ./backend
       args: 
         - DEBUG=True
+        - SSL_REDIRECT=True
+        - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://test.finddining.ca
+        - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,test.finddining.ca
         - SECRET_KEY=${SECRET_KEY}
         - DB_ENGINE=${DB_ENGINE}
         - DB_NAME=${DB_NAME}
@@ -29,12 +77,61 @@ services:
       dockerfile: Dockerfile
     image: finddiningutsc/revamp:latest-server-test
     ports: 
-      - "8000:8000"
-  client:
+      - "8001:8001"
+  client-test:
     build:
       context: ./client-server
+      args:
+        - CONFIG=test
+        - HTTP_PORT=8080
+        - HTTPS_PORT=8443
       dockerfile: Dockerfile
     image: finddiningutsc/revamp:latest-client-test
     ports:
-      - "443:443"
-      - "80:80"
+      - "8080:8080"
+      - "8443:8443"
+
+  server-uat:
+    build:
+      context: ./backend
+      args: 
+        - DEBUG=True
+        - SSL_REDIRECT=True
+        - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://uat.finddining.ca
+        - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,uat.finddining.ca
+        - SECRET_KEY=${SECRET_KEY}
+        - DB_ENGINE=${DB_ENGINE}
+        - DB_NAME=${DB_NAME}
+        - DB_HOST=${DB_HOST}
+        - DB_USER=${DB_USER}
+        - DB_PASS=${DB_PASS}
+        - GMAIL_API_CLIENT_ID=${GMAIL_API_CLIENT_ID}
+        - GMAIL_API_CLIENT_SECRET=${GMAIL_API_CLIENT_SECRET}
+        - GMAIL_API_REFRESH_TOKEN=${GMAIL_API_REFRESH_TOKEN}
+        - GOOGLE_OAUTH2_CLIENT_ID=${GOOGLE_OAUTH2_CLIENT_ID}
+        - GOOGLE_OAUTH2_CLIENT_SECRET=${GOOGLE_OAUTH2_CLIENT_SECRET}
+        - VIEW_REDIRECT_URL=${VIEW_REDIRECT_URL}
+        - RECAP_PRIV_KEY=${RECAP_PRIV_KEY}
+        - RECAP_PUB_KEY=${RECAP_PUB_KEY}
+        - GEOCODE_API_KEY=${GEOCODE_API_KEY}
+        - GA_VIEW_ID=${GA_VIEW_ID}
+        - GOOGLE_OAUTH2_CLIENT_EMAIL=${GOOGLE_OAUTH2_CLIENT_EMAIL}
+        - GOOGLE_OAUTH2_PRIVATE_KEY=${GOOGLE_OAUTH2_PRIVATE_KEY}
+        - GOOGLE_ANALYTICS_PRIVATE_KEY=${GOOGLE_ANALYTICS_PRIVATE_KEY}
+        - GOOGLE_ANALYTICS_CLIENT_EMAIL=${GOOGLE_ANALYTICS_CLIENT_EMAIL}
+      dockerfile: Dockerfile
+    image: finddiningutsc/revamp:latest-server-uat
+    ports: 
+      - "8002:8002"
+  client-uat:
+    build:
+      context: ./client-server
+      args:
+        - CONFIG=uat
+        - HTTP_PORT=8081
+        - HTTPS_PORT=8444
+      dockerfile: Dockerfile
+    image: finddiningutsc/revamp:latest-client-uat
+    ports:
+      - "8081:8081"
+      - "8444:8444"

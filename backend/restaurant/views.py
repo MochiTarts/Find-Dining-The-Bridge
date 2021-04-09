@@ -1,6 +1,8 @@
 from django.utils import timezone
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, QueryDict
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import IntegrityError
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework.utils import json
@@ -8,9 +10,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from jsonschema import validate
-from jsonschema.exceptions import ValidationError
 
-from restaurant.enum import Status
+from restaurant.enum import Status, MediaType, RestaurantSaveLocations, FoodSaveLocations
 from restaurant.models import (
     Food,
     Restaurant,
@@ -19,19 +20,19 @@ from restaurant.models import (
     UserFavRestrs,
     RestaurantPost
 )
+from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, FoodMediaForm
 
 from google.analytics import get_access_token, get_analytics_data
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
-from utils.common import get_user
+from utils.permissions import ROPermission
 
 from bson import ObjectId
 import ast
 import json
 
-# jsonschema validation schemes
-
-food_schema = {
+# jsonschema validation schemas for request bodies
+food_insert_schema = {
     "properties": {
         "name": {"type": "string"},
         "description": {"type": "string"},
@@ -99,8 +100,6 @@ restaurant_insert_for_approval_schema = {
         "owner_first_name": {"type": "array"},
         "owner_last_name": {"type": "array"},
         "owner_preferred_name": {"type": "array"},
-        "owner_story": {"type": "string"},
-        "owner_picture_url": {"type": "string"},
 
         "sysAdminComments": {"type": "string"},
         "categories": {"type": "array"},
@@ -109,7 +108,8 @@ restaurant_insert_for_approval_schema = {
         "open_hours": {"type": "string"},
         "payment_methods": {"type": "array"},
 
-        "full_menu_url": {"type": "string"}
+        "full_menu_url": {"type": "string"},
+        "restaurant_video_desc": {"type": "string"}
     },
     "required": ["name", "years", "address", "postalCode", "phone", "pricepoint", "offer_options",
                  "bio", "owner_first_name", "owner_last_name", "open_hours", "payment_methods"],
@@ -142,7 +142,6 @@ restaurant_insert_draft_schema = {
         "twitter": {"type": "string"},
         "instagram": {"type": "string"},
         "bio": {"type": "string"},
-        "GEO_location": {"type": "string"},
         "cover_photo_url": {"type": "string"},
         "logo_url": {"type": "string"},
         "restaurant_video_url": {"type": "string"},
@@ -151,8 +150,6 @@ restaurant_insert_draft_schema = {
         "owner_first_name": {"type": "array"},
         "owner_last_name": {"type": "array"},
         "owner_preferred_name": {"type": "array"},
-        "owner_story": {"type": "string"},
-        "owner_picture_url": {"type": "string"},
 
         "sysAdminComments": {"type": "string"},
         "categories": {"type": "array"},
@@ -161,7 +158,8 @@ restaurant_insert_draft_schema = {
         "open_hours": {"type": "string"},
         "payment_methods": {"type": "array"},
 
-        "full_menu_url": {"type": "string"}
+        "full_menu_url": {"type": "string"},
+        "restaurant_video_desc": {"type": "string"}
     },
     "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
@@ -192,7 +190,6 @@ restaurant_edit_draft_schema = {
         "twitter": {"type": "string"},
         "instagram": {"type": "string"},
         "bio": {"type": "string"},
-        "GEO_location": {"type": "string"},
         "cover_photo_url": {"type": "string"},
         "logo_url": {"type": "string"},
         "restaurant_video_url": {"type": "string"},
@@ -201,8 +198,6 @@ restaurant_edit_draft_schema = {
         "owner_first_name": {"type": "array"},
         "owner_last_name": {"type": "array"},
         "owner_preferred_name": {"type": "array"},
-        "owner_story": {"type": "string"},
-        "owner_picture_url": {"type": "string"},
 
         "sysAdminComments": {"type": "string"},
         "categories": {"type": "array"},
@@ -211,7 +206,8 @@ restaurant_edit_draft_schema = {
         "open_hours": {"type": "string"},
         "payment_methods": {"type": "array"},
 
-        "full_menu_url": {"type": "string"}
+        "full_menu_url": {"type": "string"},
+        "restaurant_video_desc": {"type": "string"}
     },
     "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
@@ -233,28 +229,12 @@ post_schema = {
 }
 
 
-dish_editable = ["name", "description", "picture",
-    "price", "specials", "category", "status"]
-
-restaurant_editable = [
-    "name", "years", "address", "streetAddress2", "streetAddress3", "postalCode",
-    "phone", "updated_at", "cuisines", "pricepoint",
-    "offer_options", "deliveryDetails", "locationNotes", "dineinPickupDetails",
-    "web_url", "facebook", "twitter", "instagram",
-    "bio", "cover_photo_url", "logo_url", "restaurant_video_url", "restaurant_image_url",
-    "owner_first_name", "owner_last_name", "owner_preferred_name",
-    "owner_story", "owner_picture_url",
-    "status", "modified_time", "sysAdminComments",
-    "open_hours", "payment_methods", "full_menu_url"
-]
-
-
 class DishList(APIView):
     """ dish list """
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        """Retrieve all dishes from the database"""
+        """ Retrieve all dishes from the database """
         foods = Food.objects.all()
         response = {'Dishes': models_to_json(foods)}
         return JsonResponse(response)
@@ -265,8 +245,7 @@ class DishRestaurantView(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
-        """Retrieve all dishes from a restaurant"""
-        # rest_id = request.GET.get('restaurant_id')
+        """ Retrieve all dishes from a restaurant """
         dishes = Food.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
@@ -275,175 +254,107 @@ class DishRestaurantView(APIView):
 class PendingDishView(APIView):
     """ pending dish view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def get(self, request):
         """Retrieve all dishes from a restaurant"""
-        user = get_user(request)
+        user = request.user
         if not user:
-            return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-        user_id = user['user_id']
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-        restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+        user_id = user.id
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=user_id).first()
         if not restaurant:
-            return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
+            raise IntegrityError(
+                "The restaurant with owner_user_id: " +
+                user_id +
+                " does not exist")
         rest_id = restaurant._id
         dishes = PendingFood.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
-    def post(self, request, dish_id=''):
+    def post(self, request):
         """ Insert dish into database """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                detail="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data, schema=food_schema)
-            body = request.data
-            invalid = PendingFood.field_validate(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
-            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
-            if not restaurant:
-                return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
-            rest_id = restaurant._id
+        user_id = user.id
+        validate(instance=request.data, schema=food_insert_schema)
+        body = request.data
+        PendingFood.field_validate(body)
 
-            if PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').count() == 6 and body['category'] == 'Popular Dish':
-                return JsonResponse({'message': 'You can only have up to a maximum of 6 popular dishes.'}, status=400)
-            if PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').count() == 1 and body['category'] == 'Signature Dish':
-                return JsonResponse({'message': 'You can only have 1 signature dish.'}, status=400)
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=user_id).first()
+        if not restaurant:
+            raise IntegrityError(
+                "The restaurant with owner_user_id: " +
+                user_id +
+                " does not exist")
 
-            food = PendingFood.add_dish(body, rest_id)
-            return JsonResponse(model_to_json(food))
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            body = request.data
-            PendingFood.objects.filter(
-                restaurant_id=rest_id, name=body['name']).delete()
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        rest_id = restaurant._id
+        food = PendingFood.add_dish(body, rest_id)
+        return JsonResponse(model_to_json(food))
 
     def put(self, request, dish_id):
         """ Update Dish data """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data,
-                     schema=food_edit_schema)
-            body = request.data
-            invalid = PendingFood.field_validate(body)
-            if invalid is not None:
-                return JsonResponse(invalid)
+        user_id = user.id
+        validate(instance=request.data,
+                 schema=food_edit_schema)
+        body = request.data
+        PendingFood.field_validate(body)
 
-            dish = PendingFood.objects.filter(_id=dish_id).first()
-            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
-            if not restaurant:
-                return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
-            rest_id = restaurant._id
-            if should_add_category(body, dish.category, restaurant):
-                add_cateogory(dish.category, restaurant)
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=user_id).first()
+        if not restaurant:
+            raise IntegrityError(
+                "The restaurant with owner_user_id: " +
+                user_id +
+                " does not exist")
 
-            restaurant_editable = ["status"]
-            restaurant_editable_values = {'status': Status.In_Progress.value}
-
-            if 'category' in body and PendingFood.objects.filter(restaurant_id=rest_id, category=body['category']).exists():
-                if (body['category'] == 'Popular Dish' and PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').count() == 6):
-                    if ObjectId(dish_id) not in list(PendingFood.objects.filter(restaurant_id=rest_id, category='Popular Dish').values_list('_id', flat=True)):
-                        return JsonResponse({'message': 'You can only have up to a maximum of 6 popular dishes.'}, status=400)
-                if (body['category'] == 'Signature Dish' and PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').count() == 1):
-                    if dish_id != str(PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').first()._id):
-                        return JsonResponse({'message': 'You can only have 1 signature dish.'}, status=400)
-                restaurant_editable.append("categories")
-
-            body["status"] = Status.Pending.value
-            edit_model(dish, body, dish_editable)
-            updated_fields = [field for field in body.keys()]
-            dish = save_and_clean(dish, updated_fields)
-
-            if 'categories' in restaurant_editable:
-                restaurant_editable_values['categories'] = PendingFood.get_all_categories(
-                    restaurant._id)
-            edit_model(restaurant, restaurant_editable_values,
-                       restaurant_editable)
-            save_and_clean(restaurant)
-            return JsonResponse(model_to_json(dish))
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        rest_id = restaurant._id
+        dish = PendingFood.edit_dish(dish_id, body, rest_id)
+        return JsonResponse(model_to_json(dish))
 
     def delete(self, request):
         """ Deletes dish from database """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data, schema=food_delete_schema)
-            body = request.data
-            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
-            if not restaurant:
-                return JsonResponse({"message": "The restaurant with owner_user_id: "+user_id+" does not exist"}, status=400)
-            rest_id = restaurant._id
-            food = PendingFood.objects.get(
-                name=body["name"], category=body['category'], restaurant_id=rest_id)
-            food.delete()
-            Food.objects.filter(
-                name=body['name'], category=body['category'], restaurant_id=rest_id).delete()
-            restaurant = PendingRestaurant.objects.get(_id=rest_id)
-
-            restaurant_categories = PendingFood.get_all_categories(rest_id)
-            restaurant_editable = ['categories']
-            edit_model(restaurant, {'categories': restaurant_categories}, [
-                       'categories'])
-            save_and_clean(restaurant)
-            return JsonResponse({'message': 'Successfully removed dish from restaurant'})
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ObjectDoesNotExist as e:
-            return JsonResponse({'message': e.message}, status=404)
-        except Exception:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user_id = user.id
+        validate(instance=request.data, schema=food_delete_schema)
+        body = request.data
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=user_id).first()
+        if not restaurant:
+            raise IntegrityError(
+                "The restaurant with owner_user_id: " +
+                user_id +
+                " does not exist")
+        deleted_dish = PendingFood.remove_dish(body, restaurant._id)
+        return JsonResponse(model_to_json(deleted_dish))
 
 
 def remove_category(category, restaurant):
     """
     remove category from restaurant
-    @param category: food category
-    @param restaurant: restaurant document
+    :param category: food category
+    :param restaurant: restaurant document
     """
     restaurant.categories.remove(category)
     restaurant.save(update_fields=['categories'])
@@ -452,11 +363,13 @@ def remove_category(category, restaurant):
 def category_exists(restaurant_id, category):
     """
     check if restaurant still covers category 'category'
-    @param restaurant:referenced restaurant
-    @param category: category
-    @return:boolean
+    :param restaurant:referenced restaurant
+    :param category: category
+    :return:boolean
     """
-    return PendingFood.objects.filter(restaurant_id=restaurant_id, category=category).exists()
+    return PendingFood.objects.filter(
+        restaurant_id=restaurant_id,
+        category=category).exists()
 
 
 # get_user_favs_page
@@ -464,62 +377,37 @@ def category_exists(restaurant_id, category):
 class UserFavView(APIView):
     """ user fav view """
     #permission_classes = (AllowAny,)
+    #permission_classes = [ROPermission]
 
     def post(self, request):
         """ Add a new user-restaurant-favourite relation """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data, schema=user_fav_schema)
-            body = request.data
-            body['user_id'] = user_id
-            rest_id = body['restaurant']
-            invalid = UserFavRestrs.field_validate(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
-            response = UserFavRestrs.insert(user_id, rest_id)
-            return JsonResponse(response, safe=False)
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            UserFavRestrs.objects.filter(
-                user=user_id, restaurant=body['restaurant_id']).delete()
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user_id = user.id
+        validate(instance=request.data, schema=user_fav_schema)
+        body = request.data
+        body['user_id'] = user_id
+        rest_id = body['restaurant']
+        UserFavRestrs.field_validate(body)
+        response = UserFavRestrs.insert(user_id, rest_id)
+        return JsonResponse(response, safe=False)
 
     def get(self, request):
         """ Get all restaurants favourited by a user """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            response = UserFavRestrs.getUserFavourites(user_id)
-            return JsonResponse(response, safe=False)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=404)
-        except Exception as e:
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user_id = user.id
+        response = UserFavRestrs.getUserFavourites(user_id)
+        return JsonResponse(response, safe=False)
 
-# get_user_favs_restr_page
 
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
@@ -527,20 +415,9 @@ class UserFavRestaurantView(APIView):
 
     def get(self, request, rest_id):
         """ Get all users who favourited the requested restaurant """
-        try:
-            response = UserFavRestrs.getRestrFavouriteds(rest_id)
-            return JsonResponse(response, safe=False)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=404)
-        except Exception as e:
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        response = UserFavRestrs.getRestrFavouriteds(rest_id)
+        return JsonResponse(response, safe=False)
 
-# remove_fav_page
 
 class FavRelationView(APIView):
     """ remove fav relation view """
@@ -548,102 +425,68 @@ class FavRelationView(APIView):
 
     def delete(self, request, rest_id):
         """ Remove a new user-restaurant-favourite relation """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            body = {'user_id': user_id, 'restaurant_id': rest_id}
-            invalid = UserFavRestrs.field_validate(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
-            response = UserFavRestrs.remove_fav(user_id, rest_id)
-            return JsonResponse(response, safe=False)
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            UserFavRestrs.objects.create(
-                user=user_id, restaurant=rest_id).save()
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user_id = user.id
+        body = {'user_id': user_id, 'restaurant_id': rest_id}
+        UserFavRestrs.field_validate(body)
+        response = UserFavRestrs.remove_fav(user_id, rest_id)
+        return JsonResponse(response, safe=False)
 
 
 class RestaurantView(APIView):
-    """ get restaurant view dish view """
+    """ get restaurant view """
     permission_classes = (AllowAny,)
 
     def get(self, request, rest_id):
-        """Retrieve restaurant by id"""
-        try:
-            # _id = request.GET.get('_id')
-            _id = rest_id
-            if _id is None:
-                return JsonResponse({'message': '_id parameter is required and cannot be None'}, status=400)
+        """ Retrieve approved restaurant by id """
+        restaurant = Restaurant.get(rest_id)
+        restaurant_image_url = ast.literal_eval(
+            restaurant.restaurant_image_url)
+        offer_options = ast.literal_eval(restaurant.offer_options)
+        payment_methods = ast.literal_eval(restaurant.payment_methods)
 
-            restaurant = Restaurant.get(_id)
-            if restaurant:
-                restaurant_image_url = ast.literal_eval(
-                    restaurant.restaurant_image_url)
-                offer_options = ast.literal_eval(restaurant.offer_options)
-                payment_methods = ast.literal_eval(restaurant.payment_methods)
+        restaurant = model_to_json(restaurant)
+        restaurant['restaurant_image_url'] = restaurant_image_url
+        restaurant['offer_options'] = offer_options
+        restaurant['payment_methods'] = payment_methods
+        return JsonResponse(restaurant)
 
-                restaurant = model_to_json(restaurant)
-                restaurant['restaurant_image_url'] = restaurant_image_url
-                restaurant['offer_options'] = offer_options
-                restaurant['payment_methods'] = payment_methods
-                return JsonResponse(restaurant)
-            else:
-                return JsonResponse({'message': 'No restaurant found with this id: '+_id}, status=404)
-        except Exception:
-            return JsonResponse({'message': 'Something went wrong'}, status=500)
-
-# get_pending_restaurant_page
 
 class PendingRestaurantView(APIView):
     """ pending restaurant view """
+    permission_classes = [ROPermission]
 
     def get(self, request):
         """ Retrieve restaurant from pending collection by the owner's user_id """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
-            if restaurant:
-                restaurant_image_url = ast.literal_eval(
-                    restaurant.restaurant_image_url)
-                offer_options = ast.literal_eval(restaurant.offer_options)
-                payment_methods = ast.literal_eval(restaurant.payment_methods)
+        user_id = user.id
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=user_id).first()
+        if not restaurant:
+            raise ObjectDoesNotExist(
+                'No pending restaurant found with owner user id of this: ' + _id)
 
-                restaurant = model_to_json(restaurant)
-                restaurant['restaurant_image_url'] = restaurant_image_url
-                restaurant['offer_options'] = offer_options
-                restaurant['payment_methods'] = payment_methods
-                return JsonResponse(restaurant)
-            else:
-                return JsonResponse({'message': 'No pending restaurant found with owner user id of this: '+_id}, status=404)
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        restaurant_image_url = ast.literal_eval(
+            restaurant.restaurant_image_url)
+        offer_options = ast.literal_eval(restaurant.offer_options)
+        payment_methods = ast.literal_eval(restaurant.payment_methods)
 
-# get_all_restaurants_page
+        restaurant = model_to_json(restaurant)
+        restaurant['restaurant_image_url'] = restaurant_image_url
+        restaurant['offer_options'] = offer_options
+        restaurant['payment_methods'] = payment_methods
+        return JsonResponse(restaurant)
+
 
 class AllRestaurantList(APIView):
     """ all restaurants list """
@@ -662,211 +505,79 @@ class AllRestaurantList(APIView):
         response = {'Restaurants': restaurants}
         return JsonResponse(response)
 
-# insert_restaurant_draft_page
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def post(self, request):
-        """Insert new restaurant as a draft into database"""
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+        """ Insert new restaurant as a draft into database """
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data,
-                     schema=restaurant_insert_draft_schema)
-            body = request.data
-            invalid = PendingRestaurant.field_validate_draft(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
-            restaurant = model_to_json(PendingRestaurant.insert(body))
-            restaurant['restaurant_image_url'] = ast.literal_eval(
-                restaurant['restaurant_image_url'])
-            restaurant['offer_options'] = ast.literal_eval(
-                restaurant['offer_options'])
-            restaurant['payment_methods'] = ast.literal_eval(
-                restaurant['payment_methods'])
-            return JsonResponse(restaurant)
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            body = request.data
-            PendingRestaurant.objects.filter(email=body['email']).delete()
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        validate(instance=request.data,
+                 schema=restaurant_insert_draft_schema)
+        body = request.data
+        PendingRestaurant.field_validate_draft(body)
+        restaurant = PendingRestaurant.insert(body)
+        return JsonResponse(model_to_json(restaurant))
 
     def put(self, request):
-        """Edit a restaurant profile and save it as a draft in the database"""
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        """ Edit a restaurant profile and save it as a draft in the database """
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data,
-                     schema=restaurant_edit_draft_schema)
-            body = request.data
-            invalid = PendingRestaurant.field_validate_draft(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
-            restaurant = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
-            if not restaurant:
-                return JsonResponse({'message': 'restaurant with owner user id '+user_id+' does not exist'}, status=404)
-            if 'email' in body and body['email'] != restaurant.email:
-                return JsonResponse({'message': "You're not allowed to modify your restaurant's email address"}, status=400)
-            body["status"] = Status.In_Progress.value
-            body["modified_time"] = timezone.now()
-            edit_model(restaurant, body, restaurant_editable)
-            if address_changed(body):
-                address = restaurant.address + ', ' + restaurant.postalCode + ', Ontario'
-                update_model_geo(restaurant, address)
-            restaurant = model_to_json(save_and_clean(restaurant))
-            restaurant['restaurant_image_url'] = ast.literal_eval(
-                restaurant['restaurant_image_url'])
-            restaurant['offer_options'] = ast.literal_eval(
-                restaurant['offer_options'])
-            restaurant['payment_methods'] = ast.literal_eval(
-                restaurant['payment_methods'])
-            return JsonResponse(restaurant)
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user_id = user.id
+        validate(instance=request.data,
+                 schema=restaurant_edit_draft_schema)
+        body = request.data
+        PendingRestaurant.field_validate_draft(body)
+        restaurant = PendingRestaurant.edit_draft(user_id, body)
+        return JsonResponse(model_to_json(restaurant))
 
-# insert_restaurant_for_approval_page
 
 class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def put(self, request):
         """ Insert or update a restaurant record for admin approval """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data,
-                     schema=restaurant_insert_for_approval_schema)
-            body = request.data
-            invalid = PendingRestaurant.field_validate(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
+        user_id = user.id
+        validate(instance=request.data,
+                 schema=restaurant_insert_for_approval_schema)
+        body = request.data
+        PendingRestaurant.field_validate(body)
 
-            rest_filter = PendingRestaurant.objects.filter(owner_user_id=user_id)
-            if not rest_filter.exists():
-                body['status'] = Status.Pending.value
-                restaurant = model_to_json(PendingRestaurant.insert(body))
-                restaurant['restaurant_image_url'] = ast.literal_eval(
-                    restaurant['restaurant_image_url'])
-                restaurant['offer_options'] = ast.literal_eval(
-                    restaurant['offer_options'])
-                restaurant['payment_methods'] = ast.literal_eval(
-                    restaurant['payment_methods'])
-            else:
-                restaurant = rest_filter.first()
-                body['status'] = Status.Pending.value
-                body["modified_time"] = timezone.now()
-                edit_model(restaurant, body, restaurant_editable)
-                if address_changed(body):
-                    address = restaurant.address + ', ' + restaurant.postalCode + ', Ontario'
-                    update_model_geo(restaurant, address)
-                restaurant = model_to_json(save_and_clean(restaurant))
-                restaurant['restaurant_image_url'] = ast.literal_eval(
-                    restaurant['restaurant_image_url'])
-                restaurant['offer_options'] = ast.literal_eval(
-                    restaurant['offer_options'])
-                restaurant['payment_methods'] = ast.literal_eval(
-                    restaurant['payment_methods'])
-            return JsonResponse(restaurant)
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            body = request.data
-            PendingRestaurant.objects.filter(email=body['email']).delete()
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
-
-
-def address_changed(body):
-    """
-    return if address has changed
-    @param body: edited fields
-    @return: boolean
-    """
-    return 'address' in body
+        rest_filter = PendingRestaurant.objects.filter(owner_user_id=user_id)
+        if not rest_filter.exists():
+            body['status'] = Status.Pending.value
+            restaurant = PendingRestaurant.insert(body)
+        else:
+            restaurant = PendingRestaurant.edit_approval(user_id, body)
+        return JsonResponse(model_to_json(restaurant))
 
 
 def category_is_changed(body):
     """
     check whether category was edited
-    @param body: request body for editing
-    @return: boolean
+    :param body: request body for editing
+    :return: boolean
     """
     return 'category' in body
-
-
-def new_category(category, restaurant):
-    """
-    check if category is new to restaurant
-    @param category: restaurant category
-    @param restaurant: referenced restaurant
-    @return: boolean
-    """
-    return category not in restaurant.categories
-
-
-def should_add_category(body, category, restaurant):
-    """
-    check if should add category
-    @param body:
-    @param category:
-    @param restaurant:
-    @return:
-    """
-    return new_category(category, restaurant)
-
-
-def add_cateogory(category, restaurant):
-    """
-    add new category to restaurant
-    @param category:
-    @param restaurant:
-    @return:
-    """
-    restaurant.categories.append(category)
-    restaurant.save(update_fields=['categories'])
 
 
 class AnalyticsAccessTokenView(APIView):
@@ -876,93 +587,164 @@ class AnalyticsAccessTokenView(APIView):
         """ Get OAuth2 access token for Google Analytics API to make call """
         return JsonResponse({'token': get_access_token()})
 
-class AnalyticsDataView(APIView):
-    """ analytics data view """
 
-    def get(self, request, rest_id):
-        """ Retrieves analytics data for a restaurant page given restaurant id """
-        #restaurant_id = request.GET.get('restaurant_id')
-        traffic = get_analytics_data(rest_id)
+class RestaurantAnalyticsDataView(APIView):
+    """ analytics data view """
+    permission_classes = (AllowAny,)
+
+    def get(self, request, rest_id, format_type):
+        """ Retrieves analytics data for a specific restaurant page
+        given restaurant id and format of date """
+        restaurant = Restaurant.objects.get(_id=rest_id)
+        traffic = get_analytics_data(rest_id, format_type)
+        traffic['name'] = restaurant.name
         return JsonResponse(traffic)
+
+
+class RestaurantsAnalyticsDataView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, format_type):
+        """ Retrieves analytics data for all restaurants page
+        given their restaurant ids and format of date """
+        restaurants = list(Restaurant.objects.all())
+        restaurant_data = {}
+        for restaurant in restaurants:
+            restJson = model_to_json(restaurant)
+            rest_id = restJson.get('_id')
+            traffic = get_analytics_data(rest_id, format_type)
+            traffic['name'] = restJson.get('name')
+            restaurant_data[rest_id] = traffic
+        return JsonResponse(restaurant_data)
 
 
 class PostView(APIView):
     """ Restaurant posts view """
     #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
 
     def post(self, request):
         """ Insert a new post for a restaurant """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
 
-            validate(instance=request.data, schema=post_schema)
-            body = request.data
-            body['owner_user_id'] = user_id
-            invalid = RestaurantPost.field_validate(body)
-            if invalid:
-                return JsonResponse(invalid, status=400)
+        user_id = user.id
+        validate(instance=request.data, schema=post_schema)
+        body = request.data
+        body['owner_user_id'] = user_id
+        RestaurantPost.field_validate(body)
 
-            post = RestaurantPost.insert(body)
-            return JsonResponse(model_to_json(post))
-        except ValidationError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({'message': e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        post = RestaurantPost.insert(body)
+        return JsonResponse(model_to_json(post))
 
     def get(self, request):
         """ Get all posts for a restaurant """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
-            posts = list(RestaurantPost.objects.filter(owner_user_id=user_id))
-            response = {"Posts": []}
-            for post in posts:
-                time_stamp = {"Timestamp": post.timestamp.strftime("%b %d, %Y %H:%M")}
-                response["Posts"].append(model_to_json(post, time_stamp))
-            return JsonResponse(response)
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
+        user_id = user.id
+        posts = RestaurantPost.get_by_user_id(user_id)
+        return JsonResponse(posts)
 
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
+        post_deleted = RestaurantPost.remove_post(post_id)
+        return JsonResponse({"Deleted post": model_to_json(post_deleted)})
 
-            post_filter = RestaurantPost.objects.filter(_id=post_id)
-            post = post_filter.first()
-            if not post:
-                return JsonResponse({"message": "no post found with this id"}, status=404)
-            post_deleted = model_to_json(post)
-            post_filter.delete()
-            return JsonResponse({"Post delete": post_deleted})
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+
+class PublicPostView(APIView):
+    """ Restaurant posts view for all viewers """
+    permission_classes = (AllowAny,)
+
+    def get(self, request, rest_id):
+        """ Get all posts for a restaurant """
+        posts = RestaurantPost.get_by_rest_id(rest_id)
+        return JsonResponse(posts)
+
+
+class RestaurantMediaView(APIView):
+    """ Restaurant media (image/video) view """
+    #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
+
+    def put(self, request):
+        """ For inserting or updating restaurant media """
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
+
+        user_id = user.id
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=user_id).first()
+        if not restaurant:
+            raise IntegrityError(
+                "Could not find restaurant owned by this user")
+
+        form = RestaurantMediaForm(request.data, request.FILES)
+        if not form.is_valid():
+            raise ValidationError(message=form.errors, code="invalid_input")
+
+        restaurant = PendingRestaurant.upload_media(
+            restaurant, request.data, request.FILES)
+        return JsonResponse(model_to_json(restaurant))
+
+    def delete(self, request):
+        """ For removing image(s) from the restaurant_image_url field
+        and Google Cloud bucket """
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
+
+        user_id = user.id
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=user_id).first()
+        if not restaurant:
+            raise IntegrityError(
+                "Could not find restaurant owned by this user")
+
+        form = RestaurantImageDeleteForm(request.data, request.FILES)
+        if not form.is_valid():
+            raise ValidationError(message=form.errors, code="invalid_input")
+
+        restaurant = PendingRestaurant.delete_media(restaurant, request.data)
+        return JsonResponse(model_to_json(restaurant))
+
+
+class DishMediaView(APIView):
+    """ Dish media (image) view """
+    #permission_classes = (AllowAny,)
+    permission_classes = [ROPermission]
+
+    def put(self, request, dish_id):
+        """ For inserting or updating restaurant media """
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user",
+                code="fail_obtain_user")
+
+        user_id = user.id
+        dish = PendingFood.objects.filter(_id=dish_id).first()
+        if not dish:
+            raise IntegrityError("Could not find the dish with id: " + dish_id)
+
+        form = FoodMediaForm(request.data, request.FILES)
+        if not form.is_valid():
+            raise ValidationError(message=form.errors, code="invalid_input")
+
+        dish = PendingFood.upload_media(dish, request.data, request.FILES)
+        return JsonResponse(model_to_json(dish))

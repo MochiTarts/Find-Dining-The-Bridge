@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmailService } from 'src/app/_services/email.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-get-involved',
@@ -32,15 +33,17 @@ export class GetInvolvedComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private titleService: Title,
   ) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle("Get Involved | Find Dining Scarborough");
     this.messageForm = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       message: ['', Validators.required],
-    })
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -59,11 +62,12 @@ export class GetInvolvedComponent implements OnInit {
     }
 
     this.emailService.sendEmail(emailInfo).subscribe((data) => {
-      console.log(data.message);
+      alert("Your message is submitted!");
+      window.location.reload();
     },
     err => {
-      console.log(err.error.message);
-    })
+      alert(err.error.message);
+    });
   }
 
 }

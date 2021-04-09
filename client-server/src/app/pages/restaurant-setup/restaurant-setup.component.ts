@@ -16,6 +16,7 @@ import { formValidation } from '../../_validation/forms';
 import { AuthService } from 'src/app/_services/auth.service';
 import { UserService } from 'src/app/_services/user.service';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { MediaService } from '../../_services/media.service';
 
 @Component({
   selector: 'app-restaurant-setup',
@@ -26,7 +27,6 @@ export class RestaurantSetupComponent implements OnInit {
   // role: string = '';
   email: string = '';
   userId: string = '';
-  // username: string = '';
   profileId: string = '';
   restaurantDetails: any;
 
@@ -40,7 +40,6 @@ export class RestaurantSetupComponent implements OnInit {
   validator: formValidator = new restaurantValidator();
   draftValidator: formValidator = new draftValidator();
   newImage: boolean = false;
-  newOwnerImage: boolean = false;
 
   faEdit = faEdit;
 
@@ -52,6 +51,7 @@ export class RestaurantSetupComponent implements OnInit {
     private restaurantService: RestaurantService,
     private authService: AuthService,
     private userService: UserService,
+    private mediaService: MediaService,
   ) { }
 
   ngOnInit(): void {
@@ -59,15 +59,12 @@ export class RestaurantSetupComponent implements OnInit {
       const user = this.tokenStorage.getUser();
       // this.role = user.role;
       this.email = user.email;
-      // this.username = user.username;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
-      // this.profileId = '1';
     }
 
     this.uploadForm = this.formBuilder.group({
       file: [''],
-      owner_image: [''],
       owner_names: this.formBuilder.array([]),
       cuisines: [[]],
       payments: [[]],
@@ -75,7 +72,7 @@ export class RestaurantSetupComponent implements OnInit {
       terms: ['', Validators.requiredTrue],
     });
 
-    if (this.authService.isLoggedIn && this.profileId) {
+    if (this.profileId) {
       this.titleService.setTitle("Edit Restaurant Profile | Find Dining Scarborough");
       var draft_btn = document.getElementById('draft-btn');
       var submit_btn = document.getElementById('submit-btn');
@@ -102,7 +99,7 @@ export class RestaurantSetupComponent implements OnInit {
     }
 
     this.pricepoints = pricepointsObj
-    // dropdown for cuisine
+    // dropdown
     this.cuisineItems = cuisinesStr;
     this.serviceItems = servicesStr;
     this.paymentItems = paymentsStr;
@@ -147,28 +144,11 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
-  onOwnerImageSelect(event) {
-    if (event.target.files.length > 0) {
-      this.newOwnerImage = true;
-      const file = event.target.files[0];
-      this.uploadForm.get('owner_image').setValue(file);
-    }
-  }
-
-  onSubmit() {
-    // const formData = new FormData();
-    // formData.append('file', this.uploadForm.get('file').value);
-    // return this.restaurantsService
-    //   .uploadRestaurantMedia(formData, this.profileId, 'logo')
-    // //this.newImage = false;
-  }
-
-  onSubmitOwnerImage() {
-    // const formData = new FormData();
-    // formData.append('file', this.uploadForm.get('owner_image').value);
-    // return this.restaurantsService
-    //   .uploadRestaurantMedia(formData, this.profileId, 'owner')
-    // //this.newOwnerImage = false;
+  onSubmit(option) {
+    const formData = new FormData();
+    formData.append('media_file', this.uploadForm.get('file').value);
+    return this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'logo_url', option.includes('SETUP') ? 'True' : 'False');
+    // this.newImage = false;
   }
 
   getAnswer() {
@@ -223,17 +203,32 @@ export class RestaurantSetupComponent implements OnInit {
       locationNotes: (<HTMLInputElement>document.getElementById('location-notes')).value,
 
       bio: (<HTMLInputElement>document.getElementById('restaurant-bio')).value,
-      owner_story: (<HTMLInputElement>document.getElementById('owner-story')).value,
       web_url: (<HTMLInputElement>document.getElementById('web_url')).value,
       facebook: (<HTMLInputElement>document.getElementById('facebook')).value,
       twitter: (<HTMLInputElement>document.getElementById('twitter')).value,
       instagram: (<HTMLInputElement>document.getElementById('instagram')).value,
-      GEO_location: 'blank',
       open_hours: (<HTMLInputElement>document.getElementById('open_hours')).value,
       payment_methods: this.uploadForm.get('payments').value,
     };
 
     return restaurantInfo;
+  }
+
+  getAnswerForProfanityCheck(restaurantInfo) {
+    let newRestaurantInfo = Object.assign({}, restaurantInfo);
+    newRestaurantInfo['name_p'] = restaurantInfo.name;
+    newRestaurantInfo['owner_first_name_p'] = String(restaurantInfo.owner_first_name);
+    newRestaurantInfo['owner_last_name_p'] = String(restaurantInfo.owner_last_name);
+    newRestaurantInfo['owner_preferred_name_p'] = String(restaurantInfo.owner_preferred_name);
+    newRestaurantInfo['address_p'] = restaurantInfo.address;
+    newRestaurantInfo['streetAddress2_p'] = restaurantInfo.streetAddress2;
+    newRestaurantInfo['streetAddress3_p'] = restaurantInfo.streetAddress3;
+    newRestaurantInfo['deliveryDetails_p'] = restaurantInfo.deliveryDetails;
+    newRestaurantInfo['dineinPickupDetails_p'] = restaurantInfo.dineinPickupDetails;
+    newRestaurantInfo['locationNotes_p'] = restaurantInfo.locationNotes;
+    newRestaurantInfo['bio_p'] = restaurantInfo.bio;
+    newRestaurantInfo['open_hours_p'] = restaurantInfo.open_hours;
+    return newRestaurantInfo;
   }
 
   chooseAPI(option: string, restaurantInfo: Object): Observable<any> {
@@ -305,11 +300,11 @@ export class RestaurantSetupComponent implements OnInit {
       restaurantInfo = this.improveDraftAnswer(restaurantInfo);
     }
 
-    // console.log(restaurantInfo);
+    let restaurantInfoForProfanityCheck = this.getAnswerForProfanityCheck(restaurantInfo);
 
     let validator = this.chooseValidator(option);
     this.validator.clearAllErrors();
-    let failFlag = validator.validateAll(restaurantInfo, (key) => {
+    let failFlag = validator.validateAll(restaurantInfoForProfanityCheck, (key) => {
       this.validator.setError(key);
     });
 
@@ -332,17 +327,32 @@ export class RestaurantSetupComponent implements OnInit {
             let roInfo = {
               restaurant_id: data._id,
             };
-            this.restaurantService.roSignup(roInfo).subscribe(() => {
-              this.authService.refreshToken().subscribe((token) => {
-                this.tokenStorage.updateTokenAndUser(token.access);
-                this.router.navigate(['/restaurant']).then(() => {
-                  this.chooseAlert(option);
-                  this.reload();
+            this.restaurantService.roSignup(roInfo).subscribe((profile) => {
+              var sduserInfo = {
+                profile_id: profile.id,
+              };
+              this.userService.editAccountUser(sduserInfo).subscribe(() => {
+                this.authService.refreshToken().subscribe((token) => {
+                  if (this.newImage) {
+                    this.onSubmit(option).subscribe(() => {
+                      this.newImage = false;
+                    })
+                  }
+                  this.tokenStorage.updateTokenAndUser(token.access);
+                  this.router.navigate(['/restaurant']).then(() => {
+                    this.chooseAlert(option);
+                    this.reload();
+                  });
                 });
-              })
+              });
             });
 
           } else {
+            if (this.newImage) {
+              this.onSubmit(option).subscribe(() => {
+                this.newImage = false;
+              })
+            }
             this.router.navigate(['/restaurant']).then(() => {
               this.chooseAlert(option);
               this.reload();
@@ -360,10 +370,13 @@ export class RestaurantSetupComponent implements OnInit {
   }
 
   reload() {
-    let currentUrl = this.router.url;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([currentUrl]);
+    this.authService.refreshToken().subscribe((token) => {
+      this.tokenStorage.updateTokenAndUser(token.access);
+      let currentUrl = this.router.url;
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.onSameUrlNavigation = 'reload';
+      this.router.navigate([currentUrl]);
+    });
   }
 
   cancel() {
@@ -375,6 +388,18 @@ export class RestaurantSetupComponent implements OnInit {
 
   gotoEditPosts() {
     this.router.navigate(['/edit-posts']);
+  }
+
+  updateCuisineList(cuisines: any[]) {
+    this.uploadForm.get('cuisines').setValue(cuisines);
+  }
+
+  updatePaymentList(payments: any[]) {
+    this.uploadForm.get('payments').setValue(payments);
+  }
+
+  updateServiceList(services: any[]) {
+    this.uploadForm.get('services').setValue(services);
   }
 
 }

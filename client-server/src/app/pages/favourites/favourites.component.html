@@ -5,11 +5,11 @@
       [role]="role"
     ></app-map>
   </div>
-  
+
   <div class="center" style="margin-top: 40px;" id="favourites-label">
     <h2>Favourites</h2>
   </div>
-  
+
   <div *ngIf="emptyFavourites" role="main" aria-labelledby="favourites-label">
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="Restaurants">
@@ -26,7 +26,7 @@
       </mat-tab>-->
     </mat-tab-group>
   </div>
-  
+
   <div *ngIf="!emptyFavourites" role="main" aria-labelledby="favourites-label">
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="Restaurants">
@@ -66,6 +66,13 @@
                 [length]="allCuisines.length"
                 (keyup.enter)="filterEnter($event)"
                 (events)="filterCuisine($event)"
+              ></app-filterlist-card>
+              <app-filterlist-card
+                [category]="'Restaurant Characteristics'"
+                [subcategories]="allServices"
+                [length]="allServices.length"
+                (keyup.enter)="filterEnter($event)"
+                (events)="filterService($event)"
               ></app-filterlist-card>
             </div>
             <div class="col-md-8">

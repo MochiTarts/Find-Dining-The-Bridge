@@ -49,7 +49,6 @@
 <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
 
   <div class="form-row">
-    {{ form.recaptcha.error }}
     {{ form.username.errors }}
     {{ form.username.label_tag }} {{ form.username }}
   </div>

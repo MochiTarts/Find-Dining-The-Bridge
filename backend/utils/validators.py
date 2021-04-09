@@ -2,8 +2,9 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from collections import Iterable
 from django.core.validators import URLValidator, RegexValidator
-from profanityfilter import ProfanityFilter
+from better_profanity import profanity
 #from django.core import validators
+
 
 def check_script_injections(value):
     if isinstance(value, Iterable) and type(value) != str:
@@ -11,6 +12,7 @@ def check_script_injections(value):
             check_script_injection(val)
     else:
         check_script_injection(value)
+
 
 def check_script_injection(value):
     if value is not None:
@@ -26,7 +28,7 @@ def check_script_injection(value):
             if val.find('<script>') != -1:
                 raise ValidationError(_('Field should not contain scripts!'))
                 #raise ValidationError(_('Script injection in %(value)s'),params={'value': val})
-                
+
 
 # validate url that may or maynot contain a shema
 def validate_url(website):
@@ -41,20 +43,27 @@ def validate_url(website):
         raise e
 
 # name should not contain weird symbols
+
+
 def validate_name(name):
     try:
-        regexValidator = RegexValidator('^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,0-9]{1,40}$')
+        regexValidator = RegexValidator(
+            '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,0-9]{1,40}$')
         regexValidator(name)
     except ValidationError as e:
         raise e
 
 # postal code should be A1A 1A1 or A1A-1A1 or A1A1A1
+
+
 def validate_postal_code(code):
     try:
-        regexValidator = RegexValidator('^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$')
+        regexValidator = RegexValidator(
+            '^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$')
         regexValidator(code)
     except ValidationError as e:
         raise e
+
 
 def validate_profane_content(content):
     """ Validates text for any profanity
@@ -65,6 +74,38 @@ def validate_profane_content(content):
     :return: None
     :rtype: None
     """
-    print(ProfanityFilter().is_clean(content))
-    if not ProfanityFilter().is_clean(content):
-        raise ValidationError(None)
+    with open('utils/more_profanity.txt', 'r') as f:
+        additional_words = [line.strip() for line in f]
+
+    profanity.add_censor_words(additional_words)
+    if profanity.contains_profanity(content):
+        raise ValidationError("Content contains profane language")
+
+
+class UserPasswordValidator():
+
+    def __init__(self, min_length=1):
+        self.min_length = min_length
+
+    def validate(self, password, user=None):
+        special_characters = "[~\!@#\$%\^&\*\(\)_\+{}\":;'\[\]]"
+
+        if not any(char.isdigit() for char in password):
+            raise ValidationError(_('Password must contain at least %(min_length)d digit.') % {
+                                  'min_length': self.min_length}, code='password_too_simple',)
+        if not validate_mix_case(password):
+            raise ValidationError(_('Password must contain at least %(min_length)d uppercase and %(mind_length)d lowercase letter.') % {
+                                  'min_length': self.min_length}, code='password_too_simple',)
+        if not any(char in special_characters for char in password):
+            raise ValidationError(_('Password must contain at least %(min_length)d special character.') % {
+                                  'min_length': self.min_length}, code='password_too_simple',)
+
+    def get_help_text(self):
+        return "Password must contain a special character, an uppercase letter, and a lowercase letter"
+
+
+def validate_mix_case(string):
+    letters = set(string)
+    mixed = any(letter.islower() for letter in letters) and any(
+        letter.isupper() for letter in letters)
+    return mixed

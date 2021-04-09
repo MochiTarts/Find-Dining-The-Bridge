@@ -3,6 +3,7 @@ import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-pr
 import { UserService } from 'src/app/_services/user.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile',
@@ -16,10 +17,12 @@ export class ProfileComponent implements OnInit {
   constructor(
     private token: TokenStorageService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private titleService: Title,
   ) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle("Profile | Find Dining Scarborough");
     this.currentUser = this.token.getUser();
     this.userService.getSubscriberProfile().subscribe((data) => {
       this.currentUser.first_name = data.first_name;
@@ -29,7 +32,6 @@ export class ProfileComponent implements OnInit {
       this.currentUser.phone = phone != 'null' ? "(" + phone.slice(0, 3) + ") " + phone.slice(3, 6) + " " + phone.slice(6, 10) : '';
     },
       err => {
-        console.log(err);
         if (err.error && err.error.code == 'no_profile_found') {
           // redirect to home page to fill the profile
           this.router.navigate(['/']);

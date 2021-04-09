@@ -18,6 +18,10 @@ import { RestaurantPageComponent } from './pages/restaurant-page/restaurant-page
 import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
 import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
+import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -29,10 +33,14 @@ const routes: Routes = [
   { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuard] },
   { path: 'restaurant-setup', component: RestaurantSetupComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'terms-of-service', component: TermsOfServiceComponent },
-  { path: 'restaurant', component: RestaurantPageComponent, canActivate: [AuthGuard] },
+  { path: 'restaurant', component: RestaurantPageComponent },
   { path: 'edit-posts', component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
-  { path: 'get-involved', component: GetInvolvedComponent,  },
+  { path: 'get-involved', component: GetInvolvedComponent, },
+  { path: 'articles', component: NewsArticlesComponent, },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent, },
+  { path: 'about-us', component: AboutUsComponent, },
+  { path: 'about-our-partner', component: AboutOurPartnerComponent, },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {

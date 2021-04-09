@@ -1,21 +1,23 @@
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.forms import PasswordResetForm
+from django.core.mail import BadHeaderError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from django.shortcuts import render, redirect
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth import get_user_model
 from django.forms import model_to_dict
+from django.urls import reverse_lazy
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 
 #from rest_framework.decorators import api_view
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
-from utils.common import get_user
-from utils.math import calculate_distance
-
-from subscriber_profile.models import SubscriberProfile
-from restaurant.models import PendingRestaurant, Restaurant
+from utils.math import get_nearby_restaurants
+from sduser.utils import send_email_password_reset, send_email_deactivate
+from sduser.forms import SDPasswordChangeForm
 
 import json
-from operator import itemgetter
 import ast
 
 User = get_user_model()
@@ -24,20 +26,28 @@ User = get_user_model()
 class AdminPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email_admin.html'
 
+class SDUserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'registration/password_reset_confirm_user.html'
+    extra_context = {'home_url': '/'}
+    success_url = reverse_lazy('password_reset_complete_user')
 
-class deactivateView(APIView):
+class SDUserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'registration/password_reset_complete_user.html'
+    extra_context = {'home_url': '/', 'login_redirect_url': '/login',}
+
+class DeactivateView(APIView):
     """ Deactivate user """
     #authentication_classes = [JWTAuthentication]
 
     def post(self, request):
-
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
-        current_user = get_user(request)
+        current_user = request.user
+
         if not current_user:
             return JsonResponse({'message': 'fail to obtain user', 'code': 'deactivation_fail'}, status=405)
 
-        if current_user['user_id'] is not user_id:
+        if current_user.id is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
 
         try:
@@ -45,6 +55,7 @@ class deactivateView(APIView):
             if refresh_token == user.refresh_token:
                 user.is_active = False
                 user.save()
+                send_email_deactivate(user=user, request=request)
                 return JsonResponse(model_to_dict(user))
             else:
                 return JsonResponse({'message': 'deactivation failed: token mismatch', 'code': 'deactivation_fail'}, status=400)
@@ -56,69 +67,78 @@ class editView(APIView):
     """ Edit user """
 
     def put(self, request):
-        try:
-            body = request.data
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user = User.objects.get(id=user['user_id'])
-            for field in body:
-                setattr(user, field, body[field])
-            user.save()
-            return JsonResponse(model_to_dict(user))
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            message = ''
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', "something went wrong")
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        body = request.data
+        user = request.user
+        if not user:
+            return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+
+        for field in body:
+            setattr(user, field, body[field])
+        user.save()
+        return JsonResponse(model_to_dict(user))
 
 
 class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
-    #permission_classes = (AllowAny,)
+    permission_classes = (AllowAny,)
 
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
+        user = request.user
+        if not user:
+            raise PermissionDenied(
+                message="Failed to obtain user", code="fail_obtain_user")
+
+        user_id = user.id
+        role = user.role
+        nearest = get_nearby_restaurants(user_id, role)
+        return JsonResponse(nearest, safe=False)
+
+
+class SDUserPasswordResetView(APIView):
+    """ password reset view """
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        email = request.data.get('email')
+        associated_users = User.objects.filter(Q(email=email))
+        
+        if not associated_users.exists():
+            raise ObjectDoesNotExist("No user associated with email: " + email)
+        if associated_users.count() > 1:
+            raise MultipleObjectsReturned("There are more than one User associated with email: " + email)
+        user = associated_users.first()
         try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
-            role = user['role']
-            user = None
+            send_email_password_reset(user=user, request=request)
+        except BadHeaderError:
+            return JsonResponse({'message':'Invalid header found.'}, status=400)
 
-            if role == 'BU':
-                user = SubscriberProfile.objects.filter(user_id=user_id).first()
-            else:
-                user = PendingRestaurant.objects.filter(owner_user_id=user_id).first()
+        return JsonResponse({'message': 'Password reset email has been sent'})
 
-            if not user:
-                return JsonResponse({"message": "The user with this user_id does not exist"}, status=400)
-            user_location = ast.literal_eval(user.GEO_location)
-            
-            nearest = []
-            restaurants = list(Restaurant.objects.all())
-            for restaurant in restaurants:
-                if role == 'RO' and restaurant._id == user._id:
-                    continue
-                user_location = ast.literal_eval(restaurant.GEO_location)
-                distance = calculate_distance(user_location, user_location)
-                nearest.append({"restaurant": str(restaurant._id), "distance": distance})
 
-            nearest = sorted(nearest, key=itemgetter("distance"))
-            if (len(nearest) > 5):
-                nearest = nearest[:5]
-            return JsonResponse(nearest, safe=False)
-        except Exception as e:
-            message = ''
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', "something went wrong")
-            finally:
-                return JsonResponse({'message': message}, status=500)
+class SDUserChangePasswordView(APIView):
+    """ password change view """
+
+    def post(self, request):
+        passwords = request.data
+        old_password = passwords.get('old_password')
+        new_password1 = passwords.get('new_password1')
+        new_password2 = passwords.get('new_password2')
+
+        user = request.user
+
+        #if not user.check_password(old_password):
+
+
+        # Django way of validation
+        form = SDPasswordChangeForm(user=user, data=passwords)
+
+        if form.is_valid():
+            form.save()
+            #user.set_password(form.cleaned_data['new_password2'])
+            #user.save()
+            return JsonResponse({'message': 'Password have been changed'})
+        else:
+            return JsonResponse(form.errors.get_json_data(escape_html=True), status=400)
+        
+

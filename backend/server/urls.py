@@ -20,10 +20,10 @@ from django.contrib.auth import views as auth_views
 from sduser.backends import verify_email
 
 from server.admin import admin_site
-from sduser.forms import NewPasswordChangeForm
-from sduser.views import AdminPasswordResetView
+from sduser.forms import SDPasswordChangeForm, SDPasswordResetForm
 
 import restaurant
+import article
 import index
 import auth
 
@@ -31,11 +31,13 @@ urlpatterns = [
     path('email/', include('index.urls')),
     path('admin/password_change/',
          auth_views.PasswordChangeView.as_view(
-             form_class=NewPasswordChangeForm,
+             form_class=SDPasswordChangeForm,
              success_url=reverse_lazy('admin:password_change_done')
          ), name='password_change'),
     path('admin/password_reset/',
-        auth_views.PasswordResetView.as_view(),
+        auth_views.PasswordResetView.as_view(
+            form_class=SDPasswordResetForm,
+        ),
         name='admin_password_reset',),
     path('admin/password_reset/done/',
         auth_views.PasswordResetDoneView.as_view(),
@@ -51,6 +53,7 @@ urlpatterns = [
     path('user/', include('sduser.urls')),
     path('subscriber/', include('subscriber_profile.urls')),
     path('owner/', include('restaurant_owner.urls')),
+    path('article/', include('article.urls')),
     path('', include('restaurant.urls')),
 ]
 
@@ -74,5 +77,5 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 if settings.DEBUG:
     #urlpatterns += staticfiles_urlpatterns()
-    static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 '''

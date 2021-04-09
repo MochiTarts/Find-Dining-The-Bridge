@@ -21,7 +21,6 @@ export class SecureGuard implements CanActivate {
                 this.authService.refreshToken().subscribe(
                     token => {
                         this.tokenStorage.updateTokenAndUser(token.access);
-                        //console.log(token.access);
                         var user = this.tokenStorage.getUser();
                         if (user && ['BU', 'RO'].includes(user.role)) {
                             obs.next(true);
@@ -33,7 +32,6 @@ export class SecureGuard implements CanActivate {
                     },
                     // refresh failed
                     err => {
-                        console.log(err.error)
                         // not logged in so redirect to login page with the return url
                         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
                         obs.next(false);
@@ -46,7 +44,7 @@ export class SecureGuard implements CanActivate {
 
 
 
-        
+
 
 
     }

@@ -5,9 +5,13 @@ from django.forms import ModelForm, Textarea
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from django.contrib.auth import password_validation
-from django.contrib.auth.forms import PasswordChangeForm
-#from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+
+from snowpenguin.django.recaptcha2.fields import ReCaptchaField
+from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
+
 from sduser.utils import send_email_verification
+
 
 User = get_user_model()
 
@@ -104,14 +108,19 @@ class AdminForm(ModelForm):
 
 
 # note that subclassing AdminPasswordChangeForm will not work...
-class NewPasswordChangeForm(PasswordChangeForm):
+class SDPasswordChangeForm(PasswordChangeForm):
     def clean_new_password1(self):
         password0 = self.cleaned_data.get('old_password')
         password1 = self.cleaned_data.get('new_password1')
-        #logger.info(password0)
-        #logger.info(password1)
+
         if password0 and password1:
             if password0 == password1:
                 raise forms.ValidationError("You may not use the same old password!",code='password_incorrect')
         return password1
 
+
+class SDPasswordResetForm(PasswordResetForm):
+    captcha = ReCaptchaField(widget=ReCaptchaWidget())
+
+    class Meta:
+        fields = ('email', 'captcha')

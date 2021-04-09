@@ -24,8 +24,8 @@ COPY . /app
 # RUN ng e2e --port 4202
 
 # generate build
-# RUN ng build --configuration=test --output-path=dist
-RUN ng build --prod --output-path=dist
+ARG CONFIG
+RUN ng build --configuration=${CONFIG} --output-path=dist
 
 ############
 ### deploy ###
@@ -34,7 +34,7 @@ RUN ng build --prod --output-path=dist
 # base image
 FROM nginx:1.16.0-alpine
 
-COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf 
+COPY nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
 
 # copy django admin static files nginx/html directory
 COPY static /usr/share/nginx/html/static
@@ -45,10 +45,12 @@ COPY ssl/server.key /etc/nginx/certs/server.key
 # copy artifact build from the 'build environment'
 COPY --from=build /app/dist /usr/share/nginx/html
 
+ARG HTTP_PORT
+ARG HTTPS_PORT
 # expose port 80 or 8080 listening for http
-EXPOSE 80
+EXPOSE ${HTTP_PORT}
 #expose port 443 or 8443 listening for https
-EXPOSE 443
+EXPOSE ${HTTPS_PORT}
 
 # run nginx
 CMD ["nginx", "-g", "daemon off;"]

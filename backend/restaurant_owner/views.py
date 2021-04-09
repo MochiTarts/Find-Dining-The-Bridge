@@ -11,7 +11,8 @@ from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
-from utils.common import get_user
+from utils.permissions import ROPermission
+
 from .models import RestaurantOwner
 from restaurant.models import PendingRestaurant
 
@@ -43,117 +44,52 @@ restaurant_owner_edit_schema = {
     "additionalProperties": False
 }
 
-restaurant_owner_editable = [
-   "restaurant_id", "last_updated", "consent_status", "subscribed_at", "unsubscribed_at", "expired_at"
-]
-
 
 class SignUp(APIView):
     """ Restaurant Owner signup view """
+    permission_classes = [ROPermission]
     #permission_classes = (AllowAny,)
 
     def post(self, request):
         """ Inserts a new restaurant profile record into the database and attaches user_id to restaurant """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
-
-            validate(instance=request.data, schema=restaurant_owner_signup_schema)
-            body = request.data
-            invalid = RestaurantOwner.field_validate(body)
-            restaurant_filter = PendingRestaurant.objects.filter(_id=body['restaurant_id'])
-            if invalid:
-                return JsonResponse(invalid, status=400)
-            if RestaurantOwner.objects.filter(user_id=user_id).exists():
-                return JsonResponse({"message": "Profile with this user_id already exists"}, status=400)
-            if not restaurant_filter.exists():
-                return JsonResponse({"message": "This restaurant_id does not exist"}, status=400)
-            
-            body['user_id'] = user_id
-            profile = RestaurantOwner.signup(body)
-            restaurant = restaurant_filter.first()
-            restaurant.owner_user_id = user_id
-            save_and_clean(restaurant)
-            return JsonResponse(model_to_json(profile))
-        except ValidationError as e:
-            return JsonResponse({"message": e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({"message": e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user = request.user
+        if not user:
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
+        
+        user_id = user.id
+        validate(instance=request.data, schema=restaurant_owner_signup_schema)
+        body = request.data
+        RestaurantOwner.field_validate(body)
+        
+        body['user_id'] = user_id
+        profile = RestaurantOwner.signup(body)
+        return JsonResponse(model_to_json(profile))
 
 
 class RestaurantOwnerView(APIView):
     """ Restaurant Owner view """
+    permission_classes = [ROPermission]
     #permission_classes = (AllowAny,)
 
     def get(self, request):
         """ Retrieves a restaurant owner profile """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-            ro_filter = RestaurantOwner.objects.filter(user_id=user_id)
-            if ro_filter.exists():
-                return JsonResponse(model_to_json(ro_filter.first()))
-            else:
-                return JsonResponse({"message": "This restaurant owner profile does not exist"}, status=404)
-        except Exception as e:
-            message = ''
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', "something went wrong")
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user_id = user.id
+        restaurant_owner = RestaurantOwner.get_by_user_id(user_id=user_id)
+        return JsonResponse(model_to_json(restaurant_owner))
 
     def put(self, request):
         """ Updates a restaurant owner profile """
-        try:
-            user = get_user(request)
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
-            user_id = user['user_id']
+        user = request.user
+        if not user:
+            raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
 
-            validate(instance=request.data, schema=restaurant_owner_edit_schema)
-            body = request.data
-            invalid = RestaurantOwner.field_validate(body)
-            profile = {}
-            ro_filter = RestaurantOwner.objects.filter(user_id=user_id)
-            
-            if not ro_filter.exists():
-                return JsonResponse({"message": "This restaurant owner profile does not exist"}, status=404)
-            else:
-                profile = ro_filter.first()
-            if not PendingRestaurant.objects.filter(_id=body['restaurant_id']).exists():
-                return JsonResponse({"message": "This restaurant_id does not exist"}, status=400)
-
-            edit_model(profile, body, restaurant_owner_editable)
-            profile = save_and_clean(profile)
-            return JsonResponse(model_to_json(profile))
-        except ValidationError as e:
-            return JsonResponse({"message": e.message}, status=500)
-        except json.decoder.JSONDecodeError as e:
-            return JsonResponse({"message": e.message}, status=500)
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            message = 'something went wrong'
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', 'something went wrong')
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        user_id = user.id
+        validate(instance=request.data, schema=restaurant_owner_edit_schema)
+        body = request.data
+        RestaurantOwner.field_validate(body)
+        profile = RestaurantOwner.edit_profile(user_id, body)
+        return JsonResponse(model_to_json(profile))

@@ -23,10 +23,20 @@ def save_and_clean(model, updated_fields=None):
         raise err
 
 def get_user(request):
+    '''
+    get user from decoding the access token in the request header
+
+    note that request.user will return a SDUser object for
+    requests obtained inside any DRF API View so it is not needed
+    for those views
+    '''
+    if not request:
+        return False
+
     header = request.META.get('HTTP_AUTHORIZATION')
-    print(header)
     if header and header.startswith('Bearer'):
         token = header.split(' ')[1]
+        print(jwt_decode(token))
         return jwt_decode(token)
     else:
         return False

@@ -57,6 +57,9 @@ INSTALLED_APPS = [
     'subscriber_profile',
     'restaurant_owner',
     'restaurant',
+    'ckeditor',
+    'article',
+    'image',
     
     #'user.apps.SDUserConfig',
 ]
@@ -124,6 +127,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {   
+        'NAME': 'utils.validators.UserPasswordValidator',
+    },
 ]
 
 
@@ -140,13 +146,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-
 # Override default user model
 AUTH_USER_MODEL = 'sduser.SDUser'
 
@@ -160,8 +159,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
@@ -177,6 +176,7 @@ REST_FRAMEWORK = {
         'anon': '100/hour',
         'user': '100/hour'
     },
+    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler'
 }
 # doesn't work right now because Djongo can't translate aggregation functions in sql
 
@@ -192,7 +192,7 @@ JWT_AUTH = {
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
-SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = os.environ.get('SSL_REDIRECT') == 'True'
 
 CORS_ALLOW_METHODS = (
 'GET',
@@ -233,7 +233,7 @@ JWT_ALGORITHM = 'HS256'
 # JWT settings
 SIMPLE_JWT = {
     # for testing
-    #'ACCESS_TOKEN_LIFETIME': timedelta(seconds=15),
+    #'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
     #'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -267,15 +267,16 @@ SIMPLE_JWT = {
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-'''
+
 STATIC_URL = '/static/'
+#STATIC_ROOT = ''
 import sys
-if sys.argv[1] != 'runserver':
+if sys.argv[1] not in ['runserver', 'makemigrations', 'migrate']:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),
 ]
-'''
+
 
 #SESSION_COOKIE_DOMAIN = '.localhost'
 
@@ -313,6 +314,8 @@ RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAP_PRIV_KEY')
 RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAP_PUB_KEY')
 
 GEOCODE_API_KEY = os.environ.get('GEOCODE_API_KEY')
+
+GA_VIEW_ID = os.environ.get('GA_VIEW_ID')
 
 GOOGLE_OAUTH2_CLIENT_EMAIL = os.environ.get('GOOGLE_OAUTH2_CLIENT_EMAIL')
 # note that the replace is required after reading

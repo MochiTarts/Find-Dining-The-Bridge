@@ -99,7 +99,9 @@ ngb-alert {
   padding: 35px;
   position: absolute;
   margin: auto;
-  top: 65px; left: 0px; right: 0px;
+  top: 65px;
+  left: 0px;
+  right: 0px;
 
   @media screen and (max-width: 850px) {
     width: 90%;
@@ -121,8 +123,14 @@ ngb-alert {
 }
 
 .logo-img {
-  width: 75%;
+  width: 263px;
   height: 175px;
+  object-fit: cover;
+
+  @media screen and (max-width: 990px) {
+    width: 200px;
+    height: 133px;
+  }
 
   @media screen and (max-width: 767px) {
     width: 150px;
@@ -229,7 +237,7 @@ ngb-alert {
 }
 
 .editRestaurantWrap {
-  text-align: center; 
+  text-align: center;
   margin-top: 25px;
 }
 

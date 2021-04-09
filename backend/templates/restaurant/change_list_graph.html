@@ -1,0 +1,148 @@
+{% extends "admin/change_list.html" %}
+{% load staticfiles %}
+{% block extrahead %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+<script>
+    var randomColorGenerator = function () {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    };
+    var options = {
+        responsive: true,
+        maintainAspectRatio: true,
+        legend: {
+            position: 'right'
+        },
+        title: {
+            display: true,
+            text: "Total Pageviews of All Restaurants",
+            fontColor: 'black',
+            fontSize: 20
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        },
+        scales: {
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Date',
+                    fontColor: 'black',
+                    fontSize: 16
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Number of Pageviews',
+                    fontColor: 'black',
+                    fontSize: 16
+                }
+            }]
+        }
+
+    };
+    var endpoint = "/api/restaurant/traffic/";
+
+    $.ajax({
+        method: "GET",
+        url: endpoint + "daily/",
+        success: function (restaurants) {
+            var labels = []
+            var date = new Date();
+            y = date.getFullYear();
+            m = date.getMonth();
+            d = date.getDate();
+            for (i = 1; i <= d; i++) {
+                date = new Date(y, m, i);
+                date = date.toLocaleDateString("en-US");
+                labels.push(date)
+            }
+
+            var restaurantData = {};
+            restaurantData['label'] = "All Restaurants"
+            restaurantData['backgroundColor'] = randomColorGenerator();
+            var data = []
+            for (key in restaurants) {
+                for (i = 0; i < restaurants[key]['rows'].length; i++) {
+                    if (data[i] == null) {
+                        data.push(parseInt(restaurants[key]['rows'][i][1]));
+                    } else {
+                        data[i] += parseInt(restaurants[key]['rows'][i][1]);
+                    }
+                }
+            }
+            restaurantData['data'] = data;
+
+            var ctx = document.getElementById("restaurant-chart");
+            var lineChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [restaurantData],
+                },
+                options: options
+            })
+        },
+        error: function (err) {
+            console.log(err)
+        }
+    });
+
+    // $.ajax({
+    //     method: "GET",
+    //     url: endpoint + "hourly/",
+    //     success: function (restaurants) {
+    //         labels = []
+    //         for (i = 0; i <= 23; i++) {
+    //             labels.push(i)
+    //         }
+
+    //         var restaurantData = {};
+    //         restaurantData['label'] = "All Restaurants"
+    //         restaurantData['backgroundColor'] = randomColorGenerator();
+    //         var data = []
+    //         for (key in restaurants) {
+    //             for (i = 0; i < restaurants[key]['rows'].length; i++) {
+    //                 if (data[i] == null) {
+    //                     data.push(parseInt(restaurants[key]['rows'][i][1]));
+    //                 } else {
+    //                     data[i] += parseInt(restaurants[key]['rows'][i][1]);
+    //                 }
+    //             }
+    //         }
+    //         restaurantData['data'] = data;
+
+    //         options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour'
+
+    //         var ctx = document.getElementById("restaurant-chart");
+    //         var lineChart = new Chart(ctx, {
+    //             type: 'bar',
+    //             data: {
+    //                 labels: labels,
+    //                 datasets: [restaurantData],
+    //             },
+    //             options: options
+    //         })
+    //     },
+    //     error: function (err) {
+    //         console.log(err)
+    //     }
+    // });
+</script>
+{% endblock %}
+{% block content %}
+<h1>Graphs</h1>
+<hr>
+<div style="margin:auto; width:50%;">
+    <canvas id="restaurant-chart"></canvas>
+</div>
+<div style="margin:auto; width:50%;">
+    <canvas id="hourly-chart"></canvas>
+</div>
+{{ block.super }}
+{% endblock %}

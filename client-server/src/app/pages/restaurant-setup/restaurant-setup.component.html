@@ -29,16 +29,22 @@
             class="form-control"
             id="restaurant-name"
             placeholder="Ex: Dan's Dumplings"
-            value="{{ profileId ? restaurantDetails.name : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.name : '' }}"
             aria-required="true"
             required
-            [disabled]="profileId ? restaurantDetails.approved_once : false"
+            [disabled]="(profileId && restaurantDetails) ? restaurantDetails.approved_once : false"
           />
           <app-dynamic-label
             class="error-label"
             [name]="'errorName'"
             [message]="validator.errors['name']"
-            tabindex="0"
+            tabindex="validator.errors['name'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorName'"
+            [message]="validator.errors['name_p']"
+            tabindex="validator.errors['name_p'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
         <div class="form-group col-md-4">
@@ -47,14 +53,14 @@
             type="number"
             class="form-control"
             id="years-in-business"
-            value="{{ profileId ? restaurantDetails.years : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.years : '' }}"
             aria-required="true"
           />
           <app-dynamic-label
             class="error-label"
             [name]="'errorYears'"
             [message]="validator.errors['years']"
-            tabindex="0"
+            tabindex="validator.errors['years'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -66,7 +72,7 @@
             type="text"
             class="form-control"
             id="owner-first-name"
-            value="{{ profileId ? restaurantDetails.owner_first_name[0] : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.owner_first_name[0] : '' }}"
             aria-required="true"
             required
           />
@@ -77,7 +83,7 @@
             type="text"
             class="form-control"
             id="owner-last-name"
-            value="{{ profileId ? restaurantDetails.owner_last_name[0] : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.owner_last_name[0] : '' }}"
             aria-required="true"
             required
           />
@@ -88,7 +94,7 @@
             type="text"
             class="form-control"
             id="owner-preferred-name"
-            value="{{ profileId ? restaurantDetails.owner_preferred_name[0] : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.owner_preferred_name[0] : '' }}"
           />
         </div>
         <div class="form-group col-md-3 add-btn">
@@ -132,22 +138,38 @@
       <div class="row">
         <div class="form-group col-md-3">
           <app-dynamic-label class="error-label"
-          [name]="'errorOwnerFirstName'"
-          [message]="validator.errors['owner_first_name']"
-          tabindex="0" ></app-dynamic-label>
+            [name]="'errorOwnerFirstName'"
+            [message]="validator.errors['owner_first_name']"
+            tabindex="validator.errors['owner_first_name'] ? 0 : -1" ></app-dynamic-label>
+          <app-dynamic-label class="error-label"
+            [name]="'errorOwnerFirstName'"
+            [message]="validator.errors['owner_first_name_p']"
+            tabindex="validator.errors['owner_first_name_p'] ? 0 : -1" ></app-dynamic-label>
         </div>
+
         <div class="form-group col-md-3">
           <app-dynamic-label class="error-label"
-          [name]="'errorOwnerLastName'"
-          [message]="validator.errors['owner_last_name']"
-          tabindex="0" ></app-dynamic-label>
+            [name]="'errorOwnerLastName'"
+            [message]="validator.errors['owner_last_name']"
+            tabindex="validator.errors['owner_last_name'] ? 0 : -1" ></app-dynamic-label>
+          <app-dynamic-label class="error-label"
+            [name]="'errorOwnerLastName'"
+            [message]="validator.errors['owner_last_name_p']"
+            tabindex="validator.errors['owner_last_name_p'] ? 0 : -1" ></app-dynamic-label>
         </div>
+
         <div class="form-group col-md-3">
           <app-dynamic-label
             class="error-label"
             [name]="'errorOwnerPreferredName'"
             [message]="validator.errors['owner_preferred_name']"
-            tabindex="0"
+            tabindex="validator.errors['owner_preferred_name'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorOwnerPreferredName'"
+            [message]="validator.errors['owner_preferred_name_p']"
+            tabindex="validator.errors['owner_preferred_name_p'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -158,7 +180,7 @@
           type="text"
           class="form-control"
           id="restaurant-address"
-          value="{{ profileId ? restaurantDetails.address : '' }}"
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.address : '' }}"
           placeholder="Ex: 1234 Address Ave"
           aria-required="true"
         />
@@ -166,7 +188,13 @@
           class="error-label"
           [name]="'errorAddress'"
           [message]="validator.errors['address']"
-          tabindex="0"
+          tabindex="validator.errors['address'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorAddress'"
+          [message]="validator.errors['address_p']"
+          tabindex="validator.errors['address_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -176,14 +204,20 @@
             type = "text"
             class="form-control"
             id="StreetAdd2"
-            value = "{{  profileId ? restaurantDetails.streetAddress2 : '' }}"
+            value = "{{  (profileId && restaurantDetails) ? restaurantDetails.streetAddress2 : '' }}"
             placeholder="Ex: 1234 Address Ave"
           />
           <app-dynamic-label
             class="error-label"
             [name]="'errorAddress2'"
             [message]="validator.errors['streetAddress2']"
-            tabindex="0"
+            tabindex="validator.errors['streetAddress2'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorAddress2'"
+            [message]="validator.errors['streetAddress2_p']"
+            tabindex="validator.errors['streetAddress2_p'] ? 0 : -1"
           ></app-dynamic-label>
       </div>
 
@@ -194,14 +228,20 @@
             type = "text"
             class="form-control"
             id="StreetAdd3"
-            value="{{ profileId ? restaurantDetails.streetAddress3 : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.streetAddress3 : '' }}"
             placeholder="Ex: 1234 Address Ave"
           />
           <app-dynamic-label
             class="error-label"
             [name]="'errorAddress3'"
             [message]="validator.errors['streetAddress3']"
-            tabindex="0"
+            tabindex="validator.errors['streetAddress3'] ? 0 : -1"
+          ></app-dynamic-label>
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorAddress3'"
+            [message]="validator.errors['streetAddress3_p']"
+            tabindex="validator.errors['streetAddress3_p'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
         <div class = "form-group col-md-4">
@@ -210,7 +250,7 @@
             type = "text"
             class="form-control"
             id="PostalCode"
-            value="{{  profileId ? restaurantDetails.postalCode : '' }}"
+            value="{{  (profileId && restaurantDetails) ? restaurantDetails.postalCode : '' }}"
             placeholder="Ex: A1A 1A1"
             aria-required="true"
           />
@@ -218,7 +258,7 @@
             class="error-label"
             [name]="'postalCode'"
             [message]="validator.errors['postalCode']"
-            tabindex="0"
+            tabindex="validator.errors['postalCode'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -231,13 +271,13 @@
             class="form-control"
             id="phone-number"
             placeholder="Ex: 4161234567"
-            value="{{ profileId ? restaurantDetails.phone : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.phone : '' }}"
             aria-required="true"
           />
           <app-dynamic-label class="error-label"
           [name]="'errorPhone'"
           [message]="validator.errors['phone']"
-          tabindex="0"></app-dynamic-label>
+          tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-8">
           <label for="restaurant-email">Email Address</label>
@@ -253,7 +293,7 @@
             class="error-label"
             [name]="'errorEmail'"
             [message]="validator.errors['email']"
-            tabindex="0"
+            tabindex="validator.errors['email'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
@@ -264,7 +304,7 @@
           <select
             id="pricepoint"
             class="form-control"
-            value="{{ profileId ? getPricepoint() : [] }}"
+            value="{{ (profileId && restaurantDetails) ? getPricepoint() : [] }}"
             aria-required="true"
           >
             <option selected disabled hidden>Choose...</option>
@@ -277,61 +317,52 @@
             class="error-label"
             [name]="'errorPrice'"
             [message]="validator.errors['pricepoint']"
-            tabindex="0"
+            tabindex="validator.errors['pricepoint'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
         <div class="form-group col-md-8">
           <label for="restaurant-cuisine">Type(s) of Cuisine <app-required-star></app-required-star></label>
-          <kendo-multiselect
-            class="form-control"
-            [placeholder]="'Select your cuisine!'"
-            [data]="cuisineItems"
-            formControlName="cuisines"
-            aria-required="true"
-            id="cuisineList"
-          ></kendo-multiselect>
+          <app-multiselect-checkbox-dropdown
+            [list]="cuisineItems"
+            [initialCheckedList]="restaurantDetails ? restaurantDetails.cuisines : []"
+            (shareCheckedList)="updateCuisineList($event)" >
+          </app-multiselect-checkbox-dropdown>
           <app-dynamic-label
             class="error-label"
             [name]="'errorCuisine'"
             [message]="validator.errors['cuisines']"
-            tabindex="0"
+            tabindex="validator.errors['cuisines'] ? 0 : -1"
           ></app-dynamic-label>
         </div>
       </div>
 
       <div class="form-group">
         <label for="payment-methods">Accepted Payment Methods <app-required-star></app-required-star></label>
-          <kendo-multiselect
-            class="form-control"
-            [placeholder]="'Select accepted payment methods'"
-            [data]="paymentItems"
-            formControlName="payments"
-            aria-required="true"
-            id="paymentList"
-          ></kendo-multiselect>
+        <app-multiselect-checkbox-dropdown
+          [list]="paymentItems"
+          [initialCheckedList]="restaurantDetails ? restaurantDetails.payment_methods : []"
+          (shareCheckedList)="updatePaymentList($event)" >
+        </app-multiselect-checkbox-dropdown>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPayment'"
           [message]="validator.errors['payment_methods']"
-          tabindex="0"
+          tabindex="validator.errors['payment_methods'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
       <div class="form-group">
         <label for="restaurant-service">General Services</label>
-        <kendo-multiselect
-          class="form-control"
-          [placeholder]="'Select general services'"
-          [data]="serviceItems"
-          formControlName="services"
-          aria-required="true"
-          id="service-list"
-        ></kendo-multiselect>
+        <app-multiselect-checkbox-dropdown
+          [list]="serviceItems"
+          [initialCheckedList]="restaurantDetails ? restaurantDetails.offer_options : []"
+          (shareCheckedList)="updateServiceList($event)" >
+        </app-multiselect-checkbox-dropdown>
         <app-dynamic-label
           class="error-label"
           [name]="'errorServices'"
           [message]="validator.errors['offer_options']"
-          tabindex="0"
+          tabindex="validator.errors['offer_options'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -342,13 +373,19 @@
           id="delivery-details"
           rows="7"
           placeholder="Include any additional delivery details here!"
-          value="{{ profileId ? restaurantDetails.deliveryDetails : '' }}"
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.deliveryDetails : '' }}"
         ></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorDeliveryDetails'"
           [message]="validator.errors['deliveryDetails']"
-          tabindex="0"
+          tabindex="validator.errors['deliveryDetails'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorDeliveryDetails'"
+          [message]="validator.errors['deliveryDetails_p']"
+          tabindex="validator.errors['deliveryDetails_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -358,14 +395,20 @@
           class="form-control"
           id="dinein-pickup-details"
           rows="7"
-          value="{{ profileId ? restaurantDetails.dineinPickupDetails : '' }}"
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.dineinPickupDetails : '' }}"
           placeholder="Include any additional dine-in / pick-up details here!"
         ></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorDineinPickupDetails'"
           [message]="validator.errors['dineinPickupDetails']"
-          tabindex="0"
+          tabindex="validator.errors['dineinPickupDetails'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorDineinPickupDetails'"
+          [message]="validator.errors['dineinPickupDetails_p']"
+          tabindex="validator.errors['dineinPickupDetails_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -375,14 +418,20 @@
           class="form-control"
           id="location-notes"
           rows="7"
-          value="{{ profileId ? restaurantDetails.locationNotes : '' }}"
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.locationNotes : '' }}"
           placeholder="Include any extra details about your restaurant's location here!"
         ></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorLocationNotes'"
           [message]="validator.errors['locationNotes']"
-          tabindex="0"
+          tabindex="validator.errors['locationNotes'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorLocationNotes'"
+          [message]="validator.errors['locationNotes_p']"
+          tabindex="validator.errors['locationNotes_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -393,33 +442,22 @@
           id="restaurant-bio"
           rows="7"
           placeholder="Tell customers about the type of dishes offered at your restaurant and unique highlights of your restaurants..."
-          value="{{ profileId ? restaurantDetails.bio : '' }}"
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.bio : '' }}"
           aria-required="true"
           required
-          [disabled]="profileId ? restaurantDetails.approved_once : false"
+          [disabled]="(profileId && restaurantDetails) ? restaurantDetails.approved_once : false"
         ></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorBio'"
           [message]="validator.errors['bio']"
-          tabindex="0"
+          tabindex="validator.errors['bio'] ? 0 : -1"
         ></app-dynamic-label>
-      </div>
-
-      <div class="form-group">
-        <label for="owner-story">Owner Story</label>
-        <textarea
-          class="form-control"
-          id="owner-story"
-          rows="7"
-          placeholder="Tell customers the story of your culinary joruney towards opening your restaurant..."
-          value="{{ profileId ? restaurantDetails.owner_story : '' }}"
-        ></textarea>
         <app-dynamic-label
           class="error-label"
-          [name]="'errorStory'"
-          [message]="validator.errors['owner_story']"
-          tabindex="0"
+          [name]="'errorBio'"
+          [message]="validator.errors['bio_p']"
+          tabindex="validator.errors['bio_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -429,7 +467,7 @@
           class="form-control"
           id="open_hours"
           rows="7"
-          value="{{ profileId ? restaurantDetails.open_hours : '' }}"
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.open_hours : '' }}"
           aria-required="true"
           required
         ></textarea>
@@ -437,7 +475,13 @@
           class="error-label"
           [name]="'errorOpenHours'"
           [message]="validator.errors['open_hours']"
-          tabindex="0"
+          tabindex="validator.errors['open_hours'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorOpenHours'"
+          [message]="validator.errors['open_hours_p']"
+          tabindex="validator.errors['open_hours_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
 
@@ -448,7 +492,7 @@
             type="text"
             class="form-control"
             id="web_url"
-            value="{{ profileId ? restaurantDetails.web_url : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.web_url : '' }}"
           />
         </div>
         <div class="form-group col-md-6">
@@ -457,7 +501,7 @@
             type="text"
             class="form-control"
             id="facebook"
-            value="{{ profileId ? restaurantDetails.facebook : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.facebook : '' }}"
           />
         </div>
         <div class="form-group col-md-6">
@@ -466,7 +510,7 @@
             type="text"
             class="form-control"
             id="twitter"
-            value="{{ profileId ? restaurantDetails.twitter : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.twitter : '' }}"
           />
         </div>
         <div class="form-group col-md-6">
@@ -475,7 +519,7 @@
             type="text"
             class="form-control"
             id="instagram"
-            value="{{ profileId ? restaurantDetails.instagram : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.instagram : '' }}"
           />
         </div>
       </div>
@@ -488,18 +532,6 @@
             name="logo"
             id="logo"
             (change)="onFileSelect($event)"
-          />
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-md-6">
-          <label for="avatar">Add owner image:</label>
-          <input
-            type="file"
-            name="owner"
-            id="owner"
-            (change)="onOwnerImageSelect($event)"
           />
         </div>
       </div>

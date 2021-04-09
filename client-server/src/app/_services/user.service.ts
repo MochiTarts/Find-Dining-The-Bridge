@@ -27,19 +27,6 @@ export class UserService {
     return this.http.get(API_URL + 'admin', { responseType: 'text' });
   }
 
-  // below are just testing for getting contents from the backend
-  getPublicContent(): Observable<any> {
-    return this.http.get(API_URL + 'all', { responseType: 'text' });
-  }
-
-  getUserBoard(): Observable<any> {
-    return this.http.get(API_URL + 'user', { responseType: 'text' });
-  }
-
-  getROBoard(): Observable<any> {
-    return this.http.get(API_URL + 'ro', { responseType: 'text' });
-  }
-
   /*
   @Input: JSON object containing fields to be modified for an sduser
   @Ouput: JSON object representing the updated sduser
@@ -81,22 +68,12 @@ export class UserService {
   }
 
   /*
-  @Input: JSON object containing userID and fields of subscriber profile to be modified
-  @Output: JSON object representing the updated subscriber profile
-  Edit consumer's consent status
-  */
-  editConsentStatus(userData): Observable<any> {
-    const endpoint = SUBSCRIBER_ENDPOINT + 'consent_status/';
-    return this.http.put<any>(endpoint, userData, httpOptions);
-  }
-
-  /*
   @Input: JSON object containing restaurant_id of restaurant that will be part of this new relation
   @Output: Message from request or error
   Add a new restaurant to a user's list of favourites
   */
   addFavouriteRestaurant(data): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/favourite/`
+    const endpoint = SDUSER_ENDPOINT + `favourite/`
     return this.http.post<any>(endpoint, data)
   }
 
@@ -106,7 +83,7 @@ export class UserService {
   Get all restaurants favourited by a user
   */
   getFavouriteRestaurants(): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/favourite/`
+    const endpoint = SDUSER_ENDPOINT + `favourite/`
     return this.http.get(endpoint)
   }
 
@@ -116,7 +93,7 @@ export class UserService {
   Removes a restaurant from a user's list of favourites
   */
   removeFavRestaurant(restaurant_id): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/favourite/${restaurant_id}/`
+    const endpoint = SDUSER_ENDPOINT + `favourite/${restaurant_id}/`
     return this.http.delete<any>(endpoint)
   }
 
@@ -128,7 +105,7 @@ export class UserService {
   List is ordered from nearest to furthest
   */
   getNearbyRestaurants(): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `/nearby/`
+    const endpoint = SDUSER_ENDPOINT + `nearby/`
     return this.http.get(endpoint);
   }
 
@@ -224,13 +201,23 @@ export class UserService {
 
 
   /*
-  @Input: None
-  @Output: None
+  @Input: user id
+  @Output: Observable
   Deactivate the user account
   */
   deactivateUser(id: string): Observable<any> {
     const endpoint = API_URL + 'user/deactivate/';
     return this.http.post<any>(endpoint, JSON.stringify({ 'id': id }), httpOptions);
+  }
+
+  /*
+  @Input: None
+  @Output: Observable
+  Deactivate the user account
+  */
+  changeUserPassword(passwordData: any): Observable<any> {
+    const endpoint = API_URL + 'user/change_password/';
+    return this.http.post<any>(endpoint, passwordData, httpOptions);
   }
 
 }

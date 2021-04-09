@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { SpinnerVisibilityService } from 'ng-http-loader';
 import { cuisinesStr } from '../../_constants/cuisines';
+import { servicesStr } from '../../_constants/services';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { Title } from '@angular/platform-browser';
 import { UserService } from '../../_services/user.service';
@@ -20,11 +21,13 @@ export class FavouritesComponent implements OnInit {
   emptyFavourites: boolean = true;
 
   allCuisines: any[];
+  allServices: any[];
   allRestaurants: any[];
 
   priceFilterRestaurants: any[];
   deliveryFilterRestaurants: any[];
   cuisineFilterRestaurants: any[];
+  serviceFilterRestaurants: any[];
   searchedRestaurants: any[];
   inputRestaurant: string = '';
 
@@ -37,7 +40,7 @@ export class FavouritesComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private spinner: SpinnerVisibilityService,
-    private titleService: Title
+    private titleService: Title,
   ) { }
 
   ngOnInit(): void {
@@ -45,6 +48,7 @@ export class FavouritesComponent implements OnInit {
     this.userId = user.user_id;
     this.role = user.role;
     this.allCuisines = cuisinesStr;
+    this.allServices = servicesStr;
     this.loadRestaurant(this.userId);
     this.titleService.setTitle("Favourites | Find Dining Scarborough");
   }
@@ -61,6 +65,7 @@ export class FavouritesComponent implements OnInit {
       this.priceFilterRestaurants = this.restaurants;
       this.deliveryFilterRestaurants = this.restaurants;
       this.cuisineFilterRestaurants = this.restaurants;
+      this.serviceFilterRestaurants = this.restaurants;
       this.searchedRestaurants = this.restaurants;
     })
   }
@@ -71,6 +76,7 @@ export class FavouritesComponent implements OnInit {
       var current = this.priceFilterRestaurants[i];
       if (this.deliveryFilterRestaurants.includes(current)
           && this.cuisineFilterRestaurants.includes(current)
+          && this.serviceFilterRestaurants.includes(current)
           && this.searchedRestaurants.includes(current))
       {
         this.restaurants.push(current);
@@ -92,9 +98,12 @@ export class FavouritesComponent implements OnInit {
           query.cuisines.toString()
             .toLowerCase()
             .includes(this.inputRestaurant.toLowerCase()) ||
+          query.offer_options.toString()
+            .toLowerCase()
+            .includes(this.inputRestaurant.toLowerCase()) ||
           query.pricepoint
             .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) 
+            .includes(this.inputRestaurant.toLowerCase())
         ) {
           this.searchedRestaurants.push(query);
         }
@@ -120,6 +129,25 @@ export class FavouritesComponent implements OnInit {
         for (var j = 0; j < this.allCuisines.length; j++) {
           if (list[j] == true && query.cuisines.includes(this.allCuisines[j])) {
             this.cuisineFilterRestaurants.push(query);
+            break;
+          }
+        }
+      }
+    }
+    this.updateRestarants();
+  }
+
+  filterService(list) {
+    const isFalse = (currentValue) => !currentValue;
+
+    if (list.every(isFalse)) {
+      this.serviceFilterRestaurants = this.allRestaurants;
+    } else {
+      this.serviceFilterRestaurants = [];
+      for (let res of this.allRestaurants) {
+        for (var j = 0; j < this.allServices.length; j++) {
+          if (list[j] && res.offer_options.includes(this.allServices[j])) {
+            this.serviceFilterRestaurants.push(res);
             break;
           }
         }
