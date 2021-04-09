@@ -28,6 +28,7 @@ from restaurant.enum import (
     RestaurantSaveLocations,
     FoodSaveLocations
 )
+from .utils import send_posts_notify_email
 from sduser.models import SDUser
 
 import json
@@ -210,10 +211,10 @@ class PendingFood(models.Model):
         :type food_data: dict
         :param rest_id: the id of the restaurant the dish belongs to
         :type rest_id: ObjectId str
-        :raises: ObjectDoesNotExist when the PendingDish to be edited does not exist
+        :raises: ObjectDoesNotExist when the PendingFood to be edited does not exist
         :raises: IntegrityError when there are business logic violations
-        :return: updated PendingDish object
-        :rtype: :class: `PendingDish`
+        :return: updated PendingFood object
+        :rtype: :class: `PendingFood`
         """
         dish = PendingFood.objects.filter(_id=dish_id).first()
         if not dish:
@@ -269,9 +270,9 @@ class PendingFood(models.Model):
         :type food_data: dict
         :param rest_id: the id of the associated restaurant
         :type rest_id: ObjectId str
-        :raises ObjectDoesNotExist: when the PendingDish does not exist
+        :raises ObjectDoesNotExist: when the PendingFood does not exist
         :return: the deleted dish record
-        :rtype: :class: `PendingDish`
+        :rtype: :class: `PendingFood`
         """
         food = PendingFood.objects.filter(
             name=food_data["name"],
@@ -1249,16 +1250,26 @@ class RestaurantPost(models.Model):
         return str(self._id)
 
     @classmethod
-    def insert(cls, post_data: dict):
+    def insert(cls, post_data: dict, request):
         """ Inserts a new post into the database
+        and sends an email to all admins containing
+        the link to the RestaurantPost change_form
+        page on Django admin
 
         :param post_data: data of the post to be inserted
         :type post_data: dict
+        :param request: the request object of the restaurant post
+                        insert endpoint
+        :type request: HttpRequest
         :return: the newly inserted post record
         :rtype: :class: `RestaurantPost`
         """
         post = RestaurantPost(**post_data)
         post = save_and_clean(post)
+
+        rest_id = post_data["restaurant_id"]
+        restaurant_name = PendingRestaurant.objects.filter(_id=rest_id).first().name
+        send_posts_notify_email(post, restaurant_name, request)
         return post
 
     @classmethod
