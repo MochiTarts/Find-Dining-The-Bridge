@@ -570,16 +570,32 @@ class AnalyticsAccessTokenView(APIView):
         """ Get OAuth2 access token for Google Analytics API to make call """
         return JsonResponse({'token': get_access_token()})
 
-class AnalyticsDataView(APIView):
+class RestaurantAnalyticsDataView(APIView):
     """ analytics data view """
     permission_classes = (AllowAny,)
 
-    def get(self, request, rest_id):
-        """ Retrieves analytics data for a restaurant page given restaurant id """
-        #restaurant_id = request.GET.get('restaurant_id')
-        traffic = get_analytics_data(rest_id)
+    def get(self, request, rest_id, format_type):
+        """ Retrieves analytics data for a specific restaurant page given restaurant id and format of date """
+        restaurant = Restaurant.objects.get(_id=rest_id)
+        traffic = get_analytics_data(rest_id, format_type)
+        traffic['name'] = restaurant.name
         return JsonResponse(traffic)
 
+class RestaurantsAnalyticsDataView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, format_type):
+        """ Retrieves analytics data for all restaurants page given their restaurant ids and format of date """
+        restaurants = list(Restaurant.objects.all())
+        restaurant_data = {}
+        for restaurant in restaurants:
+            restJson = model_to_json(restaurant)
+            rest_id = restJson.get('_id')
+            traffic = get_analytics_data(rest_id, format_type)
+            traffic['name'] = restJson.get('name')
+            restaurant_data[rest_id] = traffic
+        return JsonResponse(restaurant_data)
+        
 
 class PostView(APIView):
     """ Restaurant posts view """
