@@ -19,11 +19,11 @@ def send_posts_notify_email(post, restaurant_name):
     subject = "New Restaurant Post on Find Dining"
     admins = list(User.objects.filter(is_superuser=True).values_list('email', flat=True))
 
-    #link = settings.SITE_URL + "/api/admin/restaurant/restaurantpost/" + \
-    #        str(post._id) + "/change/"
-
-    link = "http://localhost:8000" + "/api/admin/restaurant/restaurantpost/" + \
+    link = settings.SITE_URL + "/api/admin/restaurant/restaurantpost/" + \
             str(post._id) + "/change/"
+
+    #link = "http://localhost:8000" + "/api/admin/restaurant/restaurantpost/" + \
+    #        str(post._id) + "/change/"
             
     content = "<p>New restaurant post posted by: {}</p>".format(restaurant_name) + \
               "<a href={}>Link to post</a>".format(link)

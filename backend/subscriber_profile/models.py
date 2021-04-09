@@ -39,8 +39,8 @@ class SubscriberProfile(models.Model):
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
-        :return: A list of fields that were invalid. Returns None if all fields are valid
-        :rtype: json
+        :raises: ValidationError when there are invalid(s)
+        :return: None
         """
 
         invalid = {'Invalid': []}
@@ -131,6 +131,18 @@ class SubscriberProfile(models.Model):
         return profile
 
 def handleConsentStatus(consent_status):
+    """ Creates a dict containing the fields and values
+    related to a user's consent status. Meant to be added
+    to the restaurant_owner_data dict before creating the
+    RestaurantOwner record
+
+    :param consent_status: the consent status value (ie. 'EXPRESSED', 'IMPLIED')
+    :type consent_status: str
+    :return: a dict containing the fields and values depending on the given
+            consent_status
+    :rtype: dict
+    """
+
     profile = {}
     profile["consent_status"] = consent_status
     if consent_status == "EXPRESSED":
