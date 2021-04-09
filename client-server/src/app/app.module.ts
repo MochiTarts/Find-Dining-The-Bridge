@@ -78,6 +78,9 @@ import { InfoCardComponent } from './components/info-card/info-card.component';
 import { ArticleLatestCardComponent } from './components/article-latest-card/article-latest-card.component';
 import { ArticleCommonCardComponent } from './components/article-common-card/article-common-card.component';
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
 
 
 @NgModule({
@@ -121,6 +124,9 @@ import { FilterdateCardComponent } from './components/filterdate-card/filterdate
     ArticleLatestCardComponent,
     ArticleCommonCardComponent,
     FilterdateCardComponent,
+    PrivacyPolicyComponent,
+    AboutUsComponent,
+    AboutOurPartnerComponent,
   ],
   imports: [
     BrowserModule,
