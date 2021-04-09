@@ -18,7 +18,7 @@
         <div class="carousel-row">
             <div class="carousel">
                 <ivy-carousel
-                style="width: 68%;"
+                style="width: 70%;"
                 *ngIf="filteredArticles.length >= 1"
                 [images]="filteredArticles"
                 [margin]="30"
@@ -35,51 +35,89 @@
 
     <div class="main-container">
         <div class="row no-gutters article-row">
-            <div class="col-lg-10 article-list">
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-                        <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">
-                            <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>
+            <div class="col-lg-10 article-list-col">
+                <div class="article-list col-12" id="article-list">
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">
+                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">
+                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">
+                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">
-                        <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">
-                            <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>
-                        </div>
-                    </div>
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length"
+                    style="position: absolute; bottom: 0; width: 100%;">
+                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">
+                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>
+
+                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>
+                        </li>
+                    </ul>
                 </div>
 
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">
-                    <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">
-                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>
+                <div class="article-container" id="article-container">
+                    <div class="btn" (click)="closeArticle()">Close Article</div>
 
-                        <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-lg-10 article-container" style="display: none;">
-                <h1 class="article-title">{{ selectedArticle.title }}</h1>
-                <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:'mediumDate' }}</h3>
-                <div class="article-content" [innerHTML]="selectedArticle.content"></div>
+                    <h1 class="article-title">{{ selectedArticle.title }}</h1>
+                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:'mediumDate' }}</h3>
+                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>
+                </div>
             </div>
     
             <div class="col-lg-2 filter">
-                <app-filterdate-card [months]="months" [years]="years" [monthsLength]="months.length"
-                (keyup.enter)="filterEnter($event)" (monthEvents)="filterMonth($event)" (yearEvents)="filterYear($event)">
+                <app-filterdate-card [months]="months" [years]="years"
+                (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">
                 </app-filterdate-card>
             </div>
 
-            <div class="col-lg-12 article-full-container">
-                <h1 class="article-title">{{ articleService.articleTitle }}</h1>
-                <h3 class="article-subtitle">Last Updated {{ articleService.articleModifiedDate | date:'mediumDate' }}</h3>
-                <div class="article-content" [innerHTML]="articleService.articleContentString"></div>
+            <div class="col-lg-12 article-mobile">
+                <div fxLayout="row" fxLayoutAlign="end">
+                    <div class="btn" (click)="openFilter()">Filter</div>
+                </div>
+
+                <div class="article-list-mobile col-12" id="article-list-mobile">
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">
+                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">
+                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">
+                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length"
+                    style="position: absolute; left: 0; bottom: 0; width: 100%;">
+                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">
+                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>
+
+                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="article-container-mobile" id="article-container-mobile">
+                    <div class="btn" (click)="closeArticleMobile()">Close Article</div>
+
+                    <h1 class="article-title">{{ selectedArticle.title }}</h1>
+                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:'mediumDate' }}</h3>
+                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>
+                </div>
             </div>
 
-            <div class="side-filter">
-                <app-filterdate-card [months]="months" [years]="years" [monthsLength]="months.length"
-                (keyup.enter)="filterEnter($event)" (monthEvents)="filterMonth($event)" (yearEvents)="filterYear($event)">
+            <div class="side-filter" id="mobile-filter">
+                <app-filterdate-card [months]="months" [years]="years"
+                (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">
                 </app-filterdate-card>
             </div>
         </div>
