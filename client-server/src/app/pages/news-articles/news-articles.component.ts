@@ -43,42 +43,6 @@ export class NewsArticlesComponent implements OnInit {
   selectedArticle: any = Object;
   totalTabs: any[] = [];
 
-  dishes: any[] = [];
-
-  cuisines = [
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/chinese.jpg',
-      caption: 'Chinese',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/greek.jpg',
-      caption: 'Greek',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/indian.jpg',
-      caption: 'Indian',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/italian.jpg',
-      caption: 'Italian',
-    },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/japanese.jpg',
-      caption: 'Japanese',
-    },
-    { type: 'image', path: 'assets/images/cuisines/thai.jpg', caption: 'Thai' },
-    {
-      type: 'image',
-      path: 'assets/images/cuisines/vietnamese.jpg',
-      caption: 'Vietnamese',
-    },
-  ];
-
   constructor(
     public articleService: ArticleService,
     private userService: UserService,
@@ -138,14 +102,6 @@ export class NewsArticlesComponent implements OnInit {
       length = Math.ceil(this.filteredArticles.length/10);
       this.totalTabs = Array(length);
     })
-
-    this.restaurantsService.getDishes().subscribe((data) => {
-      const len = data.Dishes.length < 5 ? data.Dishes.length : 5;
-      for (let i = 0; i < len; i++) {
-        data.Dishes[i].type = 'dish';
-        this.dishes[i] = data.Dishes[i];
-      }
-    });
   }
 
   openArticle(article) {

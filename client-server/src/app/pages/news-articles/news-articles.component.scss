@@ -253,4 +253,51 @@ h1, h2, h3, h4, h5, h6 {
     padding-top: 0px;
 }
 
+.headline-card {
+    padding: 10px 0px;
+}
+
+.nav-pills {
+    padding: 10px 0px;
+}
+
+}
+
+@media screen and (max-width: 550px) {
+
+.title-row {
+    min-height: 200px;
+    width: 100%;
+    position: relative;
+}
+
+.title {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.title-row h1 {
+    font-size: 2rem;
+}
+
+.nav-header {
+    right: 0;
+}
+
+.nav-header .nav-item {
+    font-size: 0.9rem;
+}
+
+.main-container {
+    padding: 0px 5px;
+}
+
+.article-container-mobile {
+    margin: 0px 10px;
+}
+
 }
