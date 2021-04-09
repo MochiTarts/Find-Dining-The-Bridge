@@ -1,0 +1,11 @@
+<div class="card" (click)="openArticle()">
+    <div class="row no-gutters flex-nowrap">
+        <div class="col-md-3">
+            <img src="../../../assets/images/food/veggies.jpg" alt="Card image cap">
+        </div>
+        <div class="col-md-9">
+            <h2 class="card-title">{{ article.title }}</h2>
+            <h4 class="card-subtitle text-muted">{{ article.modified_at | date:'mediumDate' }}</h4>
+        </div>
+    </div>
+</div>

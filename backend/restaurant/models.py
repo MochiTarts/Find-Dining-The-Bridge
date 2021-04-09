@@ -1115,6 +1115,9 @@ class RestaurantPost(models.Model):
     content = models.TextField(max_length=4096)
     timestamp = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self._id)
+
     @classmethod
     def insert(cls, post_data:dict):
         """ Inserts a new post into the database

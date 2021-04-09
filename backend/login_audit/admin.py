@@ -36,7 +36,7 @@ class AuditEntryAdmin(admin.ModelAdmin):
         # delete all filtered logs
         queryset.delete()
 
-    delete_all.short_description = "delete all filtered Loging Logs"
+    delete_all.short_description = "Delete all filtered Loging Logs (if no filter is applied, this will delete every single log)"
 
 
     # override changelist_view to allow certain action (e.g. delete_all) to run without selecting any object
@@ -59,8 +59,11 @@ class AuditEntryAdmin(admin.ModelAdmin):
         return super(AuditEntryAdmin, self).changelist_view(request, extra_context)
 
 
-
+    # login log should not be added or changed
     def has_add_permission(self, request):
+        return False
+    
+    def has_change_permission(self, request, obj=None):
         return False
 
 admin.site.register(AuditEntry, AuditEntryAdmin)

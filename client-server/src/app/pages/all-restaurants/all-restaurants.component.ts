@@ -7,6 +7,10 @@ import { servicesStr } from '../../_constants/services';
 import { Title } from '@angular/platform-browser';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -41,17 +45,29 @@ export class AllRestaurantsComponent implements OnInit {
 
   faSearch = faSearch;
 
+  location: string = '';
+
   constructor(
     private restaurantService: RestaurantService,
     private titleService: Title,
     private tokenStorage: TokenStorageService,
     private userService: UserService,
-  ) {}
+    private route: ActivatedRoute,
+    private http: HttpClient,
+  ) { }
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-    this.userId = user.user_id
-    this.role = user.role
+    this.userId = user.user_id;
+    this.role = user.role;
+
+    if (this.route.snapshot.queryParams.location) {
+      this.location = this.route.snapshot.queryParams.location;
+    }
+
+    if (this.route.snapshot.queryParams.find) {
+      this.inputRestaurant = this.route.snapshot.queryParams.find;
+    }
 
     this.loadRestaurants();
     // this.loadDishes();
@@ -71,31 +87,40 @@ export class AllRestaurantsComponent implements OnInit {
     this.restaurantService.listRestaurants().subscribe((data) => {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
-      navigator.geolocation.getCurrentPosition((positon) => {
-        for (var i = 0; i < this.restaurants.length; i++) {
-          var index = this.restaurants[i];
 
-          if (index.GEO_location != 'blank' && index.GEO_location != '') {
-            var GEOJson = JSON.parse(index.GEO_location.replace(/\'/g, '"'));
-            if (
-              GEOJson[this.LONGITUDE_PROPERTY_NAME] != undefined &&
-              GEOJson[this.LATITUDE_PROPERTY_NAME] != undefined
-            ) {
-              this.restaurants[
-                i
-              ].distanceFromUser = geolocation.haversineDistance(
-                GEOJson[this.LATITUDE_PROPERTY_NAME],
-                GEOJson[this.LONGITUDE_PROPERTY_NAME],
-                positon.coords.latitude,
-                positon.coords.longitude
-              );
+      var selectedPostion: any;
+      if (this.location) {
+        this.getGeoCode(this.location).subscribe((data) => {
+          let selectedLocation = data["features"][0];
+          selectedPostion = {
+            coords: {
+              longitude: selectedLocation.center[0],
+              latitude: selectedLocation.center[1],
             }
+          };
+
+          this.addDistance(selectedPostion);
+          this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
+          this.allRestaurants = this.restaurants;
+          this.initializeRestaurants();
+
+          if (this.inputRestaurant) {
+            this.searchRestaurants();
           }
-        }
-        this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
-        this.allRestaurants = this.restaurants;
-        this.initializeRestaurants();
-      });
+        });
+      } else {
+        navigator.geolocation.getCurrentPosition((position) => {
+          selectedPostion = position;
+          this.addDistance(selectedPostion);
+          this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
+          this.allRestaurants = this.restaurants;
+          this.initializeRestaurants();
+
+          if (this.inputRestaurant) {
+            this.searchRestaurants();
+          }
+        });
+      }
     });
   }
 
@@ -115,15 +140,42 @@ export class AllRestaurantsComponent implements OnInit {
     this.searchedRestaurants = this.allRestaurants;
   }
 
+  getGeoCode(searchText: string): Observable<any> {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json?country=ca&types=place,address,neighborhood,locality&access_token=${environment.mapbox.accessToken}`;
+    return this.http.get(url);
+  }
+
+  addDistance(selectedPostion) {
+    for (var i = 0; i < this.restaurants.length; i++) {
+      var index = this.restaurants[i];
+
+      if (index.GEO_location != 'blank' && index.GEO_location != '') {
+        var GEOJson = JSON.parse(index.GEO_location.replace(/\'/g, '"'));
+        if (
+          GEOJson[this.LONGITUDE_PROPERTY_NAME] != undefined &&
+          GEOJson[this.LATITUDE_PROPERTY_NAME] != undefined
+        ) {
+          this.restaurants[
+            i
+          ].distanceFromUser = geolocation.haversineDistance(
+            GEOJson[this.LATITUDE_PROPERTY_NAME],
+            GEOJson[this.LONGITUDE_PROPERTY_NAME],
+            selectedPostion.coords.latitude,
+            selectedPostion.coords.longitude
+          );
+        }
+      }
+    }
+  }
+
   updateRestarants() {
     this.restaurants = [];
     for (var i = 0; i < this.priceFilterRestaurants.length; i++) {
       var current = this.priceFilterRestaurants[i];
       if (this.deliveryFilterRestaurants.includes(current)
-          && this.cuisineFilterRestaurants.includes(current)
-          && this.serviceFilterRestaurants.includes(current)
-          && this.searchedRestaurants.includes(current))
-      {
+        && this.cuisineFilterRestaurants.includes(current)
+        && this.serviceFilterRestaurants.includes(current)
+        && this.searchedRestaurants.includes(current)) {
         this.restaurants.push(current);
       }
     }
@@ -147,7 +199,7 @@ export class AllRestaurantsComponent implements OnInit {
   }
 
   // This is for the enter key press on check boxes.
-  filterEnter(event){
+  filterEnter(event) {
     event.srcElement.click();
   }
 
@@ -171,7 +223,7 @@ export class AllRestaurantsComponent implements OnInit {
           this.priceFilterRestaurants.push(query);
         }
 
-        if (list[3] == true && query.pricepoint == 'EXHIGH' ){
+        if (list[3] == true && query.pricepoint == 'EXHIGH') {
           this.priceFilterRestaurants.push(query);
         }
       }

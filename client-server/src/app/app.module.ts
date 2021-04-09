@@ -52,6 +52,7 @@ import { EditPostsComponent } from './pages/posts-edit/edit-posts.component';
 import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
 import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
+import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -67,7 +68,6 @@ import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-ca
 import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.component';
 import { RequiredStarComponent } from './components/required-star/required-star.component';
 import { SubscriberProfileFormComponent } from './components/subscriber-profile-form/subscriber-profile-form.component';
-import { RestaurantProfileFormComponent } from './components/restaurant-profile-form/restaurant-profile-form.component';
 import { PageErrorComponent } from './components/page-error/page-error.component';
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 import { PostComponent } from './components/post/post.component';
@@ -75,6 +75,13 @@ import { PartnerCardComponent } from './components/partner-card/partner-card.com
 import { MultiselectCheckboxDropdownComponent } from './components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component';
 import { PasswordChangeFormComponent } from './components/password-change-form/password-change-form.component';
 import { InfoCardComponent } from './components/info-card/info-card.component';
+import { ArticleLatestCardComponent } from './components/article-latest-card/article-latest-card.component';
+import { ArticleCommonCardComponent } from './components/article-common-card/article-common-card.component';
+import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
+import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
 
 
 @NgModule({
@@ -102,7 +109,6 @@ import { InfoCardComponent } from './components/info-card/info-card.component';
     RequiredStarComponent,
     TermsOfServiceComponent,
     SubscriberProfileFormComponent,
-    RestaurantProfileFormComponent,
     RestaurantPageComponent,
     PageErrorComponent,
     VirtualScrollingComponent,
@@ -115,6 +121,14 @@ import { InfoCardComponent } from './components/info-card/info-card.component';
     PasswordChangeFormComponent,
     AccountSettingComponent,
     InfoCardComponent,
+    NewsArticlesComponent,
+    ArticleLatestCardComponent,
+    ArticleCommonCardComponent,
+    FilterdateCardComponent,
+    PrivacyPolicyComponent,
+    AboutUsComponent,
+    AboutOurPartnerComponent,
+    ArticleHeadlineCardComponent,
   ],
   imports: [
     BrowserModule,

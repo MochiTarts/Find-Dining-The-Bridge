@@ -27,6 +27,9 @@ class RestaurantOwner(models.Model):
     unsubscribed_at = models.DateField(blank=True)
     expired_at = models.DateField(blank=True)
 
+    def __str__(self):
+        return str(self.id)
+
     @classmethod
     def signup(cls, restaurant_owner_data:dict):
         """ Constructs and saves restaurant owner to the database and

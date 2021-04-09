@@ -76,6 +76,37 @@ def send_email_deactivate(user, request=None, site=None):
                         recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
+def send_email_deactivate_notify(user, request=None, site=None):
+    if site is not None:
+        domain = site
+    else:
+        domain = get_current_site(request).domain
+    subject = 'Account Deactivation for Find Dining'
+    email_template_name = 'verify_email/deactivation_notify.html'
+    message = render_to_string(email_template_name, {
+                'user': user,
+                'domain': domain,
+            })
+    send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
+                        recipient_list=[user.email], html_message=message, fail_silently=False)
+
+
+def send_email_activate_notify(user, request=None, site=None):
+    if site is not None:
+        domain = site
+    else:
+        domain = get_current_site(request).domain
+    subject = 'Account activation for Find Dining'
+    email_template_name = 'verify_email/activation_notify.html'
+    message = render_to_string(email_template_name, {
+                'user': user,
+                'domain': domain,
+            })
+    send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
+                        recipient_list=[user.email], html_message=message, fail_silently=False)
+
+
+
 
 def send_email_password_reset(user, request=None, site=None):
     if site is not None:

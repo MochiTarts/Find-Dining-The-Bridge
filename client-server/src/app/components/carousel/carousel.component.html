@@ -9,7 +9,7 @@
       <div
         class="carousel-cell"
         *ngIf="
-          i < cellLimit && getFile(i) && getFile(i)['image']['type'] === 'image'
+          i < cellLimit && getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'image'
         "
         [style.width]="getCellWidth() + 'px'"
         [style.border-radius]="borderRadius + 'px'"
@@ -26,7 +26,7 @@
       </div>
       <div
         class="carousel-cell carousel-cell-cards"
-        *ngIf="getFile(i) && getFile(i)['image']['type'] === 'dish'"
+        *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'dish'"
         [style.width]="getCellWidth() + 'px'"
         [style.border-radius]="borderRadius + 'px'"
       >
@@ -35,7 +35,7 @@
 
       <div
         class="carousel-cell carousel-cell-cards"
-        *ngIf="getFile(i) && getFile(i)['image']['type'] === 'story'"
+        *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'story'"
         [style.width]="getCellWidth() + 'px'"
         [style.border-radius]="borderRadius + 'px'"
       >
@@ -44,11 +44,30 @@
 
       <div
         class="carousel-cell carousel-cell-cards"
-        *ngIf="getFile(i) && getFile(i)['image']['type'] === 'partner'"
+        *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'partner'"
         [style.width]="getCellWidth() + 'px'"
         [style.border-radius]="borderRadius + 'px'"
       >
         <app-partner-card [partner]="getFile(i)['image']"></app-partner-card>
+      </div>
+
+      <div
+        class="carousel-cell carousel-cell-cards"
+        *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'restaurant'"
+        [style.width]="getCellWidth() + 'px'"
+        [style.border-radius]="borderRadius + 'px'"
+      >
+        <app-restaurant-nearby-card [restaurant]="getFile(i)['image']"></app-restaurant-nearby-card>
+      </div>
+
+      <div
+        class="carousel-cell carousel-cell-cards"
+        *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'article'"
+        [style.width]="getCellWidth() + 'px'"
+        [style.border-radius]="borderRadius + 'px'"
+        style="text-align: left;"
+      >
+        <app-article-common-card [article]="getFile(i)['image']" (articleOutput)="sendArticleForOpen($event)"></app-article-common-card>
       </div>
     </ng-template>
   </div>

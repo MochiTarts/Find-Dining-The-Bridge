@@ -1,0 +1,8 @@
+<p>Hello {{ user.username }},</p>
+<p>Your account for Find Dining has been activated by a system administrator.</p>
+<p>No action is required. You may now <a href="https://{{ domain }}{% url 'login' %}">log in</a> to the site using the account registerd with this email.</p>
+
+<p>Thanks,</p>
+<p>Your SCDining team</p>
+{% autoescape off %}
+{% endautoescape %}

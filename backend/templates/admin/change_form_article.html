@@ -92,16 +92,19 @@
 </div>
 </form></div>
 <script>
-    function toggleIframe() {
-        var iframe = document.getElementById('image_search_iframe');
-        var display = 'block';
-        var link_display = 'none';
-        if (iframe.style.display == display){
-            display = 'none';
-            link_display = 'block';
-        }
-        iframe.style.display = display;
+  function toggleIframe() {
+      var iframe = document.getElementById('image_search_iframe');
+      var display = 'block';
+      var link_display = 'none';
+      if (iframe.style.display == display){
+          display = 'none';
+          link_display = 'block';
+      }
+      iframe.style.display = display;
+      // only hide/show history link (button) on change form and not on creation
+      if ('{{ change }}' == 'True'){
         document.getElementsByClassName('historylink')[0].style.display = link_display;
-    }
+      }
+  }
 </script>
 {% endblock %}

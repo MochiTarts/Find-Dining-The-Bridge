@@ -14,7 +14,7 @@ class SDUser(AbstractUser):
         ),)
     # unique id from third party
     auth_id = models.CharField(max_length=255, default='', blank=True, help_text=_(
-            'This is a unique id given by third parties'
+            'This is a unique id given by third parties '
             '(if the user logs in with a third party service)'
         ),)
     # if the user is blocked by admin

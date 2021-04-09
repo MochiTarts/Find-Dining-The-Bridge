@@ -1,0 +1,26 @@
+.icons {
+    font-size: 25px;
+    color: gold;
+}
+
+p {
+    font-size: 0.9rem;
+}
+
+.card {
+    width: 100%;
+    height: 328px;
+    transition: all 0.2s ease-in-out;
+    border: none !important;
+}
+
+.card:hover {
+    cursor: pointer;
+    transform: scale(1.025);
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}

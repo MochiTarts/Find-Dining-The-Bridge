@@ -552,6 +552,8 @@ class RestPostAdmin(admin.ModelAdmin):
     list_filter = (RestaurantFilter, 'timestamp',)
     list_display = ('restaurant_name', 'link_to_restaurant', 'owner_user_id', 'timestamp',)
 
+    readonly_fields = ('restaurant_id',)
+
     def restaurant_name(self, obj):
         if not obj.restaurant_id:
             return ""

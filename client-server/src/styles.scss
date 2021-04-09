@@ -21,6 +21,7 @@ $primary-color: white;
 $secondary-color: #007faa;
 $dark-color: rgb(7, 27, 48);
 $grey-color: #dddddd;
+$sky-blue: rgb(1, 164, 228);
 
 $background-color1: white;
 $background-color2: rgb(240, 240, 240);
@@ -90,12 +91,18 @@ fa-icon {
   z-index: -1;
 }
 
-.error-label{
-    width: auto;
-    color: $error-red;
+.error-label {
+  width: auto;
+  color: $error-red;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 [tabindex] {
   outline: none !important;
@@ -106,16 +113,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .modal {
-	animation: fadeIn 0.5s;
-	opacity: 1;
+  animation: fadeIn 0.5s;
+  opacity: 1;
 }
 
 @keyframes fadeIn {
-	from {
-		opacity: 0;
-		top: -10%;
-	}
-	to {
-		opacity: 1;
-	}
+  from {
+    opacity: 0;
+    top: -10%;
+  }
+  to {
+    opacity: 1;
+  }
 }
