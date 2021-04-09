@@ -13,7 +13,11 @@ ENV PYTHONUNBUFFERED 1
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
+ARG PORT
 ARG DEBUG
+ARG SSL_REDIRECT
+ARG CORS_ALLOWED
+ARG ALLOWED_HOSTS
 ARG SECRET_KEY
 ARG DB_ENGINE
 ARG DB_NAME
@@ -35,7 +39,11 @@ ARG GOOGLE_OAUTH2_PRIVATE_KEY
 ARG GOOGLE_ANALYTICS_PRIVATE_KEY
 ARG GOOGLE_ANALYTICS_CLIENT_EMAIL
 
+ENV PORT=${PORT}
 ENV DEBUG=${DEBUG}
+ENV SSL_REDIRECT=${SSL_REDIRECT}
+ENV CORS_ALLOWED=${ALLOWED_HOSTS}
+ENV ALLOWED_HOSTS=${ALLOWED_HOSTS}
 ENV SECRET_KEY=${SECRET_KEY}
 ENV DB_ENGINE=${DB_ENGINE}
 ENV DB_NAME=${DB_NAME}
@@ -76,5 +84,5 @@ RUN pip3 install pipenv && pip3 install -r requirements.txt
 # Install project dependencies
 RUN pipenv install --skip-lock --system --dev
 
-EXPOSE 8000
-CMD python manage.py migrate && uwsgi --socket :8000 --module server.wsgi:application
+EXPOSE ${PORT}
+CMD python manage.py migrate && uwsgi --socket :${PORT} --module server.wsgi:application

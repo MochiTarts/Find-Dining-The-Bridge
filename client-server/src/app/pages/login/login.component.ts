@@ -124,7 +124,7 @@ export class LoginComponent implements OnInit {
               this.authService.googleAuth(user.idToken, user.authToken, this.role).subscribe((data) => {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
                 this.authService.updateLoginStatus(true);
-                this.router.navigate(['']);
+                this.router.navigate(['/articles']);
               }, err => {
                 this.authService.updateLoginStatus(false);
                 // console.log(err);
@@ -135,7 +135,7 @@ export class LoginComponent implements OnInit {
               this.authService.facebookAuth(user.id, user.authToken, this.role).subscribe((data) => {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
                 this.authService.updateLoginStatus(true);
-                this.router.navigate(['']);
+                this.router.navigate(['/articles']);
               }, err => {
                 this.authService.updateLoginStatus(false);
                 // console.log(err);
@@ -182,7 +182,7 @@ export class LoginComponent implements OnInit {
               else
                 this.router.navigate(['/restaurant']);
             } else {
-              this.router.navigate(['/']);
+              this.router.navigate(['/articles']);
             }
 
           },

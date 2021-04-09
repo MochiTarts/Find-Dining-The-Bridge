@@ -67,26 +67,15 @@ class editView(APIView):
     """ Edit user """
 
     def put(self, request):
-        try:
-            body = request.data
-            user = request.user
-            if not user:
-                return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+        body = request.data
+        user = request.user
+        if not user:
+            return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
 
-            for field in body:
-                setattr(user, field, body[field])
-            user.save()
-            return JsonResponse(model_to_dict(user))
-        except ValueError as e:
-            return JsonResponse({'message': str(e)}, status=500)
-        except Exception as e:
-            message = ''
-            try:
-                message = getattr(e, 'message', str(e))
-            except Exception as e:
-                message = getattr(e, 'message', "something went wrong")
-            finally:
-                return JsonResponse({'message': message}, status=500)
+        for field in body:
+            setattr(user, field, body[field])
+        user.save()
+        return JsonResponse(model_to_dict(user))
 
 
 class NearbyRestaurantsView(APIView):
@@ -104,6 +93,7 @@ class NearbyRestaurantsView(APIView):
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
         return JsonResponse(nearest, safe=False)
+
 
 class SDUserPasswordResetView(APIView):
     """ password reset view """
@@ -124,6 +114,7 @@ class SDUserPasswordResetView(APIView):
             return JsonResponse({'message':'Invalid header found.'}, status=400)
 
         return JsonResponse({'message': 'Password reset email has been sent'})
+
 
 class SDUserChangePasswordView(APIView):
     """ password change view """

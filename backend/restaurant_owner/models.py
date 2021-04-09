@@ -32,8 +32,8 @@ class RestaurantOwner(models.Model):
 
     @classmethod
     def signup(cls, restaurant_owner_data:dict):
-        """ Constructs and saves restaurant owner to the database and
-        returns the newly registered restaurant owner object
+        """ Constructs and saves a new RestaurantOwner record to the database and
+        returns the newly made RestaurantOwner object
 
         :param restaurant_owner_data: data of the restaurant owner
         :type restaurant_owner_data: dict
@@ -63,7 +63,7 @@ class RestaurantOwner(models.Model):
 
     @classmethod
     def get_by_user_id(cls, user_id):
-        """ Retrieves a RestaurnatOwner record given 
+        """ Retrieves a RestaurantOwner record given 
         the user_id
 
         :param user_id: id of the sduser
@@ -83,7 +83,8 @@ class RestaurantOwner(models.Model):
 
     @classmethod
     def edit_profile(cls, user_id, user_data):
-        """[summary]
+        """ Updates the fields of a RestaurantOwner record of the user_id
+        Updated fields and values are contained in the user_data dict
 
         :param user_id: id of the sduser
         :type user_id: int
@@ -112,9 +113,8 @@ class RestaurantOwner(models.Model):
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
-        :raises: ValidationError if there are any invalid fields
-        :return: A list of fields that were invalid. Returns None if all fields are valid
-        :rtype: json
+        :raises: ValidationError when there are invalid(s)
+        :return: None
         """
 
         invalid = {'Invalid': []}
@@ -153,6 +153,18 @@ class RestaurantOwner(models.Model):
         verbose_name = 'Restaurant Owner'
 
 def handleConsentStatus(consent_status):
+    """ Creates a dict containing the fields and values
+    related to a user's consent status. Meant to be added
+    to the restaurant_owner_data dict before creating the
+    RestaurantOwner record
+
+    :param consent_status: the consent status value (ie. 'EXPRESSED', 'IMPLIED')
+    :type consent_status: str
+    :return: a dict containing the fields and values depending on the given
+            consent_status
+    :rtype: dict
+    """
+
     profile = {}
     profile["consent_status"] = consent_status
     if consent_status == "EXPRESSED":
