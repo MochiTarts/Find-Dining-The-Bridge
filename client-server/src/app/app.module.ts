@@ -68,7 +68,6 @@ import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-ca
 import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.component';
 import { RequiredStarComponent } from './components/required-star/required-star.component';
 import { SubscriberProfileFormComponent } from './components/subscriber-profile-form/subscriber-profile-form.component';
-import { RestaurantProfileFormComponent } from './components/restaurant-profile-form/restaurant-profile-form.component';
 import { PageErrorComponent } from './components/page-error/page-error.component';
 import { VirtualScrollingComponent } from './components/virtual-scrolling/virtual-scrolling.component';
 import { PostComponent } from './components/post/post.component';
@@ -106,7 +105,6 @@ import { FilterdateCardComponent } from './components/filterdate-card/filterdate
     RequiredStarComponent,
     TermsOfServiceComponent,
     SubscriberProfileFormComponent,
-    RestaurantProfileFormComponent,
     RestaurantPageComponent,
     PageErrorComponent,
     VirtualScrollingComponent,

@@ -142,11 +142,11 @@ export class IvyCarouselComponent implements OnDestroy {
     this.touches.on('mouseup', this.handleTouchend);
     this.touches.on('tap', this.handleTap);
 
-    this.initCarousel();
     this.setDimensions();
+    this.initCarousel();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewChecked() {
     this.carousel.lineUpCells();
   }
 

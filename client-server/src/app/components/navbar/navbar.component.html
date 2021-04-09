@@ -55,7 +55,7 @@
         </li>
 
         <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
-          <a (click)="restaurant()" routerLink="/restaurant" routerLinkActive="active" class="nav-link">
+          <a (click)="restaurant()" routerLink="/restaurant" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
             Restaurant Page
           </a>
         </li>

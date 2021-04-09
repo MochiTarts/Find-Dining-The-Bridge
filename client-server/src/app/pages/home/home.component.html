@@ -1,159 +1,90 @@
 <div class="header-img">
-  <div class="header">
-    Celebrating Amazing People and Food in Scarborough
+  <div class="title absolute-center" tabindex="0">
+    Support <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants
   </div>
+  <div class="header-content description absolute-center" tabindex="0">
+    Celebrating Scarborough's rich cultural diversity through food,
+    we aim to highlight local, independent restaurants from the
+    longstanding neighbourhood favourites, to the new and hidden
+    gems. We will help residents and east end visitors Find Dining
+    and discover the amazing food of Scarborough!
+  </div>
+
+  <div class="input-group absolute-center">
+    <div class="input-group-prepend">
+      <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
+    </div>
+    <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Find</span>
+    </div>
+    <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">
+    <div class="input-group-append">
+      <button class="btn-primary" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
+    </div>
+  </div>
+
+  <button class="btn-primary search-btn absolute-center" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
+
+  <div *ngIf="photoCourtesy" class="header-content photo-courtesy absolute-center">Photo Courtesy of <strong>{{ photoCourtesy }}</strong></div>
 </div>
 
-<button class="scroll-down-btn" (click)="scrollDown()" aria-label="scroll down" >
-  <fa-icon class="header-down-icon icon" [icon]="faArrowCircleDown"></fa-icon>
-</button>
-
-<div id="scroll"></div>
-
-<div class="bg1" style="text-align: center;">
-  <h2 class="heading">Ready to explore?</h2>
-  <br />
-  <button
-    (click)="onLoginRegisterClicked()"
-    class="btn get-started-btn"
-    placement="top"
-    ngbTooltip="Create/Login to An Account"
-    *ngIf="!authService.isLoggedIn()"
-  >
-    LOGIN/SIGNUP
-  </button>
-  <button
-    (click)="browseListings()"
-    class="btn get-started-btn"
-    placement="top"
-    ngbTooltip="Explore Available Restaurants"
-  >
-    GO FIND DINING
-  </button>
-  <button
-    (click)="restaurant()"
-    class="btn get-started-btn"
-    placement="top"
-    ngbTooltip="Explore Available Restaurants"
-    *ngIf="!loggedOut && role == 'RO'"
-  >
-    RESTAURANT PAGE
-  </button>
-</div>
-
-<!-- <div class="row overview-grid" data-aos="fade-right">
-  <div class="col-lg-4 overview-item">
-    <img
-      src="assets/images/undraw_chef.png"
-      class="overview-icons"
-      alt="chef"
-    />
-    <h2>Local Businesses</h2>
-    <p>
-      Support local Scarborough businesses in times of need. Let them tell you
-      their history and story through their foods!
-    </p>
-  </div>
-  <div class="col-lg-4 overview-item">
-    <img
-      src="assets/images/undraw_cooking.png"
-      class="overview-icons"
-      alt="cooking"
-    />
-    <h2>Family Recipes</h2>
-    <p>
-      Learn from professional chefs and their best selling recipes from the
-      comfort of your home!
-    </p>
-  </div>
-  <div class="col-lg-4 overview-item" *ngIf="loggedOut">
-    <img
-      src="assets/images/undraw_shopping.png"
-      class="overview-icons"
-      alt="shopping"
-    />
-    <h2>Order Today</h2>
-    <p>
-      What are you waiting for? Sign up and get your food right to your
-      doorstep!
-    </p>
-    <button
-      (click)="onLoginRegisterClicked()"
-      class="btn signup-btn"
-      placement="top"
-      ngbTooltip="Create An Account"
-      tabindex="0"
-    >
-      Sign Up →
-    </button>
-  </div>
-</div> -->
-
-<carousel [isAnimated]="true" [interval]="5000">
-  <slide>
-    <img
-      src="assets/images/food/dim-sum.jpg"
-      alt="first slide"
-      class="carousel-images"
-    />
-    <div class="carousel-caption d-none d-md-block">
-      <h2>Taste the Streets of China</h2>
-      <p>
-        Enjoy some of the freshest and tastiest Chinese cuisine that Scarborough
-        has to offer
-      </p>
-    </div>
-  </slide>
-  <slide>
-    <img
-      src="assets/images/food/indian.jpg"
-      alt="second slide"
-      class="carousel-images"
-    />
-    <div class="carousel-caption d-none d-md-block">
-      <h2>Taste the Spices of India</h2>
-      <p>
-        Let Scarborough restaurants transport you taste buds to the spice
-        markets of India
-      </p>
-    </div>
-  </slide>
-  <slide>
-    <img
-      src="assets/images/food/vegetarian.jpg"
-      alt="third slide"
-      class="carousel-images"
-    />
-    <div class="carousel-caption d-none d-md-block">
-      <h2>Something for Everyone</h2>
-      <p>
-        Find Dining Scarborough has a wide variety of cuisines to cater for all
-        dietrary restrictions
-      </p>
-    </div>
-  </slide>
-</carousel>
-
-<div class="bg2">
-  <div class="cuisine-carousel" data-aos="fade-right">
-    <h2 class="heading">Specials</h2>
+<div class="local-restaurants">
+  <b>Discover Local Favorites</b>
+  <div class="restaurant-carousel">
     <ivy-carousel
-      *ngIf="dishes.length >= 5"
-      [images]="dishes"
-      [margin]="30"
+      class="arrow-outside-carousel"
+      [images]="restaurants"
+      [margin]="5"
       [arrowsOutside]="arrowsOutside"
       [borderRadius]="20"
-      [cellWidth]="300"
-      [height]="400"
-    >
-    </ivy-carousel>
+      [cellWidth]="200"
+      [height]="150"
+    ></ivy-carousel>
   </div>
 </div>
 
+<div class="bg2" *ngIf="spotlight">
+  <div class="res-spotlight">
+    <div class="title-2" tabindex="0">
+      Restaurant Spotlight
+    </div>
+    <div class="infoCard">
+      <div class="row" id="info-row">
+        <div class="logo col-12 col-md-4" id="info-col1">
+          <img
+            src="{{ spotlight.logo_url }}"
+            alt="logo"
+            class="logo-img"
+          />
+        </div>
+        <div class="col-12 col-md-8" id="info-col2">
+          <p><b>{{ spotlight.name }}</b> | {{ spotlight.cuisines }} | {{ spotlight.years }} year(s) in business</p>
+          <p class="bio">
+            {{ spotlight.bio }}
+            <a [routerLink]="['/restaurant']" [queryParams]="{restaurantId: spotlight._id}" target="_blank">
+              Continue reading
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- part 4 -->
 <div class="box-2">
-  <div class="flex-container">
-    <div class="flex-item" tabindex="0">
-      <app-info-card [imgUrl]="'assets/images/connect.png'" [title]="'CONNECT'"></app-info-card>
+  <div>
+    <div class="title-2" tabindex="0">
+      For Restaurants
+    </div>
+    <div class="subtitle-2" tabindex="0">
+      What does Find Dining Scarborough offer for restaurant owners?
+    </div>
+  </div>
+  <div class="flex-container-2">
+    <div class="flex-item-2" tabindex="0">
+      <app-info-card [imgUrl]="'assets/images/home/connect.png'" [title]="'CONNECT'"></app-info-card>
       <p class="info-description">
         Connect your business with an online
         <strong>community</strong>
@@ -162,16 +93,16 @@
         restaurants
       </p>
     </div>
-    <div class="flex-item" tabindex="0">
-      <app-info-card [imgUrl]="'assets/images/celebrate.png'" [title]="'CELEBRATE'"></app-info-card>
+    <div class="flex-item-2" tabindex="0">
+      <app-info-card [imgUrl]="'assets/images/home/celebrate.png'" [title]="'CELEBRATE'"></app-info-card>
       <p class="info-description">
         Celebrate your unique
         <strong>history</strong> and
         <strong>stories</strong>
       </p>
     </div>
-    <div class="flex-item" tabindex="0">
-      <app-info-card [imgUrl]="'assets/images/promote.png'" [title]="'PROMOTE'"></app-info-card>
+    <div class="flex-item-2" tabindex="0">
+      <app-info-card [imgUrl]="'assets/images/home/promote.png'" [title]="'PROMOTE'"></app-info-card>
       <p class="info-description">
         Promote your restaurant through our
         <strong>FREE</strong> platform
@@ -180,76 +111,28 @@
   </div>
 </div>
 
-<!-- <div class="row overview-grid" data-aos="fade-right">
-  <div class="col-lg-4 overview-item">
-    <img
-      src="assets/images/undraw_book.png"
-      class="overview-icons"
-      alt="chef"
-    />
-    <h2>Learn</h2>
-    <p>
-      Learn the local history and foods, and the adventures of the Scarborough
-      restuarant owners in their lifetime.
-    </p>
-  </div>
+<hr id="get_started">
+<br />
 
-  <div class="col-lg-4 overview-item">
-    <img
-      src="assets/images/undraw_business.png"
-      class="overview-icons"
-      alt="cooking"
-    />
-    <h2>Connect</h2>
-    <p>
-        Become a partner of Find Dining Scarborough to help spread awareness of
-        great cuisines in Scarborough.
-    </p>
+<!-- part 5 -->
+<div class="box-3">
+  <div class="title-2" tabindex="0">
+    How to Get Started
   </div>
-
-  <div class="col-lg-4 overview-item">
-    <img
-      src="assets/images/undraw_search.png"
-      class="overview-icons"
-      alt="shopping"
-    />
-    <h2>Search</h2>
-    <p>
-      Dynamic and easy searching to help you search for desired dishes,
-      cuisines, restaurants, you name it!
-    </p>
+  <div class="flex-container-3">
+    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/signup.png'" [title]="'SIGN UP'"
+      [description]="'Register your restaurant to the Find Dining platform'" tabindex="0"></app-info-card>
+    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/email_update.png'" [title]="'EMAIL UPDATES'"
+      [description]="'Monitor your emails for launch updates'" tabindex="0"></app-info-card>
+    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/complete_profile.png'" [title]="'COMPLETE PROFILE'"
+      [description]="'Complete any outstanding sections within your profile'" tabindex="0"></app-info-card>
+    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/share.png'" [title]="'SHARE'"
+      [description]="'Share your profile with a community of your peers'" tabindex="0"></app-info-card>
   </div>
-</div> -->
-
-<div class="bg2">
-  <div class="cuisine-carousel" data-aos="fade-right">
-    <h2 class="heading">Cuisines</h2>
-    <ivy-carousel
-      class="arrow-outside-carousel"
-      [images]="cuisines"
-      [margin]="20"
-      [arrowsOutside]="arrowsOutside"
-      [borderRadius]="20"
-      [cellWidth]="300"
-    >
-    </ivy-carousel>
-    <ivy-carousel
-      class="arrow-inside-carousel"
-      [images]="cuisines"
-      [margin]="20"
-      [borderRadius]="20"
-      [cellWidth]="'100%'"
-    >
-    </ivy-carousel>
-  </div>
+  <button type="button" class="register-btn" (click)="gotoRegister()">Register Now</button>
 </div>
 
-<button *ngIf="isShow" class="scroll-top-btn" (click)="gotoTop()" aria-label="Go to top" >
-  <fa-icon class="top-icon icon" [icon]="faArrowCircleUp"></fa-icon>
-</button>
-
-<!-- Restaurant Profile Form -->
-<app-restaurant-profile-form #restaurantInfo role="form"></app-restaurant-profile-form>
+<div class="bg2" style="padding: 10px;"></div>
 
 <!-- Subscriber Profile Form -->
 <app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form>
