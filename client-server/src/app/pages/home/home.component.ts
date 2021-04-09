@@ -8,7 +8,6 @@ import 'aos/dist/aos.css';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Title } from '@angular/platform-browser';
@@ -30,8 +29,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   idToken: string = '';
   siteKey: string;
   loggedOut: boolean = true;
-
-  @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
 
   faMapMarkerAlt = faMapMarkerAlt;
 
@@ -83,10 +80,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Add one more '&&' statement to see if profile_id is null
-    if (this.role && this.role == 'BU' && this.profileId == null) {
-      this.userInfo.open(false);
-    }
+
   }
 
   gotoRegister(): void {

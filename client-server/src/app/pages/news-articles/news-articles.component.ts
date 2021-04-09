@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
@@ -7,6 +7,8 @@ import { Title } from '@angular/platform-browser';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
 import { RestaurantService } from 'src/app/_services/restaurant.service';
+import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-news-articles',
@@ -14,6 +16,9 @@ import { RestaurantService } from 'src/app/_services/restaurant.service';
   styleUrls: ['./news-articles.component.scss']
 })
 export class NewsArticlesComponent implements OnInit {
+  role: string = '';
+  profileId: string = '';
+
   /*
   Array containing all viewable articles
   Will not update upon being filtered
@@ -43,13 +48,13 @@ export class NewsArticlesComponent implements OnInit {
   selectedArticle: any = Object;
   totalTabs: any[] = [];
 
+  @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
+
   constructor(
     public articleService: ArticleService,
-    private userService: UserService,
+    private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private titleService: Title,
-    private changeDetection: ChangeDetectorRef,
-    private restaurantsService: RestaurantService,
   ) {
     this.months = [
       "January", "February", "March", "April", "May", "June",
@@ -72,6 +77,12 @@ export class NewsArticlesComponent implements OnInit {
       anchorPlacement: 'top-bottom',
     });
 
+    if (this.authService.isLoggedIn) {
+      const user = this.tokenStorage.getUser();
+      this.role = user.role;
+      this.profileId = user.profile_id;
+    }
+
     this.articleService.getArticles().subscribe((data) => {
       this.allArticles = data.articles;
       this.filteredArticles = data.articles;
@@ -85,6 +96,12 @@ export class NewsArticlesComponent implements OnInit {
       length = Math.ceil(this.filteredArticles.length/10);
       this.totalTabs = Array(length);
     })
+  }
+
+  ngAfterViewInit(): void {
+    if (this.role && this.role == 'BU' && this.profileId == null) {
+      this.userInfo.open(false);
+    }
   }
 
   openArticle(article) {
@@ -161,8 +178,8 @@ export class NewsArticlesComponent implements OnInit {
     var monthList = map.month;
     var yearList = map.year;
 
-    var monthsFilter = [];
-    var yearsFilter = [];
+    this.filterMonthArticles = [];
+    this.filterYearArticles = [];
 
     if (monthList.every(isFalse) && yearList.every(isFalse)) {
       // If every option is unchecked
@@ -171,25 +188,25 @@ export class NewsArticlesComponent implements OnInit {
       // If some option(s) are checked
       for (let article of this.allArticles) {
         if (monthList.every(isFalse)) {
-          monthsFilter = this.allArticles;
+          this.filterMonthArticles = this.allArticles;
         } else {
           var date = new Date(article.modified_at);
           var monthNumber = date.getMonth();
           for (var i = 0; i < this.months.length; i++) {
             if (monthList[i] && i == monthNumber) {
-              monthsFilter.push(article)
+              this.filterMonthArticles.push(article)
             }
           }
         }
 
         if (yearList.every(isFalse)) {
-          yearsFilter = this.allArticles;
+          this.filterYearArticles = this.allArticles;
         } else {
           var date = new Date(article.modified_at);
           var year = date.getFullYear();
           for (var i = 0; i < this.years.length; i++) {
             if (yearList[i] && this.years[i] == year) {
-              yearsFilter.push(article);
+              this.filterYearArticles.push(article);
             }
           }
         }
@@ -197,7 +214,7 @@ export class NewsArticlesComponent implements OnInit {
 
       this.filteredArticles = [];
       for (let article of this.allArticles) {
-        if (monthsFilter.includes(article) && yearsFilter.includes(article)) {
+        if (this.filterMonthArticles.includes(article) && this.filterYearArticles.includes(article)) {
           this.filteredArticles.push(article);
         }
       }
