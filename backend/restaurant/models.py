@@ -211,10 +211,10 @@ class PendingFood(models.Model):
         :type food_data: dict
         :param rest_id: the id of the restaurant the dish belongs to
         :type rest_id: ObjectId str
-        :raises: ObjectDoesNotExist when the PendingDish to be edited does not exist
+        :raises: ObjectDoesNotExist when the PendingFood to be edited does not exist
         :raises: IntegrityError when there are business logic violations
-        :return: updated PendingDish object
-        :rtype: :class: `PendingDish`
+        :return: updated PendingFood object
+        :rtype: :class: `PendingFood`
         """
         dish = PendingFood.objects.filter(_id=dish_id).first()
         if not dish:
@@ -270,9 +270,9 @@ class PendingFood(models.Model):
         :type food_data: dict
         :param rest_id: the id of the associated restaurant
         :type rest_id: ObjectId str
-        :raises ObjectDoesNotExist: when the PendingDish does not exist
+        :raises ObjectDoesNotExist: when the PendingFood does not exist
         :return: the deleted dish record
-        :rtype: :class: `PendingDish`
+        :rtype: :class: `PendingFood`
         """
         food = PendingFood.objects.filter(
             name=food_data["name"],
