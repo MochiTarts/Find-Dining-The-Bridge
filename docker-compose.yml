@@ -4,8 +4,9 @@ services:
   # server-prod:
   #   build:
   #     context: ./backend
-  #     args: 
-  #       - DEBUG=True
+  #     args:
+  #       - PORT=8000
+  #       - DEBUG=False
   #       - SSL_REDIRECT=True
   #       - CORS_ALLOWED=https://142.1.166.180,https://finddining.utsc.utoronto.ca,https://finddining.ca
   #       - ALLOWED_HOSTS=142.1.166.180,finddining.utsc.utoronto.ca,finddining.ca
@@ -20,7 +21,7 @@ services:
   #       - GMAIL_API_REFRESH_TOKEN=${GMAIL_API_REFRESH_TOKEN}
   #       - GOOGLE_OAUTH2_CLIENT_ID=${GOOGLE_OAUTH2_CLIENT_ID}
   #       - GOOGLE_OAUTH2_CLIENT_SECRET=${GOOGLE_OAUTH2_CLIENT_SECRET}
-  #       - VIEW_REDIRECT_URL=${VIEW_REDIRECT_URL}
+  #       - VIEW_REDIRECT_URL=https://finddining.ca
   #       - RECAP_PRIV_KEY=${RECAP_PRIV_KEY}
   #       - RECAP_PUB_KEY=${RECAP_PUB_KEY}
   #       - GEOCODE_API_KEY=${GEOCODE_API_KEY}
@@ -49,7 +50,8 @@ services:
   server-test:
     build:
       context: ./backend
-      args: 
+      args:
+        - PORT=8001
         - DEBUG=True
         - SSL_REDIRECT=True
         - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://test.finddining.ca
@@ -65,7 +67,7 @@ services:
         - GMAIL_API_REFRESH_TOKEN=${GMAIL_API_REFRESH_TOKEN}
         - GOOGLE_OAUTH2_CLIENT_ID=${GOOGLE_OAUTH2_CLIENT_ID}
         - GOOGLE_OAUTH2_CLIENT_SECRET=${GOOGLE_OAUTH2_CLIENT_SECRET}
-        - VIEW_REDIRECT_URL=${VIEW_REDIRECT_URL}
+        - VIEW_REDIRECT_URL=https://test.finddining.ca
         - RECAP_PRIV_KEY=${RECAP_PRIV_KEY}
         - RECAP_PUB_KEY=${RECAP_PUB_KEY}
         - GEOCODE_API_KEY=${GEOCODE_API_KEY}
@@ -94,8 +96,9 @@ services:
   server-uat:
     build:
       context: ./backend
-      args: 
-        - DEBUG=True
+      args:
+        - PORT=8002
+        - DEBUG=False
         - SSL_REDIRECT=True
         - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://uat.finddining.ca
         - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,uat.finddining.ca
@@ -110,7 +113,7 @@ services:
         - GMAIL_API_REFRESH_TOKEN=${GMAIL_API_REFRESH_TOKEN}
         - GOOGLE_OAUTH2_CLIENT_ID=${GOOGLE_OAUTH2_CLIENT_ID}
         - GOOGLE_OAUTH2_CLIENT_SECRET=${GOOGLE_OAUTH2_CLIENT_SECRET}
-        - VIEW_REDIRECT_URL=${VIEW_REDIRECT_URL}
+        - VIEW_REDIRECT_URL=https://uat.finddining.ca
         - RECAP_PRIV_KEY=${RECAP_PRIV_KEY}
         - RECAP_PUB_KEY=${RECAP_PUB_KEY}
         - GEOCODE_API_KEY=${GEOCODE_API_KEY}
