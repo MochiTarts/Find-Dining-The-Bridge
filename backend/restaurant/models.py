@@ -28,6 +28,7 @@ from restaurant.enum import (
     RestaurantSaveLocations,
     FoodSaveLocations
 )
+from .utils import send_posts_notify_email
 from sduser.models import SDUser
 
 import json
@@ -1249,16 +1250,26 @@ class RestaurantPost(models.Model):
         return str(self._id)
 
     @classmethod
-    def insert(cls, post_data: dict):
+    def insert(cls, post_data: dict, request):
         """ Inserts a new post into the database
+        and sends an email to all admins containing
+        the link to the RestaurantPost change_form
+        page on Django admin
 
         :param post_data: data of the post to be inserted
         :type post_data: dict
+        :param request: the request object of the restaurant post
+                        insert endpoint
+        :type request: HttpRequest
         :return: the newly inserted post record
         :rtype: :class: `RestaurantPost`
         """
         post = RestaurantPost(**post_data)
         post = save_and_clean(post)
+
+        rest_id = post_data["restaurant_id"]
+        restaurant_name = PendingRestaurant.objects.filter(_id=rest_id).first().name
+        send_posts_notify_email(post, restaurant_name, request)
         return post
 
     @classmethod
