@@ -76,23 +76,6 @@ export class NewsArticlesComponent implements OnInit {
       this.allArticles = data.articles;
       this.filteredArticles = data.articles;
 
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-      this.filteredArticles.push(this.filteredArticles[0])
-
       for (let i = 0; i < this.allArticles.length; i++) {
         this.filteredArticles[i].type = 'article';
       }
