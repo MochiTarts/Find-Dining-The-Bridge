@@ -57,5 +57,5 @@ jobs:
           echo "$SSL_KEY" > client-server/ssl/server.key
           
           # Build docker files and push to github container
-          docker-compose build server && docker-compose push server
-          docker-compose build client && docker-compose push client
+          docker-compose build server-prod && docker-compose push server-prod
+          docker-compose build client-prod && docker-compose push client-prod
