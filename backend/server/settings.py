@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'article',
     'image',
+    'django.contrib.admindocs',
     
     #'user.apps.SDUserConfig',
 ]

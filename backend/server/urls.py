@@ -55,6 +55,7 @@ urlpatterns = [
     path('owner/', include('restaurant_owner.urls')),
     path('article/', include('article.urls')),
     path('', include('restaurant.urls')),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
 ]
 
 # prefix all URLpatterns with api/ i.e. api/urlpattern
