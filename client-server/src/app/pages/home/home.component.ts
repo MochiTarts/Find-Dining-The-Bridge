@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   OnInit,
-  ViewChild
 } from '@angular/core';
 import 'aos/dist/aos.css';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +11,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Title } from '@angular/platform-browser';
 import { RestaurantService } from '../../_services/restaurant.service';
+import { type } from 'node:os';
 
 @Component({
   selector: 'app-home',

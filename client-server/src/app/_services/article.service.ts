@@ -10,32 +10,16 @@ const ARTICLE_API = AUTH_API + '/article/all/'
 })
 export class ArticleService {
 
-  articleTitle: string = "";
-  articleModifiedDate: string = "";
-  articleContentString: string = "";
-
   constructor(private http: HttpClient) { }
 
-  /*
-  @Input: None
-  @Output: List of article objects available to the user based
-          on their role
-  Retrieves all the viewable articles a user is allowed to see
-  */
+  /**
+   * Retrieves all the viewable articles a user is allowed to see
+   * @returns list of article objects available to the user
+   *  based on their role
+   */
   getArticles(): Observable<any> {
     const endpoint = ARTICLE_API;
     return this.http.get(endpoint);
-  }
-
-  /*
-  @Input: The article to open
-  @Output: None
-  Sets the htmlString to the content of the article to be opened
-  */
-  openArticle(article): void {
-    this.articleTitle = article.title;
-    this.articleModifiedDate = article.modified_at;
-    this.articleContentString = article.content;
   }
 
 }

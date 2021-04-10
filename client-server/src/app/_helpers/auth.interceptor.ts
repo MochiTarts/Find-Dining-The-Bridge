@@ -55,7 +55,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private logout(): void {
     this.tokenStorage.signOut();
-    //window.location.reload();
   }
 
   // add access token to the header

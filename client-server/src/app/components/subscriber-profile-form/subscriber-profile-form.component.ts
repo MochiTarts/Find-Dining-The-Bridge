@@ -106,7 +106,6 @@ export class SubscriberProfileFormComponent implements OnInit {
 
   updateProfile(): void {
     var subscriberInfo = {
-      user_id: this.userId,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
       last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,

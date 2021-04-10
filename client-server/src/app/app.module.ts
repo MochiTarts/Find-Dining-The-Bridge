@@ -75,7 +75,6 @@ import { PartnerCardComponent } from './components/partner-card/partner-card.com
 import { MultiselectCheckboxDropdownComponent } from './components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component';
 import { PasswordChangeFormComponent } from './components/password-change-form/password-change-form.component';
 import { InfoCardComponent } from './components/info-card/info-card.component';
-import { ArticleLatestCardComponent } from './components/article-latest-card/article-latest-card.component';
 import { ArticleCommonCardComponent } from './components/article-common-card/article-common-card.component';
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
@@ -122,7 +121,6 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     AccountSettingComponent,
     InfoCardComponent,
     NewsArticlesComponent,
-    ArticleLatestCardComponent,
     ArticleCommonCardComponent,
     FilterdateCardComponent,
     PrivacyPolicyComponent,
