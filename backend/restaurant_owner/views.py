@@ -19,6 +19,7 @@ from restaurant.models import PendingRestaurant
 from bson import ObjectId
 import json
 
+# jsonschema validation schemas for request bodies
 restaurant_owner_signup_schema = {
     "properties": {
         "restaurant_id": {"type": "string"},

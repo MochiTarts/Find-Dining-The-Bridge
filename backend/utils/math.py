@@ -42,9 +42,9 @@ def get_nearby_restaurants(user_id, role):
     :param role: the sduser's role (BU or RO)
     :type role: str
     :raises ObjectDoesNotExist: if the Subscriber or PendingRestaurnat associated
-                            with the given user_id does not exist
+        with the given user_id does not exist
     :return: list of dict objects, each one containing the restaurant's id
-            and distance from the sduser, in ascending order
+        and distance from the sduser, in ascending order
     :rtype: list of dict
     """
     user = None

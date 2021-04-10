@@ -23,7 +23,17 @@ VIDEO = 'video/mp4'
 
 
 def upload(file, bucket_path, content_type=None):
-    """ Uploads a file to the bucket path. """
+    """ Uploads a file to the bucket path
+
+    :param file: the file to be uploaded
+    :type file: FILE
+    :param bucket_path: the google cloud bucket to upload the file to
+    :type bucket_path: str
+    :param content_type: the type of media this file is (IMAGE or VIDEO)
+    :type content_type: str
+    :return: the url to the uploaded image
+    :rtype: str
+    """
     #if settings.ENVIRONMENT == 'prod':
     #    bucket_path = PRODUCTION_BUCKET  # Use production bucket if in production mode
     bucket = client.bucket(bucket_path)
@@ -37,14 +47,24 @@ def upload(file, bucket_path, content_type=None):
 
 
 def generate_name():
-    """Generate a randomized filename"""
+    """ Generate a randomized filename
+    for image files
+
+    :return: the generated filename
+    :rtype: str
+    """
     letters = string.ascii_lowercase
     name = 'FILE-' + (''.join(random.choice(letters) for i in range(10))) + '-' + \
            str(datetime.datetime.now()) + '.png'
     return name
 
 def generate_video_name():
-    """Generate a randomized filename"""
+    """ Generate a randomized filename
+    for video files
+
+    :return: the generated filename
+    :rtype: str
+    """
     letters = string.ascii_lowercase
     name = 'FILE-' + (''.join(random.choice(letters) for i in range(10))) + '-' + \
            str(datetime.datetime.now()) + '.mp4'
@@ -52,8 +72,10 @@ def generate_video_name():
 
 
 def delete(file_path):
-    """
-    delete object from bucket if it is not a default
+    """ delete object from bucket if it is not a default
+
+    :param file_path: the url to the file in google cloud bucket
+    :type: str
     """
 
     if 'default-assets' in file_path:
