@@ -34,8 +34,6 @@ if DEBUG:
     VIEW_REDIRECT_URL = 'http://localhost:4200'
 
 
-ALLOWED_HOSTS = ["uat.finddining.ca"]
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -194,6 +192,10 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = os.environ.get('SSL_REDIRECT') == 'True'
 
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
+
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED').split(',')
+
 CORS_ALLOW_METHODS = (
 'GET',
 'POST',
@@ -202,12 +204,6 @@ CORS_ALLOW_METHODS = (
 'DELETE',
 'OPTIONS'
  )
-
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:4200",
-    "http://127.0.0.1:4200",
-    "https://jsonip.com",
-]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",

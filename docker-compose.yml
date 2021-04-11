@@ -8,7 +8,7 @@ services:
   #       - PORT=8000
   #       - DEBUG=False
   #       - SSL_REDIRECT=True
-  #       - CORS_ALLOWED=https://142.1.166.180,https://finddining.utsc.utoronto.ca,https://finddining.ca
+  #       - CORS_ALLOWED=https://142.1.166.180,https://finddining.utsc.utoronto.ca,https://finddining.ca,https://jsonip.com
   #       - ALLOWED_HOSTS=142.1.166.180,finddining.utsc.utoronto.ca,finddining.ca
   #       - SECRET_KEY=${SECRET_KEY}
   #       - DB_ENGINE=${DB_ENGINE}
@@ -54,7 +54,7 @@ services:
         - PORT=8001
         - DEBUG=True
         - SSL_REDIRECT=True
-        - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://test.finddining.ca
+        - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://test.finddining.ca,https://jsonip.com
         - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,test.finddining.ca
         - SECRET_KEY=${SECRET_KEY}
         - DB_ENGINE=${DB_ENGINE}
@@ -100,7 +100,7 @@ services:
         - PORT=8002
         - DEBUG=False
         - SSL_REDIRECT=True
-        - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://uat.finddining.ca
+        - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://uat.finddining.ca,https://jsonip.com
         - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,uat.finddining.ca
         - SECRET_KEY=${SECRET_KEY}
         - DB_ENGINE=${DB_ENGINE}
