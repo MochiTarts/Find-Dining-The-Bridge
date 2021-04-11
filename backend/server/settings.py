@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'article',
     'image',
     'django.contrib.admindocs',
+    'drf_yasg',
     
     #'user.apps.SDUserConfig',
 ]
@@ -178,11 +179,16 @@ REST_FRAMEWORK = {
         'anon': '100/hour',
         'user': '100/hour'
     },
-    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler'
+    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema'
 }
 # doesn't work right now because Djongo can't translate aggregation functions in sql
 
-
+SWAGGER_SETTINGS = {
+    'SUPPORTED_SUBMIT_METHODS': [],
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': None,
+}
 
 '''
 JWT_AUTH = {

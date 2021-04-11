@@ -31,6 +31,12 @@ from bson import ObjectId
 import ast
 import json
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from rest_framework.decorators import parser_classes
+from restaurant import swagger
+
 # jsonschema validation schemas for request bodies
 food_insert_schema = {
     "properties": {
@@ -111,14 +117,13 @@ restaurant_insert_for_approval_schema = {
         "full_menu_url": {"type": "string"},
         "restaurant_video_desc": {"type": "string"}
     },
-    "required": ["name", "years", "address", "postalCode", "phone", "pricepoint", "offer_options",
+    "required": ["name", "years", "address", "postalCode", "phone", "email", "pricepoint", "offer_options",
                  "bio", "owner_first_name", "owner_last_name", "open_hours", "payment_methods"],
     "additionalProperties": False
 }
 
 restaurant_insert_draft_schema = {
     "properties": {
-        "restaurant_id": {"type": "string"},
         "name": {"type": "string"},
         "years": {"type": "number"},
         "address": {"type": "string"},
@@ -161,7 +166,7 @@ restaurant_insert_draft_schema = {
         "full_menu_url": {"type": "string"},
         "restaurant_video_desc": {"type": "string"}
     },
-    "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
+    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
 }
 
@@ -209,7 +214,7 @@ restaurant_edit_draft_schema = {
         "full_menu_url": {"type": "string"},
         "restaurant_video_desc": {"type": "string"}
     },
-    "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
+    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
 }
 
@@ -233,6 +238,7 @@ class DishList(APIView):
     """ dish list """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.dish_all_response)
     def get(self, request):
         """ Retrieve all dishes from the database """
         foods = Food.objects.all()
@@ -244,8 +250,9 @@ class DishRestaurantView(APIView):
     """ dish restaurant view """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.dish_approved_rest_id_response)
     def get(self, request, rest_id):
-        """ Retrieve all dishes from a restaurant """
+        """ Retrieve all approved dishes from a restaurant """
         dishes = Food.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
@@ -256,8 +263,9 @@ class PendingDishView(APIView):
     #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
+    @swagger_auto_schema(responses=swagger.dish_pending_get_response)
     def get(self, request):
-        """Retrieve all dishes from a restaurant"""
+        """ Retrieve all dishes from a restaurant """
         user = request.user
         if not user:
             raise PermissionDenied(
@@ -277,6 +285,8 @@ class PendingDishView(APIView):
         response = {'Dishes': models_to_json(dishes)}
         return JsonResponse(response)
 
+    @swagger_auto_schema(request_body=swagger.PendingFoodInsertUpdate,
+        responses=swagger.dish_pending_post_response)
     def post(self, request):
         """ Insert dish into database """
         user = request.user
@@ -302,6 +312,12 @@ class PendingDishView(APIView):
         food = PendingFood.add_dish(body, rest_id)
         return JsonResponse(model_to_json(food))
 
+
+class PendingDishModifyDeleteView(APIView):
+    """ PendingDish view for updating or deleting """
+
+    @swagger_auto_schema(request_body=swagger.PendingFoodInsertUpdate,
+        responses=swagger.dish_pending_dish_id_put_response)
     def put(self, request, dish_id):
         """ Update Dish data """
         user = request.user
@@ -328,6 +344,8 @@ class PendingDishView(APIView):
         dish = PendingFood.edit_dish(dish_id, body, rest_id)
         return JsonResponse(model_to_json(dish))
 
+    @swagger_auto_schema(request_body=swagger.PendingFoodDelete,
+        responses=swagger.dish_pending_dish_id_delete_response)
     def delete(self, request):
         """ Deletes dish from database """
         user = request.user
@@ -377,8 +395,9 @@ def category_exists(restaurant_id, category):
 class UserFavView(APIView):
     """ user fav view """
     #permission_classes = (AllowAny,)
-    #permission_classes = [ROPermission]
 
+    @swagger_auto_schema(request_body=swagger.UserFavRest,
+        responses=swagger.user_favourite_post_response)
     def post(self, request):
         """ Add a new user-restaurant-favourite relation """
         user = request.user
@@ -396,6 +415,7 @@ class UserFavView(APIView):
         response = UserFavRestrs.insert(user_id, rest_id)
         return JsonResponse(response, safe=False)
 
+    @swagger_auto_schema(responses=swagger.user_favourite_get_response)
     def get(self, request):
         """ Get all restaurants favourited by a user """
         user = request.user
@@ -413,6 +433,8 @@ class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
     #permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(
+        responses=swagger.restaurant_rest_id_favourited_users_get_response)
     def get(self, request, rest_id):
         """ Get all users who favourited the requested restaurant """
         response = UserFavRestrs.getRestrFavouriteds(rest_id)
@@ -423,6 +445,8 @@ class FavRelationView(APIView):
     """ remove fav relation view """
     #permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(
+        responses=swagger.user_favourited_rest_id_delete_response)
     def delete(self, request, rest_id):
         """ Remove a new user-restaurant-favourite relation """
         user = request.user
@@ -442,6 +466,8 @@ class RestaurantView(APIView):
     """ get restaurant view """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(
+        responses=swagger.restaurant_approved_rest_id_get_response)
     def get(self, request, rest_id):
         """ Retrieve approved restaurant by id """
         restaurant = Restaurant.get(rest_id)
@@ -461,6 +487,7 @@ class PendingRestaurantView(APIView):
     """ pending restaurant view """
     permission_classes = [ROPermission]
 
+    @swagger_auto_schema(responses=swagger.restaurant_pending_get_response)
     def get(self, request):
         """ Retrieve restaurant from pending collection by the owner's user_id """
         user = request.user
@@ -474,7 +501,7 @@ class PendingRestaurantView(APIView):
             owner_user_id=user_id).first()
         if not restaurant:
             raise ObjectDoesNotExist(
-                'No pending restaurant found with owner user id of this: ' + _id)
+                'No pending restaurant found with owner user id: ' + user_id)
 
         restaurant_image_url = ast.literal_eval(
             restaurant.restaurant_image_url)
@@ -492,8 +519,9 @@ class AllRestaurantList(APIView):
     """ all restaurants list """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.restaurant_all_get_response)
     def get(self, request):
-        """Retrieve all restaurants"""
+        """ Retrieve all approved restaurants """
         restaurants = models_to_json(list(Restaurant.objects.all()))
         for restaurant in restaurants:
             restaurant['restaurant_image_url'] = ast.literal_eval(
@@ -511,6 +539,8 @@ class RestaurantDraftView(APIView):
     #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
+    @swagger_auto_schema(request_body=swagger.PendingRestaurantDraftInsertUpdate,
+        responses=swagger.restaurant_draft_post_response)
     def post(self, request):
         """ Insert new restaurant as a draft into database """
         user = request.user
@@ -526,6 +556,8 @@ class RestaurantDraftView(APIView):
         restaurant = PendingRestaurant.insert(body)
         return JsonResponse(model_to_json(restaurant))
 
+    @swagger_auto_schema(request_body=swagger.PendingRestaurantDraftInsertUpdate,
+        responses=swagger.restaurant_draft_put_response)
     def put(self, request):
         """ Edit a restaurant profile and save it as a draft in the database """
         user = request.user
@@ -548,6 +580,8 @@ class RestaurantForApprovalView(APIView):
     #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
+    @swagger_auto_schema(request_body=swagger.PendingRestaurantSubmit,
+        responses=swagger.restaurant_submit_put_response)
     def put(self, request):
         """ Insert or update a restaurant record for admin approval """
         user = request.user
@@ -623,6 +657,8 @@ class PostView(APIView):
     #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
+    @swagger_auto_schema(request_body=swagger.RestaurantPostInsert,
+        responses=swagger.restaurant_post_post_response)
     def post(self, request):
         """ Insert a new post for a restaurant """
         user = request.user
@@ -640,8 +676,9 @@ class PostView(APIView):
         post = RestaurantPost.insert(body, request)
         return JsonResponse(model_to_json(post))
 
+    @swagger_auto_schema(responses=swagger.restaurant_post_get_response)
     def get(self, request):
-        """ Get all posts for a restaurant """
+        """ Get all posts for a restaurant (for ROs) """
         user = request.user
         if not user:
             raise PermissionDenied(
@@ -651,6 +688,12 @@ class PostView(APIView):
         posts = RestaurantPost.get_by_user_id(user_id)
         return JsonResponse(posts)
 
+
+class PostDeleteView(APIView):
+    """ Restaurant post delete view """
+
+    @swagger_auto_schema(
+        responses=swagger.restaurant_post_post_id_delete_response)
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
         user = request.user
@@ -666,8 +709,10 @@ class PublicPostView(APIView):
     """ Restaurant posts view for all viewers """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.restaurant_post_get_response)
     def get(self, request, rest_id):
-        """ Get all posts for a restaurant """
+        """ Get all posts for a restaurant given
+        restaurant id (for all users) """
         posts = RestaurantPost.get_by_rest_id(rest_id)
         return JsonResponse(posts)
 
@@ -676,7 +721,10 @@ class RestaurantMediaView(APIView):
     """ Restaurant media (image/video) view """
     #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
+    parser_classes = (MultiPartParser,)
 
+    @swagger_auto_schema(manual_parameters=swagger.restaurant_media_put_request,
+        responses=swagger.restaurant_media_put_response)
     def put(self, request):
         """ For inserting or updating restaurant media """
         user = request.user
@@ -700,6 +748,8 @@ class RestaurantMediaView(APIView):
             restaurant, request.data, request.FILES)
         return JsonResponse(model_to_json(restaurant))
 
+    @swagger_auto_schema(manual_parameters=swagger.restaurant_media_delete_request,
+        responses=swagger.restaurant_media_delete_response)
     def delete(self, request):
         """ For removing image(s) from the restaurant_image_url field
         and Google Cloud bucket """
@@ -728,7 +778,10 @@ class DishMediaView(APIView):
     """ Dish media (image) view """
     #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
+    parser_classes = (MultiPartParser,)
 
+    @swagger_auto_schema(manual_parameters=swagger.dish_media_put_request,
+        responses=swagger.dish_media_put_response)
     def put(self, request, dish_id):
         """ For inserting or updating restaurant media """
         user = request.user

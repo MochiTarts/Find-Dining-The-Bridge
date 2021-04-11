@@ -20,6 +20,10 @@ from sduser.forms import SDPasswordChangeForm
 import json
 import ast
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from sduser import swagger
+
 User = get_user_model()
 
 
@@ -45,7 +49,8 @@ class DeactivateView(APIView):
         current_user = request.user
 
         if not current_user:
-            return JsonResponse({'message': 'fail to obtain user', 'code': 'deactivation_fail'}, status=405)
+            raise PermissionDenied(
+                message="Failed to obtain user", code="deactivation_fail")
 
         if current_user.id is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
@@ -70,7 +75,8 @@ class editView(APIView):
         body = request.data
         user = request.user
         if not user:
-            return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            raise PermissionDenied(
+                message="Failed to obtain user", code="fail_obtain_user")
 
         for field in body:
             setattr(user, field, body[field])
@@ -82,6 +88,7 @@ class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.user_nearby_get_response)
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
         user = request.user
@@ -92,6 +99,7 @@ class NearbyRestaurantsView(APIView):
         user_id = user.id
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
+
         return JsonResponse(nearest, safe=False)
 
 

@@ -961,8 +961,8 @@ class PendingRestaurant(models.Model):
         :param restaurant: the PendingRestaurant object to be updated
         :type restaurant: :class: `PendingRestaurant`
         :param form_data: the form containing fields that specify the file,
-                        the file type, and whether this PendingRestaurant is just
-                        created or is being edited
+            the file type, and whether this PendingRestaurant is just created
+            or is being edited
         :type form_data: QueryDict
         :param form_file: the file(s) to be uploaded
         :type form_file: File or Array of Files
@@ -1199,7 +1199,7 @@ class UserFavRestrs(models.Model):
         :type rest_id: ObjectId string
         :raises: ObjectDoesNotExist if the user does not exist or the
             user-restaurant favourite relation does not exist
-        :return: Message with success or raise IntegrityError upon exceptions
+        :return: Message with success or raise ObjectDoesNotExist
         :rtype: json object
         """
         user_filter = User.objects.filter(id=user_id)

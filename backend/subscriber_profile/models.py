@@ -133,8 +133,8 @@ class SubscriberProfile(models.Model):
 def handleConsentStatus(consent_status):
     """ Creates a dict containing the fields and values
     related to a user's consent status. Meant to be added
-    to the restaurant_owner_data dict before creating the
-    RestaurantOwner record
+    to the subscriber_data dict before creating the
+    SubscriberProfile record
 
     :param consent_status: the consent status value (ie. 'EXPRESSED', 'IMPLIED')
     :type consent_status: str

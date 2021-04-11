@@ -13,14 +13,18 @@ from jsonschema import validate
 
 from article.enum import Visibility
 from article.models import Article
+from article import swagger
 
 from utils.model_util import models_to_json,model_to_json
 import json
+
+from drf_yasg.utils import swagger_auto_schema
 
 class ArticleList(APIView):
     """ article list """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.article_all_response)
     def get(self, request):
         """ Retrieve all intend-for-publish articles from the database (restricted by user's visibility) """
         user = request.user
@@ -38,6 +42,7 @@ class ArticleView(APIView):
     """ article view """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.article_id_response)
     def get(self, request, id):
         """ Retrieve an article given id (restricted by user's visibility) """
         user = request.user
