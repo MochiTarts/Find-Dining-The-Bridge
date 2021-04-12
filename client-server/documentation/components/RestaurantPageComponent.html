@@ -3168,7 +3168,7 @@ export class RestaurantPageComponent implements OnInit {
 
   newFile: boolean &#x3D; false;
 
-  videoId:string &#x3D; &#x27;&#x27;;
+  videoId: string &#x3D; &#x27;&#x27;;
   validator: formValidator &#x3D; new linkValidator();
   draftValidator: formValidator &#x3D; new draftValidator();
   apiLoaded &#x3D; false;
@@ -3210,10 +3210,10 @@ export class RestaurantPageComponent implements OnInit {
     this.titleService.setTitle(&quot;Restaurant Page | Find Dining Scarborough&quot;);
 
     this.pricepoints &#x3D; [
-      {key: &quot;$&quot;, value: &quot;LOW&quot;},
-      {key: &quot;$$&quot;, value: &quot;MID&quot;},
-      {key: &quot;$$$&quot;, value: &quot;HIGH&quot;},
-      {key: &quot;$$$$&quot;, value: &quot;EXHIGH&quot;}
+      { key: &quot;$&quot;, value: &quot;LOW&quot; },
+      { key: &quot;$$&quot;, value: &quot;MID&quot; },
+      { key: &quot;$$$&quot;, value: &quot;HIGH&quot; },
+      { key: &quot;$$$$&quot;, value: &quot;EXHIGH&quot; }
     ]
 
     if (this.authService.isLoggedIn) {
@@ -3222,10 +3222,10 @@ export class RestaurantPageComponent implements OnInit {
       this.email &#x3D; user.email;
       this.userId &#x3D; user.user_id;
       this.profileId &#x3D; user.profile_id;
-    }
 
-    if (this.userId !&#x3D; null &amp;&amp; (this.role &#x3D;&#x3D; &#x27;BU&#x27; || this.role &#x3D;&#x3D; &#x27;RO&#x27;)) {
-      this.getNearbyRestaurants();
+      if (this.userId !&#x3D; null &amp;&amp; (this.role &#x3D;&#x3D; &#x27;BU&#x27; || this.role &#x3D;&#x3D; &#x27;RO&#x27;)) {
+        this.getNearbyRestaurants();
+      }
     }
 
     this.restaurantId &#x3D; this.route.snapshot.queryParams.restaurantId;
@@ -3245,7 +3245,7 @@ export class RestaurantPageComponent implements OnInit {
 
       // displayed phone
       var phone: string &#x3D; String(this.restaurantDetails.phone);
-      this.displayed_phone &#x3D; phone !&#x3D; &#x27;null&#x27; ? &quot;(&quot; + phone.slice(0,3) + &quot;) &quot; + phone.slice(3,6) + &quot; &quot; + phone.slice(6,10) : &#x27;&#x27;;
+      this.displayed_phone &#x3D; phone !&#x3D; &#x27;null&#x27; ? &quot;(&quot; + phone.slice(0, 3) + &quot;) &quot; + phone.slice(3, 6) + &quot; &quot; + phone.slice(6, 10) : &#x27;&#x27;;
 
       // pricepoint
       let price &#x3D; String(this.restaurantDetails.pricepoint);
@@ -3268,7 +3268,7 @@ export class RestaurantPageComponent implements OnInit {
           this.serviceCount +&#x3D; 1;
         } else {
           this.serviceList &#x3D; this.serviceList + &quot; | &quot; + String(service);
-          if(this.serviceCount &lt; 4) {
+          if (this.serviceCount &lt; 4) {
             this.firstFourServices &#x3D; this.serviceList;
           }
           this.serviceCount +&#x3D; 1;
@@ -3293,7 +3293,7 @@ export class RestaurantPageComponent implements OnInit {
       });
 
       for (let url of this.restaurantDetails.restaurant_image_url) {
-        this.slides.push({url: url.replace(&#x27; &#x27;, &#x27;%20&#x27;)});
+        this.slides.push({ url: url.replace(&#x27; &#x27;, &#x27;%20&#x27;) });
       }
 
       this.videoId &#x3D; this.getVideoId(this.restaurantDetails.restaurant_video_url);
@@ -3436,7 +3436,7 @@ export class RestaurantPageComponent implements OnInit {
     const formData &#x3D; new FormData();
     formData.append(&#x27;media_type&#x27;, &#x27;VIDEO&#x27;);
     formData.append(&#x27;save_location&#x27;, &#x27;restaurant_video_url&#x27;);
-    formData.append(&#x27;first_time_submission&#x27;, &#x27;False&#x27;);
+    formData.append(&#x27;submit_for_approval&#x27;, &#x27;False&#x27;);
 
     let info &#x3D; {
       restaurant_video_desc: (&lt;HTMLInputElement&gt;document.getElementById(&#x27;video_desc&#x27;)).value,
@@ -3516,7 +3516,7 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   getVideoId(link: string) {
-    return (getVideoId(link) as {id, service}).id;
+    return (getVideoId(link) as { id, service }).id;
   }
 
   deleteImage(imgUrl: string) {

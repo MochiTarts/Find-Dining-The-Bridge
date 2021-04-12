@@ -185,6 +185,9 @@
                                 <a href="#accountSetting">accountSetting</a>
                             </li>
                             <li>
+                                <a href="#article">article</a>
+                            </li>
+                            <li>
                                 <a href="#browse">browse</a>
                             </li>
                             <li>
@@ -387,6 +390,45 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="article"></a>
+                    <span class="name">
+                        <b>
+                            article
+                        </b>
+                        <a href="#article"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>article()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="121"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:121</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="browse"></a>
                     <span class="name">
                         <b>
@@ -483,8 +525,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="129"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:129</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="133"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:133</a></div>
                 </td>
             </tr>
 
@@ -561,8 +603,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="142"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:142</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="146"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:146</a></div>
                 </td>
             </tr>
 
@@ -678,8 +720,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="134"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:134</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="138"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:138</a></div>
                 </td>
             </tr>
 
@@ -717,8 +759,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="125"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:125</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:129</a></div>
                 </td>
             </tr>
 
@@ -939,8 +981,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="121"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:121</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="125"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:125</a></div>
                 </td>
             </tr>
 
@@ -1444,6 +1486,10 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  article() {
+    this.router.navigate([&#x27;/articles&#x27;]);
+  }
+
   restaurantSetup() {
     this.router.navigate([&#x27;/restaurant-setup&#x27;])
   }
@@ -1528,10 +1574,23 @@ export class NavbarComponent implements OnInit {
           &lt;/div&gt;
         &lt;/li&gt;
 
-        &lt;li class&#x3D;&quot;nav-item&quot; *ngIf&#x3D;&quot;authService.isLoggedIn() &amp;&amp; tokenStorageService.RO&quot; data-toggle&#x3D;&quot;collapse&quot; data-target&#x3D;&quot;.navbar-collapse.show&quot; tabindex&#x3D;&quot;0&quot;&gt;
-          &lt;a (click)&#x3D;&quot;accountSetting()&quot; routerLink&#x3D;&quot;/account-setting&quot; routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link&quot;&gt;
-            Account Settings
-          &lt;/a&gt;
+        &lt;li class&#x3D;&quot;nav-item&quot; *ngIf&#x3D;&quot;authService.isLoggedIn() &amp;&amp; tokenStorageService.RO&quot;&gt;
+          &lt;div ngbDropdown class&#x3D;&quot;d-inline-block&quot;&gt;
+            &lt;button class&#x3D;&quot;btn dropdown nav-link&quot; id&#x3D;&quot;dropdownBasic1&quot; ngbDropdownToggle tabindex&#x3D;&quot;0&quot;&gt;
+              User Info
+            &lt;/button&gt;
+            &lt;div ngbDropdownMenu aria-labelledby&#x3D;&quot;dropdownProfile&quot;&gt;
+              &lt;button ngbDropdownItem (click)&#x3D;&quot;favourites()&quot; tabindex&#x3D;&quot;0&quot;&gt;
+                Favourites
+              &lt;/button&gt;
+              &lt;button ngbDropdownItem (click)&#x3D;&quot;accountSetting()&quot; tabindex&#x3D;&quot;0&quot;&gt;
+                Account Settings
+              &lt;/button&gt;
+              &lt;button ngbDropdownItem (click)&#x3D;&quot;newsletter()&quot; tabindex&#x3D;&quot;0&quot;&gt;
+                Notifications
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
         &lt;/li&gt;
 
         &lt;li class&#x3D;&quot;nav-item&quot; *ngIf&#x3D;&quot;authService.isLoggedIn() &amp;&amp; tokenStorageService.RO&quot; data-toggle&#x3D;&quot;collapse&quot; data-target&#x3D;&quot;.navbar-collapse.show&quot; tabindex&#x3D;&quot;0&quot;&gt;
@@ -1540,24 +1599,17 @@ export class NavbarComponent implements OnInit {
           &lt;/a&gt;
         &lt;/li&gt;
 
-        &lt;!-- li class&#x3D;&quot;nav-item&quot; *ngIf&#x3D;&quot;authService.isLoggedIn() &amp;&amp; !tokenStorageService.RO&quot;&gt;
-          &lt;div ngbDropdown class&#x3D;&quot;d-inline-block&quot;&gt;
-            &lt;button class&#x3D;&quot;btn dropdown nav-link&quot; id&#x3D;&quot;dropdownBasic1&quot; ngbDropdownToggle&gt;
-              Go Find Dining
-            &lt;/button&gt;
-            &lt;div ngbDropdownMenu aria-labelledby&#x3D;&quot;dropdownBrowse&quot;&gt;
-              &lt;button ngbDropdownItem (click)&#x3D;&quot;browse()&quot;&gt;
-                Restaurants
-              &lt;/button&gt;
-              &lt;button ngbDropdownItem (click)&#x3D;&quot;timeline()&quot;&gt;
-                Timeline
-              &lt;/button&gt;
-              &lt;button ngbDropdownItem (click)&#x3D;&quot;owners()&quot;&gt;
-                Owner Stories
-              &lt;/button&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/li&gt; --&gt;
+        &lt;li class&#x3D;&quot;nav-item&quot; data-toggle&#x3D;&quot;collapse&quot; data-target&#x3D;&quot;.navbar-collapse.show&quot; tabindex&#x3D;&quot;0&quot;  (keyup.enter)&#x3D;&quot;browse()&quot;&gt;
+          &lt;a routerLink&#x3D;&quot;/all-listings&quot; routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link&quot; (click)&#x3D;&quot;browse()&quot;&gt;
+            Go Find Dining
+          &lt;/a&gt;
+        &lt;/li&gt;
+
+        &lt;!--&lt;li class&#x3D;&quot;nav-item&quot; *ngIf&#x3D;&quot;authService.isLoggedIn() &amp;&amp; tokenStorageService.RO&quot; data-toggle&#x3D;&quot;collapse&quot; data-target&#x3D;&quot;.navbar-collapse.show&quot; tabindex&#x3D;&quot;0&quot;&gt;
+          &lt;a (click)&#x3D;&quot;accountSetting()&quot; routerLink&#x3D;&quot;/account-setting&quot; routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link&quot;&gt;
+            Account Settings
+          &lt;/a&gt;
+        &lt;/li&gt;
 
         &lt;li class&#x3D;&quot;nav-item&quot; data-toggle&#x3D;&quot;collapse&quot; data-target&#x3D;&quot;.navbar-collapse.show&quot; tabindex&#x3D;&quot;0&quot;  (keyup.enter)&#x3D;&quot;browse()&quot;&gt;
           &lt;a routerLink&#x3D;&quot;/all-listings&quot; routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link&quot; (click)&#x3D;&quot;browse()&quot;&gt;
@@ -1568,17 +1620,13 @@ export class NavbarComponent implements OnInit {
           &lt;a routerLink&#x3D;&quot;/favourites&quot; routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link&quot; (click)&#x3D;&quot;favourites()&quot;&gt;
             Favourites
           &lt;/a&gt;
-        &lt;/li&gt;
-        &lt;!-- &lt;li class&#x3D;&quot;nav-item nav-link&quot; *ngIf&#x3D;&quot;authService.isLoggedIn() || tokenStorageService.RO&quot;&gt;
-          &lt;a routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link&quot; (click)&#x3D;&quot;timeline()&quot;&gt;
-            Timeline
+        &lt;/li&gt;--&gt;
+
+        &lt;li class&#x3D;&quot;nav-item&quot; data-toggle&#x3D;&quot;collapse&quot; data-target&#x3D;&quot;.navbar-collapse.show&quot; tabindex&#x3D;&quot;0&quot;&gt;
+          &lt;a (click)&#x3D;&quot;article()&quot; class&#x3D;&quot;nav-link&quot;&gt;
+            Articles
           &lt;/a&gt;
         &lt;/li&gt;
-        &lt;li class&#x3D;&quot;nav-item nav-link&quot; *ngIf&#x3D;&quot;authService.isLoggedIn()&quot;&gt;
-          &lt;a routerLinkActive&#x3D;&quot;active&quot; class&#x3D;&quot;nav-link&quot; (click)&#x3D;&quot;owners()&quot;&gt;
-            Owner Stories
-          &lt;/a&gt;
-        &lt;/li&gt; --&gt;
 
         &lt;li *ngIf&#x3D;&quot;!tokenStorageService.RO &amp;&amp; authService.isLoggedIn()&quot; class&#x3D;&quot;nav-item&quot;&gt;
           &lt;p class&#x3D;&quot;nav-link address nav-link&quot; *ngIf&#x3D;&quot;this.userAddress&quot; tabindex&#x3D;&quot;0&quot;&gt;
@@ -1814,7 +1862,7 @@ br {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><nav class="navbar navbar-expand-lg" role="navigation">    <img src="assets/images/find_dining_logo.png" class="logo" (click)="home()" alt="Find Dining logo, click to go to home page" />    <p class="word" (click)="home()">      <span class="find">FIND </span>      <span class="dining">DINING </span> <br />      <span class="scarborough">SCARBOROUGH</span>    </p>    <button      class="navbar-toggler"      type="button"      data-toggle="collapse"      data-target="#navbarNav"      aria-controls="navbarNav"      aria-expanded="false"      aria-label="Toggle navigation"    >      <span class="navbar-toggler-icon"></span>    </button>    <div class="collapse navbar-collapse" id="navbarNav">      <ul class="navbar-nav ml-auto" >        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" (keyup.enter)="home()" tabindex="0">          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="home()" >            Home          </a>        </li>        <li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">          <div ngbDropdown class="d-inline-block">            <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle tabindex="0">              User Info            </button>            <div ngbDropdownMenu aria-labelledby="dropdownProfile">              <button ngbDropdownItem (click)="profile()" tabindex="0">                Profile              </button>              <button ngbDropdownItem (click)="favourites()" tabindex="0">                Favourites              </button>              <button ngbDropdownItem (click)="accountSetting()" tabindex="0">                Account Settings              </button>              <button ngbDropdownItem (click)="newsletter()" tabindex="0">                Notifications              </button>            </div>          </div>        </li>        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">          <a (click)="accountSetting()" routerLink="/account-setting" routerLinkActive="active" class="nav-link">            Account Settings          </a>        </li>        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">          <a (click)="restaurant()" routerLink="/restaurant" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">            Restaurant Page          </a>        </li>        <!-- li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">          <div ngbDropdown class="d-inline-block">            <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle>              Go Find Dining            </button>            <div ngbDropdownMenu aria-labelledby="dropdownBrowse">              <button ngbDropdownItem (click)="browse()">                Restaurants              </button>              <button ngbDropdownItem (click)="timeline()">                Timeline              </button>              <button ngbDropdownItem (click)="owners()">                Owner Stories              </button>            </div>          </div>        </li> -->        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">          <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">            Go Find Dining          </a>        </li>        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="tokenStorageService.RO">          <a routerLink="/favourites" routerLinkActive="active" class="nav-link" (click)="favourites()">            Favourites          </a>        </li>        <!-- <li class="nav-item nav-link" *ngIf="authService.isLoggedIn() || tokenStorageService.RO">          <a routerLinkActive="active" class="nav-link" (click)="timeline()">            Timeline          </a>        </li>        <li class="nav-item nav-link" *ngIf="authService.isLoggedIn()">          <a routerLinkActive="active" class="nav-link" (click)="owners()">            Owner Stories          </a>        </li> -->        <li *ngIf="!tokenStorageService.RO && authService.isLoggedIn()" class="nav-item">          <p class="nav-link address nav-link" *ngIf="this.userAddress" tabindex="0">            <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>            {{ this.userAddress }}          </p>          <p class="nav-link address nav-link" *ngIf="!this.userAddress" tabindex="0">            No Address Provided            <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>          </p>        </li>        <p class="nav-item separator">|</p>        <li data-toggle="collapse" data-target=".navbar-collapse.show" class="nav-item">          <a href="https://www.facebook.com/finddiningscarborough/" target="_blank"  tabindex="0">            <img src="assets/images/facebook_icon.png" class="icon" alt="Facebook" ngbTooltip="View Find Dining Facebook Page" />          </a>          <a href="https://twitter.com/FDscarborough" target="_blank" tabindex="0">            <img src="assets/images/twitter_icon.png" class="icon" alt="Twitter" ngbTooltip="View Find Dining Twitter Page" />          </a>          <a href="https://www.instagram.com/finddiningscarborough/" target="_blank"  tabindex="0">            <img src="assets/images/instagram_icon.png" class="icon" alt="Instagram" ngbTooltip="View Find Dining Instagram Page" />          </a>        </li>        <p class="nav-item separator">|</p>        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0" (keyup.enter)="onLoginRegisterClicked()">          <a routerLink="/authentication" routerLinkActive="active" class="nav-link"  (click)="onLoginRegisterClicked()" id="login/logout"  >            {{ !authService.isLoggedIn() ? \'Log In / Register\' : \'Log Out\' }}          </a>        </li>      </ul>    </div>  </nav></div>'
+        var COMPONENT_TEMPLATE = '<div><nav class="navbar navbar-expand-lg" role="navigation">    <img src="assets/images/find_dining_logo.png" class="logo" (click)="home()" alt="Find Dining logo, click to go to home page" />    <p class="word" (click)="home()">      <span class="find">FIND </span>      <span class="dining">DINING </span> <br />      <span class="scarborough">SCARBOROUGH</span>    </p>    <button      class="navbar-toggler"      type="button"      data-toggle="collapse"      data-target="#navbarNav"      aria-controls="navbarNav"      aria-expanded="false"      aria-label="Toggle navigation"    >      <span class="navbar-toggler-icon"></span>    </button>    <div class="collapse navbar-collapse" id="navbarNav">      <ul class="navbar-nav ml-auto" >        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" (keyup.enter)="home()" tabindex="0">          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="home()" >            Home          </a>        </li>        <li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">          <div ngbDropdown class="d-inline-block">            <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle tabindex="0">              User Info            </button>            <div ngbDropdownMenu aria-labelledby="dropdownProfile">              <button ngbDropdownItem (click)="profile()" tabindex="0">                Profile              </button>              <button ngbDropdownItem (click)="favourites()" tabindex="0">                Favourites              </button>              <button ngbDropdownItem (click)="accountSetting()" tabindex="0">                Account Settings              </button>              <button ngbDropdownItem (click)="newsletter()" tabindex="0">                Notifications              </button>            </div>          </div>        </li>        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO">          <div ngbDropdown class="d-inline-block">            <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle tabindex="0">              User Info            </button>            <div ngbDropdownMenu aria-labelledby="dropdownProfile">              <button ngbDropdownItem (click)="favourites()" tabindex="0">                Favourites              </button>              <button ngbDropdownItem (click)="accountSetting()" tabindex="0">                Account Settings              </button>              <button ngbDropdownItem (click)="newsletter()" tabindex="0">                Notifications              </button>            </div>          </div>        </li>        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">          <a (click)="restaurant()" routerLink="/restaurant" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">            Restaurant Page          </a>        </li>        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">          <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">            Go Find Dining          </a>        </li>        <!--<li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">          <a (click)="accountSetting()" routerLink="/account-setting" routerLinkActive="active" class="nav-link">            Account Settings          </a>        </li>        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">          <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">            Go Find Dining          </a>        </li>        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="tokenStorageService.RO">          <a routerLink="/favourites" routerLinkActive="active" class="nav-link" (click)="favourites()">            Favourites          </a>        </li>-->        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">          <a (click)="article()" class="nav-link">            Articles          </a>        </li>        <li *ngIf="!tokenStorageService.RO && authService.isLoggedIn()" class="nav-item">          <p class="nav-link address nav-link" *ngIf="this.userAddress" tabindex="0">            <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>            {{ this.userAddress }}          </p>          <p class="nav-link address nav-link" *ngIf="!this.userAddress" tabindex="0">            No Address Provided            <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>          </p>        </li>        <p class="nav-item separator">|</p>        <li data-toggle="collapse" data-target=".navbar-collapse.show" class="nav-item">          <a href="https://www.facebook.com/finddiningscarborough/" target="_blank"  tabindex="0">            <img src="assets/images/facebook_icon.png" class="icon" alt="Facebook" ngbTooltip="View Find Dining Facebook Page" />          </a>          <a href="https://twitter.com/FDscarborough" target="_blank" tabindex="0">            <img src="assets/images/twitter_icon.png" class="icon" alt="Twitter" ngbTooltip="View Find Dining Twitter Page" />          </a>          <a href="https://www.instagram.com/finddiningscarborough/" target="_blank"  tabindex="0">            <img src="assets/images/instagram_icon.png" class="icon" alt="Instagram" ngbTooltip="View Find Dining Instagram Page" />          </a>        </li>        <p class="nav-item separator">|</p>        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0" (keyup.enter)="onLoginRegisterClicked()">          <a routerLink="/authentication" routerLinkActive="active" class="nav-link"  (click)="onLoginRegisterClicked()" id="login/logout"  >            {{ !authService.isLoggedIn() ? \'Log In / Register\' : \'Log Out\' }}          </a>        </li>      </ul>    </div>  </nav></div>'
     var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'NavbarComponent'};

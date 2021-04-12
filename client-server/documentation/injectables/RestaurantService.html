@@ -109,6 +109,12 @@
                                 <a href="#listRestaurants">listRestaurants</a>
                             </li>
                             <li>
+                                <a href="#roEdit">roEdit</a>
+                            </li>
+                            <li>
+                                <a href="#roGet">roGet</a>
+                            </li>
+                            <li>
                                 <a href="#roSignup">roSignup</a>
                             </li>
                             <li>
@@ -202,8 +208,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="161"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:161</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="180"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:180</a></div>
                 </td>
             </tr>
 
@@ -283,8 +289,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="191"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:191</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="210"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:210</a></div>
                 </td>
             </tr>
 
@@ -360,8 +366,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="180"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:180</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="199"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:199</a></div>
                 </td>
             </tr>
 
@@ -537,8 +543,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="135"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:135</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="154"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:154</a></div>
                 </td>
             </tr>
 
@@ -615,8 +621,8 @@ Dishes (a list of dish objects)</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="145"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:145</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="164"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:164</a></div>
                 </td>
             </tr>
 
@@ -710,8 +716,8 @@ Dishes (a list of dish objects)</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="122"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:122</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="141"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:141</a></div>
                 </td>
             </tr>
 
@@ -758,8 +764,8 @@ Dishes (a list of dish objects)</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="112"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:112</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="131"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:131</a></div>
                 </td>
             </tr>
 
@@ -848,17 +854,14 @@ marks the status to &#39;Pending&#39;</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="69"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:69</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="88"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:88</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Inserts a new restaurant record into pending restaurant collection,
-status is marked as &#39;In_Progress&#39;</p>
-</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -867,7 +870,6 @@ status is marked as &#39;In_Progress&#39;</p>
                                 <tr>
                                     <td>Name</td>
                                     <td>Optional</td>
-                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -879,15 +881,6 @@ status is marked as &#39;In_Progress&#39;</p>
                                     </td>
 
 
-                                    <td>
-                                        <ul>
-<li>JSON object containing restaurant info
- Required fields:
-   name, address, postalCode, email, owner_first_name, owner_last_name
-   (all are strings)</li>
-</ul>
-
-                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -899,8 +892,7 @@ status is marked as &#39;In_Progress&#39;</p>
 
                     </div>
                     <div class="io-description">
-                        <p>JSON object of restaurant</p>
-
+                        
                     </div>
                 </td>
             </tr>
@@ -947,6 +939,122 @@ status is marked as &#39;In_Progress&#39;</p>
                     </div>
                     <div class="io-description">
                         <p>List of all approved restaurants</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="roEdit"></a>
+                    <span class="name">
+                        <b>
+                            roEdit
+                        </b>
+                        <a href="#roEdit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>roEdit(ownerInfo)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="66"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:66</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Updates a restaurant_owner record in the database</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ownerInfo</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>JSON object containing:
+   consent_status (string)</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>Updated RO record in JSON format</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="roGet"></a>
+                    <span class="name">
+                        <b>
+                            roGet
+                        </b>
+                        <a href="#roGet"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>roGet()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="75"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:75</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
 
                     </div>
                 </td>
@@ -1053,8 +1161,8 @@ status is marked as &#39;In_Progress&#39;</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="87"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:87</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="106"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:106</a></div>
                 </td>
             </tr>
 
@@ -1134,7 +1242,7 @@ const DISH_ENDPOINT &#x3D; AUTH_API + &#x27;/dish&#x27;;
 })
 export class RestaurantService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Retrieves all restaurants that are approved
@@ -1179,15 +1287,34 @@ export class RestaurantService {
   }
 
   /**
-   * Inserts a new restaurant record into pending restaurant collection,
-   * status is marked as &#x27;In_Progress&#x27;
-   * 
-   * @param restInfo - JSON object containing restaurant info
-   *                   Required fields:
-   *                     name, address, postalCode, email, owner_first_name, owner_last_name
-   *                     (all are strings)
-   * @returns JSON object of restaurant
+   * Updates a restaurant_owner record in the database
+   *
+   * @param ownerInfo - JSON object containing:
+   *                      consent_status (string)
+   * @returns Updated RO record in JSON format
    */
+  roEdit(ownerInfo): Observable&lt;any&gt; {
+    const endpoint &#x3D; OWNER_ENDPOINT + &#x27;/profile/&#x27;;
+    return this.http.put&lt;any&gt;(endpoint, ownerInfo);
+  }
+
+  /**
+    @Input: None
+    @Output: RO record
+   */
+  roGet(): Observable&lt;any&gt; {
+    const endpoint &#x3D; OWNER_ENDPOINT + &#x27;/profile/&#x27;;
+    return this.http.get&lt;any&gt;(endpoint);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
+          Required fields:
+            name, address, postalCode, email, owner_first_name, owner_last_name (all are strings)
+  @Output: JSON object of restaurant
+
+  Inserts a new restaurant record into pending restaurant collection, status is marked as &#x27;In_Progress&#x27;
+  */
   insertRestaurantDraft(restInfo): Observable&lt;any&gt; {
     const endpoint &#x3D; RO_ENDPOINT + &#x27;/draft/&#x27;;
     return this.http.post&lt;any&gt;(endpoint, restInfo);
@@ -1318,7 +1445,7 @@ export class RestaurantService {
       }),
       body: dishInfo,
     };
-    this.http.delete&lt;any&gt;(endpoint, options).subscribe((data) &#x3D;&gt; {});
+    this.http.delete&lt;any&gt;(endpoint, options).subscribe((data) &#x3D;&gt; { });
   }
 
 }

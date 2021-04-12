@@ -172,8 +172,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="51"
-                            class="link-to-prism">src/app/_services/media.service.ts:51</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="50"
+                            class="link-to-prism">src/app/_services/media.service.ts:50</a></div>
                 </td>
             </tr>
 
@@ -249,8 +249,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="70"
-                            class="link-to-prism">src/app/_services/media.service.ts:70</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="69"
+                            class="link-to-prism">src/app/_services/media.service.ts:69</a></div>
                 </td>
             </tr>
 
@@ -333,15 +333,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>uploadRestaurantMedia(formData, media_type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, save_location: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, first_time_submission: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+<code>uploadRestaurantMedia(formData, media_type: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, save_location: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, submit_for_approval: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="36"
-                            class="link-to-prism">src/app/_services/media.service.ts:36</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="35"
+                            class="link-to-prism">src/app/_services/media.service.ts:35</a></div>
                 </td>
             </tr>
 
@@ -380,7 +380,7 @@
   save_location: value from save_location param
   media_file: FILE (attach your image file(s) or video file here)
   media_link: string (YouTube url)<pre><code>- Use media_file if you&#39;re going to send a file to upload; leave media_link blank
-- Use media_link if you&#39;re going to send a YouTube link; leave media_file blank</code></pre>  first_time_submission: value from first_time_submission</li>
+- Use media_link if you&#39;re going to send a YouTube link; leave media_file blank</code></pre>  submit_for_approval: value from submit_for_approval</li>
 </ul>
 
                                     </td>
@@ -422,7 +422,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>first_time_submission</td>
+                                    <td>submit_for_approval</td>
                                     <td>
                                                 <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                     </td>
@@ -435,10 +435,9 @@
                                     <td>
                                         <ul>
 <li>string (value must be &#39;True&#39; or &#39;False&#39;; NO LOWERCASE)<ul>
-<li>This tells backend if request is coming from initial restaurant setup form, or if it&#39;s coming
-from the editing restaurant profile page
-&#39;True&#39; - coming from initial setup form
-&#39;False&#39; - coming from restaurant profile editing page</li>
+<li>This tells backend if restaurant is saving draft or submitting it for admin approval
+True - submitting for admin approval
+False - saving as draft</li>
 </ul>
 </li>
 </ul>
@@ -493,21 +492,20 @@ export class MediaService {
    *                    media_link: string (YouTube url)
    *                      - Use media_file if you&#x27;re going to send a file to upload; leave media_link blank
    *                      - Use media_link if you&#x27;re going to send a YouTube link; leave media_file blank
-   *                    first_time_submission: value from first_time_submission
+   *                    submit_for_approval: value from submit_for_approval
    * @param media_type - string (value must be either &#x27;IMAGE&#x27; or &#x27;VIDEO&#x27;)
    * @param save_location - string (value must be &#x27;cover_photo_url&#x27;, &#x27;logo_url&#x27;, &#x27;restaurant_image_url&#x27;, or &#x27;restaurant_video_url&#x27;)
-   * @param first_time_submission - string (value must be &#x27;True&#x27; or &#x27;False&#x27;; NO LOWERCASE)
-   *                                  - This tells backend if request is coming from initial restaurant setup form, or if it&#x27;s coming
-   *                                    from the editing restaurant profile page
-   *                                  &#x27;True&#x27; - coming from initial setup form
-   *                                  &#x27;False&#x27; - coming from restaurant profile editing page
+   * @param submit_for_approval - string (value must be &#x27;True&#x27; or &#x27;False&#x27;; NO LOWERCASE)
+   *                                  - This tells backend if restaurant is saving draft or submitting it for admin approval
+   *                                  True - submitting for admin approval
+   *                                  False - saving as draft
    * @returns JSON object of the updated restaurant record
    */
-  uploadRestaurantMedia(formData, media_type: string, save_location: string, first_time_submission: string): Observable&lt;any&gt; {
+  uploadRestaurantMedia(formData, media_type: string, save_location: string, submit_for_approval: string): Observable&lt;any&gt; {
     const endpoint &#x3D; RO_MEDIA_ENDPOINT;
     formData.append(&#x27;media_type&#x27;, media_type);
     formData.append(&#x27;save_location&#x27;, save_location);
-    formData.append(&#x27;first_time_submission&#x27;, first_time_submission);
+    formData.append(&#x27;submit_for_approval&#x27;, submit_for_approval);
     return this.http.put&lt;any&gt;(endpoint, formData);
   }
 

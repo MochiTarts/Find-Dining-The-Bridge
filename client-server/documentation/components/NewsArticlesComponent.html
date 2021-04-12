@@ -351,8 +351,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="121"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:121</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="118"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:118</a></div>
                 </td>
             </tr>
 
@@ -390,8 +390,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="147"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:147</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="144"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:144</a></div>
                 </td>
             </tr>
 
@@ -429,8 +429,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="175"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:175</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="172"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:172</a></div>
                 </td>
             </tr>
 
@@ -495,8 +495,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="171"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:171</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="168"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:168</a></div>
                 </td>
             </tr>
 
@@ -639,8 +639,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="107"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:107</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="104"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:104</a></div>
                 </td>
             </tr>
 
@@ -705,8 +705,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="133"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:133</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:130</a></div>
                 </td>
             </tr>
 
@@ -771,8 +771,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="226"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:226</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="223"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:223</a></div>
                 </td>
             </tr>
 
@@ -810,8 +810,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="231"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:231</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="228"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:228</a></div>
                 </td>
             </tr>
 
@@ -849,8 +849,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="159"
-                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:159</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="156"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:156</a></div>
                 </td>
             </tr>
 
@@ -1452,16 +1452,13 @@ export class NewsArticlesComponent implements OnInit {
       }
       this.latestArticles &#x3D; this.filteredArticles.slice(0, 8);
 
-      this.selectedArticle &#x3D; this.filteredArticles[1];
+      this.selectedArticle &#x3D; this.filteredArticles[0];
       length &#x3D; Math.ceil(this.filteredArticles.length/10);
       this.totalTabs &#x3D; Array(length);
     })
   }
 
   ngAfterViewInit(): void {
-    if (this.role &amp;&amp; this.role &#x3D;&#x3D; &#x27;BU&#x27; &amp;&amp; this.profileId &#x3D;&#x3D; null) {
-      this.userInfo.open(false);
-    }
   }
 
   openArticle(article) {
@@ -1619,7 +1616,7 @@ export class NewsArticlesComponent implements OnInit {
             &lt;div class&#x3D;&quot;carousel&quot;&gt;
                 &lt;ivy-carousel
                 style&#x3D;&quot;max-width: fit-content;&quot;
-                *ngIf&#x3D;&quot;latestArticles.length &gt;&#x3D; 1&quot;
+                *ngIf&#x3D;&quot;latestArticles.length&quot;
                 [images]&#x3D;&quot;latestArticles&quot;
                 [margin]&#x3D;&quot;30&quot;
                 [arrowsOutside]&#x3D;&quot;true&quot;
@@ -1636,7 +1633,7 @@ export class NewsArticlesComponent implements OnInit {
             &lt;div class&#x3D;&quot;carousel&quot;&gt;
                 &lt;ivy-carousel
                 style&#x3D;&quot;max-width: fit-content;&quot;
-                *ngIf&#x3D;&quot;latestArticles.length &gt;&#x3D; 1&quot;
+                *ngIf&#x3D;&quot;latestArticles.length&quot;
                 [images]&#x3D;&quot;latestArticles&quot;
                 [margin]&#x3D;&quot;30&quot;
                 [arrowsOutside]&#x3D;&quot;false&quot;
@@ -1651,7 +1648,7 @@ export class NewsArticlesComponent implements OnInit {
     &lt;/div&gt;
 
     &lt;div class&#x3D;&quot;main-container&quot;&gt;
-        &lt;div class&#x3D;&quot;row no-gutters article-row&quot;&gt;
+        &lt;div class&#x3D;&quot;row no-gutters article-row&quot; *ngIf&#x3D;&quot;filteredArticles.length&quot;&gt;
             &lt;div class&#x3D;&quot;col-lg-10 article-list-col&quot;&gt;
                 &lt;div class&#x3D;&quot;article-list col-12&quot; id&#x3D;&quot;article-list&quot;&gt;
                     &lt;div class&#x3D;&quot;tab-content&quot; id&#x3D;&quot;pills-tabContent&quot;&gt;
@@ -1738,10 +1735,7 @@ export class NewsArticlesComponent implements OnInit {
             &lt;/div&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;!-- Subscriber Profile Form --&gt;
-&lt;app-subscriber-profile-form #userInfo role&#x3D;&quot;form&quot;&gt;&lt;/app-subscriber-profile-form&gt;</code></pre>
+&lt;/div&gt;</code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-styleData">
@@ -1833,6 +1827,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 70px;
     margin-bottom: 50px;
     padding: 0px 50px;
+    min-height: 300px;
 }
 
 .article-row {
@@ -2078,7 +2073,7 @@ h1, h2, h3, h4, h5, h6 {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="article-body">    <div class="header-container">        <div class="title-row">            <div class="title">                <h1>Find Dining News</h1>                <div class="underline"></div>            </div>            <nav class="nav nav-header justify-content-end">                <span class="nav-item">                    <a class="nav-link" (click)="seeMostRecent()">Most Recent</a>                </span>                <span class="nav-item">                    <a class="nav-link" (click)="seeAll()">See All</a>                </span>            </nav>        </div>            <div class="carousel-row">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content;"                *ngIf="latestArticles.length >= 1"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="true"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticle($event)"                >                </ivy-carousel>            </div>        </div>        <div class="carousel-row-mobile">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content;"                *ngIf="latestArticles.length >= 1"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="false"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticle($event)"                >                </ivy-carousel>            </div>        </div>    </div>    <div class="main-container">        <div class="row no-gutters article-row">            <div class="col-lg-10 article-list-col">                <div class="article-list col-12" id="article-list">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container" id="article-container">                    <div class="btn" (click)="closeArticle()">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:\'mediumDate\' }}</h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>            </div>                <div class="col-lg-2 filter">                <app-filterdate-card [months]="months" [years]="years"                (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                </app-filterdate-card>            </div>            <!-- MOBILE LAYOUT BELOW -->            <div class="col-lg-12 article-mobile">                <div fxLayout="row" fxLayoutAlign="end">                    <div class="btn" (click)="toggleFilter()">Filter</div>                </div>                <div class="article-list-mobile col-12" id="article-list-mobile">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1mobile" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}mobile" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container-mobile" id="article-container-mobile" style="overflow: hidden;">                    <div class="btn" (click)="closeArticleMobile()">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:\'mediumDate\' }}</h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>                <div class="side-filter" id="mobile-filter" style="opacity: 0;">                    <app-filterdate-card [months]="months" [years]="years"                    (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                    </app-filterdate-card>                </div>            </div>        </div>    </div></div><!-- Subscriber Profile Form --><app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="article-body">    <div class="header-container">        <div class="title-row">            <div class="title">                <h1>Find Dining News</h1>                <div class="underline"></div>            </div>            <nav class="nav nav-header justify-content-end">                <span class="nav-item">                    <a class="nav-link" (click)="seeMostRecent()">Most Recent</a>                </span>                <span class="nav-item">                    <a class="nav-link" (click)="seeAll()">See All</a>                </span>            </nav>        </div>            <div class="carousel-row">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content;"                *ngIf="latestArticles.length"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="true"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticle($event)"                >                </ivy-carousel>            </div>        </div>        <div class="carousel-row-mobile">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content;"                *ngIf="latestArticles.length"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="false"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticle($event)"                >                </ivy-carousel>            </div>        </div>    </div>    <div class="main-container">        <div class="row no-gutters article-row" *ngIf="filteredArticles.length">            <div class="col-lg-10 article-list-col">                <div class="article-list col-12" id="article-list">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container" id="article-container">                    <div class="btn" (click)="closeArticle()">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:\'mediumDate\' }}</h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>            </div>                <div class="col-lg-2 filter">                <app-filterdate-card [months]="months" [years]="years"                (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                </app-filterdate-card>            </div>            <!-- MOBILE LAYOUT BELOW -->            <div class="col-lg-12 article-mobile">                <div fxLayout="row" fxLayoutAlign="end">                    <div class="btn" (click)="toggleFilter()">Filter</div>                </div>                <div class="article-list-mobile col-12" id="article-list-mobile">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1mobile" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}mobile" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container-mobile" id="article-container-mobile" style="overflow: hidden;">                    <div class="btn" (click)="closeArticleMobile()">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:\'mediumDate\' }}</h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>                <div class="side-filter" id="mobile-filter" style="opacity: 0;">                    <app-filterdate-card [months]="months" [years]="years"                    (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                    </app-filterdate-card>                </div>            </div>        </div>    </div></div></div>'
     var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'NewsArticlesComponent'};

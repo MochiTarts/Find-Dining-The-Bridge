@@ -2244,7 +2244,7 @@ export class RestaurantSetupComponent implements OnInit {
   onSubmit(option) {
     const formData &#x3D; new FormData();
     formData.append(&#x27;media_file&#x27;, this.uploadForm.get(&#x27;file&#x27;).value);
-    return this.mediaService.uploadRestaurantMedia(formData, &#x27;IMAGE&#x27;, &#x27;logo_url&#x27;, option.includes(&#x27;SETUP&#x27;) ? &#x27;True&#x27; : &#x27;False&#x27;);
+    return this.mediaService.uploadRestaurantMedia(formData, &#x27;IMAGE&#x27;, &#x27;logo_url&#x27;, option.includes(&#x27;SUBMIT&#x27;) ? &#x27;True&#x27; : &#x27;False&#x27;);
     // this.newImage &#x3D; false;
   }
 
