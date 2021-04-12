@@ -12,7 +12,7 @@ const DISH_ENDPOINT = AUTH_API + '/dish';
 })
 export class RestaurantService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Retrieves all restaurants that are approved
@@ -58,7 +58,7 @@ export class RestaurantService {
 
   /**
    * Updates a restaurant_owner record in the database
-   * 
+   *
    * @param ownerInfo - JSON object containing:
    *                      consent_status (string)
    * @returns Updated RO record in JSON format
@@ -66,6 +66,15 @@ export class RestaurantService {
   roEdit(ownerInfo): Observable<any> {
     const endpoint = OWNER_ENDPOINT + '/profile/';
     return this.http.put<any>(endpoint, ownerInfo);
+  }
+
+  /**
+    @Input: None
+    @Output: RO record
+   */
+  roGet(): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + '/profile/';
+    return this.http.get<any>(endpoint);
   }
 
   /*
@@ -206,7 +215,7 @@ export class RestaurantService {
       }),
       body: dishInfo,
     };
-    this.http.delete<any>(endpoint, options).subscribe((data) => {});
+    this.http.delete<any>(endpoint, options).subscribe((data) => { });
   }
 
 }
