@@ -703,7 +703,7 @@ class PendingRestaurant(models.Model):
             owner_user_id=user_id).first()
         if not restaurant:
             raise ObjectDoesNotExist(
-                'restaurant with owner user id ' + user_id + ' does not exist')
+                'restaurant with owner user id ' + str(user_id) + ' does not exist')
 
         body["status"] = Status.In_Progress.value
         body["modified_time"] = timezone.now()
@@ -733,7 +733,7 @@ class PendingRestaurant(models.Model):
             owner_user_id=user_id).first()
         if not restaurant:
             raise ObjectDoesNotExist(
-                'restaurant with owner user id ' + user_id + ' does not exist')
+                'restaurant with owner user id ' + str(user_id) + ' does not exist')
 
         body["status"] = Status.Pending.value
         body["modified_time"] = timezone.now()
@@ -1088,7 +1088,7 @@ class UserFavRestrs(models.Model):
         restaurant = {}
         if not user_filter.exists():
             ObjectDoesNotExist("The user with user_id: " +
-                               user_id + " does not exist")
+                               str(user_id) + " does not exist")
         if user_filter.count() > 1:
             raise MultipleObjectsReturned(
                 'There are more than one user with this user_id')
@@ -1130,10 +1130,10 @@ class UserFavRestrs(models.Model):
         user_filter = User.objects.filter(id=user_id)
         if not user_filter.exists():
             raise ObjectDoesNotExist(
-                "The user with user_id: " + user_id + " does not exist")
+                "The user with user_id: " + str(user_id) + " does not exist")
         if user_filter.count() > 1:
             raise MultipleObjectsReturned(
-                "There are more than one user with this id: " + user_id)
+                "There are more than one user with this id: " + str(user_id))
 
         favourites = UserFavRestrs.objects.filter(user_id=user_id)
         if not favourites:
@@ -1205,7 +1205,7 @@ class UserFavRestrs(models.Model):
         user_filter = User.objects.filter(id=user_id)
         if not user_filter.exists():
             raise ObjectDoesNotExist(
-                "The user with user_id: " + user_id + " does not exist")
+                "The user with user_id: " + str(user_id) + " does not exist")
 
         user_fav_filter = UserFavRestrs.objects.filter(
             user_id=user_id, restaurant=rest_id)
@@ -1298,10 +1298,10 @@ class RestaurantPost(models.Model):
         ro_filter = User.objects.filter(id=user_id)
         if not ro_filter.exists:
             raise ObjectDoesNotExist(
-                "The restaurant owner with id: " + user_id + " does not exist")
+                "The restaurant owner with id: " + str(user_id) + " does not exist")
         if ro_filter.count() > 1:
             raise MultipleObjectsReturned(
-                "There are more than one sduser record for the user with id: " + user_id)
+                "There are more than one sduser record for the user with id: " + str(user_id))
 
         posts = list(RestaurantPost.objects.filter(owner_user_id=user_id))
         response = {"Posts": []}

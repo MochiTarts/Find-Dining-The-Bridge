@@ -57,15 +57,25 @@ export class RestaurantService {
   }
 
   /**
-   * Inserts a new restaurant record into pending restaurant collection,
-   * status is marked as 'In_Progress'
+   * Updates a restaurant_owner record in the database
    * 
-   * @param restInfo - JSON object containing restaurant info
-   *                   Required fields:
-   *                     name, address, postalCode, email, owner_first_name, owner_last_name
-   *                     (all are strings)
-   * @returns JSON object of restaurant
+   * @param ownerInfo - JSON object containing:
+   *                      consent_status (string)
+   * @returns Updated RO record in JSON format
    */
+  roEdit(ownerInfo): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + '/profile/';
+    return this.http.put<any>(endpoint, ownerInfo);
+  }
+
+  /*
+  @Input: JSON object containing restaurant info
+          Required fields:
+            name, address, postalCode, email, owner_first_name, owner_last_name (all are strings)
+  @Output: JSON object of restaurant
+
+  Inserts a new restaurant record into pending restaurant collection, status is marked as 'In_Progress'
+  */
   insertRestaurantDraft(restInfo): Observable<any> {
     const endpoint = RO_ENDPOINT + '/draft/';
     return this.http.post<any>(endpoint, restInfo);

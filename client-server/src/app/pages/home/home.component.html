@@ -29,7 +29,7 @@
   <div *ngIf="photoCourtesy" class="header-content photo-courtesy absolute-center">Photo Courtesy of <strong>{{ photoCourtesy }}</strong></div>
 </div>
 
-<div class="local-restaurants">
+<div class="local-restaurants" *ngIf="restaurants">
   <b>Discover Local Favorites</b>
   <div class="restaurant-carousel">
     <ivy-carousel
