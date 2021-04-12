@@ -86,7 +86,7 @@ class RestaurantOwner(models.Model):
             raise MultipleObjectsReturned(
                 "There are more than one restaurant owner record with this user_id: "+str(user_id))
 
-        return JsonResponse(ro_filter.first())
+        return ro_filter.first()
 
     @classmethod
     def edit_profile(cls, user_id, user_data):

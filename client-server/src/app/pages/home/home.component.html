@@ -33,6 +33,7 @@
   <b>Discover Local Favorites</b>
   <div class="restaurant-carousel">
     <ivy-carousel
+      style="max-width: fit-content;"
       class="arrow-outside-carousel"
       [images]="restaurants"
       [margin]="5"
@@ -58,7 +59,7 @@
             class="logo-img"
           />
         </div>
-        <div class="col-12 col-md-8" id="info-col2">
+        <div class="col" id="info-col2">
           <p><b>{{ spotlight.name }}</b> | {{ spotlight.cuisines }} | {{ spotlight.years }} year(s) in business</p>
           <p class="bio">
             {{ spotlight.bio }}
