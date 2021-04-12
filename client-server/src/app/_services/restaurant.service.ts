@@ -15,13 +15,13 @@ const REMOVE_ENDPOINT = AUTH_API + '/cloud_storage/remove/';
 })
 export class RestaurantService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /*
   @Input: restaurant id
   @Output: Google analytics data of restaurant page views
   */
-  getViewTraffic(id:string): Observable<any> {
+  getViewTraffic(id: string): Observable<any> {
     const endpoint = RO_ENDPOINT + id + '/restaurant_traffic/'
     return this.http.get(endpoint)
   }
@@ -43,7 +43,7 @@ export class RestaurantService {
 
   Retrieved the approved restaurant record provided the restaurant_id (can be obtained from the site url's query string)
   */
-  getApprovedRestaurant(id:string): Observable<any> {
+  getApprovedRestaurant(id: string): Observable<any> {
     const endpoint = RO_ENDPOINT + '/approved/' + id + '/';
     return this.http.get(endpoint);
   }
@@ -75,7 +75,7 @@ export class RestaurantService {
 
   /**
    * Updates a restaurant_owner record in the database
-   * 
+   *
    * @param ownerInfo - JSON object containing:
    *                      consent_status (string)
    * @returns Updated RO record in JSON format
@@ -83,6 +83,15 @@ export class RestaurantService {
   roEdit(ownerInfo): Observable<any> {
     const endpoint = OWNER_ENDPOINT + '/profile/';
     return this.http.put<any>(endpoint, ownerInfo);
+  }
+
+  /**
+    @Input: None
+    @Output: RO record
+   */
+  roGet(): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + '/profile/';
+    return this.http.get<any>(endpoint);
   }
 
   /*
@@ -226,7 +235,7 @@ export class RestaurantService {
       }),
       body: dishInfo,
     };
-    this.http.delete<any>(endpoint, options).subscribe((data) => {});
+    this.http.delete<any>(endpoint, options).subscribe((data) => { });
   }
 
 }
