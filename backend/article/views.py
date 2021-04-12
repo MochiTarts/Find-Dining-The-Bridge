@@ -31,7 +31,7 @@ class ArticleList(APIView):
         if user.is_anonymous:
             articles = Article.objects.filter(visibility="ALL", published=True).values()
         else:
-            articles = Article.objects.filter(visibility=user.role, published=True).values()
+            articles = Article.objects.filter(visibility__in=[user.role, "ALL"], published=True).values()
 
         response = {'articles': articles}
         # model to dict (and therefore model to json) does not work for date fields
@@ -50,7 +50,7 @@ class ArticleView(APIView):
         if user.is_anonymous:
             article = Article.objects.filter(visibility="ALL", published=True, id=id).values()
         else:
-            article = Article.objects.filter(visibility=user.role, published=True, id=id).values()
+            article = Article.objects.filter(visibility__in=[user.role, "ALL"], published=True, id=id).values()
         # evaluate it instead of calling exists() because we need the cached result in response
         if article:
             response = {'article': article[0]}

@@ -56,6 +56,7 @@ services:
         - SSL_REDIRECT=True
         - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,test.finddining.ca
         - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://test.finddining.ca,https://jsonip.com
+        - MAIN_SITE_URL=https://test.finddining.ca
         - SECRET_KEY=${SECRET_KEY}
         - DB_ENGINE=${DB_ENGINE}
         - DB_NAME=${DB_NAME}
@@ -102,6 +103,7 @@ services:
         - SSL_REDIRECT=True
         - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,uat.finddining.ca
         - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://uat.finddining.ca,https://jsonip.com
+        - MAIN_SITE_URL=https://uat.finddining.ca
         - SECRET_KEY=${SECRET_KEY}
         - DB_ENGINE=${DB_ENGINE}
         - DB_NAME=${DB_NAME}

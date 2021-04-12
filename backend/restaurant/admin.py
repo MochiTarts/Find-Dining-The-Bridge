@@ -166,6 +166,7 @@ def approve_restr(model_admin, request, queryset):
                     "status": Status.Approved.value, "approved_once": True}, [
                     "status", "approved_once"])
             save_and_clean(restaurant)
+
             owner_prefer_names = r.owner_preferred_name
             restaurant_name = r.name
             email = r.email
@@ -175,10 +176,11 @@ def approve_restr(model_admin, request, queryset):
                 email,
                 restaurant_name,
                 'restaurant')
+                
+            queryset.update(status=Status.Approved.value, approved_once=True)
         else:
             messages.error(
                 request, "You can only approve of 'Pending' restaurants")
-    queryset.update(status=Status.Approved.value, approved_once=True)
     if count > 1:
         messages.success(
             request,

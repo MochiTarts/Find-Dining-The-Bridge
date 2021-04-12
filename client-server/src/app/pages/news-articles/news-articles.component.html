@@ -19,7 +19,7 @@
             <div class="carousel">
                 <ivy-carousel
                 style="max-width: fit-content;"
-                *ngIf="latestArticles.length >= 1"
+                *ngIf="latestArticles.length"
                 [images]="latestArticles"
                 [margin]="30"
                 [arrowsOutside]="true"
@@ -36,7 +36,7 @@
             <div class="carousel">
                 <ivy-carousel
                 style="max-width: fit-content;"
-                *ngIf="latestArticles.length >= 1"
+                *ngIf="latestArticles.length"
                 [images]="latestArticles"
                 [margin]="30"
                 [arrowsOutside]="false"
@@ -51,7 +51,7 @@
     </div>
 
     <div class="main-container">
-        <div class="row no-gutters article-row">
+        <div class="row no-gutters article-row" *ngIf="filteredArticles.length">
             <div class="col-lg-10 article-list-col">
                 <div class="article-list col-12" id="article-list">
                     <div class="tab-content" id="pills-tabContent">
@@ -139,6 +139,3 @@
         </div>
     </div>
 </div>
-
-<!-- Subscriber Profile Form -->
-<app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form>

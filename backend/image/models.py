@@ -44,7 +44,7 @@ class Image(models.Model):
     def save(self, *args, **kwargs):
         if self.image:
             self.uploaded_at = timezone.now()
-            file_path = upload(self.image, DEV_BUCKET, IMAGE)
+            file_path = upload(self.image, IMAGE)
             # override image == delete old image and upload new image
             if self.url:
                 delete(self.url)

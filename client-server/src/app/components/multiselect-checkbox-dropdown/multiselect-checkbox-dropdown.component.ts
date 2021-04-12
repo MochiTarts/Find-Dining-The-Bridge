@@ -25,13 +25,13 @@ export class MultiselectCheckboxDropdownComponent implements OnInit, OnChanges, 
 
   ngOnInit(): void {
     for (let item of this.list) {
-      this.initialList.push({name: item, checked: false});
+      this.initialList.push({ name: item, checked: false });
     }
     this.checkedList = this.initialCheckedList;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['initialCheckedList']) {
+    if (changes['initialCheckedList'] && this.initialCheckedList[0] != '') {
       this.checkedList = this.initialCheckedList;
 
       for (let i = 0; i < this.initialList.length; i++) {
@@ -53,19 +53,19 @@ export class MultiselectCheckboxDropdownComponent implements OnInit, OnChanges, 
     this.containerWidth = this.dropdownContainer.nativeElement.offsetWidth;
   }
 
-  getSelectedValue(checked: Boolean, value:String){
+  getSelectedValue(checked: Boolean, value: String) {
     if (checked) {
       this.checkedList.push(value);
     } else {
       var index = this.checkedList.indexOf(value);
-      this.checkedList.splice(index,1);
+      this.checkedList.splice(index, 1);
     }
 
     //share checked list
     this.shareCheckedlist();
   }
 
-  shareCheckedlist(){
+  shareCheckedlist() {
     this.shareCheckedList.emit(this.checkedList);
   }
 

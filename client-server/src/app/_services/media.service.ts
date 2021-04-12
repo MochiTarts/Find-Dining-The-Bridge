@@ -23,21 +23,20 @@ export class MediaService {
    *                    media_link: string (YouTube url)
    *                      - Use media_file if you're going to send a file to upload; leave media_link blank
    *                      - Use media_link if you're going to send a YouTube link; leave media_file blank
-   *                    first_time_submission: value from first_time_submission
+   *                    submit_for_approval: value from submit_for_approval
    * @param media_type - string (value must be either 'IMAGE' or 'VIDEO')
    * @param save_location - string (value must be 'cover_photo_url', 'logo_url', 'restaurant_image_url', or 'restaurant_video_url')
-   * @param first_time_submission - string (value must be 'True' or 'False'; NO LOWERCASE)
-   *                                  - This tells backend if request is coming from initial restaurant setup form, or if it's coming
-   *                                    from the editing restaurant profile page
-   *                                  'True' - coming from initial setup form
-   *                                  'False' - coming from restaurant profile editing page
+   * @param submit_for_approval - string (value must be 'True' or 'False'; NO LOWERCASE)
+   *                                  - This tells backend if restaurant is saving draft or submitting it for admin approval
+   *                                  True - submitting for admin approval
+   *                                  False - saving as draft
    * @returns JSON object of the updated restaurant record
    */
-  uploadRestaurantMedia(formData, media_type: string, save_location: string, first_time_submission: string): Observable<any> {
+  uploadRestaurantMedia(formData, media_type: string, save_location: string, submit_for_approval: string): Observable<any> {
     const endpoint = RO_MEDIA_ENDPOINT;
     formData.append('media_type', media_type);
     formData.append('save_location', save_location);
-    formData.append('first_time_submission', first_time_submission);
+    formData.append('submit_for_approval', submit_for_approval);
     return this.http.put<any>(endpoint, formData);
   }
 

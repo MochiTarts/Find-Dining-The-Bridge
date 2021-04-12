@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import 'aos/dist/aos.css';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +12,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Title } from '@angular/platform-browser';
 import { RestaurantService } from '../../_services/restaurant.service';
-import { type } from 'node:os';
+import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   arrowsOutside = window.innerWidth < 1020 ? false : true;
 
   modalRef: any;
+  @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
 
   restaurants: any[] = [];
   pricepoints: any[] = [];
@@ -80,7 +82,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-
+    if (this.role && this.role == 'BU' && this.profileId == null) {
+      this.userInfo.open(false);
+    }
   }
 
   gotoRegister(): void {

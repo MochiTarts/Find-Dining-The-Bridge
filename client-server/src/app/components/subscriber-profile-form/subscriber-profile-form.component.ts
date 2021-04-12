@@ -144,7 +144,9 @@ export class SubscriberProfileFormComponent implements OnInit {
             this.authService.refreshToken().subscribe((token) => {
               this.tokenStorageService.updateTokenAndUser(token.access);
               this.modalRef.close();
-              this.reload();
+              setTimeout(() => {
+                this.reload();
+              }, 100);
             })
           })
         })
@@ -153,10 +155,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   }
 
   reload() {
-    let currentUrl = this.router.url;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([currentUrl]);
+    window.location.reload();
   }
 
 }

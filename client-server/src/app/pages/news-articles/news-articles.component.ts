@@ -92,16 +92,13 @@ export class NewsArticlesComponent implements OnInit {
       }
       this.latestArticles = this.filteredArticles.slice(0, 8);
 
-      this.selectedArticle = this.filteredArticles[1];
+      this.selectedArticle = this.filteredArticles[0];
       length = Math.ceil(this.filteredArticles.length/10);
       this.totalTabs = Array(length);
     })
   }
 
   ngAfterViewInit(): void {
-    if (this.role && this.role == 'BU' && this.profileId == null) {
-      this.userInfo.open(false);
-    }
   }
 
   openArticle(article) {
