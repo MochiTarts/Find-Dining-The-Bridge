@@ -101,6 +101,12 @@ def create_disable_user_and_send_verification_email(user, password, request):
     form = SDUserCreateForm(data=user)
 
     if form.is_valid():
+
+        # create Admin user if the email is info@finddining.ca
+        if user['email'] == "info@finddining.ca":
+            UserModel.objects.create_superuser(
+            username=user['username'], email=user['email'], password=user['password'], role=user['role'], )
+            return JsonResponse({'message': "An admin account has been created. You can now log in with the registered credentials."})
         user = UserModel.objects.create_user(
             username=user['username'], email=user['email'], password=user['password'], role=user['role'])
         user.is_active = False
