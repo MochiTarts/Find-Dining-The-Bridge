@@ -211,6 +211,8 @@ CSRF_TRUSTED_ORIGINS = [
     ".finddining.ca",
 ]
 
+MAIN_SITE_URL = os.environ.get('MAIN_SITE_URL')
+
 #CSRF_COOKIE_NAME = 'XSRF-TOKEN'
 #CSRF_HEADER_NAME = 'HTTP_X_XSRF_TOKEN'
 

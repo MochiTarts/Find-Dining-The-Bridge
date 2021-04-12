@@ -270,7 +270,7 @@ class PendingDishView(APIView):
         if not restaurant:
             raise IntegrityError(
                 "The restaurant with owner_user_id: " +
-                user_id +
+                str(user_id) +
                 " does not exist")
         rest_id = restaurant._id
         dishes = PendingFood.get_by_restaurant(rest_id)
@@ -295,7 +295,7 @@ class PendingDishView(APIView):
         if not restaurant:
             raise IntegrityError(
                 "The restaurant with owner_user_id: " +
-                user_id +
+                str(user_id) +
                 " does not exist")
 
         rest_id = restaurant._id
@@ -321,7 +321,7 @@ class PendingDishView(APIView):
         if not restaurant:
             raise IntegrityError(
                 "The restaurant with owner_user_id: " +
-                user_id +
+                str(user_id) +
                 " does not exist")
 
         rest_id = restaurant._id
@@ -344,7 +344,7 @@ class PendingDishView(APIView):
         if not restaurant:
             raise IntegrityError(
                 "The restaurant with owner_user_id: " +
-                user_id +
+                str(user_id) +
                 " does not exist")
         deleted_dish = PendingFood.remove_dish(body, restaurant._id)
         return JsonResponse(model_to_json(deleted_dish))
@@ -474,7 +474,7 @@ class PendingRestaurantView(APIView):
             owner_user_id=user_id).first()
         if not restaurant:
             raise ObjectDoesNotExist(
-                'No pending restaurant found with owner user id of this: ' + _id)
+                'No pending restaurant found with owner user id of this: ' + str(user_id))
 
         restaurant_image_url = ast.literal_eval(
             restaurant.restaurant_image_url)
