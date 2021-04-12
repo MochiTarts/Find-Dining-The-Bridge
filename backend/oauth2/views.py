@@ -73,14 +73,18 @@ class GoogleView(APIView):
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
                 Q(auth_id=auth_id) | Q(email__iexact=email))
+            '''
             if user.email is not email:
                 user.email = email
                 user.save()
+            '''
         # if verify_oauth2_token failed
         except ValueError:
             return JsonResponse({'message': 'idToken is invalid'}, status=400)
         # if user not in db, create one with random password
         except User.DoesNotExist:
+            if role is None or role == "":
+                return JsonResponse({'message': 'no user is associated with this google account, please register an account first'}, status=400)
             user = create_default_user_for_3rd_party(email, auth_id, role)
 
             # if email is verified with 3rd party we can simply save the user with an 3rd party id
@@ -145,12 +149,17 @@ class FacebookView(APIView):
                 Q(auth_id=auth_id) | Q(email__iexact=email))
             # update user email in case they updated it in 3rd party service
             # we can also ask it before update (future enhancements)
+            '''
             if user.email is not email:
                 user.email = email
                 user.save()
+            '''
 
         # if user not in db, create one with random password
         except User.DoesNotExist:
+            # prevent unregistered user logging in
+            if role is None or role == "":
+                return JsonResponse({'message': 'no user is associated with this facebook account, please register an account first'}, status=400)
             user = create_default_user_for_3rd_party(email, auth_id, role)
 
         response = construct_response_for_3rd_party_auth(user)

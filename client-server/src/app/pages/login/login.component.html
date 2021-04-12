@@ -13,7 +13,7 @@
                 </div>
               </div>
               <div class="form-element">
-                <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed && loginErrorMessage">
+                <div class="alert alert-danger" role="alert" *ngIf="(f.submitted || isThirdParty) && isLoginFailed && loginErrorMessage">
                   {{ loginErrorMessage }}
                 </div>
               </div>
