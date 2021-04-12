@@ -334,7 +334,7 @@ export class RestaurantPageComponent implements OnInit {
     const formData = new FormData();
     formData.append('media_type', 'VIDEO');
     formData.append('save_location', 'restaurant_video_url');
-    formData.append('first_time_submission', 'False');
+    formData.append('submit_for_approval', 'False');
 
     let info = {
       restaurant_video_desc: (<HTMLInputElement>document.getElementById('video_desc')).value,
