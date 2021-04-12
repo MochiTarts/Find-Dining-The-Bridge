@@ -55,7 +55,7 @@ jobs:
           pip install -r backend/requirements.txt
           
           python backend/manage.py collectstatic --no-input
-          cp -r backend/static client-server
+          cp -TR backend/static client-server
       
       - name: Create Docker images
         run: |
