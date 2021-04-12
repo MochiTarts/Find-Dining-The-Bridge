@@ -73,6 +73,12 @@
           </a>
         </li>
 
+        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">
+          <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">
+            Go Find Dining
+          </a>
+        </li>
+
         <!--<li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
           <a (click)="accountSetting()" routerLink="/account-setting" routerLinkActive="active" class="nav-link">
             Account Settings
@@ -89,35 +95,6 @@
             Favourites
           </a>
         </li>-->
-
-        <!-- li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">
-          <div ngbDropdown class="d-inline-block">
-            <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle>
-              Go Find Dining
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBrowse">
-              <button ngbDropdownItem (click)="browse()">
-                Restaurants
-              </button>
-              <button ngbDropdownItem (click)="timeline()">
-                Timeline
-              </button>
-              <button ngbDropdownItem (click)="owners()">
-                Owner Stories
-              </button>
-            </div>
-          </div>
-        </li> -->
-        <!-- <li class="nav-item nav-link" *ngIf="authService.isLoggedIn() || tokenStorageService.RO">
-          <a routerLinkActive="active" class="nav-link" (click)="timeline()">
-            Timeline
-          </a>
-        </li>
-        <li class="nav-item nav-link" *ngIf="authService.isLoggedIn()">
-          <a routerLinkActive="active" class="nav-link" (click)="owners()">
-            Owner Stories
-          </a>
-        </li> -->
 
         <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
           <a (click)="article()" class="nav-link">
