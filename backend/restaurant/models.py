@@ -962,7 +962,7 @@ class PendingRestaurant(models.Model):
         media_type = form_data.get('media_type')
         save_location = form_data.get('save_location')
         media_link = form_data.get('media_link')
-        first_time_submission = form_data.get('first_time_submission')
+        submit_for_approval = form_data.get('submit_for_approval')
 
         if media_type == MediaType.IMAGE.name:
             if save_location == 'restaurant_video_url':
@@ -1002,8 +1002,10 @@ class PendingRestaurant(models.Model):
         approved_restaurant = Restaurant.objects.filter(
             _id=restaurant._id).first()
         old_file_path = getattr(restaurant, save_location)
-        if first_time_submission == 'False':
+        if submit_for_approval == 'False':
             setattr(restaurant, 'status', Status.In_Progress.value)
+        else:
+            setattr(restaurant, 'status', Status.Pending.value)
         if approved_restaurant:
             approved_file_path = getattr(approved_restaurant, save_location)
             if save_location != RestaurantSaveLocations.restaurant_image_url.name and approved_file_path != old_file_path:
