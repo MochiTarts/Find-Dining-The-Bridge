@@ -866,12 +866,8 @@ class PendingRestaurant(models.Model):
             except ValidationError as e:
                 invalid['Invalid'].append('email')
 
-        if 'pricepoint' in fields:
-            if fields['pricepoint'] is not None:
-                if fields['pricepoint'] not in Prices:
-                    invalid['Invalid'].append('pricepoint')
-            else:
-                invalid['Invalid'].append('pricepoint')
+        if 'pricepoint' in fields and not fields['pricepoint']:
+            invalid['Invalid'].append('pricepoint')
 
         if 'web_url' in fields and fields['web_url'] != "":
             website = fields['web_url']
