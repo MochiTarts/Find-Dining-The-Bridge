@@ -210,7 +210,11 @@ export class LoginComponent implements OnInit {
               else
                 this.router.navigate(['/restaurant']);
             } else {
-              this.router.navigate(['/articles']);
+              if (profileId == null) {
+                this.router.navigate(['/']);
+              } else {
+                this.router.navigate(['/articles']);
+              }
             }
 
           },

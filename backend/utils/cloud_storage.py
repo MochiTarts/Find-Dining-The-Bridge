@@ -16,16 +16,26 @@ credentials = service_account.Credentials.from_service_account_info({
 
 client = storage.Client(project='scdining-winter2021', credentials=credentials)
 DEV_BUCKET = 'dev-scdining'
+TEST_BUCKET = 'test-scdining'
+UAT_BUCKET = 'uat-scdining'
 PRODUCTION_BUCKET = 'production-scdining'
 API = 'https://storage.googleapis.com/'
 IMAGE = 'image/png'
 VIDEO = 'video/mp4'
 
 
-def upload(file, bucket_path, content_type=None):
+def upload(file, content_type=None):
     """ Uploads a file to the bucket path. """
-    #if settings.ENVIRONMENT == 'prod':
-    #    bucket_path = PRODUCTION_BUCKET  # Use production bucket if in production mode
+    bucket_path = DEV_BUCKET
+
+    if settings.MAIN_SITE_URL is not None:
+        if "test" in settings.MAIN_SITE_URL:
+            bucket_path = TEST_BUCKET
+        elif "uat" in settings.MAIN_SITE_URL:
+            bucket_path = UAT_BUCKET
+        else:
+            bucket_path = PRODUCTION_BUCKET
+
     bucket = client.bucket(bucket_path)
     if content_type == VIDEO:
         name = generate_video_name()

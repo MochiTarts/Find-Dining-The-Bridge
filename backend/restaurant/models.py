@@ -432,7 +432,7 @@ class PendingFood(models.Model):
         save_location = form_data.get('save_location')
         media_file = form_file['media_file']
 
-        file_path = upload(media_file, DEV_BUCKET, IMAGE)
+        file_path = upload(media_file, IMAGE)
 
         approved_dish = Food.objects.filter(_id=dish._id).first()
         old_file_path = getattr(dish, save_location)
@@ -981,11 +981,11 @@ class PendingRestaurant(models.Model):
                     file_path.remove('/')
 
                 for image in media_files_list:
-                    file_path.append(upload(image, DEV_BUCKET, IMAGE))
+                    file_path.append(upload(image, IMAGE))
                 file_path = json.dumps(file_path)
             else:
                 media_file = form_file['media_file']
-                file_path = upload(media_file, DEV_BUCKET, IMAGE)
+                file_path = upload(media_file, IMAGE)
         else:
             if save_location != 'restaurant_video_url':
                 raise ValidationError(
@@ -1001,7 +1001,7 @@ class PendingRestaurant(models.Model):
                 file_path = media_link
             else:
                 media_file = form_file['media_file']
-                file_path = upload(media_file, DEV_BUCKET, VIDEO)
+                file_path = upload(media_file, VIDEO)
 
         approved_restaurant = Restaurant.objects.filter(
             _id=restaurant._id).first()

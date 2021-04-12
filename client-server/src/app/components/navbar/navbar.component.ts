@@ -118,6 +118,10 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  article() {
+    this.router.navigate(['/articles']);
+  }
+
   restaurantSetup() {
     this.router.navigate(['/restaurant-setup'])
   }
