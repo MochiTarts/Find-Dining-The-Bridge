@@ -92,7 +92,7 @@ export class NewsArticlesComponent implements OnInit {
       }
       this.latestArticles = this.filteredArticles.slice(0, 8);
 
-      this.selectedArticle = this.filteredArticles[1];
+      this.selectedArticle = this.filteredArticles[0];
       length = Math.ceil(this.filteredArticles.length/10);
       this.totalTabs = Array(length);
     })
