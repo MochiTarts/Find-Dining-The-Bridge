@@ -243,6 +243,14 @@
   margin: auto;
 }
 
+#info-col1 {
+  min-width: 300px;
+
+  @media screen and (max-width:482px) {
+    min-width: 0px;
+  }
+}
+
 .logo {
   text-align: center;
   border-right: 1px solid black;
@@ -257,15 +265,25 @@
   height: 175px;
   object-fit: cover;
 
-  @media screen and (max-width: 1024px) {
-    width: 200px;
+  /*@media screen and (max-width: 1160px) {
+    width: 220px;
     height: 133px;
   }
 
+  @media screen and (max-width: 1024px) {
+    width: 200px;
+    height: 133px;
+  }*/
+
   @media screen and (max-width: 768px) {
-    width: 150px;
-    height: 100px;
+    //width: 150px;
+    //height: 100px;
     margin-bottom: 50px;
+  }
+
+  @media screen and (max-width:482px) {
+    width: 100%;
+    height: auto;
   }
 }
 
