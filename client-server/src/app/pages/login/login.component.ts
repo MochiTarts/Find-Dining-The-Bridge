@@ -130,8 +130,7 @@ export class LoginComponent implements OnInit {
                 this.authService.updateLoginStatus(true);
                 this.isLoggedIn = true;
                 this.modalService.dismissAll();
-
-                this.router.navigate(['/articles']);
+                this.loginRedirect();
               }, err => {
 
                 this.authService.updateLoginStatus(false);
@@ -154,7 +153,7 @@ export class LoginComponent implements OnInit {
                 this.authService.updateLoginStatus(true);
                 this.isLoggedIn = true;
                 this.modalService.dismissAll();
-                this.router.navigate(['/articles']);
+                this.loginRedirect();
               }, err => {
                 this.authService.updateLoginStatus(false);
                 this.isLoggedIn = false;
@@ -201,21 +200,8 @@ export class LoginComponent implements OnInit {
             this.authService.updateLoginStatus(true);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
-            this.role = this.tokenStorage.getUser().role;
-            let profileId = this.tokenStorage.getUser().profile_id;
-
-            if (this.role == 'RO') {
-              if (profileId == null)
-                this.router.navigate(['/restaurant-setup']);
-              else
-                this.router.navigate(['/restaurant']);
-            } else {
-              if (profileId == null) {
-                this.router.navigate(['/']);
-              } else {
-                this.router.navigate(['/articles']);
-              }
-            }
+            this.role = this.tokenStorage.getUser().role;     
+            this.loginRedirect();
 
           },
           // login failed
@@ -302,6 +288,23 @@ export class LoginComponent implements OnInit {
 
   reloadPage(): void {
     window.location.reload();
+  }
+
+  loginRedirect(): void {
+    let profileId = this.tokenStorage.getUser().profile_id;
+
+    if (this.role == 'RO') {
+      if (profileId == null)
+        this.router.navigate(['/restaurant-setup']);
+      else
+        this.router.navigate(['/restaurant']);
+    } else {
+      if (profileId == null) {
+        this.router.navigate(['/']);
+      } else {
+        this.router.navigate(['/articles']);
+      }
+    }
   }
 
 
