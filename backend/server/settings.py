@@ -276,8 +276,8 @@ STATIC_URL = '/static/'
 import sys
 # not exhaustive, we simply need to add any manage.py command that we would run and not setting static root when running them
 #or sys.argv[1] not in ['runserver', 'makemigrations', 'migrate', 'createsuperuser', ...]
-if len(sys.argv) < 2 or sys.argv[1] not in ['runserver', 'makemigrations', 'migrate', 'createsuperuser']:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+#if len(sys.argv) < 2 or sys.argv[1] not in ['runserver', 'makemigrations', 'migrate', 'createsuperuser']:
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),
 ]
