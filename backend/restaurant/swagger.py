@@ -931,7 +931,7 @@ restaurant_media_put_request = [
         enum=["cover_photo_url", "logo_url", "restaurant_video_url", "restaurant_image_url"]),
     openapi.Parameter('media_file', in_=openapi.IN_FORM, type=openapi.TYPE_FILE),
     openapi.Parameter('media_link', in_=openapi.IN_FORM, type=openapi.TYPE_STRING),
-    openapi.Parameter('first_time_submission', in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter('submit_for_approval', in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True, enum=["True", "False"]),
 ]
 
 restaurant_media_put_response = {
