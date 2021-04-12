@@ -8,7 +8,7 @@
           <mat-card-content>
             <form *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit('login')" #f="ngForm" novalidate>
               <div class="form-element">
-                <div class="alert alert-primary" role="alert" *ngIf="f.submitted && isLoginFailed && infoMessage">
+                <div class="alert alert-primary" role="alert" *ngIf="(f.submitted || isThirdParty) && isLoginFailed && infoMessage">
                   {{ infoMessage }}
                 </div>
               </div>
