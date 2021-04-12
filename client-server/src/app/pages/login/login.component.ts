@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
   isSignupSuccessful = false;
   isSignUpFailed = false;
   signupErrorMessage: string = '';
+  signupMessage: string = '';
 
   resetForm: any = {
     email: null,
@@ -244,9 +245,10 @@ export class LoginComponent implements OnInit {
         if (password1 == password2) {
           this.authService.register(username, email, password1, role).subscribe(
             data => {
-              // console.log(data);
+              //console.log(data);
               this.isSignupSuccessful = true;
               this.isSignUpFailed = false;
+              this.signupMessage = data.message;
               this.ref.detectChanges();
               //let curTab = document.getElementsByClassName("tab-header")[0];
               //let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
