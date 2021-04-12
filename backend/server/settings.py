@@ -192,9 +192,11 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = os.environ.get('SSL_REDIRECT') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
+if os.environ.get('ALLOWED_HOSTS') != None:
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
 
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED').split(',')
+if os.environ.get('CORS_ALLOWED') != None:
+    CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED').split(',')
 
 CORS_ALLOW_METHODS = (
 'GET',
