@@ -21,19 +21,19 @@ export class MediaService {
             media_link: string (YouTube url)
               - Use media_file if you're going to send me a file to upload; leave media_link blank
               - Use media_link if you're going to send me a YouTube link; leave media_file blank
-            first_time_submission: string (True or False; NO LOWERCASE)
-              - This tells backend if request is coming from the initial restaurant setup form, or it's coming from the editing restaurant profile page area
-              True - coming from initial setup form
-              False - coming from restaurant profile editing page
+            submit_for_approval: string (True or False; NO LOWERCASE)
+              - This tells backend if restaurant is saving draft or submitting it for admin approval
+              True - submitting for admin approval
+              False - saving as draft
   @Output: Restaurant record
 
   Uploads images and videos for a given PendingRestaurant
   */
-  uploadRestaurantMedia(formData, media_type: string, save_location: string, first_time_submission: string): Observable<any> {
+  uploadRestaurantMedia(formData, media_type: string, save_location: string, submit_for_approval: string): Observable<any> {
     const endpoint = RO_MEDIA_ENDPOINT;
     formData.append('media_type', media_type);
     formData.append('save_location', save_location);
-    formData.append('first_time_submission', first_time_submission);
+    formData.append('submit_for_approval', submit_for_approval);
     return this.http.put<any>(endpoint, formData);
   }
 

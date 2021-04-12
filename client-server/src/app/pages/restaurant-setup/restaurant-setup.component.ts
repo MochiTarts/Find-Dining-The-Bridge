@@ -147,7 +147,7 @@ export class RestaurantSetupComponent implements OnInit {
   onSubmit(option) {
     const formData = new FormData();
     formData.append('media_file', this.uploadForm.get('file').value);
-    return this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'logo_url', option.includes('SETUP') ? 'True' : 'False');
+    return this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'logo_url', option.includes('SUBMIT') ? 'True' : 'False');
     // this.newImage = false;
   }
 

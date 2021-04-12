@@ -29,7 +29,7 @@ class RestaurantMediaForm(forms.Form):
     save_location = forms.ChoiceField(choices=RestaurantSaveLocations.choices(), required=True)
     media_file = forms.FileField(required=False)
     media_link = forms.CharField(required=False)
-    first_time_submission = forms.ChoiceField(choices=(('True', 'True'), ('False', 'False')))
+    submit_for_approval = forms.ChoiceField(choices=(('True', 'True'), ('False', 'False')))
 
 
 class RestaurantImageDeleteForm(forms.Form):
