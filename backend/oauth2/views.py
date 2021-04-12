@@ -73,9 +73,11 @@ class GoogleView(APIView):
             # get user by auth Id (3rd party id) Or email
             user = User.objects.get(
                 Q(auth_id=auth_id) | Q(email__iexact=email))
+            '''
             if user.email is not email:
                 user.email = email
                 user.save()
+            '''
         # if verify_oauth2_token failed
         except ValueError:
             return JsonResponse({'message': 'idToken is invalid'}, status=400)
@@ -147,9 +149,11 @@ class FacebookView(APIView):
                 Q(auth_id=auth_id) | Q(email__iexact=email))
             # update user email in case they updated it in 3rd party service
             # we can also ask it before update (future enhancements)
+            '''
             if user.email is not email:
                 user.email = email
                 user.save()
+            '''
 
         # if user not in db, create one with random password
         except User.DoesNotExist:
