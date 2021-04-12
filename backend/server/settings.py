@@ -268,12 +268,12 @@ SIMPLE_JWT = {
 
 STATIC_URL = '/static/'
 #STATIC_ROOT = ''
-# import sys
-# if sys.argv[1] not in ['runserver', 'makemigrations', 'migrate']:
-#     STATIC_ROOT = os.path.join(BASE_DIR, "static")
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static/"),
-# ]
+import sys
+if len(sys.argv) < 2 or sys.argv[1] not in ['runserver', 'makemigrations', 'migrate']:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static/"),
+]
 
 
 #SESSION_COOKIE_DOMAIN = '.localhost'
