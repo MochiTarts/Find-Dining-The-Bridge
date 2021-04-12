@@ -1,4 +1,5 @@
 from rest_framework.views import exception_handler
+from rest_framework.exceptions import ErrorDetail
 from django.http import JsonResponse
 
 from django.core.exceptions import MultipleObjectsReturned, ValidationError, ObjectDoesNotExist
@@ -42,24 +43,11 @@ def views_exception_handler(exc, context):
         }
         return JsonResponse(custom_error_response, status=400)
 
+    # 401 are all DRF exceptions so we can simply use its response handling
     if isinstance(exc, status_401_excpetions):
-        if hasattr(exc, 'message'):
-            detail = exc.message
-        elif hasattr(exc, 'message_dict'):
-            detail = exc.message_dict
-        else:
-            detail = str(exc)
-
-        if hasattr(exc, 'code'):
-            code = exc.code
-        else:
-            code = "not_authenticated"
-        custom_error_response = {
-            "status": 401,
-            "code": code,
-            "detail": detail
-        }
-        return JsonResponse(custom_error_response, status=401)
+        if response is not None:
+            response.data['status'] = response.status_code
+        return response
 
     if isinstance(exc, status_403_exceptions):
         if hasattr(exc, 'message'):

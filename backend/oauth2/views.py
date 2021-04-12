@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 
-from sduser.backends import SDUserCookieTokenObtainPairSerializer, create_disable_user_and_send_verification_email
+from sduser.backends import SDUserCookieTokenObtainPairSerializer, create_disable_user_and_send_verification_email, check_user_status
 from sduser.forms import SDUserCreateForm
 
 from google.oauth2 import id_token
@@ -51,7 +51,7 @@ class GoogleView(APIView):
         r = requests.get(
             'https://www.googleapis.com/oauth2/v2/userinfo', params=payload)
         data = json.loads(r.text)
-        print(data)
+        #print(data)
 
         if 'error' in data:
             content = {
@@ -66,8 +66,8 @@ class GoogleView(APIView):
         try:
             googleJWT = id_token.verify_oauth2_token(request.data.get(
                 'idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
-            print('user info from google idToken:')
-            print(googleJWT)
+            #print('user info from google idToken:')
+            #print(googleJWT)
             # this is definitive as it is not modifiable
             email = googleJWT['email']
             # get user by auth Id (3rd party id) Or email
@@ -78,6 +78,7 @@ class GoogleView(APIView):
                 user.email = email
                 user.save()
             '''
+            check_user_status(user)
         # if verify_oauth2_token failed
         except ValueError:
             return JsonResponse({'message': 'idToken is invalid'}, status=400)
@@ -87,13 +88,12 @@ class GoogleView(APIView):
                 return JsonResponse({'message': 'no user is associated with this google account, please register an account first'}, status=400)
             user = create_default_user_for_3rd_party(email, auth_id, role)
 
-            # if email is verified with 3rd party we can simply save the user with an 3rd party id
-            if googleJWT['email_verified']:
-                user.auth_id = auth_id
+            # if email is not verified with 3rd party we create a disabled user and send an email for verification
+            if not googleJWT['email_verified']:
+                user.is_active = False
                 user.save()
-            # otherwise we create a disabled user and send an email for verification
-            else:
-                return create_disable_user_and_send_verification_email(user, password, request)
+                create_disable_user_and_send_verification_email(user, password, request)
+                check_user_status(user)
 
         response = construct_response_for_3rd_party_auth(user)
 
@@ -132,8 +132,8 @@ class FacebookView(APIView):
                          request.data.get('id'), params=payload)
         data = json.loads(r.text)
 
-        print('user profile fields from facebook:')
-        print(data)
+        #print('user profile fields from facebook:')
+        #print(data)
 
         if 'error' in data:
             content = {'message': 'invalid facebook token or user id'}
@@ -212,6 +212,7 @@ def create_default_user_for_3rd_party(email, auth_id, role):
     user.password = password
     user.email = email
     user.role = role
+    user.is_active = True
 
     # note that facebook users have their email verified so we do not need to check it
     user.auth_id = auth_id

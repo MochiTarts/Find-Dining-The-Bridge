@@ -132,11 +132,20 @@ export class LoginComponent implements OnInit {
                 this.modalService.dismissAll();
                 this.loginRedirect();
               }, err => {
+                console.log(err);
 
                 this.authService.updateLoginStatus(false);
                 this.isLoggedIn = false;
+                var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
+
                 if (err.error){
-                  this.loginErrorMessage = err.error.message;
+                  switch (err.error.code) {
+                    case 'user_disabled':
+                      this.infoMessage = verifyEmailInfoMessage;
+                      break;
+                    default:
+                      this.loginErrorMessage = err.error.message;
+                  }
                   //console.log(this.loginErrorMessage);
                 }
                 this.isLoginFailed = true;
