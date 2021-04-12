@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponseRedirect
+from django.conf import settings
 from django.urls import reverse
 
 from login_audit.forms import LoginForm
@@ -102,10 +103,15 @@ admin.site = admin_site
 
 # customization on the admin site (global)
 # header
-admin.site.site_header = "Fine Dining Administration"
+admin.site.site_header = "Find Dining Administration"
 # url for view_site
-admin.site.site_url = "https://finddining.ca"
+admin.site.site_url = "https://localhost:4200"
+#admin.site.site_url = "https://finddining.ca"
+main_site_url = settings.MAIN_SITE_URL
+if main_site_url:
+    admin.site.site_url = main_site_url
+
 # title suffix
 # admin.site.site_title = "Administration"
 # Title of admin index page
-admin.site.index_title = "Fine Dining Administration"
+admin.site.index_title = "Find Dining Administration"
