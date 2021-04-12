@@ -66,6 +66,7 @@ export class LoginComponent implements OnInit {
   hide: boolean = true;
   strength: number = 0;
   siteKey: string;
+  isThirdParty: boolean = false;
 
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
@@ -110,24 +111,40 @@ export class LoginComponent implements OnInit {
       // otherwise the user is logged in with third party and need to handle authentication on the backend
     } else {
       this.socialAuth.authState.subscribe((user) => {
+        this.isThirdParty = true;
         this.user = user;
+
         // console.log(user);
         // we'll get a SocialUser object with the following properties:
         // id, idToken, authToken, email, firstName, lastName, name, photoUrl, provider
-        this.isLoggedIn = (user != null);
+        //this.isLoggedIn = (user != null);
         if (user != null) {
           this.tokenStorage.setProvider(user.provider);
           // direct authentication to the appropriate view depending on the provider
           switch (user.provider) {
             case 'GOOGLE':
+
               // send the token to backend to process
               this.authService.googleAuth(user.idToken, user.authToken, this.role).subscribe((data) => {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
                 this.authService.updateLoginStatus(true);
+                this.isLoggedIn = true;
+                this.modalService.dismissAll();
+
                 this.router.navigate(['/articles']);
               }, err => {
+
                 this.authService.updateLoginStatus(false);
-                // console.log(err);
+                this.isLoggedIn = false;
+                if (err.error){
+                  this.loginErrorMessage = err.error.message;
+                  //console.log(this.loginErrorMessage);
+                }
+                this.isLoginFailed = true;
+                this.tokenStorage.signOut();
+                // manually trigger change detection to have error messages render
+                this.ref.detectChanges();
+                //throw err;
               })
               break;
             case 'FACEBOOK':
@@ -135,15 +152,26 @@ export class LoginComponent implements OnInit {
               this.authService.facebookAuth(user.id, user.authToken, this.role).subscribe((data) => {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
                 this.authService.updateLoginStatus(true);
+                this.isLoggedIn = true;
+                this.modalService.dismissAll();
                 this.router.navigate(['/articles']);
               }, err => {
                 this.authService.updateLoginStatus(false);
-                // console.log(err);
+                this.isLoggedIn = false;
+                if (err.error){
+                  this.loginErrorMessage = err.error.message;
+                  //console.log(this.loginErrorMessage);
+                }
+                this.isLoginFailed = true;
+                this.tokenStorage.signOut();
+                // manually trigger change detection to have error messages render
+                this.ref.detectChanges();
               })
               break;
             default:
               // console.log('unrecognized provider: ' + user.provider);
               this.authService.updateLoginStatus(false);
+              this.isLoggedIn = false;
               this.tokenStorage.signOut();
               this.reloadPage();
           }
@@ -151,7 +179,7 @@ export class LoginComponent implements OnInit {
         }
       }, (err) => {
         this.authService.updateLoginStatus(false);
-        // console.log(err);
+        //console.log(err);
       });
     }
   }
@@ -275,15 +303,19 @@ export class LoginComponent implements OnInit {
 
   signInWithGoogle(role: string = ''): void {
     this.role = role;
-    this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => {
-      this.modalService.dismissAll();
+    this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
+      //this.modalService.dismissAll();
+    }).catch(error => {
+      console.log(error);
     });
   }
 
   signInWithFB(role: string = ''): void {
     this.role = role;
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID).then(() => {
-      this.modalService.dismissAll();
+      //this.modalService.dismissAll();
+    }).catch(error => {
+      console.log(error);
     });
   }
 
