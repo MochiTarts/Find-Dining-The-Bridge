@@ -73,6 +73,18 @@ export class RestaurantService {
     return this.http.post<any>(endpoint, ownerInfo);
   }
 
+  /**
+   * Updates a restaurant_owner record in the database
+   * 
+   * @param ownerInfo - JSON object containing:
+   *                      consent_status (string)
+   * @returns Updated RO record in JSON format
+   */
+  roEdit(ownerInfo): Observable<any> {
+    const endpoint = OWNER_ENDPOINT + '/profile/';
+    return this.http.put<any>(endpoint, ownerInfo);
+  }
+
   /*
   @Input: JSON object containing restaurant info
           Required fields:

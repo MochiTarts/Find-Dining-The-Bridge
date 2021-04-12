@@ -75,9 +75,11 @@ class RestaurantOwner(models.Model):
         """
         ro_filter = RestaurantOwner.objects.filter(user_id=user_id)
         if not ro_filter.exists():
-            raise NotFound("The restaurant owner profile with user_id: "+user_id+" does not exist")
+            raise NotFound(
+                "The restaurant owner profile with user_id: "+str(user_id)+" does not exist")
         if ro_filter.count() > 1:
-            raise MultipleObjectsReturned("There are more than one restaurant owner record with this user_id: "+user_id)
+            raise MultipleObjectsReturned(
+                "There are more than one restaurant owner record with this user_id: "+str(user_id))
 
         return JsonResponse(ro_filter.first())
 
@@ -95,15 +97,14 @@ class RestaurantOwner(models.Model):
         :rtype: :class: `RestaurantOwner`
         """
         ro_filter = RestaurantOwner.objects.filter(user_id=user_id)
-        restaurant_id = user_data['restaurant_id']
-        
-        if not ro_filter.exists():
-            raise ObjectDoesNotExist("This restaurant owner profile does not exist")
-        if not PendingRestaurant.objects.filter(_id=restaurant_id).exists():
-            raise ObjectDoesNotExist("This restaurant with _id: "+restaurant_id+" does not exist")
-
         profile = ro_filter.first()
+
         edit_model(profile, user_data, restaurant_owner_editable)
+        if "consent_status" in user_data:
+            consent_data = handleConsentStatus(user_data["consent_status"])
+            for field in consent_data:
+                setattr(profile, field, consent_data[field])
+
         profile = save_and_clean(profile)
         return profile
 
@@ -154,9 +155,7 @@ class RestaurantOwner(models.Model):
 
 def handleConsentStatus(consent_status):
     """ Creates a dict containing the fields and values
-    related to a user's consent status. Meant to be added
-    to the restaurant_owner_data dict before creating the
-    RestaurantOwner record
+    related to a user's consent status.
 
     :param consent_status: the consent status value (ie. 'EXPRESSED', 'IMPLIED')
     :type consent_status: str
@@ -168,11 +167,9 @@ def handleConsentStatus(consent_status):
     profile = {}
     profile["consent_status"] = consent_status
     if consent_status == "EXPRESSED":
-        profile["expired_at"] =  None
         profile["subscribed_at"] = datetime.datetime.today()
-        profile["unsubscribed_at"] = None
     elif consent_status == "IMPLIED":
         profile["expired_at"] = datetime.datetime.today() + datetime.timedelta(days=+182)
-        profile["subscribed_at"] = None
-        profile["unsubscribed_at"] = None
+    elif consent_status == "UNSUBSCRIBED":
+        profile["unsubscribed_at"] = datetime.datetime.today()
     return profile
