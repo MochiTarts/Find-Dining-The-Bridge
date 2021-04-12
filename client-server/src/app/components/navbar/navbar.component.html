@@ -48,10 +48,23 @@
           </div>
         </li>
 
-        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
-          <a (click)="accountSetting()" routerLink="/account-setting" routerLinkActive="active" class="nav-link">
-            Account Settings
-          </a>
+        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle tabindex="0">
+              User Info
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownProfile">
+              <button ngbDropdownItem (click)="favourites()" tabindex="0">
+                Favourites
+              </button>
+              <button ngbDropdownItem (click)="accountSetting()" tabindex="0">
+                Account Settings
+              </button>
+              <button ngbDropdownItem (click)="newsletter()" tabindex="0">
+                Notifications
+              </button>
+            </div>
+          </div>
         </li>
 
         <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
@@ -59,6 +72,23 @@
             Restaurant Page
           </a>
         </li>
+
+        <!--<li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
+          <a (click)="accountSetting()" routerLink="/account-setting" routerLinkActive="active" class="nav-link">
+            Account Settings
+          </a>
+        </li>
+
+        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">
+          <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">
+            Go Find Dining
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="tokenStorageService.RO">
+          <a routerLink="/favourites" routerLinkActive="active" class="nav-link" (click)="favourites()">
+            Favourites
+          </a>
+        </li>-->
 
         <!-- li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">
           <div ngbDropdown class="d-inline-block">
@@ -78,17 +108,6 @@
             </div>
           </div>
         </li> -->
-
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">
-          <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">
-            Go Find Dining
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="tokenStorageService.RO">
-          <a routerLink="/favourites" routerLinkActive="active" class="nav-link" (click)="favourites()">
-            Favourites
-          </a>
-        </li>
         <!-- <li class="nav-item nav-link" *ngIf="authService.isLoggedIn() || tokenStorageService.RO">
           <a routerLinkActive="active" class="nav-link" (click)="timeline()">
             Timeline

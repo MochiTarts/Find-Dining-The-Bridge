@@ -56,7 +56,7 @@ def get_nearby_restaurants(user_id, role):
             owner_user_id=user_id).first()
 
     if not user:
-        raise ObjectDoesNotExist("The user with the given user_id: "+ user_id +" does not exist")
+        raise ObjectDoesNotExist("The user with the given user_id: "+ str(user_id) +" does not exist")
 
     user_location = ast.literal_eval(user.GEO_location)
     nearest = []

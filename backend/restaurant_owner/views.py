@@ -22,11 +22,7 @@ import json
 restaurant_owner_signup_schema = {
     "properties": {
         "restaurant_id": {"type": "string"},
-        "last_updated": {"type": "string", "format": "date"},
         "consent_status": {"type": "string"},
-        "subscribed_at": {"type": "string", "format": "date"},
-        "unsubscribed_at": {"type": "string", "format": "date"},
-        "expired_at": {"type": "string", "format": "date"},
     },
     "required": ["restaurant_id"],
     "additionalProperties": False
@@ -34,12 +30,7 @@ restaurant_owner_signup_schema = {
 
 restaurant_owner_edit_schema = {
     "properties": {
-        "restaurant_id": {"type": "string"},
-        "last_updated": {"type": "string", "format": "date"},
         "consent_status": {"type": "string"},
-        "subscribed_at": {"type": "string", "format": "date"},
-        "unsubscribed_at": {"type": "string", "format": "date"},
-        "expired_at": {"type": "string", "format": "date"},
     },
     "additionalProperties": False
 }

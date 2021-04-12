@@ -37,7 +37,8 @@ class SubscriberProfileView(APIView):
             raise PermissionDenied(message="Failed to obtain user", code="fail_obtain_user")
         profile = SubscriberProfile.objects.get(user_id=user.id)
         if not profile:
-            raise ObjectDoesNotExist('No subscriber profile found with owner user id of this: ' + user_id)
+            raise ObjectDoesNotExist(
+                'No subscriber profile found with owner user id of this: ' + str(user_id))
         return JsonResponse(model_to_dict(profile))
 
     def put(self, request):
