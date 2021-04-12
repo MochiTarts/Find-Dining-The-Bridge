@@ -15,7 +15,6 @@ export class NewsletterComponent implements OnInit {
   userId: string = '';
   role: string = '';
   subscribed: boolean = false;
-  unsubscribed: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -27,54 +26,53 @@ export class NewsletterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.titleService.setTitle("Newsletter | Find Dining Scarborough");
     const user = this.tokenStorageService.getUser();
     this.userId = user.user_id;
     this.role = user.role;
 
     this.subscribed = false;
-    this.unsubscribed = false;
+
+    this.chooseGetAPI().subscribe((data) => {
+      this.subscribed = (data.consent_status == "EXPRESSED");
+    });
   }
 
   subscribeNewsletter() {
-    this.titleService.setTitle("Newsletter | Find Dining Scarborough");
     var userInfo = {
       consent_status: "EXPRESSED"
     }
-    if (this.role == 'BU') {
-      this.userService.editSubscriberProfile(userInfo).subscribe(() => {
-        this.subscribed = true;
-        alert("You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.");
-        this.reload();
-      });
-    } else if (this.role == 'RO') {
-      this.restaurantService.roEdit(userInfo).subscribe(() => {
-        this.subscribed = true;
-        alert("You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.");
-        this.reload();
-      })
-    } else {
-      alert("Your role is neither RO nor BU");
-    }
+    this.chooseEditAPI(userInfo).subscribe(() => {
+      this.subscribed = true;
+      alert("You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.");
+      this.reload();
+    });
   }
 
   unsubscribeNewsletter() {
     var userInfo = {
       consent_status: "UNSUBSCRIBED",
     }
+    this.chooseEditAPI(userInfo).subscribe(() => {
+      this.subscribed = false;
+      alert("You have successfully unsubscribed.");
+      this.reload();
+    });
+  }
+
+  chooseEditAPI(userInfo) {
     if (this.role == 'BU') {
-      this.userService.editSubscriberProfile(userInfo).subscribe(() => {
-        this.unsubscribed = true;
-        alert("You have successfully unsubscribed.");
-        this.reload();
-      });
+      return this.userService.editSubscriberProfile(userInfo);
     } else if (this.role == 'RO') {
-      this.restaurantService.roEdit(userInfo).subscribe(() => {
-        this.subscribed = true;
-        alert("You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.");
-        this.reload();
-      })
-    } else {
-      alert("Your role is neither RO nor BU");
+      return this.restaurantService.roEdit(userInfo);
+    }
+  }
+
+  chooseGetAPI() {
+    if (this.role == 'BU') {
+      return this.userService.getSubscriberProfile();
+    } else if (this.role == 'RO') {
+      return this.restaurantService.roGet();
     }
   }
 
