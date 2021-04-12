@@ -99,9 +99,6 @@ export class NewsArticlesComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    if (this.role && this.role == 'BU' && this.profileId == null) {
-      this.userInfo.open(false);
-    }
   }
 
   openArticle(article) {

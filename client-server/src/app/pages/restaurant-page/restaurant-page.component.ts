@@ -66,7 +66,7 @@ export class RestaurantPageComponent implements OnInit {
 
   newFile: boolean = false;
 
-  videoId:string = '';
+  videoId: string = '';
   validator: formValidator = new linkValidator();
   draftValidator: formValidator = new draftValidator();
   apiLoaded = false;
@@ -108,10 +108,10 @@ export class RestaurantPageComponent implements OnInit {
     this.titleService.setTitle("Restaurant Page | Find Dining Scarborough");
 
     this.pricepoints = [
-      {key: "$", value: "LOW"},
-      {key: "$$", value: "MID"},
-      {key: "$$$", value: "HIGH"},
-      {key: "$$$$", value: "EXHIGH"}
+      { key: "$", value: "LOW" },
+      { key: "$$", value: "MID" },
+      { key: "$$$", value: "HIGH" },
+      { key: "$$$$", value: "EXHIGH" }
     ]
 
     if (this.authService.isLoggedIn) {
@@ -120,10 +120,10 @@ export class RestaurantPageComponent implements OnInit {
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
-    }
 
-    if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
-      this.getNearbyRestaurants();
+      if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
+        this.getNearbyRestaurants();
+      }
     }
 
     this.restaurantId = this.route.snapshot.queryParams.restaurantId;
@@ -143,7 +143,7 @@ export class RestaurantPageComponent implements OnInit {
 
       // displayed phone
       var phone: string = String(this.restaurantDetails.phone);
-      this.displayed_phone = phone != 'null' ? "(" + phone.slice(0,3) + ") " + phone.slice(3,6) + " " + phone.slice(6,10) : '';
+      this.displayed_phone = phone != 'null' ? "(" + phone.slice(0, 3) + ") " + phone.slice(3, 6) + " " + phone.slice(6, 10) : '';
 
       // pricepoint
       let price = String(this.restaurantDetails.pricepoint);
@@ -166,7 +166,7 @@ export class RestaurantPageComponent implements OnInit {
           this.serviceCount += 1;
         } else {
           this.serviceList = this.serviceList + " | " + String(service);
-          if(this.serviceCount < 4) {
+          if (this.serviceCount < 4) {
             this.firstFourServices = this.serviceList;
           }
           this.serviceCount += 1;
@@ -191,7 +191,7 @@ export class RestaurantPageComponent implements OnInit {
       });
 
       for (let url of this.restaurantDetails.restaurant_image_url) {
-        this.slides.push({url: url.replace(' ', '%20')});
+        this.slides.push({ url: url.replace(' ', '%20') });
       }
 
       this.videoId = this.getVideoId(this.restaurantDetails.restaurant_video_url);
@@ -414,7 +414,7 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   getVideoId(link: string) {
-    return (getVideoId(link) as {id, service}).id;
+    return (getVideoId(link) as { id, service }).id;
   }
 
   deleteImage(imgUrl: string) {
