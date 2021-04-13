@@ -1,9 +1,14 @@
 from django.db import models
+from django.db.models.signals import pre_delete
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
-from .enum import Roles
 #from django import models as django_models
+from django.dispatch.dispatcher import receiver
+from django.core.exceptions import PermissionDenied
+from django.conf import settings
+
+from sduser.enum import Roles
 
 class SDUser(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
@@ -58,3 +63,8 @@ class SDUser(AbstractUser):
 
     def has_perm(self, perm, obj=None):
        return self.is_superuser
+
+@receiver(pre_delete, sender=SDUser)
+def delete_user(sender, instance, **kwargs):
+    if instance.is_superuser or instance.email == settings.ADMIN_EMAIL:
+        raise PermissionDenied

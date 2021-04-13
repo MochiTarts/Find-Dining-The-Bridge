@@ -43,7 +43,7 @@ def verify_email(request, uidb64, token):
         )
 
 def send_email_verification(user, request=None, site=None):
-    domain, protocal = get_domain_and_protocal(request, site)
+    domain, protocal = get_domain_and_protocal(request, site, django_template=True)
     subject = 'Verify Your Email for Find Dining'
     email_template_name = 'verify_email/verification.html'
     message = render_to_string(email_template_name, {
@@ -100,9 +100,23 @@ def send_email_activate_notify(user, request=None, site=None):
 
 
 
+def send_email_promote_notify(user, request=None, site=None):
+    domain, protocal = get_domain_and_protocal(request, site)
+    subject = 'Account promotion for Find Dining'
+    email_template_name = 'verify_email/promotion_notify.html'
+    message = render_to_string(email_template_name, {
+                'user': user,
+                'domain': domain,
+                'protocal': protocal,
+            })
+    send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
+                        recipient_list=[user.email], html_message=message, fail_silently=False)
+
+
+
 
 def send_email_password_reset(user, request=None, site=None):
-    domain, protocal = get_domain_and_protocal(request, site)
+    domain, protocal = get_domain_and_protocal(request, site, django_template=True)
     subject = "Password Reset on Find Dining"
     email_template_name = 'registration/password_reset_email_user.html'
     message = render_to_string(email_template_name, {
@@ -118,7 +132,7 @@ def send_email_password_reset(user, request=None, site=None):
                         recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
-def get_domain_and_protocal(request, site):
+def get_domain_and_protocal(request, site, django_template=False):
     if site is not None:
         domain = site
     else:
@@ -126,5 +140,8 @@ def get_domain_and_protocal(request, site):
     # for localhost:4200 or test/uat/prod
     protocal = 'https'
     if 'localhost:8000' in domain:
+        protocal = 'http'
+    if 'localhost:4200' in domain and django_template:
+        domain = 'localhost:8000'
         protocal = 'http'
     return (domain, protocal)
