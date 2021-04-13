@@ -34,10 +34,17 @@ export class AccountSettingComponent implements OnInit {
     }
   }
 
+  /**
+   * Opens the modal asking for confirmation on account deactivation
+   * @param content - the modal to open
+   */
   openConfirmModal(content) {
     this.modalRef = this.modalService.open(content, { backdrop: 'static', keyboard: false });
   }
 
+  /**
+   * Performs action to deactivate the current user
+   */
   deactivateAccount() {
     var user = this.tokenStorage.getUser();
     this.userService.deactivateUser(user.user_id).subscribe(data => {

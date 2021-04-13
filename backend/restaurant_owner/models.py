@@ -14,7 +14,9 @@ import datetime
 import requests
 
 restaurant_owner_editable = [
-   "restaurant_id", "last_updated", "consent_status", "subscribed_at", "unsubscribed_at", "expired_at"
+   "restaurant_id", "last_updated",
+   "consent_status", "subscribed_at",
+   "unsubscribed_at", "expired_at"
 ]
 
 class RestaurantOwner(models.Model):
@@ -37,7 +39,8 @@ class RestaurantOwner(models.Model):
 
         :param restaurant_owner_data: data of the restaurant owner
         :type restaurant_owner_data: dict
-        :rairses ObjectDoesNotExist: if PendingRestaurant record of given id does not exist
+        :rairses ObjectDoesNotExist: if PendingRestaurant record
+            of given id does not exist
         :raises IntegrityError: upon business logic violations
         :return: new RestaurantOwner object
         """
@@ -45,13 +48,15 @@ class RestaurantOwner(models.Model):
         restaurant_id = restaurant_owner_data['restaurant_id']
 
         if cls.objects.filter(user_id=user_id).exists():
-            raise IntegrityError('Cannot insert restaurant owner user, a user with this user_id already exists')
+            raise IntegrityError(
+                'Cannot insert restaurant owner user, a user with this user_id already exists')
         restaurant_filter = PendingRestaurant.objects.filter(_id=restaurant_id)
         if not restaurant_filter.exists():
             raise ObjectDoesNotExist("This restaurant with _id: "+restaurant_id+" does not exist")
 
         if "consent_status" in restaurant_owner_data:
-            restaurant_owner_data.update(handleConsentStatus(restaurant_owner_data['consent_status']))
+            restaurant_owner_data.update(
+                handleConsentStatus(restaurant_owner_data['consent_status']))
 
         restaurant = restaurant_filter.first()
         restaurant.owner_user_id = user_id
@@ -69,7 +74,7 @@ class RestaurantOwner(models.Model):
         :param user_id: id of the sduser
         :type user_id: int
         :raises NotFound: when the RestaurantOwner record does not exist
-                        or the SDUser record does not exist
+            or the SDUser record does not exist
         :return: the RestaurantOwner record
         :rtype: :class: `RestaurantOwner`
         """
@@ -92,7 +97,8 @@ class RestaurantOwner(models.Model):
         :type user_id: int
         :param user_data: RestaurnatOwner fields and values to be updated to
         :type user_data: dict
-        :raises ObjectDoesNotExist: when SDUser or RestaurantOwner record does not exist
+        :raises ObjectDoesNotExist: when SDUser or RestaurantOwner record
+            does not exist
         :return: the updated RestaurantOwner record
         :rtype: :class: `RestaurantOwner`
         """
@@ -104,13 +110,13 @@ class RestaurantOwner(models.Model):
             consent_data = handleConsentStatus(user_data["consent_status"])
             for field in consent_data:
                 setattr(profile, field, consent_data[field])
-
         profile = save_and_clean(profile)
         return profile
 
     @classmethod
     def field_validate(self, fields):
-        """ Validates the fields of the request to insert or modify a RestaurantOwner object
+        """ Validates the fields of the request to insert
+        or modify a RestaurantOwner object
 
         :param fields: Dictionary of fields to validate
         :type fields: dict
@@ -160,7 +166,7 @@ def handleConsentStatus(consent_status):
     :param consent_status: the consent status value (ie. 'EXPRESSED', 'IMPLIED')
     :type consent_status: str
     :return: a dict containing the fields and values depending on the given
-            consent_status
+        consent_status
     :rtype: dict
     """
 

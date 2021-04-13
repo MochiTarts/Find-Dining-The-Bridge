@@ -25,7 +25,7 @@ def get_analytics_data(restaurant_id, format_type):
     Function to retrieve view data given page view
     :param: restaurant_id: id of the restaurant whose page views will be retrieved
     :return: Google Analytics Core Reporting response data given the specific query
-             parameters
+        parameters
     """
     VIEW_ID = settings.GA_VIEW_ID
     start_date = ''

@@ -413,15 +413,15 @@ class PendingFood(models.Model):
     def upload_media(self, dish, form_data, form_file):
         """ Uploads an image to Google Cloud bucket
         and updates the field in the PendingFood record
-        with the link to the uploaded image. Deletes the
-        previous image associated with the PendingFood record
+        with the link to the uploaded image.
+        Deletes the previous image associated with the PendingFood record,
         if the url to the image DOES NOT match the url to the image
-        on the Food record (the approved version of the food)
+        on the Food record (the approved version of the food).
 
         :param dish: the PendingFood object to be updated
         :type dish: :class: `PendingFood`
         :param form_data: the form containing fields that specify the file,
-                            and the file type
+            and the file type
         :type form_data: QueryDict
         :param form_file: the file(s) to be uploaded
         :type form_file: File
@@ -522,7 +522,8 @@ class Restaurant(models.Model):
 
         :param category: referenced category
         :type category: string
-        :return: A boolean representing if a category exists in the restaurant's categories field
+        :return: A boolean representing if a category exists
+            in the restaurant's categories field
         :type: boolean
         """
         return category in self.categories
@@ -535,7 +536,7 @@ class Restaurant(models.Model):
         :type _id: ObjectId str
         :raises: NotFound if the restaurant with given _id is not found
         :raises: MultipleObjectsReturned if there are more than one
-                restaurant of the given _id
+            restaurant of the given _id
         :return: :class: `Restaurant`
         :rtype: :class: `Restaurant`
         """
@@ -644,7 +645,8 @@ class PendingRestaurant(models.Model):
 
         :param restaurant_data: json data of restaurant
         :type restaurant_data: json
-        :raises: IntegrityError if the pending restaurant already exists in the database
+        :raises: IntegrityError if the pending restaurant
+            already exists in the database
         :return: restaurant object representing sent data
         :rtype: :class:`PendingRestaurant` object
         """
@@ -667,7 +669,7 @@ class PendingRestaurant(models.Model):
         :param _id: id of restaurant
         :type _id: ObjectId string
         :raises: ObjectDoesNotExist if record of given _id cannot be found
-                MultipleObjectsReturned if there are several records of given _id
+        :raises: MultipleObjectsReturned if there are several records of given _id
         :return: PendingRestaurant record of given _id
         :rtype: :class: `PendingRestaurant`
         """
@@ -689,9 +691,11 @@ class PendingRestaurant(models.Model):
 
         :param user_id: id of the restaurant owner user
         :type user_id: int
-        :param body: dict containing PendingRestaurant fields and the updated values
+        :param body: dict containing PendingRestaurant fields
+            and the updated values
         :type body: dict
-        :raises: ObjectDoesNotExist if the PendingRestaurant owned by user_id does not exist
+        :raises: ObjectDoesNotExist if the PendingRestaurant
+            owned by user_id does not exist
         :return: the updated PendingRestaurant
         :rtype: :class: `PendingRestaurant`
         """
@@ -717,9 +721,11 @@ class PendingRestaurant(models.Model):
 
         :param user_id: id of the restaurant owner user
         :type user_id: int
-        :param body: dict containing PendingRestaurant fields and the updated values
+        :param body: dict containing PendingRestaurant fields
+            and the updated values
         :type body: dict
-        :raises: ObjectDoesNotExist if the PendingRestaurant owned by user_id does not exist
+        :raises: ObjectDoesNotExist if the PendingRestaurant
+            owned by user_id does not exist
         :return: the updated PendingRestaurant
         :rtype: :class: `PendingRestaurant`
         """
@@ -751,7 +757,8 @@ class PendingRestaurant(models.Model):
 
         :param category: referenced category
         :type category: string
-        :return: A boolean representing if a category exists in the restaurant's categories field
+        :return: A boolean representing if a category exists
+            in the restaurant's categories field
         :type: boolean
         """
         return category in self.categories
@@ -942,20 +949,21 @@ class PendingRestaurant(models.Model):
     def upload_media(self, restaurant, form_data, form_file):
         """ Uploads an image(s) or video to Google Cloud bucket
         and updates the field in the PendingRestaurant record
-        with the link to the uploaded image/video. Deletes the
-        previous image associated with the PendingRestaurant record
+        with the link to the uploaded image/video.
+        Deletes the previous image associated with the PendingRestaurant record,
         if the url to the image DOES NOT match the url to the image
-        on the Restaurant record (the approved version of the restaurant)
+        on the Restaurant record (the approved version of the restaurant).
 
         :param restaurant: the PendingRestaurant object to be updated
         :type restaurant: :class: `PendingRestaurant`
         :param form_data: the form containing fields that specify the file,
-                        the file type, and whether this PendingRestaurant is just
-                        created or is being edited
+            the file type, and whether this PendingRestaurant is just created
+            or is being edited
         :type form_data: QueryDict
         :param form_file: the file(s) to be uploaded
         :type form_file: File or Array of Files
-        :raises: ValidationError upon any invalid field values or violations against business logic
+        :raises: ValidationError upon any invalid field values or violations
+            against business logic
         :return: the updated PendingRestaurant object
         :rtype: :class: `PendingRestaurant`
         """
@@ -1061,14 +1069,15 @@ class UserFavRestrs(models.Model):
 
         :param user_id: the id of the user for this user-restaurant favourite relation
         :type user_id: int
-        :param rest_id: the id of the restaurant for this user-restaurant favourite relation
+        :param rest_id: the id of the restaurant for this
+            user-restaurant favourite relation
         :type rest_id: ObjectId string
         :raises: ObjectDoesNotExist if the user or restaurant does not exist
-        :raises: MultipleObjectsReturned if there are more than one user or restaurant with
-                the given ids
+        :raises: MultipleObjectsReturned if there are more than one
+            user or restaurant with the given ids
         :raises: IntegrityError if the relation already exists
-        :return: user-restaurant-favourite relation object with actual restaurant data of
-                 the favourite restaurant
+        :return: user-restaurant-favourite relation object with actual restaurant data
+            of the favourite restaurant
         :rtype: json object
         """
         user_filter = User.objects.filter(id=user_id)
@@ -1109,7 +1118,8 @@ class UserFavRestrs(models.Model):
 
         :param user_id: id of user to retrieve list of favourited restaurants
         :type user_id: int
-        :raises: ObjectDoesNotExist if one of the restaurants in the list of user's favourites does not exist
+        :raises: ObjectDoesNotExist if one of the restaurants in the list of
+            user's favourites does not exist
         :return: list of restaurants in json format
         :rtype: list of json objects
         """
@@ -1146,10 +1156,10 @@ class UserFavRestrs(models.Model):
         given the restaurant_id
 
         :param restaurant_id: id of the restaurant whose list of
-                            favourited users to retrieve
+            favourited users to retrieve
         :type restaurant_id: ObjectId string
         :raises: ObjectDoesNotExist if the restaurant does not exist,
-                or one of the users who favourited this restaurant does not exist
+            or one of the users who favourited this restaurant does not exist
         :return: list of users who favourited this restaurant
         :rtype: list of json objects
         """
@@ -1180,14 +1190,14 @@ class UserFavRestrs(models.Model):
         """ removes a restaurant from the user's favourites list
 
         :param user_id: the id of the user whose list of
-                    favourites will have one restaurant removed
+            favourites will have one restaurant removed
         :type user_id: int
         :param rest_id: the id of the restaurant to be removed
-                        from the user's list
+            from the user's list
         :type rest_id: ObjectId string
         :raises: ObjectDoesNotExist if the user does not exist or the
-                user-restaurant favourite relation does not exist
-        :return: Message with success or raise IntegrityError upon exceptions
+            user-restaurant favourite relation does not exist
+        :return: Message with success or raise ObjectDoesNotExist
         :rtype: json object
         """
         user_filter = User.objects.filter(id=user_id)
@@ -1257,7 +1267,7 @@ class RestaurantPost(models.Model):
         :param post_data: data of the post to be inserted
         :type post_data: dict
         :param request: the request object of the restaurant post
-                        insert endpoint
+            insert endpoint
         :type request: HttpRequest
         :return: the newly inserted post record
         :rtype: :class: `RestaurantPost`
@@ -1279,7 +1289,7 @@ class RestaurantPost(models.Model):
         :type user_id: int
         :raises ObjectDoesNotExist: when the restaurant owner user does not exist
         :raises MultipleObjectsReturned: when there are more than one restaurant owner
-                                        of the given user_id
+            of the given user_id
         :return: list of post records
         :rtype: list of :class: `RestaurantPost`
         """
@@ -1309,7 +1319,7 @@ class RestaurantPost(models.Model):
         :type rest_id: ObjectId str
         :raises ObjectDoesNotExist: when the restaurant does not exist
         :raises MultipleObjectsReturned: when there are more than one restaurant
-                                        of the given rest_id
+            of the given rest_id
         :return: list of post records
         :rtype: list of :class: `RestaurantPost`
         """

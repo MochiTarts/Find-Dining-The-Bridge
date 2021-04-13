@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'ckeditor',
     'article',
     'image',
+    'django.contrib.admindocs',
+    'drf_yasg',
     
     #'user.apps.SDUserConfig',
 ]
@@ -175,11 +177,15 @@ REST_FRAMEWORK = {
         'anon': '100/hour',
         'user': '100/hour'
     },
-    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler'
+    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
 }
 # doesn't work right now because Djongo can't translate aggregation functions in sql
 
-
+SWAGGER_SETTINGS = {
+    'SUPPORTED_SUBMIT_METHODS': [],
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': None,
+}
 
 '''
 JWT_AUTH = {
@@ -271,7 +277,14 @@ SIMPLE_JWT = {
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+import sys
+# set staticfiles_dirs for django templates to render static files on development server
+if len(sys.argv) > 2 and sys.argv[1] == 'runserver':
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static/"),
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Try uncommenting STATICFILES_DIRS and commenting out STATIC_ROOT to read static files in DEV
 # STATICFILES_DIRS = [

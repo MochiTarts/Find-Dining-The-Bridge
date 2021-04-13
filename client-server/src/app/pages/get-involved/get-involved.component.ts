@@ -51,6 +51,10 @@ export class GetInvolvedComponent implements OnInit {
     this.arrowsOutside = window.innerWidth < 800 ? false : true;
   }
 
+  /**
+   * Performs action to send email to info@finddining.ca, asking about
+   * the Get Involved activity
+   */
   onSubmit(): void {
     let name = this.messageForm.get('name').value;
     let message = this.messageForm.get('message').value;

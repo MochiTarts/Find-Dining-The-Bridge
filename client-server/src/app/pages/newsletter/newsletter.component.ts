@@ -38,6 +38,9 @@ export class NewsletterComponent implements OnInit {
     });
   }
 
+  /**
+   * Performs action to let user subscribe to mailing list
+   */
   subscribeNewsletter() {
     var userInfo = {
       consent_status: "EXPRESSED"
@@ -49,6 +52,9 @@ export class NewsletterComponent implements OnInit {
     });
   }
 
+  /**
+   * Performs action to let user unsubscribe from mailing list
+   */
   unsubscribeNewsletter() {
     var userInfo = {
       consent_status: "UNSUBSCRIBED",
@@ -60,6 +66,13 @@ export class NewsletterComponent implements OnInit {
     });
   }
 
+  /**
+   * Selects which service to call depending on user's role
+   * so to make right http request for sub/unsubbing to mailing list
+   * 
+   * @param userInfo - the user's role (BU or RO)
+   * @returns the Observable from the http request service
+   */
   chooseEditAPI(userInfo) {
     if (this.role == 'BU') {
       return this.userService.editSubscriberProfile(userInfo);
@@ -68,6 +81,12 @@ export class NewsletterComponent implements OnInit {
     }
   }
 
+  /**
+   * Selects which service to call depending on user's role
+   * so to make right http request for retrieving user's current
+   * consent status
+   * @returns the Observable from the http request service
+   */
   chooseGetAPI() {
     if (this.role == 'BU') {
       return this.userService.getSubscriberProfile();

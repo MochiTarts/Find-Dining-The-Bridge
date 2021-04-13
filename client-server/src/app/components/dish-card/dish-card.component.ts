@@ -44,6 +44,10 @@ export class DishCardComponent implements OnInit {
     // this.userId = localStorage.getItem('userId');
   }
 
+  /**
+   * Opens the dish modal
+   * @param content - the modal to be opened
+   */
   openDish(content) {
     this.modalRef = this.modalService.open(content, { size: 'xl' });
   }

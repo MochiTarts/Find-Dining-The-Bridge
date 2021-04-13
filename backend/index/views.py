@@ -10,9 +10,14 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.utils.html import strip_tags
 
+from drf_yasg.utils import swagger_auto_schema
+from index import swagger
+
 class EmailView(APIView):
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(request_body=swagger.SendEmail, responses=swagger.send_email_post_response,
+        operation_id="POST /email/send/")
     def post(self, request):
         data = request.data
         try:

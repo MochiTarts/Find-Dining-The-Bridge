@@ -23,12 +23,17 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
+from rest_framework.decorators import api_view
 
 from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
-from sduser.utils import send_email_verification, verify_email
+from sduser.utils import send_email_verification
 
 import json
 import jwt
+
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from sduser import swagger
 
 
 UserModel = get_user_model()
@@ -64,6 +69,11 @@ class EmailBackend(ModelBackend):
         return user if self.user_can_authenticate(user) else None
 
 
+@swagger_auto_schema(
+    method='post', request_body=swagger.UserSignUp,
+    responses=swagger.user_signup_post_response,
+    operation_id="POST /auth/signup/")
+@api_view(['POST'])
 def signup(request):
     """
     validate registration form and create a disabled SDUser from the form (and sends verifiication email)
@@ -118,7 +128,7 @@ def create_disable_user_and_send_verification_email(user, password, request):
             return JsonResponse({'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
         except (BadHeaderError, SMTPException):
             user.delete()
-            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact find dining support.'}, status=503)
+            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact Find Dining support.'}, status=503)
 
     # this should never happen
     else:
@@ -132,7 +142,7 @@ def check_user_status(user):
     """
     if user.is_blocked:
         raise AuthenticationFailed(
-            'This user has been blocked. If you think this is a mistake, please contact find dining team to resolve it',
+            'This user has been blocked. If you think this is a mistake, please contact Find Dining team to resolve it',
             'user_blocked',
         )
     elif not user.is_active:

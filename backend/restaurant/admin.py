@@ -24,8 +24,8 @@ import ast
 
 def reject_restr(model_admin, request, queryset):
     """
-    Reject a Restaurant and unpublish it if the current one on live site is the same as the submission
-    Sends a notification email to the restaurant email for each successful rejection
+    Reject a Restaurant's changes and sends a notification email to the restaurant email for
+    each successful rejection.
     """
     count = 0
     total = 0
@@ -85,15 +85,16 @@ reject_restr.short_description = "Reject a restaurant submission (and unpublish 
 
 def unpublish_restr(model_admin, request, queryset):
     """
-    Unpublish a live Restaurant Profile and updates the status of pendingRestaurant accordingly
-    Sends a notification email to the restaurant email for each successful unpublish action
+    Unpublish a live Restaurant Profile and updates the
+    status of pendingRestaurant accordingly.
+    Sends a notification email to the restaurant email for
+    each successful unpublish action.
     """
     count = 0
     restaurant_name = ""
     for r in queryset:
         count += 1
         res_dict = model_to_json(r)
-        #res_status = res_dict['status']
 
         owner_prefer_names = res_dict.get('owner_preferred_name', "")
         restaurant_name = res_dict.get('name', "")
@@ -110,8 +111,8 @@ def unpublish_restr(model_admin, request, queryset):
         if pendingRestaurant.status == Status.Approved.value:
             pendingRestaurant.status = Status.Rejected.value
             pendingRestaurant.save()
-        # Remove all user-restaurant favourites for the restaurant to be
-        # unpublished
+        # Remove all user-restaurant favourite relation records
+        # that contains the unpublished restaurant
         UserFavRestrs.objects.filter(restaurant=restaurant_id).delete()
     queryset.delete()
     if count > 1:
@@ -130,8 +131,11 @@ unpublish_restr.short_description = "Unpublish a restaurant (remove it from live
 
 def approve_restr(model_admin, request, queryset):
     """
-    Approve of PendingRestaurant info and insert into Restaurant collection
-    Sends a notification email to the restaurant email for each successful approval
+    Approve of PendingRestaurant record and insert it into Restaurant collection,
+    or updates the existing record in Restaurant collection that corresponds to
+    this PendingRestaurant record.
+    Sends a notification email to the restaurant email
+    for each successful approval.
     """
     count = 0
     total = 0
@@ -145,12 +149,18 @@ def approve_restr(model_admin, request, queryset):
 
         if r.status == Status.Pending.value:
             count += 1
+
+            # If there's already an approved restaurant record in Restaurant collection
+            # check if the restaurant's media (image or video) is oudated, by comparing the url
+            # to the url in the PendingRestaurant's media fields. If they don't match
+            # delete the approved restaurant record's media file from google cloud bucket
             if old_restaurant:
                 if old_restaurant.logo_url != r.logo_url:
                     delete(old_restaurant.logo_url)
                 if old_restaurant.cover_photo_url != r.cover_photo_url:
                     delete(old_restaurant.cover_photo_url)
-                if old_restaurant.restaurant_video_url != r.restaurant_video_url and 'youtube' not in old_restaurant.restaurant_video_url:
+                if (old_restaurant.restaurant_video_url != r.restaurant_video_url
+                        and 'youtube' not in old_restaurant.restaurant_video_url):
                     delete(old_restaurant.restaurant_video_url)
             edit_model(
                 restaurant, {
@@ -201,8 +211,8 @@ approve_restr.short_description = "Approve of restaurant info to be displayed on
 
 def reject_food(model_admin, request, queryset):
     """
-    Reject a Food and unpublish it if the current one on live site is the same as the submission
-    Sends a notification email to the restaurant email for each successful rejection
+    Reject a Food and sends a notification email to the restaurant email for
+    each successful rejection.
     """
     count = 0
     total = 0
@@ -251,8 +261,10 @@ reject_food.short_description = "Reject a food submission (and unpublish from li
 
 def unpublish_food(model_admin, request, queryset):
     """
-    Unpublish a live Restaurant Dish Profile and updates the status of pendingDish accordingly
-    Sends a notification email to the restaurant email for each successful unpublish action
+    Unpublish a live Restaurant Dish Profile and updates
+    the status of pendingDish accordingly.
+    Sends a notification email to the restaurant email for
+    each successful unpublish action.
     """
     count = 0
     for f in queryset:
@@ -283,7 +295,12 @@ unpublish_food.short_description = "Unpublish a food (remove it from live site a
 
 
 def approve_food(model_admin, request, queryset):
-    """ Approve of PendingFood info and insert into Food collection """
+    """ Approve of PendingFood record and insert it into Food collection,
+    or updates the existing record in Food collection that corresponds to
+    this PendingFood record.
+    Sends a notification email to the restaurant email
+    for each successful approval.
+    """
     count = 0
     total = 0
     wrong_status = False
@@ -299,6 +316,11 @@ def approve_food(model_admin, request, queryset):
             food_name = f.name
             email = restr.email
             send_approval_email(owner_prefer_names, email, food_name, 'food')
+
+            # If there's already an approved food record in Food collection
+            # check if the food's picture is oudated, by comparing the url
+            # to the url in the PendingFood's picture field. If they don't match
+            # delete the approved food record's picture from google cloud bucket
             if old_food:
                 if old_food.picture != f.picture:
                     delete(old_food.picture)

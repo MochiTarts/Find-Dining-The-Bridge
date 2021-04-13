@@ -25,6 +25,9 @@ export class ArticleCommonCardComponent implements OnInit {
     this.articleTextPreview = temp.textContent || temp.innerText || "";
   }
 
+  /**
+   * Emits the inputed article to be opened on articles page
+   */
   openArticle() {
     this.articleOutput.emit(this.article);
   }

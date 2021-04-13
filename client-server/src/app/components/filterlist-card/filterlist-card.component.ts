@@ -22,6 +22,10 @@ export class FilterlistCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Emits the checkMap for favourites and all-restaurants page
+   * to use for filtering
+   */
   sendList() {
     this.events.emit(this.checkMap);
   }

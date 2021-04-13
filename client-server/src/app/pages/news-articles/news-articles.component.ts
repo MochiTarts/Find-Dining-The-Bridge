@@ -101,6 +101,13 @@ export class NewsArticlesComponent implements OnInit {
   ngAfterViewInit(): void {
   }
 
+  /**
+   * Sets the selectedArticle to the input article for display
+   * Performs css transitions to display article instead of
+   * articles headlines list
+   * 
+   * @param article - the article to open
+   */
   openArticle(article) {
     this.selectedArticle = article;
 
@@ -115,6 +122,10 @@ export class NewsArticlesComponent implements OnInit {
     }, 10);
   }
 
+  /**
+   * Performs css transitions to close selectedArticle and display
+   * the articles headelins list again
+   */
   closeArticle() {
     var articleDiv = document.getElementById("article-container");
     articleDiv.style.display = "none";
@@ -127,6 +138,11 @@ export class NewsArticlesComponent implements OnInit {
     }, 10);
   }
 
+  /**
+   * The mobile equivalent of openArticle function
+   * 
+   * @param article - the article to open
+   */
   openArticleMobile(article) {
     this.selectedArticle = article;
 
@@ -141,6 +157,9 @@ export class NewsArticlesComponent implements OnInit {
     }, 10);
   }
 
+  /**
+   * The mobile equivalent of closeArticle function
+   */
   closeArticleMobile() {
     var articleDiv = document.getElementById("article-container-mobile");
     articleDiv.style.display = "none";
@@ -153,6 +172,10 @@ export class NewsArticlesComponent implements OnInit {
     }, 10);
   }
 
+  /**
+   * Performs css transition to toggle the filter by date
+   * card
+   */
   toggleFilter() {
     var mobileFilterDiv = document.getElementById("mobile-filter");
 
@@ -169,6 +192,13 @@ export class NewsArticlesComponent implements OnInit {
     event.srcElement.click();
   }
 
+  /**
+   * Updates the list of displayed articles to match the selected months/years
+   * 
+   * @param map - the JSON object containing the list of booleans representing which months/years were selected
+   *                (month) list of bool,
+   *                (year) list of bool
+   */
   filterDate(map) {
     const isFalse = (currentValue) => !currentValue;
 
@@ -220,11 +250,17 @@ export class NewsArticlesComponent implements OnInit {
     this.latestArticles = this.filteredArticles;
   }
 
+  /**
+   * Display all visible articles
+   */
   seeAll() {
     this.filteredArticles = this.allArticles;
     this.latestArticles = this.allArticles;
   }
 
+  /**
+   * Display the most recent articles (the top 8)
+   */
   seeMostRecent() {
     this.filteredArticles = this.allArticles.slice(0, 8);
     this.latestArticles = this.allArticles.slice(0, 8);
