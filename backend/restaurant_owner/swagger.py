@@ -52,7 +52,6 @@ restaurant_owner_profile_get_response = {
 }
 
 class RestaurantOwnerUpdate(serializers.Serializer):
-    last_updated = serializers.DateField(required=False)
     consent_status = serializers.ChoiceField(required=False, choices=ConsentStatus.choices())
 
     class Meta:
