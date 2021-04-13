@@ -205,11 +205,15 @@
 
 .restaurant-carousel {
   padding-top: 25px;
-  width: 1020px;
+  //width: 1020px;
+  padding-left: 20vw;
+  padding-right: 20vw;
   text-align: center;
   margin: auto;
 
   @media screen and (max-width: 1020px) {
+    padding-left: 0;
+    padding-right: 0;
     width: 100%;
   }
 }
