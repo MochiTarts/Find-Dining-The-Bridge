@@ -34,6 +34,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       )
     }
 
+    /* This tracks the restaurant page views by BU and public users
+    by adding the page path to google analytics for every time a BU or public user
+    visits a restaurant page
+    */
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (event.urlAfterRedirects.includes('restaurant?')) {

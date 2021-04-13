@@ -14,8 +14,9 @@ def views_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
     status_400_exceptions = (
-        jsonschema.exceptions.ValidationError, json.decoder.JSONDecodeError, IntegrityError,
-        MultipleObjectsReturned, ValidationError, ParseError, ObjectDoesNotExist
+        jsonschema.exceptions.ValidationError, json.decoder.JSONDecodeError,
+        IntegrityError, MultipleObjectsReturned, ValidationError, ParseError,
+        ObjectDoesNotExist
     )
     status_401_excpetions = (NotAuthenticated, AuthenticationFailed)
     status_403_exceptions = (PermissionDenied)

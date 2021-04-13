@@ -53,6 +53,11 @@ export class MultiselectCheckboxDropdownComponent implements OnInit, OnChanges, 
     this.containerWidth = this.dropdownContainer.nativeElement.offsetWidth;
   }
 
+  /**
+   * PLEASE UPDATE DOCSTRING
+   * @param checked - ?
+   * @param value - ?
+   */
   getSelectedValue(checked: Boolean, value: String) {
     if (checked) {
       this.checkedList.push(value);
@@ -65,10 +70,17 @@ export class MultiselectCheckboxDropdownComponent implements OnInit, OnChanges, 
     this.shareCheckedlist();
   }
 
+  /**
+   * PLEASE UPDATE DOCSTRING
+   */
   shareCheckedlist() {
     this.shareCheckedList.emit(this.checkedList);
   }
 
+  /**
+   * PLEASE UPDATE DOCSTRING
+   * @param event - ?
+   */
   toggleDropdown(event) {
     if (this.isFocused) {
       this.showDropDown = !this.showDropDown;

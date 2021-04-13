@@ -9,15 +9,19 @@ User = get_user_model()
 
 def send_posts_notify_email(post, restaurant_name, request):
     """ Send email to all admins, notifying
-    them of a new restaurant post
+    them of a new restaurant post. Email will contain the link
+    to the RestaurantPost change_form page on Django admin site.
 
     :param post: the newly created post by a restaurant owner
     :type post: :class: `RestaurantPost`
     :param restaurant_name: the name of the restaurant that made this post
     :type restaurant_name: str
+    :param request: the request to inserting a new post
+    :type request: HttpRequest object
     """
     subject = "New Restaurant Post on Find Dining"
-    admins = list(User.objects.filter(is_superuser=True).values_list('email', flat=True))
+    admins = list(User.objects.filter(
+        is_superuser=True).values_list('email', flat=True))
 
     link = get_current_site(request).domain
     if link == "localhost:8000":
@@ -30,10 +34,24 @@ def send_posts_notify_email(post, restaurant_name, request):
     content = "<p>New restaurant post posted by: {}</p>".format(restaurant_name) + \
               "<a href={}>Link to post</a>".format(link)
     send_mail(subject, strip_tags(content), from_email="admin@finddining.ca",
-              recipient_list=admins, html_message=content)
+        recipient_list=admins, html_message=content)
               
 
 def send_approval_email(names, receiver, profile_title, profile_type):
+    """ Sends an email to the restaurant owner, informing them
+    that their restaurant or dish is now approved and
+    is viewable to all users on the Find Dining site
+
+    :param names: restaurant owner name(s)
+    :type names: list of str
+    :param receiver: restaurant owner's email
+    :type receiver: str
+    :param profile_title: name of the restaurant of dish
+    :type profile_title: str
+    :param profile_type: tells whether the admin approved of a
+        restaurant or a dish (must be either 'restaurant' or 'food')
+    :type profile_type: str
+    """
     # if names list is empty
     if not names:
         names = ["Restaurant Owner"]
@@ -57,6 +75,20 @@ def send_approval_email(names, receiver, profile_title, profile_type):
 
 
 def send_reject_email(names, receiver, profile_title, profile_type):
+    """ Sends an email to the restaurant owner, informing them
+    that their restaurant or dish is has been rejected by
+    an admin
+
+    :param names: restaurant owner name(s)
+    :type names: list of str
+    :param receiver: restaurant owner's email
+    :type receiver: str
+    :param profile_title: name of the restaurant of dish
+    :type profile_title: str
+    :param profile_type: tells whether the admin rejected a
+        restaurant or a dish (must be either 'restaurant' or 'food')
+    :type profile_type: str
+    """
     # if names list is empty
     if not names:
         names = ["Restaurant Owner"]
@@ -86,6 +118,20 @@ def send_reject_email(names, receiver, profile_title, profile_type):
 
 
 def send_unpublish_email(names, receiver, profile_title, profile_type):
+    """ Sends an email to the restaurant owner, informing them
+    that their restaurant or dish is has been unpublished from
+    the live site by an admin
+
+    :param names: restaurant owner name(s)
+    :type names: list of str
+    :param receiver: restaurant owner's email
+    :type receiver: str
+    :param profile_title: name of the restaurant of dish
+    :type profile_title: str
+    :param profile_type: tells whether the admin unpublished a
+        restaurant or a dish (must be either 'restaurant' or 'food')
+    :type profile_type: str
+    """
     # if names list is empty
     if not names:
         names = ["Restaurant Owner"]

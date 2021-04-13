@@ -12,7 +12,11 @@ export class SecureGuard implements CanActivate {
         private authService: AuthService,
         private tokenStorage: TokenStorageService,
     ) { }
-    // this is the most secured guard that will verify the refresh token on the backend against the database
+
+    /**
+     * This is the most secured guard that will verify the refresh token on the backend against the database
+     * @returns boolean (true if refresh token matches the one in the database; false otherwise)
+     */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
         if (this.authService.isLoggedIn()){

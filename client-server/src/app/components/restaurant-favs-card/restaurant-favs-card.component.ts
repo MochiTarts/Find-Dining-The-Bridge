@@ -69,6 +69,10 @@ export class RestaurantFavsCardComponent implements OnInit {
     this.router.navigate([currentUrl]);
   }
 
+  /**
+   * Performs action to let a user remove a restaurant from their list of favourites
+   * @param restaurnt_id - the restaurant id
+   */
   remove(restaurnt_id) {
     this.userService.removeFavRestaurant(restaurnt_id).subscribe(() => {
       this.reload()

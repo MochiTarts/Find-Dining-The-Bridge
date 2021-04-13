@@ -1,0 +1,2231 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>client-server documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">client-server documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>NewsArticlesComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/pages/news-articles/news-articles.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-news-articles</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./news-articles.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./news-articles.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#allArticles">allArticles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#articleService">articleService</a>
+                            </li>
+                            <li>
+                                <a href="#dark">dark</a>
+                            </li>
+                            <li>
+                                <a href="#faSearch">faSearch</a>
+                            </li>
+                            <li>
+                                <a href="#faStar">faStar</a>
+                            </li>
+                            <li>
+                                <a href="#filteredArticles">filteredArticles</a>
+                            </li>
+                            <li>
+                                <a href="#filterMonthArticles">filterMonthArticles</a>
+                            </li>
+                            <li>
+                                <a href="#filterYearArticles">filterYearArticles</a>
+                            </li>
+                            <li>
+                                <a href="#latestArticles">latestArticles</a>
+                            </li>
+                            <li>
+                                <a href="#months">months</a>
+                            </li>
+                            <li>
+                                <a href="#profileId">profileId</a>
+                            </li>
+                            <li>
+                                <a href="#role">role</a>
+                            </li>
+                            <li>
+                                <a href="#selectedArticle">selectedArticle</a>
+                            </li>
+                            <li>
+                                <a href="#totalTabs">totalTabs</a>
+                            </li>
+                            <li>
+                                <a href="#userInfo">userInfo</a>
+                            </li>
+                            <li>
+                                <a href="#years">years</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#closeArticle">closeArticle</a>
+                            </li>
+                            <li>
+                                <a href="#closeArticleMobile">closeArticleMobile</a>
+                            </li>
+                            <li>
+                                <a href="#filterDate">filterDate</a>
+                            </li>
+                            <li>
+                                <a href="#filterEnter">filterEnter</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit">ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#openArticle">openArticle</a>
+                            </li>
+                            <li>
+                                <a href="#openArticleMobile">openArticleMobile</a>
+                            </li>
+                            <li>
+                                <a href="#seeAll">seeAll</a>
+                            </li>
+                            <li>
+                                <a href="#seeMostRecent">seeMostRecent</a>
+                            </li>
+                            <li>
+                                <a href="#toggleFilter">toggleFilter</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(articleService: <a href="../injectables/ArticleService.html">ArticleService</a>, authService: <a href="../injectables/AuthService.html">AuthService</a>, tokenStorage: <a href="../injectables/TokenStorageService.html">TokenStorageService</a>, titleService: <a href="https://angular.io/api/platform-browser/Title" target="_blank">Title</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:51</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>articleService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/ArticleService.html" target="_self" >ArticleService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>authService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthService.html" target="_self" >AuthService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>tokenStorage</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/TokenStorageService.html" target="_self" >TokenStorageService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>titleService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/platform-browser/Title" target="_blank" >Title</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeArticle"></a>
+                    <span class="name">
+                        <b>
+                            closeArticle
+                        </b>
+                        <a href="#closeArticle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>closeArticle()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:129</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Performs css transitions to close selectedArticle and display
+the articles headelins list again</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="closeArticleMobile"></a>
+                    <span class="name">
+                        <b>
+                            closeArticleMobile
+                        </b>
+                        <a href="#closeArticleMobile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>closeArticleMobile()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="163"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:163</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>The mobile equivalent of closeArticle function</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterDate"></a>
+                    <span class="name">
+                        <b>
+                            filterDate
+                        </b>
+                        <a href="#filterDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterDate(map)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="202"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:202</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Updates the list of displayed articles to match the selected months/years</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>map</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>the JSON object containing the list of booleans representing which months/years were selected
+   (month) list of bool,
+   (year) list of bool</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="filterEnter"></a>
+                    <span class="name">
+                        <b>
+                            filterEnter
+                        </b>
+                        <a href="#filterEnter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>filterEnter(event)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="191"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:191</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <b>
+                            ngAfterViewInit
+                        </b>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="101"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:101</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="71"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:71</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openArticle"></a>
+                    <span class="name">
+                        <b>
+                            openArticle
+                        </b>
+                        <a href="#openArticle"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openArticle(article)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="111"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:111</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Sets the selectedArticle to the input article for display
+Performs css transitions to display article instead of
+articles headlines list</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>article</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>the article to open</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="openArticleMobile"></a>
+                    <span class="name">
+                        <b>
+                            openArticleMobile
+                        </b>
+                        <a href="#openArticleMobile"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>openArticleMobile(article)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="146"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:146</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>The mobile equivalent of openArticle function</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>article</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>the article to open</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="seeAll"></a>
+                    <span class="name">
+                        <b>
+                            seeAll
+                        </b>
+                        <a href="#seeAll"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>seeAll()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="256"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:256</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Display all visible articles</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="seeMostRecent"></a>
+                    <span class="name">
+                        <b>
+                            seeMostRecent
+                        </b>
+                        <a href="#seeMostRecent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>seeMostRecent()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="264"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:264</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Display the most recent articles (the top 8)</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleFilter"></a>
+                    <span class="name">
+                        <b>
+                            toggleFilter
+                        </b>
+                        <a href="#toggleFilter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleFilter()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="179"
+                            class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:179</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Performs css transition to toggle the filter by date
+card</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="allArticles"></a>
+                        <span class="name">
+                            <b>
+                            allArticles</b>
+                            <a href="#allArticles"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:28</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="articleService"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            articleService</b>
+                            <a href="#articleService"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../injectables/ArticleService.html" target="_self" >ArticleService</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:54</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="dark"></a>
+                        <span class="name">
+                            <b>
+                            dark</b>
+                            <a href="#dark"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&quot;dark&quot;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:32</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="faSearch"></a>
+                        <span class="name">
+                            <b>
+                            faSearch</b>
+                            <a href="#faSearch"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>faSearch</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:45</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="faStar"></a>
+                        <span class="name">
+                            <b>
+                            faStar</b>
+                            <a href="#faStar"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>faStar</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:46</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="filteredArticles"></a>
+                        <span class="name">
+                            <b>
+                            filteredArticles</b>
+                            <a href="#filteredArticles"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:39</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="filterMonthArticles"></a>
+                        <span class="name">
+                            <b>
+                            filterMonthArticles</b>
+                            <a href="#filterMonthArticles"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:42</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="filterYearArticles"></a>
+                        <span class="name">
+                            <b>
+                            filterYearArticles</b>
+                            <a href="#filterYearArticles"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:43</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="latestArticles"></a>
+                        <span class="name">
+                            <b>
+                            latestArticles</b>
+                            <a href="#latestArticles"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:40</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="months"></a>
+                        <span class="name">
+                            <b>
+                            months</b>
+                            <a href="#months"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:30</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="profileId"></a>
+                        <span class="name">
+                            <b>
+                            profileId</b>
+                            <a href="#profileId"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:20</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="role"></a>
+                        <span class="name">
+                            <b>
+                            role</b>
+                            <a href="#role"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="19" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:19</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="selectedArticle"></a>
+                        <span class="name">
+                            <b>
+                            selectedArticle</b>
+                            <a href="#selectedArticle"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>Object</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:48</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="totalTabs"></a>
+                        <span class="name">
+                            <b>
+                            totalTabs</b>
+                            <a href="#totalTabs"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:49</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="userInfo"></a>
+                        <span class="name">
+                            <b>
+                            userInfo</b>
+                            <a href="#userInfo"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../components/SubscriberProfileFormComponent.html" target="_self" >SubscriberProfileFormComponent</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Decorators : </b>
+                            <br />
+                            <code>
+                                @ViewChild(&#x27;userInfo&#x27;)<br />
+                            </code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="51" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:51</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="years"></a>
+                        <span class="name">
+                            <b>
+                            years</b>
+                            <a href="#years"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>any[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/pages/news-articles/news-articles.component.ts:31</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, ChangeDetectorRef, ViewChild } from &#x27;@angular/core&#x27;;
+import AOS from &#x27;aos&#x27;;
+import &#x27;aos/dist/aos.css&#x27;;
+import { faSearch, faStar } from &#x27;@fortawesome/free-solid-svg-icons&#x27;;
+import { ArticleService } from &#x27;../../_services/article.service&#x27;;
+import { Title } from &#x27;@angular/platform-browser&#x27;;
+import { TokenStorageService } from &#x27;../../_services/token-storage.service&#x27;;
+import { UserService } from &#x27;../../_services/user.service&#x27;;
+import { RestaurantService } from &#x27;src/app/_services/restaurant.service&#x27;;
+import { SubscriberProfileFormComponent } from &#x27;src/app/components/subscriber-profile-form/subscriber-profile-form.component&#x27;;
+import { AuthService } from &#x27;src/app/_services/auth.service&#x27;;
+
+@Component({
+  selector: &#x27;app-news-articles&#x27;,
+  templateUrl: &#x27;./news-articles.component.html&#x27;,
+  styleUrls: [&#x27;./news-articles.component.scss&#x27;]
+})
+export class NewsArticlesComponent implements OnInit {
+  role: string &#x3D; &#x27;&#x27;;
+  profileId: string &#x3D; &#x27;&#x27;;
+
+  /*
+  Array containing all viewable articles
+  Will not update upon being filtered
+  Is meant to be used as a set list of all viewable articles
+  to prevent constant calling of get articles endpoint
+  */
+  allArticles: any[];
+
+  months: any[];
+  years: any[] &#x3D; [];
+  dark &#x3D; &quot;dark&quot;;
+
+  /*
+  Array that contains all articles viewable and filtered
+  Will always update to contain the articles according
+  to the filter option(s)
+  */
+  filteredArticles: any[] &#x3D; [];
+  latestArticles: any[] &#x3D; [];
+
+  filterMonthArticles: any[];
+  filterYearArticles: any[];
+
+  faSearch &#x3D; faSearch;
+  faStar &#x3D; faStar;
+
+  selectedArticle: any &#x3D; Object;
+  totalTabs: any[] &#x3D; [];
+
+  @ViewChild(&#x27;userInfo&#x27;) userInfo: SubscriberProfileFormComponent;
+
+  constructor(
+    public articleService: ArticleService,
+    private authService: AuthService,
+    private tokenStorage: TokenStorageService,
+    private titleService: Title,
+  ) {
+    this.months &#x3D; [
+      &quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;,
+      &quot;July&quot;, &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;
+    ];
+
+    var currentYear &#x3D; new Date().getFullYear()
+    var minYear &#x3D; currentYear - 5 // Subject to change
+    for (var year &#x3D; currentYear; year &gt;&#x3D; minYear; year--) {
+      this.years.push(year);
+    }
+  }
+
+  ngOnInit(): void {
+    this.titleService.setTitle(&quot;Articles | Find Dining Scarborough&quot;);
+    AOS.init({
+      delay: 300,
+      duration: 1500,
+      once: true,
+      anchorPlacement: &#x27;top-bottom&#x27;,
+    });
+
+    if (this.authService.isLoggedIn) {
+      const user &#x3D; this.tokenStorage.getUser();
+      this.role &#x3D; user.role;
+      this.profileId &#x3D; user.profile_id;
+    }
+
+    this.articleService.getArticles().subscribe((data) &#x3D;&gt; {
+      this.allArticles &#x3D; data.articles;
+      this.filteredArticles &#x3D; data.articles;
+
+      for (let i &#x3D; 0; i &lt; this.allArticles.length; i++) {
+        this.filteredArticles[i].type &#x3D; &#x27;article&#x27;;
+      }
+      this.latestArticles &#x3D; this.filteredArticles.slice(0, 8);
+
+      this.selectedArticle &#x3D; this.filteredArticles[0];
+      length &#x3D; Math.ceil(this.filteredArticles.length/10);
+      this.totalTabs &#x3D; Array(length);
+    })
+  }
+
+  ngAfterViewInit(): void {
+  }
+
+  /**
+   * Sets the selectedArticle to the input article for display
+   * Performs css transitions to display article instead of
+   * articles headlines list
+   * 
+   * @param article - the article to open
+   */
+  openArticle(article) {
+    this.selectedArticle &#x3D; article;
+
+    var articleListDiv &#x3D; document.getElementById(&quot;article-list&quot;);
+    articleListDiv.style.display &#x3D; &quot;none&quot;;
+    articleListDiv.style.opacity &#x3D; &quot;0&quot;;
+
+    var articleDiv &#x3D; document.getElementById(&quot;article-container&quot;);
+    articleDiv.style.display &#x3D; &quot;block&quot;;
+    setTimeout(() &#x3D;&gt; {
+      articleDiv.style.opacity &#x3D; &quot;1&quot;;
+    }, 10);
+  }
+
+  /**
+   * Performs css transitions to close selectedArticle and display
+   * the articles headelins list again
+   */
+  closeArticle() {
+    var articleDiv &#x3D; document.getElementById(&quot;article-container&quot;);
+    articleDiv.style.display &#x3D; &quot;none&quot;;
+    articleDiv.style.opacity &#x3D; &quot;0&quot;;
+
+    var articleListDiv &#x3D; document.getElementById(&quot;article-list&quot;);
+    articleListDiv.style.display &#x3D; &quot;block&quot;;
+    setTimeout(() &#x3D;&gt; {
+      articleListDiv.style.opacity &#x3D; &quot;1&quot;;
+    }, 10);
+  }
+
+  /**
+   * The mobile equivalent of openArticle function
+   * 
+   * @param article - the article to open
+   */
+  openArticleMobile(article) {
+    this.selectedArticle &#x3D; article;
+
+    var articleListDiv &#x3D; document.getElementById(&quot;article-list-mobile&quot;);
+    articleListDiv.style.display &#x3D; &quot;none&quot;;
+    articleListDiv.style.opacity &#x3D; &quot;0&quot;;
+
+    var articleDiv &#x3D; document.getElementById(&quot;article-container-mobile&quot;);
+    articleDiv.style.display &#x3D; &quot;block&quot;;
+    setTimeout(() &#x3D;&gt; {
+      articleDiv.style.opacity &#x3D; &quot;1&quot;;
+    }, 10);
+  }
+
+  /**
+   * The mobile equivalent of closeArticle function
+   */
+  closeArticleMobile() {
+    var articleDiv &#x3D; document.getElementById(&quot;article-container-mobile&quot;);
+    articleDiv.style.display &#x3D; &quot;none&quot;;
+    articleDiv.style.opacity &#x3D; &quot;0&quot;;
+
+    var articleListDiv &#x3D; document.getElementById(&quot;article-list-mobile&quot;);
+    articleListDiv.style.display &#x3D; &quot;block&quot;;
+    setTimeout(() &#x3D;&gt; {
+      articleListDiv.style.opacity &#x3D; &quot;1&quot;;
+    }, 10);
+  }
+
+  /**
+   * Performs css transition to toggle the filter by date
+   * card
+   */
+  toggleFilter() {
+    var mobileFilterDiv &#x3D; document.getElementById(&quot;mobile-filter&quot;);
+
+    if (mobileFilterDiv.style.opacity &#x3D;&#x3D;&#x3D; &quot;0&quot;) {
+      mobileFilterDiv.style.opacity &#x3D; &quot;1&quot;;
+      mobileFilterDiv.style.marginRight &#x3D; &quot;0&quot;;
+    } else {
+      mobileFilterDiv.style.opacity &#x3D; &quot;0&quot;;
+      mobileFilterDiv.style.marginRight &#x3D; &quot;-400px&quot;;
+    }
+  }
+
+  filterEnter(event){
+    event.srcElement.click();
+  }
+
+  /**
+   * Updates the list of displayed articles to match the selected months/years
+   * 
+   * @param map - the JSON object containing the list of booleans representing which months/years were selected
+   *                (month) list of bool,
+   *                (year) list of bool
+   */
+  filterDate(map) {
+    const isFalse &#x3D; (currentValue) &#x3D;&gt; !currentValue;
+
+    var monthList &#x3D; map.month;
+    var yearList &#x3D; map.year;
+
+    this.filterMonthArticles &#x3D; [];
+    this.filterYearArticles &#x3D; [];
+
+    if (monthList.every(isFalse) &amp;&amp; yearList.every(isFalse)) {
+      // If every option is unchecked
+      this.filteredArticles &#x3D; this.allArticles;
+    } else {
+      // If some option(s) are checked
+      for (let article of this.allArticles) {
+        if (monthList.every(isFalse)) {
+          this.filterMonthArticles &#x3D; this.allArticles;
+        } else {
+          var date &#x3D; new Date(article.modified_at);
+          var monthNumber &#x3D; date.getMonth();
+          for (var i &#x3D; 0; i &lt; this.months.length; i++) {
+            if (monthList[i] &amp;&amp; i &#x3D;&#x3D; monthNumber) {
+              this.filterMonthArticles.push(article)
+            }
+          }
+        }
+
+        if (yearList.every(isFalse)) {
+          this.filterYearArticles &#x3D; this.allArticles;
+        } else {
+          var date &#x3D; new Date(article.modified_at);
+          var year &#x3D; date.getFullYear();
+          for (var i &#x3D; 0; i &lt; this.years.length; i++) {
+            if (yearList[i] &amp;&amp; this.years[i] &#x3D;&#x3D; year) {
+              this.filterYearArticles.push(article);
+            }
+          }
+        }
+      }
+
+      this.filteredArticles &#x3D; [];
+      for (let article of this.allArticles) {
+        if (this.filterMonthArticles.includes(article) &amp;&amp; this.filterYearArticles.includes(article)) {
+          this.filteredArticles.push(article);
+        }
+      }
+    }
+
+    this.latestArticles &#x3D; this.filteredArticles;
+  }
+
+  /**
+   * Display all visible articles
+   */
+  seeAll() {
+    this.filteredArticles &#x3D; this.allArticles;
+    this.latestArticles &#x3D; this.allArticles;
+  }
+
+  /**
+   * Display the most recent articles (the top 8)
+   */
+  seeMostRecent() {
+    this.filteredArticles &#x3D; this.allArticles.slice(0, 8);
+    this.latestArticles &#x3D; this.allArticles.slice(0, 8);
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;article-body&quot;&gt;
+    &lt;div class&#x3D;&quot;header-container&quot;&gt;
+        &lt;div class&#x3D;&quot;title-row&quot;&gt;
+            &lt;div class&#x3D;&quot;title&quot;&gt;
+                &lt;h1&gt;Find Dining News&lt;/h1&gt;
+                &lt;div class&#x3D;&quot;underline&quot;&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;nav class&#x3D;&quot;nav nav-header justify-content-end&quot;&gt;
+                &lt;span class&#x3D;&quot;nav-item&quot;&gt;
+                    &lt;a class&#x3D;&quot;nav-link&quot; (click)&#x3D;&quot;seeMostRecent()&quot;&gt;Most Recent&lt;/a&gt;
+                &lt;/span&gt;
+                &lt;span class&#x3D;&quot;nav-item&quot;&gt;
+                    &lt;a class&#x3D;&quot;nav-link&quot; (click)&#x3D;&quot;seeAll()&quot;&gt;See All&lt;/a&gt;
+                &lt;/span&gt;
+            &lt;/nav&gt;
+        &lt;/div&gt;
+    
+        &lt;div class&#x3D;&quot;carousel-row&quot;&gt;
+            &lt;div class&#x3D;&quot;carousel&quot;&gt;
+                &lt;ivy-carousel
+                style&#x3D;&quot;max-width: fit-content;&quot;
+                *ngIf&#x3D;&quot;latestArticles.length&quot;
+                [images]&#x3D;&quot;latestArticles&quot;
+                [margin]&#x3D;&quot;30&quot;
+                [arrowsOutside]&#x3D;&quot;true&quot;
+                [cellWidth]&#x3D;&quot;300&quot;
+                [height]&#x3D;&quot;400&quot;
+                [arrowsTheme]&#x3D;&quot;dark&quot;
+                (selectedArticle)&#x3D;&quot;openArticle($event)&quot;
+                &gt;
+                &lt;/ivy-carousel&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;carousel-row-mobile&quot;&gt;
+            &lt;div class&#x3D;&quot;carousel&quot;&gt;
+                &lt;ivy-carousel
+                style&#x3D;&quot;max-width: fit-content;&quot;
+                *ngIf&#x3D;&quot;latestArticles.length&quot;
+                [images]&#x3D;&quot;latestArticles&quot;
+                [margin]&#x3D;&quot;30&quot;
+                [arrowsOutside]&#x3D;&quot;false&quot;
+                [cellWidth]&#x3D;&quot;300&quot;
+                [height]&#x3D;&quot;400&quot;
+                [arrowsTheme]&#x3D;&quot;dark&quot;
+                (selectedArticle)&#x3D;&quot;openArticle($event)&quot;
+                &gt;
+                &lt;/ivy-carousel&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;main-container&quot;&gt;
+        &lt;div class&#x3D;&quot;row no-gutters article-row&quot; *ngIf&#x3D;&quot;filteredArticles.length&quot;&gt;
+            &lt;div class&#x3D;&quot;col-lg-10 article-list-col&quot;&gt;
+                &lt;div class&#x3D;&quot;article-list col-12&quot; id&#x3D;&quot;article-list&quot;&gt;
+                    &lt;div class&#x3D;&quot;tab-content&quot; id&#x3D;&quot;pills-tabContent&quot;&gt;
+                        &lt;div class&#x3D;&quot;tab-pane fade show active&quot; id&#x3D;&quot;tab1&quot; role&#x3D;&quot;tabpanel&quot;&gt;
+                            &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice(0, 10)&quot;&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticle($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class&#x3D;&quot;tab-pane fade&quot; id&#x3D;&quot;tab{{i+2}}&quot; role&#x3D;&quot;tabpanel&quot; *ngFor&#x3D;&quot;let tab of totalTabs.slice(1); let i &#x3D; index&quot;&gt;
+                            &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)&quot;&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticle($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;ul class&#x3D;&quot;nav nav-pills mb-3&quot; id&#x3D;&quot;pills-tab&quot; role&#x3D;&quot;tablist&quot; *ngIf&#x3D;&quot;filteredArticles.length&quot;&gt;
+                        &lt;li class&#x3D;&quot;nav-item&quot; *ngFor&#x3D;&quot;let tab of totalTabs; let i &#x3D; index&quot;&gt;
+                            &lt;a class&#x3D;&quot;nav-link active&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i &#x3D;&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+
+                            &lt;a class&#x3D;&quot;nav-link&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i !&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+                        &lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+
+                &lt;div class&#x3D;&quot;article-container&quot; id&#x3D;&quot;article-container&quot;&gt;
+                    &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;closeArticle()&quot;&gt;Close Article&lt;/div&gt;
+
+                    &lt;h1 class&#x3D;&quot;article-title&quot;&gt;{{ selectedArticle.title }}&lt;/h1&gt;
+                    &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;!selectedArticle.modified_at&quot;&gt;
+                        Last Updated {{ (selectedArticle.created_at) | date:&#x27;mediumDate&#x27; }}
+                    &lt;/h3&gt;
+                    &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;selectedArticle.modified_at&quot;&gt;
+                        Last Updated {{ (selectedArticle.modified_at) | date:&#x27;mediumDate&#x27; }}
+                    &lt;/h3&gt;
+                    &lt;div class&#x3D;&quot;article-content&quot; [innerHTML]&#x3D;&quot;selectedArticle.content&quot;&gt;&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+    
+            &lt;div class&#x3D;&quot;col-lg-2 filter&quot;&gt;
+                &lt;app-filterdate-card [months]&#x3D;&quot;months&quot; [years]&#x3D;&quot;years&quot;
+                (keyup.enter)&#x3D;&quot;filterEnter($event)&quot; (events)&#x3D;&quot;filterDate($event)&quot;&gt;
+                &lt;/app-filterdate-card&gt;
+            &lt;/div&gt;
+
+            &lt;!-- MOBILE LAYOUT BELOW --&gt;
+            &lt;div class&#x3D;&quot;col-lg-12 article-mobile&quot;&gt;
+                &lt;div fxLayout&#x3D;&quot;row&quot; fxLayoutAlign&#x3D;&quot;end&quot;&gt;
+                    &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;toggleFilter()&quot;&gt;Filter&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class&#x3D;&quot;article-list-mobile col-12&quot; id&#x3D;&quot;article-list-mobile&quot;&gt;
+                    &lt;div class&#x3D;&quot;tab-content&quot; id&#x3D;&quot;pills-tabContent&quot;&gt;
+                        &lt;div class&#x3D;&quot;tab-pane fade show active&quot; id&#x3D;&quot;tab1mobile&quot; role&#x3D;&quot;tabpanel&quot;&gt;
+                            &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice(0, 10)&quot;&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticleMobile($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class&#x3D;&quot;tab-pane fade&quot; id&#x3D;&quot;tab{{i+2}}mobile&quot; role&#x3D;&quot;tabpanel&quot; *ngFor&#x3D;&quot;let tab of totalTabs.slice(1); let i &#x3D; index&quot;&gt;
+                            &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)&quot;&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticleMobile($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;ul class&#x3D;&quot;nav nav-pills mb-3&quot; id&#x3D;&quot;pills-tab&quot; role&#x3D;&quot;tablist&quot; *ngIf&#x3D;&quot;filteredArticles.length&quot;&gt;
+                        &lt;li class&#x3D;&quot;nav-item&quot; *ngFor&#x3D;&quot;let tab of totalTabs; let i &#x3D; index&quot;&gt;
+                            &lt;a class&#x3D;&quot;nav-link active&quot; id&#x3D;&quot;pills-home-tab&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}mobile&quot; role&#x3D;&quot;tab&quot; aria-controls&#x3D;&quot;pills-home&quot; aria-selected&#x3D;&quot;true&quot; *ngIf&#x3D;&quot;i &#x3D;&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+
+                            &lt;a class&#x3D;&quot;nav-link&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}mobile&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i !&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+                        &lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+
+                &lt;div class&#x3D;&quot;article-container-mobile&quot; id&#x3D;&quot;article-container-mobile&quot; style&#x3D;&quot;overflow: hidden;&quot;&gt;
+                    &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;closeArticleMobile()&quot;&gt;Close Article&lt;/div&gt;
+
+                    &lt;h1 class&#x3D;&quot;article-title&quot;&gt;{{ selectedArticle.title }}&lt;/h1&gt;
+                    &lt;h3 class&#x3D;&quot;article-subtitle&quot;&gt;Last Updated {{ selectedArticle.modified_at | date:&#x27;mediumDate&#x27; }}&lt;/h3&gt;
+                    &lt;div class&#x3D;&quot;article-content&quot; [innerHTML]&#x3D;&quot;selectedArticle.content&quot;&gt;&lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class&#x3D;&quot;side-filter&quot; id&#x3D;&quot;mobile-filter&quot; style&#x3D;&quot;opacity: 0;&quot;&gt;
+                    &lt;app-filterdate-card [months]&#x3D;&quot;months&quot; [years]&#x3D;&quot;years&quot;
+                    (keyup.enter)&#x3D;&quot;filterEnter($event)&quot; (events)&#x3D;&quot;filterDate($event)&quot;&gt;
+                    &lt;/app-filterdate-card&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./news-articles.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@import &quot;src/styles&quot;;
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 50px;
+}
+
+.article-body {
+    height: fit-content;
+    overflow: hidden;
+}
+
+/* HEADER */
+.header-container {
+    background-image: url(../../../assets/images/articles_header.png);
+    background-position: center -550px;
+    background-size: 2100px auto;
+	background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.title-row {
+    min-height: 200px;
+    width: 100%;
+    position: relative;
+}
+
+.title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.title-row h1 {
+    font-size: 50px;
+    font-weight: bolder;
+    color: white;
+}
+
+.underline {
+    border-bottom: #00a4e5 solid 5px;
+    width: 75px;
+    padding-top: 15px;
+    margin: auto;
+}
+
+.nav-header {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    right: 16%;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.nav-header a {
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-header a:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.carousel-row {
+    min-height: 400px;
+    background-color: rgba($color: #fff, $alpha: 0.75);
+}
+
+.carousel-row-mobile {
+    display: none;
+}
+
+.carousel {
+    margin: auto;
+    padding: 0px 5rem;
+}
+
+/* DISPLAYED ARTICLES */
+.main-container {
+    margin-top: 70px;
+    margin-bottom: 50px;
+    padding: 0px 50px;
+    min-height: 300px;
+}
+
+.article-row {
+    margin: 0px auto;
+    padding-bottom: 50px;
+    max-width: 1700px;
+}
+
+.article-mobile-row {
+    display: none;
+}
+
+.headline-card {
+    padding: 10px 100px;
+}
+
+.article-title {
+    text-align: center;
+    font-size: 30px;
+}
+
+.article-subtitle {
+    text-align: center;
+    color: #00a4e5;
+}
+
+.article-content {
+    margin-top: 25px;
+}
+
+.article-mobile {
+    display: none;
+}
+
+.filter {
+    min-width: 200px;
+}
+
+.side-filter {
+    display: none;
+}
+
+.article-list {
+    min-height: 620px;
+    position: relative;
+    -webkit-transition: 1s;
+    transition: 1s;
+    display: block;
+    opacity: 1;
+}
+
+.article-container {
+    min-height: 620px;
+    padding-right: 10px;
+    opacity: 0;
+    display: none;
+    -webkit-transition: 1s;
+    transition: 1s;
+}
+
+.nav-pills {
+    margin-bottom: 0;
+    border: none;
+    padding: 10px 100px;
+}
+
+.nav-pills .nav-link {
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-pills .nav-link {
+    margin-right: 1rem;
+    border: none;
+    background-color: #00a4e5;
+    color: white;
+    cursor: pointer;
+}
+
+.nav-pills .nav-link:hover, .nav-pills .nav-link.active:hover {
+    border: none;
+    background-color: white;
+    color: #00a4e5;
+    cursor: pointer;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #007faa;
+    color: white;
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 1301px) {
+
+.main-container {
+    position: relative;
+}
+
+.article-row {
+    min-height: 620px;
+}
+
+.filter {
+    display: none;
+}
+
+.article-list-col {
+    display: none;
+}
+
+.article-mobile {
+    display: block;
+    position: relative;
+}
+
+.article-list-mobile {
+    min-height: 620px;
+    -webkit-transition: 1s;
+    transition: 1s;
+    display: block;
+    opacity: 1;
+}
+
+.article-container-mobile {
+    min-height: 620px;
+    opacity: 1;
+    display: none;
+    -webkit-transition: 1s;
+    transition: 1s;
+}
+
+.side-filter {
+    position: absolute;
+    margin-top: 75px;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 18rem;
+    opacity: 1;
+    display: block;
+    -webkit-transition: 1s;
+    transition: 1s;
+    margin-right: -400px;
+}
+
+}
+
+@media screen and (max-width: 945px) {
+    
+.carousel-row {
+    display: none;
+}
+
+.carousel-row-mobile {
+    display: block;
+    min-height: 400px;
+    background-color: rgba($color: #fff, $alpha: 0.75);
+    padding: 0 5rem;
+}
+
+.carousel {
+    padding: 0 0rem;
+}
+
+}
+
+@media screen and (max-width: 839px) {
+
+.underline {
+    padding-top: 0px;
+}
+
+.headline-card {
+    padding: 10px 0px;
+}
+
+.nav-pills {
+    padding: 10px 0px;
+}
+
+}
+
+@media screen and (max-width: 550px) {
+
+.title-row {
+    min-height: 200px;
+    width: 100%;
+    position: relative;
+}
+
+.title {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.title-row h1 {
+    font-size: 2rem;
+}
+
+.nav-header {
+    right: 0;
+}
+
+.nav-header .nav-item {
+    font-size: 0.9rem;
+}
+
+.main-container {
+    padding: 0px 5px;
+}
+
+.article-container-mobile {
+    margin: 0px 10px;
+}
+
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="article-body">    <div class="header-container">        <div class="title-row">            <div class="title">                <h1>Find Dining News</h1>                <div class="underline"></div>            </div>            <nav class="nav nav-header justify-content-end">                <span class="nav-item">                    <a class="nav-link" (click)="seeMostRecent()">Most Recent</a>                </span>                <span class="nav-item">                    <a class="nav-link" (click)="seeAll()">See All</a>                </span>            </nav>        </div>            <div class="carousel-row">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content;"                *ngIf="latestArticles.length"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="true"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticle($event)"                >                </ivy-carousel>            </div>        </div>        <div class="carousel-row-mobile">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content;"                *ngIf="latestArticles.length"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="false"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticle($event)"                >                </ivy-carousel>            </div>        </div>    </div>    <div class="main-container">        <div class="row no-gutters article-row" *ngIf="filteredArticles.length">            <div class="col-lg-10 article-list-col">                <div class="article-list col-12" id="article-list">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container" id="article-container">                    <div class="btn" (click)="closeArticle()">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">                        Last Updated {{ (selectedArticle.created_at) | date:\'mediumDate\' }}                    </h3>                    <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">                        Last Updated {{ (selectedArticle.modified_at) | date:\'mediumDate\' }}                    </h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>            </div>                <div class="col-lg-2 filter">                <app-filterdate-card [months]="months" [years]="years"                (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                </app-filterdate-card>            </div>            <!-- MOBILE LAYOUT BELOW -->            <div class="col-lg-12 article-mobile">                <div fxLayout="row" fxLayoutAlign="end">                    <div class="btn" (click)="toggleFilter()">Filter</div>                </div>                <div class="article-list-mobile col-12" id="article-list-mobile">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1mobile" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}mobile" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container-mobile" id="article-container-mobile" style="overflow: hidden;">                    <div class="btn" (click)="closeArticleMobile()">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:\'mediumDate\' }}</h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>                <div class="side-filter" id="mobile-filter" style="opacity: 0;">                    <app-filterdate-card [months]="months" [years]="years"                    (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                    </app-filterdate-card>                </div>            </div>        </div>    </div></div></div>'
+    var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'NewsArticlesComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'NewsArticlesComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

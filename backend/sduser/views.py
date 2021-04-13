@@ -20,6 +20,10 @@ from smtplib import SMTPException
 import json
 import ast
 
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from sduser import swagger
+
 User = get_user_model()
 
 
@@ -39,13 +43,15 @@ class DeactivateView(APIView):
     """ Deactivate user """
     #authentication_classes = [JWTAuthentication]
 
+    @swagger_auto_schema(operation_id="POST /user/deactivate/")
     def post(self, request):
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
         current_user = request.user
 
         if not current_user:
-            return JsonResponse({'message': 'fail to obtain user', 'code': 'deactivation_fail'}, status=405)
+            raise PermissionDenied(
+                message="Failed to obtain user", code="deactivation_fail")
 
         if current_user.id is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
@@ -66,11 +72,13 @@ class DeactivateView(APIView):
 class editView(APIView):
     """ Edit user """
 
+    @swagger_auto_schema(operation_id="PUT /user/edit/")
     def put(self, request):
         body = request.data
         user = request.user
         if not user:
-            return JsonResponse({'message': 'fail to obtain user', 'code': 'fail_obtain_user'}, status=405)
+            raise PermissionDenied(
+                message="Failed to obtain user", code="fail_obtain_user")
 
         for field in body:
             setattr(user, field, body[field])
@@ -82,6 +90,8 @@ class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(responses=swagger.user_nearby_get_response,
+        operation_id="GET /user/nearby/")
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
         user = request.user
@@ -92,6 +102,7 @@ class NearbyRestaurantsView(APIView):
         user_id = user.id
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
+
         return JsonResponse(nearest, safe=False)
 
 
@@ -99,6 +110,7 @@ class SDUserPasswordResetView(APIView):
     """ password reset view """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(operation_id="POST /auth/password_reset/")
     def post(self, request):
         email = request.data.get('email')
         associated_users = User.objects.filter(Q(email=email))
@@ -119,6 +131,7 @@ class SDUserPasswordResetView(APIView):
 class SDUserChangePasswordView(APIView):
     """ password change view """
 
+    @swagger_auto_schema(operation_id="POST /user/change_password")
     def post(self, request):
         passwords = request.data
         old_password = passwords.get('old_password')

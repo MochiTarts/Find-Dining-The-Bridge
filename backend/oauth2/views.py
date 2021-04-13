@@ -19,6 +19,8 @@ from google.auth.transport import requests as google_requests
 
 import requests
 
+from drf_yasg.utils import swagger_auto_schema
+
 User = get_user_model()
 
 
@@ -30,6 +32,7 @@ class GoogleView(APIView):
     # this is to allow handling log in request (obviously they are not logged in when making the request)
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(operation_id="POST /auth/google/")
     def post(self, request):
         """
         FLOW 1 (for new signup)
@@ -108,6 +111,7 @@ class FacebookView(APIView):
     # this is to allow handling log in request (obviously they are not logged in when making the request)
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(operation_id="POST /auth/facebook/")
     def post(self, request):
         """
         FLOW 1 (for new signup)

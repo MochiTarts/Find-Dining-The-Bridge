@@ -27,8 +27,10 @@ export class ArticleHeadlineCardComponent implements OnInit {
     this.articleTextPreview = temp.textContent || temp.innerText || "";
   }
 
+  /**
+   * Emits the inputed article to be opened on articles page
+   */
   openArticle() {
-    //this.articleService.openArticle(this.article);
     this.articleOutput.emit(this.article);
   }
 

@@ -47,14 +47,24 @@ def upload(file, content_type=None):
 
 
 def generate_name():
-    """Generate a randomized filename"""
+    """ Generate a randomized filename
+    for image files
+
+    :return: the generated filename
+    :rtype: str
+    """
     letters = string.ascii_lowercase
     name = 'FILE-' + (''.join(random.choice(letters) for i in range(10))) + '-' + \
            str(datetime.datetime.now()) + '.png'
     return name
 
 def generate_video_name():
-    """Generate a randomized filename"""
+    """ Generate a randomized filename
+    for video files
+
+    :return: the generated filename
+    :rtype: str
+    """
     letters = string.ascii_lowercase
     name = 'FILE-' + (''.join(random.choice(letters) for i in range(10))) + '-' + \
            str(datetime.datetime.now()) + '.mp4'
@@ -62,8 +72,10 @@ def generate_video_name():
 
 
 def delete(file_path):
-    """
-    delete object from bucket if it is not a default
+    """ delete object from bucket if it is not a default
+
+    :param file_path: the url to the file in google cloud bucket
+    :type: str
     """
 
     if 'default-assets' in file_path:

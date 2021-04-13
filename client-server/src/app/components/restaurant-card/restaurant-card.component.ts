@@ -73,6 +73,10 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * Performs action to let user add a restaurant to their list of favourites
+   * @param restaurnt_id - the restaurant id
+   */
   addFavourite(restaurnt_id) {
     var data = {
       restaurant: restaurnt_id

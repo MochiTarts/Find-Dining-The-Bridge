@@ -13,49 +13,46 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  /*
-  @Input: None
-  @Output: List of all posts by a restaurant
-
-  Retrieves all posts from a restaurant in the database (for RO).
-  */
+  /**
+   * Retrieves all posts from a restaurant in the database (for RO)
+   * @returns list of all posts by a restaurant
+   */
   getRestaurantPosts(): Observable<any> {
     const endpoint = POST_API;
     return this.http.get(endpoint);
   }
 
-  /*
-  @Input: restaurant_id
-  @Output: List of all posts by a restaurant
-
-  Retrieves all posts from a restaurant in the database (for public and BU user).
-  */
+  /**
+   * Retrieves all posts from a restaurant in the database (for public and BU user)
+   * 
+   * @param restaurant_id - the restaurant's id
+   * @returns list of all posts by a restaurant
+   */
   getRestaurantPostsById(restaurant_id): Observable<any> {
     const endpoint = PUBLIC_POST_API + `${restaurant_id}/`;
     return this.http.get(endpoint);
   }
 
-  /*
-  @Input: JSON object containing:
-            restaurant_id (string),
-            content (string; max_length=4096)
-  @Output: JSON object of inserted post record
-
-  Inserts a new restaurant post into the database
-  */
+  /**
+   * Inserts a new restaurant post into the database
+   * 
+   * @param postInfo - JSON object containing:
+   *                    restaurant_id (string),
+   *                    content (string; max_length=4096)
+   * @returns JSON object of the inserted post record
+   */
   createPost(postInfo): Observable<any> {
     const endpoint = POST_API;
     return this.http.post<any>(endpoint, postInfo);
   }
 
-  /*
-  @Input: Post id of the post to be deleted
-  @Output: None
-
-  Deletes a post using post id.
-  */
+  /**
+   * Deletes a post given its post id
+   * @param postId - post id of the post to be deleted
+   */
   deletePost(postId): void {
     const endpoint = POST_API + postId + '/';
     this.http.delete<any>(endpoint).subscribe((data) => {});
   }
+  
 }

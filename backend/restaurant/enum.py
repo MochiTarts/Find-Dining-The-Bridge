@@ -91,9 +91,18 @@ class Options(Enum):
 
 class Payment(Enum):
     """ The types of payment a restaurant can have """
-    CR = 'Credit'
-    DB = 'Debit'
-    CA = 'Cash'
+    Credit = 'Credit'
+    Debit = 'Debit'
+    Cash = 'Cash'
+
+    @classmethod
+    def choices(cls):
+        """ Get the payment methods in tuple form
+
+        :return: payment methods' in tuple form
+        :rtype: tuple
+        """
+        return tuple((method.name, method.value) for method in cls)
 
     @classmethod
     def names(cls):
@@ -127,7 +136,6 @@ class RestaurantSaveLocations(Enum):
     """ The valid locations a restaurant can upload/remove media to/from """
     cover_photo_url = "Cover Photo"
     logo_url = 'Logo'
-    owner_picture_url = 'Owner Picture'
     restaurant_video_url = 'Restaurant Video'
     restaurant_image_url = 'Restaurant Image'
 

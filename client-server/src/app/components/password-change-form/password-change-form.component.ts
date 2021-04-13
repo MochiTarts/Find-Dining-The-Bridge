@@ -31,6 +31,10 @@ export class PasswordChangeFormComponent implements OnInit {
   }
 
 
+  /**
+   * Opens the change password modal
+   * @param closeButton - determines if the close button should be displayed on the modal
+   */
   open(closeButton: boolean): void {
     this.aFormGroup = this.formBuilder.group({
       oldPassword: ['', Validators.required],
@@ -41,6 +45,9 @@ export class PasswordChangeFormComponent implements OnInit {
     this.modalRef = this.modalService.open(this.passwordContent, { backdrop: 'static', keyboard: false });
   }
 
+  /**
+   * Performs action to let a user change their password
+   */
   changeUserPassword(): void {
     var passwords = {
       old_password: (<HTMLInputElement>document.getElementById('oldPassword')).value,

@@ -37,10 +37,10 @@ def model_to_json(model, extra_params={}):
 def edit_model(model, body, editable):
     """
     Edit model data
-    @param model: model to be edited
-    @param body: body of fields
-    @param editable: list of editable fields
-    @return:
+    :param model: model to be edited
+    :param body: body of fields
+    :param editable: list of editable fields
+    :return: None
     """
     editable_fields = list(set(body) & set(editable))
     for editable_field in editable_fields:
@@ -55,8 +55,8 @@ def update_model_geo(model, address):
 def models_to_json(iterable):
     """
     serialize iterable of models
-    @param iterable: iterable of models
-    @return: list of serialized models
+    :param iterable: iterable of models
+    :return: list of serialized models
     """
     models = []
     for model in iterable:
@@ -67,9 +67,9 @@ def models_to_json(iterable):
 def model_refresh(model_class, query):
     """
     Refresh model from db (workaround fix to _id not showing up)
-    @param model_class: Class object for model
-    @param query: query for searching correct model
-    @return: updated model
+    :param model_class: Class object for model
+    :param query: query for searching correct model
+    :return: updated model
     """
     model = model_class.objects.get(**query)
     return model
