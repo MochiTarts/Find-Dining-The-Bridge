@@ -88,6 +88,12 @@ export class AllRestaurantsComponent implements OnInit {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
 
+      this.priceFilterRestaurants = data.Restaurants;
+      this.deliveryFilterRestaurants = data.Restaurants;
+      this.cuisineFilterRestaurants = data.Restaurants;
+      this.serviceFilterRestaurants = data.Restaurants;
+      this.searchedRestaurants = data.Restaurants;
+
       var selectedPostion: any;
       if (this.location) {
         this.getGeoCode(this.location).subscribe((data) => {
