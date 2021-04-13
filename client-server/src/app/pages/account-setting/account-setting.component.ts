@@ -15,6 +15,7 @@ import { PasswordChangeFormComponent } from '../../components/password-change-fo
 export class AccountSettingComponent implements OnInit {
   modalRef: any;
   userId: string;
+  isThirdParty: boolean = false;
   @ViewChild('changePassword') changePassword: PasswordChangeFormComponent;
   
   constructor(
@@ -28,6 +29,9 @@ export class AccountSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Account Settings | Find Dining Scarborough");
+    if (this.tokenStorage.getProvider()){
+      this.isThirdParty = true;
+    }
   }
 
   openConfirmModal(content) {
