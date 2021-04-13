@@ -35,15 +35,6 @@
 
       <div
         class="carousel-cell carousel-cell-cards"
-        *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'story'"
-        [style.width]="getCellWidth() + 'px'"
-        [style.border-radius]="borderRadius + 'px'"
-      >
-        <app-owner-card [story]="getFile(i)['image']"></app-owner-card>
-      </div>
-
-      <div
-        class="carousel-cell carousel-cell-cards"
         *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'partner'"
         [style.width]="getCellWidth() + 'px'"
         [style.border-radius]="borderRadius + 'px'"
