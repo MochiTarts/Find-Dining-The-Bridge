@@ -57,7 +57,6 @@ import { NewsArticlesComponent } from './pages/news-articles/news-articles.compo
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
 import { DishCardComponent } from './components/dish-card/dish-card.component';
-import { OwnerCardComponent } from './components/owner-card/owner-card.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FilterlistCardComponent } from './components/filterlist-card/filterlist-card.component';
@@ -90,7 +89,6 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     IvyCarouselComponent,
     CarouselWithThumbnailComponent,
     DishCardComponent,
-    OwnerCardComponent,
     LoginComponent,
     HomeComponent,
     ProfileComponent,

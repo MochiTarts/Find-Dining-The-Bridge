@@ -273,6 +273,11 @@ SIMPLE_JWT = {
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+# Try uncommenting STATICFILES_DIRS and commenting out STATIC_ROOT to read static files in DEV
+# STATICFILES_DIRS = [
+#   os.path.join(BASE_DIR, "static/"),
+# ]
+
 
 #SESSION_COOKIE_DOMAIN = '.localhost'
 
