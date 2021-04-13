@@ -305,7 +305,7 @@ user_favourite_get_response = {
                         "k"
                     ],
                     "owner_preferred_name": [],
-                    "owner_user_id": 0,
+                    "owner_user_id": 1,
                     "payment_methods": "['Credit', 'Debit', 'Cash']",
                     "phone": 1234567890,
                     "postalCode": "A1A 1A1",
@@ -455,7 +455,7 @@ restaurant_pending_get_response = {
                     "k"
                 ],
                 "owner_preferred_name": [],
-                "owner_user_id": 0,
+                "owner_user_id": 1,
                 "payment_methods": "['Credit', 'Debit', 'Cash']",
                 "phone": 1234567890,
                 "postalCode": "A1A 1A1",
@@ -512,7 +512,7 @@ restaurant_all_get_response = {
                             "k"
                         ],
                         "owner_preferred_name": [],
-                        "owner_user_id": 0,
+                        "owner_user_id": 1,
                         "payment_methods": [
                             "Credit",
                             "Debit",

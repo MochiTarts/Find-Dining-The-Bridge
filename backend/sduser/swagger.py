@@ -8,6 +8,23 @@ from rest_framework.response import Response
 
 User = get_user_model()
 
+class UserSignUp(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    role = serializers.CharField()
+
+user_signup_post_response = {
+    "200": openapi.Response(
+        description="custom 200 description",
+        examples={
+            "application/json": {
+                'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."
+            }
+        }
+    )
+}
+
 user_nearby_get_response = {
     "200": openapi.Response(
         description="custom 200 description",

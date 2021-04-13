@@ -501,11 +501,7 @@ class PendingRestaurantView(APIView):
             owner_user_id=user_id).first()
         if not restaurant:
             raise ObjectDoesNotExist(
-<<<<<<< HEAD
-                'No pending restaurant found with owner user id: ' + user_id)
-=======
                 'No pending restaurant found with owner user id of this: ' + str(user_id))
->>>>>>> master
 
         restaurant_image_url = ast.literal_eval(
             restaurant.restaurant_image_url)
