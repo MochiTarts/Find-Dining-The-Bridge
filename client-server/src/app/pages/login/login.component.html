@@ -73,7 +73,7 @@
             <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
             Facebook
           </button>
-  
+
         </div>
 
       </mat-tab>
@@ -143,8 +143,8 @@
                   <mat-label>Type of Account</mat-label>
                   <mat-select name="role" [(ngModel)]="signupForm.role" required #role="ngModel">
                     <mat-option value="role" selected disabled>Role</mat-option>
-                    <mat-option value="BU">Basic User</mat-option>
-                    <mat-option value="RO">Restaurant Owner</mat-option>
+                    <mat-option value="BU">I want to Find Dining</mat-option>
+                    <mat-option value="RO">I am a Restaurant Owner</mat-option>
                   </mat-select>
                   <mat-error *ngIf="role.errors && role.errors.required && f.submitted">Role is required</mat-error>
                 </mat-form-field>
@@ -187,7 +187,7 @@
             <fa-icon [icon]="faFacebook" class="icons"></fa-icon>
             Facebook
           </button>
-  
+
         </div>
       </mat-tab>
 
@@ -247,7 +247,7 @@
 <ng-template #reCaptcha let-modal role="form">
 <form [formGroup]="recaptchaForm">
   <div class="form-group" style="margin-top: 20px;">
-    <ngx-recaptcha2 
+    <ngx-recaptcha2
       #captchaElem
       [siteKey]="siteKey"
       formControlName="recaptcha"
