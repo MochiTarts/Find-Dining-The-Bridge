@@ -444,8 +444,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="343"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:343</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="351"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:351</a></div>
                 </td>
             </tr>
 
@@ -510,8 +510,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="340"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:340</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="348"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:348</a></div>
                 </td>
             </tr>
 
@@ -576,8 +576,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="304"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:304</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="312"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:312</a></div>
                 </td>
             </tr>
 
@@ -693,8 +693,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="360"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:360</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="368"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:368</a></div>
                 </td>
             </tr>
 
@@ -763,8 +763,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="355"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:355</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="363"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:363</a></div>
                 </td>
             </tr>
 
@@ -833,14 +833,19 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="197"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:197</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="205"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:205</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Performs the actions to properly log a user in or
+sign a user up, depending on the parameter provided.
+Makes the http request to the appropriate endpoints for
+signup or login</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -850,6 +855,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -864,6 +870,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>determines the action: login or signup</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -903,8 +915,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="346"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:346</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="354"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:354</a></div>
                 </td>
             </tr>
 
@@ -969,8 +981,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="300"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:300</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="308"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:308</a></div>
                 </td>
             </tr>
 
@@ -1008,8 +1020,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="331"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:331</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="339"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:339</a></div>
                 </td>
             </tr>
 
@@ -1082,8 +1094,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="322"
-                            class="link-to-prism">src/app/pages/login/login.component.ts:322</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="330"
+                            class="link-to-prism">src/app/pages/login/login.component.ts:330</a></div>
                 </td>
             </tr>
 
@@ -2151,6 +2163,14 @@ export class LoginComponent implements OnInit {
   }
 
   // signup or login form on submit
+  /**
+   * Performs the actions to properly log a user in or
+   * sign a user up, depending on the parameter provided.
+   * Makes the http request to the appropriate endpoints for
+   * signup or login
+   * 
+   * @param type - determines the action: login or signup
+   */
   onSubmit(type: string): void {
 
     switch (type) {

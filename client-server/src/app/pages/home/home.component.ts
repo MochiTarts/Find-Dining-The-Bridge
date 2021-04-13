@@ -91,6 +91,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/login']);
   }
 
+  /**
+   * Retreives all approved restaurants from database
+   * and shuffles their order for carousel display as well
+   * as pick a random restaurant for spotlight display
+   */
   getRestaurants() {
     this.restaurantService.listRestaurants().subscribe((data) => {
       // Shuffle the order of restaurants
@@ -111,6 +116,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Retrieves the user-friendly values for each
+   * price level
+   * @param priceLevel - the price level (LOW, MID, HIGH, EXHIGH)
+   * @returns 
+   */
   getPricepoint(priceLevel: string) {
     // priceLevels: LOW, MID, HIGH, EXHIGH
     // return: $, $$, $$$, $$$$
@@ -130,6 +141,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/all-listings']);
   }
 
+  /**
+   * Shuffles the list of restaurants
+   * @param list - list of restaurants
+   * @returns list of restaurants in new random order
+   */
   shuffle(list: any[]) {
     // Reference: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 

@@ -193,7 +193,14 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // signup or login form on submit
+  /**
+   * Performs the actions to properly log a user in or
+   * sign a user up, depending on the parameter provided.
+   * Makes the http request to the appropriate endpoints for
+   * signup or login
+   * 
+   * @param type - determines the action: login or signup
+   */
   onSubmit(type: string): void {
 
     switch (type) {
@@ -301,6 +308,10 @@ export class LoginComponent implements OnInit {
     window.location.reload();
   }
 
+  /**
+   * Redirects user to the correct page after
+   * successful login
+   */
   loginRedirect(): void {
     let profileId = this.tokenStorage.getUser().profile_id;
 
@@ -319,6 +330,12 @@ export class LoginComponent implements OnInit {
   }
 
 
+  /**
+   * Registers or logs in a user using Google as the 3rd-party
+   * provider
+   * 
+   * @param role - the specified role of the user (BU or RO)
+   */
   signInWithGoogle(role: string = ''): void {
     this.role = role;
     this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
@@ -328,6 +345,12 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Registers or logs in a user using Facebook as the 3rd-party
+   * provider
+   * 
+   * @param role - the specified role of the user (BU or RO)
+   */
   signInWithFB(role: string = ''): void {
     this.role = role;
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID).then(() => {

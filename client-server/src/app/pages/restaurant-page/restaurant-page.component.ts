@@ -223,6 +223,13 @@ export class RestaurantPageComponent implements OnInit {
 
   }
 
+  /**
+   * Retrieves the restaurant from the database, either the pending
+   * one or the approved one depending on the role
+   * 
+   * @param id - the restaurant's id
+   * @returns the retrieved restaurant record
+   */
   getPendingOrApprovedRestaurant(id) {
     if (this.role == 'RO' && !id) {
       return this.restaurantService.getPendingRestaurant();
@@ -231,6 +238,12 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Retrieves the restaurant dishes from the database
+   * 
+   * @param id - the restaurant's id
+   * @returns the restaurant dishes
+   */
   getPendingOrApprovedDishes(id) {
     if (this.role == 'RO' && !id) {
       return this.restaurantService.getPendingRestaurantFood();

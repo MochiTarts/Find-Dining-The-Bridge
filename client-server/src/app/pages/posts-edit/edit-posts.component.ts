@@ -61,30 +61,50 @@ export class EditPostsComponent implements OnInit {
     this.loadPosts();
   }
 
+  /**
+   * Retrieves the id of the currently displayed restaurant
+   */
   getRestaurantId() {
     this.restaurantService.getPendingRestaurant().subscribe((data) => {
       this.restaurantId = data._id;
     })
   }
 
+  /**
+   * Retrieves all the restaurant's posts
+   */
   loadPosts() {
     this.postService.getRestaurantPosts().subscribe((data) => {
       this.posts = data.Posts;
     })
   }
 
+  /**
+   * Opens the editing modal form for creating a new post
+   * @param content - post content
+   */
   openPostModal(content) {
     this.content = '';
     this.validator.clearAllErrors();
     this.postModalRef = this.postModalService.open(content, { size: 'lg' });
   }
 
+  /**
+   * Opens the delete modal for confirming to delete a post or not
+   * 
+   * @param content - post content
+   * @param id - post id
+   * @param index - post index
+   */
   openDeleteModal(content, id, index) {
     this.deletePostId = id;
     this.deletePostIndex = index;
     this.deleteModalRef = this.deleteModalService.open(content, { size: 's' });
   }
 
+  /**
+   * Performs action to make a new restaurant post
+   */
   createPost() {
     if (this.content == '') {
       alert('Please enter your content before posting!');
@@ -120,6 +140,9 @@ export class EditPostsComponent implements OnInit {
     }
   }
 
+  /**
+   * Performs action to remove a restaurant post
+   */
   deleteContent() {
     this.postService.deletePost(this.deletePostId);
 
