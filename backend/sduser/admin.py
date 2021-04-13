@@ -7,7 +7,7 @@ from django.urls import reverse
 from django import forms
 
 from sduser.forms import AdminForm
-from sduser.utils import send_email_verification, send_email_activate_notify, send_email_deactivate_notify
+from sduser.utils import send_email_verification, send_email_activate_notify, send_email_deactivate_notify, send_email_promote_notify
 from utils.filters import InputFilter, EmailFilter, UsernameFilter
 from utils.model_util import model_to_json
 
@@ -25,7 +25,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = (EmailFilter, UsernameFilter, 'is_active', 'is_staff',
                    'is_superuser', 'is_blocked',)
     # note that the order of actions will be reversed (in get_actions)
-    actions = ('disable_user','disable_user_notify','enable_user','enable_user_notify', 'email_verification', 'unblock_user', 'block_user',)
+    actions = ('disable_user','disable_user_notify','enable_user','enable_user_notify', 'email_verification', 'unblock_user', 'block_user', 'promote_user',)
     # list_per_page=200
 
     readonly_fields = (
@@ -71,6 +71,28 @@ class UserAdmin(admin.ModelAdmin):
         # reverse the action list so delete comes latest
         actions = OrderedDict(reversed(list(actions.items())))
         return actions
+
+    def promote_user(self, request, queryset):
+        try:
+            email_sent = 0
+            for user in queryset:
+                send_email_promote_notify(user, request)
+                email_sent += 1
+            count = queryset.update(is_superuser=True, is_staff=True)
+            if count > 1:
+                msg = "Selected " + str(count) + " Users have been promoted to administrators."
+                msg += " " + str(email_sent) + " notification emails have been sent."
+            else:
+                msg = "Selected User has been promoted to administrator."
+                if email_sent > 0:
+                    msg += " An notification email has been sent."
+            messages.success(request, msg)
+        except Exception:
+            msg = "Fail to promote one or more Users"
+            messages.error(request, msg)
+
+    promote_user.short_description = "Promote selected Users to become administrators (will send notification email)"
+
 
     def block_user(self, request, queryset):
         try:

@@ -5,6 +5,11 @@ from django.contrib.auth.models import AbstractUser
 from .enum import Roles
 #from django import models as django_models
 
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
+#from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+
 class SDUser(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     role = models.CharField(max_length=5, choices=Roles.choices(), default="BU")
@@ -58,3 +63,9 @@ class SDUser(AbstractUser):
 
     def has_perm(self, perm, obj=None):
        return self.is_superuser
+
+@receiver(pre_delete, sender=SDUser)
+def delete_user(sender, instance, **kwargs):
+    print(sender)
+    if instance.is_superuser:
+        raise PermissionDenied
