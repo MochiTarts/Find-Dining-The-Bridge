@@ -139,8 +139,9 @@ def get_domain_and_protocal(request, site, django_template=False):
         domain = get_current_site(request).domain
     # for localhost:4200 or test/uat/prod
     protocal = 'https'
-    if 'localhost:8000' in domain or django_template:
+    if 'localhost:8000' in domain:
         protocal = 'http'
     if 'localhost:4200' in domain and django_template:
         domain = 'localhost:8000'
+        protocal = 'http'
     return (domain, protocal)
