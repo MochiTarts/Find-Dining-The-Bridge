@@ -14,6 +14,9 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * Redirects to login
+   */
   onBecomePartnerClicked() {
     this.router.navigate(['/login']);
   }

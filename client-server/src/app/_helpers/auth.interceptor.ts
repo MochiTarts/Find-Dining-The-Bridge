@@ -14,8 +14,19 @@ export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
-  // intercepts all http request to attach access token to the header and handle error response flows
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private tokenStorage: TokenStorageService,
+  ) { }
+
+  /**
+   * Intercepts all http request to attach access token to the header and handle error response flows
+   * 
+   * @param req - the http request
+   * @param next - the http handler
+   * @returns the BeahviourSubject containing the cloned request with appropriate headers
+   */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let authReq = req;
     const token = this.tokenStorage.getToken();
@@ -53,21 +64,34 @@ export class AuthInterceptor implements HttpInterceptor {
     }));
   }
 
+  /**
+   * Logs the user out
+   */
   private logout(): void {
     this.tokenStorage.signOut();
   }
 
-  // add access token to the header
+  /**
+   * Add access token to the header
+   * 
+   * @param req - the http reequest
+   * @param token - the user's access token
+   * @returns the cloned request with proper headers
+   */
   private addToken(req: HttpRequest<any>, token: string) {
     return req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
   }
 
-  /*
-  Handles 401, 403, 405 error (due to expired token) by attempting to refresh the tokens (assuming the old token expired)
-  while blocking all requests in between and retry after refresh returns
-
-  BehaviorSubject is used as a semaphore (to block and release requests during the refreshing)
-  */
+  /**
+   * Handles 401, 403, 405 error (due to expired token) by attempting to refresh the tokens (assuming the old token expired)
+   * while blocking all requests in between and retry after refresh returns
+   * 
+   * BehaviorSubject is used as a semaphore (to block and release requests during the refreshing)
+   * 
+   * @param request - the http request
+   * @param next - the http handler
+   * @returns the BehaviourSubject containing the cloned request with appropriate headers
+   */
   private handleTokenError(request: HttpRequest<any>, next: HttpHandler) {
 
     // haven't start refreshing yet. Start refreshing

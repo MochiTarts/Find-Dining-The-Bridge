@@ -26,6 +26,9 @@ export class VirtualScrollingComponent implements OnInit {
     this.loadPosts();
   }
 
+  /**
+   * PLEASE UPDATE DOCSTRING
+   */
   loadPosts() {
     this.restaurantId = this.route.snapshot.queryParams.restaurantId;
     if (this.restaurantId) {

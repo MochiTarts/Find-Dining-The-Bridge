@@ -49,6 +49,11 @@ export class PostComponent implements OnInit {
     })
   }
 
+  /**
+   * Retrieves the restaurant from the database
+   * @param id - the restaurant id
+   * @returns the restaurant record
+   */
   getPendingOrApproved(id) {
     if (this.authService.isLoggedIn && this.role == 'RO' && !this.isQueryRestaurant) {
       return this.restaurantService.getPendingRestaurant();

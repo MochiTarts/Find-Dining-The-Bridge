@@ -72,6 +72,10 @@ export class SubscriberProfileFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Opens the modal for user profile form
+   * @param closeButton - determines if the close button should be displayed on the modal
+   */
   open(closeButton: boolean): void {
     if (this.authService.isLoggedIn) {
       this.siteKey = `${environment.captcha.siteKey}`;
@@ -104,6 +108,9 @@ export class SubscriberProfileFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Performs action to update or create the user's profile
+   */
   updateProfile(): void {
     var subscriberInfo = {
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
