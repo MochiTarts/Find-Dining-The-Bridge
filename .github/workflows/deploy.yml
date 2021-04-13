@@ -55,7 +55,7 @@ jobs:
           pip install -r backend/requirements.txt
           
           python backend/manage.py collectstatic --no-input
-          cp -TR backend/static client-server
+          cp -TR backend/static client-server/static
 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
