@@ -399,14 +399,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="47"
-                            class="link-to-prism">src/app/components/dish-card/dish-card.component.ts:47</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="51"
+                            class="link-to-prism">src/app/components/dish-card/dish-card.component.ts:51</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Opens the dish modal</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -415,6 +417,7 @@
                                 <tr>
                                     <td>Name</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -426,6 +429,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the modal to be opened</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -560,6 +569,10 @@ export class DishCardComponent implements OnInit {
     // this.userId &#x3D; localStorage.getItem(&#x27;userId&#x27;);
   }
 
+  /**
+   * Opens the dish modal
+   * @param content - the modal to be opened
+   */
   openDish(content) {
     this.modalRef &#x3D; this.modalService.open(content, { size: &#x27;xl&#x27; });
   }

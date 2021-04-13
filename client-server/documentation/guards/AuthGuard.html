@@ -181,14 +181,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="13"
-                            class="link-to-prism">src/app/_helpers/auth.guard.ts:13</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="17"
+                            class="link-to-prism">src/app/_helpers/auth.guard.ts:17</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>This is the basic guard that just checks for any user (both BU and RO)</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -235,7 +237,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>boolean (true if user has a role; false otherwise)</p>
+
                     </div>
                 </td>
             </tr>
@@ -257,7 +260,11 @@ export class AuthGuard implements CanActivate {
         private router: Router,
         private tokenStorage: TokenStorageService
     ) { }
-    // this is the basic guard that just checks for any user (both BU and RO)
+
+    /**
+     * This is the basic guard that just checks for any user (both BU and RO)
+     * @returns boolean (true if user has a role; false otherwise)
+     */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user &#x3D; this.tokenStorage.getUser();
 

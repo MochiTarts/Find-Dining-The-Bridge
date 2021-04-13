@@ -267,14 +267,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="17"
-                            class="link-to-prism">src/app/components/footer/footer.component.ts:17</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">src/app/components/footer/footer.component.ts:20</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Redirects to login</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -306,6 +308,9 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * Redirects to login
+   */
   onBecomePartnerClicked() {
     this.router.navigate([&#x27;/login&#x27;]);
   }

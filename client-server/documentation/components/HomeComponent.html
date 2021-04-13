@@ -378,8 +378,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="125"
-                            class="link-to-prism">src/app/pages/home/home.component.ts:125</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="136"
+                            class="link-to-prism">src/app/pages/home/home.component.ts:136</a></div>
                 </td>
             </tr>
 
@@ -414,8 +414,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="129"
-                            class="link-to-prism">src/app/pages/home/home.component.ts:129</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/pages/home/home.component.ts:140</a></div>
                 </td>
             </tr>
 
@@ -453,14 +453,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="114"
-                            class="link-to-prism">src/app/pages/home/home.component.ts:114</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="125"
+                            class="link-to-prism">src/app/pages/home/home.component.ts:125</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Retrieves the user-friendly values for each
+price level</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -470,6 +473,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -484,6 +488,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the price level (LOW, MID, HIGH, EXHIGH)</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -523,14 +533,18 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="94"
-                            class="link-to-prism">src/app/pages/home/home.component.ts:94</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="99"
+                            class="link-to-prism">src/app/pages/home/home.component.ts:99</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Retreives all approved restaurants from database
+and shuffles their order for carousel display as well
+as pick a random restaurant for spotlight display</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -679,14 +693,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="133"
-                            class="link-to-prism">src/app/pages/home/home.component.ts:133</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="149"
+                            class="link-to-prism">src/app/pages/home/home.component.ts:149</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Shuffles the list of restaurants</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -696,6 +712,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -710,6 +727,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>list of restaurants</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -721,7 +744,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>list of restaurants in new random order</p>
+
                     </div>
                 </td>
             </tr>
@@ -1440,6 +1464,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.router.navigate([&#x27;/login&#x27;]);
   }
 
+  /**
+   * Retreives all approved restaurants from database
+   * and shuffles their order for carousel display as well
+   * as pick a random restaurant for spotlight display
+   */
   getRestaurants() {
     this.restaurantService.listRestaurants().subscribe((data) &#x3D;&gt; {
       // Shuffle the order of restaurants
@@ -1460,6 +1489,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   * Retrieves the user-friendly values for each
+   * price level
+   * @param priceLevel - the price level (LOW, MID, HIGH, EXHIGH)
+   * @returns 
+   */
   getPricepoint(priceLevel: string) {
     // priceLevels: LOW, MID, HIGH, EXHIGH
     // return: $, $$, $$$, $$$$
@@ -1479,6 +1514,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.router.navigate([&#x27;/all-listings&#x27;]);
   }
 
+  /**
+   * Shuffles the list of restaurants
+   * @param list - list of restaurants
+   * @returns list of restaurants in new random order
+   */
   shuffle(list: any[]) {
     // Reference: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 
@@ -1537,7 +1577,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   &lt;b&gt;Discover Local Favorites&lt;/b&gt;
   &lt;div class&#x3D;&quot;restaurant-carousel&quot;&gt;
     &lt;ivy-carousel
-      style&#x3D;&quot;max-width: fit-content;&quot;
+      style&#x3D;&quot;max-width: fit-content; margin: auto;&quot;
       class&#x3D;&quot;arrow-outside-carousel&quot;
       [images]&#x3D;&quot;restaurants&quot;
       [margin]&#x3D;&quot;5&quot;
@@ -1855,11 +1895,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 .restaurant-carousel {
   padding-top: 25px;
-  width: 1020px;
+  //width: 1020px;
+  padding-left: 20vw;
+  padding-right: 20vw;
   text-align: center;
   margin: auto;
 
   @media screen and (max-width: 1020px) {
+    padding-left: 0;
+    padding-right: 0;
     width: 100%;
   }
 }
@@ -2101,7 +2145,7 @@ hr {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="header-img">  <div class="title absolute-center" tabindex="0">    Support <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants  </div>  <div class="header-content description absolute-center" tabindex="0">    Celebrating Scarborough\'s rich cultural diversity through food,    we aim to highlight local, independent restaurants from the    longstanding neighbourhood favourites, to the new and hidden    gems. We will help residents and east end visitors Find Dining    and discover the amazing food of Scarborough!  </div>  <div class="input-group absolute-center">    <div class="input-group-prepend">      <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>    </div>    <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">    <div class="input-group-prepend">      <span class="input-group-text">Find</span>    </div>    <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">    <div class="input-group-append">      <button class="btn-primary" type="button" [routerLink]="[\'/all-listings\']" [queryParams]="{location: location, find: find}">Go Find Dining</button>    </div>  </div>  <button class="btn-primary search-btn absolute-center" type="button" [routerLink]="[\'/all-listings\']" [queryParams]="{location: location, find: find}">Go Find Dining</button>  <div *ngIf="photoCourtesy" class="header-content photo-courtesy absolute-center">Photo Courtesy of <strong>{{ photoCourtesy }}</strong></div></div><div class="local-restaurants" *ngIf="restaurants.length > 0">  <b>Discover Local Favorites</b>  <div class="restaurant-carousel">    <ivy-carousel      style="max-width: fit-content;"      class="arrow-outside-carousel"      [images]="restaurants"      [margin]="5"      [arrowsOutside]="arrowsOutside"      [borderRadius]="20"      [cellWidth]="200"      [height]="150"    ></ivy-carousel>  </div></div><div class="bg2" *ngIf="spotlight">  <div class="res-spotlight">    <div class="title-2" tabindex="0">      Restaurant Spotlight    </div>    <div class="infoCard">      <div class="row" id="info-row">        <div class="logo col-12 col-md-4" id="info-col1">          <img            src="{{ spotlight.logo_url }}"            alt="logo"            class="logo-img"          />        </div>        <div class="col" id="info-col2">          <p><b>{{ spotlight.name }}</b> | {{ spotlight.cuisines }} | {{ spotlight.years }} year(s) in business</p>          <p class="bio">            {{ spotlight.bio }}            <a [routerLink]="[\'/restaurant\']" [queryParams]="{restaurantId: spotlight._id}" target="_blank">              Continue reading            </a>          </p>        </div>      </div>    </div>  </div></div><!-- part 4 --><div class="box-2">  <div>    <div class="title-2" tabindex="0">      For Restaurants    </div>    <div class="subtitle-2" tabindex="0">      What does Find Dining Scarborough offer for restaurant owners?    </div>  </div>  <div class="flex-container-2">    <div class="flex-item-2" tabindex="0">      <app-info-card [imgUrl]="\'assets/images/home/connect.png\'" [title]="\'CONNECT\'"></app-info-card>      <p class="info-description">        Connect your business with an online        <strong>community</strong>        that supports        <strong>Scarborough</strong>        restaurants      </p>    </div>    <div class="flex-item-2" tabindex="0">      <app-info-card [imgUrl]="\'assets/images/home/celebrate.png\'" [title]="\'CELEBRATE\'"></app-info-card>      <p class="info-description">        Celebrate your unique        <strong>history</strong> and        <strong>stories</strong>      </p>    </div>    <div class="flex-item-2" tabindex="0">      <app-info-card [imgUrl]="\'assets/images/home/promote.png\'" [title]="\'PROMOTE\'"></app-info-card>      <p class="info-description">        Promote your restaurant through our        <strong>FREE</strong> platform      </p>    </div>  </div></div><hr id="get_started"><br /><!-- part 5 --><div class="box-3">  <div class="title-2" tabindex="0">    How to Get Started  </div>  <div class="flex-container-3">    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/signup.png\'" [title]="\'SIGN UP\'"      [description]="\'Register your restaurant to the Find Dining platform\'" tabindex="0"></app-info-card>    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/email_update.png\'" [title]="\'EMAIL UPDATES\'"      [description]="\'Monitor your emails for launch updates\'" tabindex="0"></app-info-card>    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/complete_profile.png\'" [title]="\'COMPLETE PROFILE\'"      [description]="\'Complete any outstanding sections within your profile\'" tabindex="0"></app-info-card>    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/share.png\'" [title]="\'SHARE\'"      [description]="\'Share your profile with a community of your peers\'" tabindex="0"></app-info-card>  </div>  <button type="button" class="register-btn" (click)="gotoRegister()">Register Now</button></div><div class="bg2" style="padding: 10px;"></div><!-- Subscriber Profile Form --><app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="header-img">  <div class="title absolute-center" tabindex="0">    Support <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants  </div>  <div class="header-content description absolute-center" tabindex="0">    Celebrating Scarborough\'s rich cultural diversity through food,    we aim to highlight local, independent restaurants from the    longstanding neighbourhood favourites, to the new and hidden    gems. We will help residents and east end visitors Find Dining    and discover the amazing food of Scarborough!  </div>  <div class="input-group absolute-center">    <div class="input-group-prepend">      <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>    </div>    <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">    <div class="input-group-prepend">      <span class="input-group-text">Find</span>    </div>    <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">    <div class="input-group-append">      <button class="btn-primary" type="button" [routerLink]="[\'/all-listings\']" [queryParams]="{location: location, find: find}">Go Find Dining</button>    </div>  </div>  <button class="btn-primary search-btn absolute-center" type="button" [routerLink]="[\'/all-listings\']" [queryParams]="{location: location, find: find}">Go Find Dining</button>  <div *ngIf="photoCourtesy" class="header-content photo-courtesy absolute-center">Photo Courtesy of <strong>{{ photoCourtesy }}</strong></div></div><div class="local-restaurants" *ngIf="restaurants.length > 0">  <b>Discover Local Favorites</b>  <div class="restaurant-carousel">    <ivy-carousel      style="max-width: fit-content; margin: auto;"      class="arrow-outside-carousel"      [images]="restaurants"      [margin]="5"      [arrowsOutside]="arrowsOutside"      [borderRadius]="20"      [cellWidth]="200"      [height]="150"    ></ivy-carousel>  </div></div><div class="bg2" *ngIf="spotlight">  <div class="res-spotlight">    <div class="title-2" tabindex="0">      Restaurant Spotlight    </div>    <div class="infoCard">      <div class="row" id="info-row">        <div class="logo col-12 col-md-4" id="info-col1">          <img            src="{{ spotlight.logo_url }}"            alt="logo"            class="logo-img"          />        </div>        <div class="col" id="info-col2">          <p><b>{{ spotlight.name }}</b> | {{ spotlight.cuisines }} | {{ spotlight.years }} year(s) in business</p>          <p class="bio">            {{ spotlight.bio }}            <a [routerLink]="[\'/restaurant\']" [queryParams]="{restaurantId: spotlight._id}" target="_blank">              Continue reading            </a>          </p>        </div>      </div>    </div>  </div></div><!-- part 4 --><div class="box-2">  <div>    <div class="title-2" tabindex="0">      For Restaurants    </div>    <div class="subtitle-2" tabindex="0">      What does Find Dining Scarborough offer for restaurant owners?    </div>  </div>  <div class="flex-container-2">    <div class="flex-item-2" tabindex="0">      <app-info-card [imgUrl]="\'assets/images/home/connect.png\'" [title]="\'CONNECT\'"></app-info-card>      <p class="info-description">        Connect your business with an online        <strong>community</strong>        that supports        <strong>Scarborough</strong>        restaurants      </p>    </div>    <div class="flex-item-2" tabindex="0">      <app-info-card [imgUrl]="\'assets/images/home/celebrate.png\'" [title]="\'CELEBRATE\'"></app-info-card>      <p class="info-description">        Celebrate your unique        <strong>history</strong> and        <strong>stories</strong>      </p>    </div>    <div class="flex-item-2" tabindex="0">      <app-info-card [imgUrl]="\'assets/images/home/promote.png\'" [title]="\'PROMOTE\'"></app-info-card>      <p class="info-description">        Promote your restaurant through our        <strong>FREE</strong> platform      </p>    </div>  </div></div><hr id="get_started"><br /><!-- part 5 --><div class="box-3">  <div class="title-2" tabindex="0">    How to Get Started  </div>  <div class="flex-container-3">    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/signup.png\'" [title]="\'SIGN UP\'"      [description]="\'Register your restaurant to the Find Dining platform\'" tabindex="0"></app-info-card>    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/email_update.png\'" [title]="\'EMAIL UPDATES\'"      [description]="\'Monitor your emails for launch updates\'" tabindex="0"></app-info-card>    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/complete_profile.png\'" [title]="\'COMPLETE PROFILE\'"      [description]="\'Complete any outstanding sections within your profile\'" tabindex="0"></app-info-card>    <app-info-card class="flex-item-3" [imgUrl]="\'assets/images/home/share.png\'" [title]="\'SHARE\'"      [description]="\'Share your profile with a community of your peers\'" tabindex="0"></app-info-card>  </div>  <button type="button" class="register-btn" (click)="gotoRegister()">Register Now</button></div><div class="bg2" style="padding: 10px;"></div><!-- Subscriber Profile Form --><app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form></div>'
     var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'HomeComponent'};

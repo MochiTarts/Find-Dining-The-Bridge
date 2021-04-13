@@ -193,14 +193,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="15"
-                            class="link-to-prism">src/app/_helpers/ro.guard.ts:15</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="19"
+                            class="link-to-prism">src/app/_helpers/ro.guard.ts:19</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>This is a simple guard that just checks for RO rule</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -247,7 +249,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>boolean (true if user is RO; false otherwise)</p>
+
                     </div>
                 </td>
             </tr>
@@ -271,7 +274,11 @@ export class ROGuard implements CanActivate {
         private tokenStorage: TokenStorageService,
         private _location: Location,
     ) { }
-    // this is a simple guard that just checks for RO rule
+
+    /**
+     * This is a simple guard that just checks for RO rule
+     * @returns boolean (true if user is RO; false otherwise)
+     */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user &#x3D; this.tokenStorage.getUser();
         if (user &amp;&amp; user.role &#x3D;&#x3D; &#x27;RO&#x27;) {

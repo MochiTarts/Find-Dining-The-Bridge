@@ -320,14 +320,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="63"
-                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:63</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="76"
+                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:76</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Selects which service to call depending on user&#39;s role
+so to make right http request for sub/unsubbing to mailing list</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -336,6 +339,7 @@
                                 <tr>
                                     <td>Name</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -347,6 +351,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the user&#39;s role (BU or RO)</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -358,7 +368,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>the Observable from the http request service</p>
+
                     </div>
                 </td>
             </tr>
@@ -386,17 +397,27 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="71"
-                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:71</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="90"
+                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:90</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Selects which service to call depending on user&#39;s role
+so to make right http request for retrieving user&#39;s current
+consent status</p>
+</div>
 
+                    <div>
+                    </div>
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>the Observable from the http request service</p>
 
                     </div>
                 </td>
@@ -464,8 +485,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="79"
-                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:79</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="98"
+                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:98</a></div>
                 </td>
             </tr>
 
@@ -503,14 +524,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="41"
-                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:41</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="44"
+                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:44</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Performs action to let user subscribe to mailing list</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -542,14 +565,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="52"
-                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:52</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="58"
+                            class="link-to-prism">src/app/pages/newsletter/newsletter.component.ts:58</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Performs action to let user unsubscribe from mailing list</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -707,17 +732,23 @@ export class NewsletterComponent implements OnInit {
     });
   }
 
+  /**
+   * Performs action to let user subscribe to mailing list
+   */
   subscribeNewsletter() {
     var userInfo &#x3D; {
       consent_status: &quot;EXPRESSED&quot;
     }
     this.chooseEditAPI(userInfo).subscribe(() &#x3D;&gt; {
       this.subscribed &#x3D; true;
-      alert(&quot;You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.&quot;);
+      alert(&quot;You have successfully subscribed! You will now receive emails regarding important updates about Find Dining or Restaurant promotions.&quot;);
       this.reload();
     });
   }
 
+  /**
+   * Performs action to let user unsubscribe from mailing list
+   */
   unsubscribeNewsletter() {
     var userInfo &#x3D; {
       consent_status: &quot;UNSUBSCRIBED&quot;,
@@ -729,6 +760,13 @@ export class NewsletterComponent implements OnInit {
     });
   }
 
+  /**
+   * Selects which service to call depending on user&#x27;s role
+   * so to make right http request for sub/unsubbing to mailing list
+   * 
+   * @param userInfo - the user&#x27;s role (BU or RO)
+   * @returns the Observable from the http request service
+   */
   chooseEditAPI(userInfo) {
     if (this.role &#x3D;&#x3D; &#x27;BU&#x27;) {
       return this.userService.editSubscriberProfile(userInfo);
@@ -737,6 +775,12 @@ export class NewsletterComponent implements OnInit {
     }
   }
 
+  /**
+   * Selects which service to call depending on user&#x27;s role
+   * so to make right http request for retrieving user&#x27;s current
+   * consent status
+   * @returns the Observable from the http request service
+   */
   chooseGetAPI() {
     if (this.role &#x3D;&#x3D; &#x27;BU&#x27;) {
       return this.userService.getSubscriberProfile();
@@ -769,7 +813,7 @@ export class NewsletterComponent implements OnInit {
     &lt;/p&gt;
 
     &lt;p *ngIf&#x3D;&quot;role &amp;&amp; subscribed&quot;&gt;
-      You are subscribed! You will receive emails regarding important about Find Dining or Restaurant promotions.&lt;br&gt;&lt;br&gt;
+      You are subscribed! You will receive emails regarding important updates about Find Dining or Restaurant promotions.&lt;br&gt;&lt;br&gt;
       Click the button below to unsubscribe.&lt;br&gt;
       &lt;button class&#x3D;&quot;btn btn-primary&quot; (click)&#x3D;&quot;unsubscribeNewsletter()&quot;&gt;
         Unsubscribe
@@ -834,7 +878,7 @@ p {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="setting-page">    <h2>Subscribe/Unsubscribe to our notifications</h2>    <p *ngIf="role && !subscribed">      You are unsubscribed.<br><br>      Click the button below to subscribe.<br>      <button class="btn btn-primary" (click)="subscribeNewsletter()">        Subscribe      </button>    </p>    <p *ngIf="role && subscribed">      You are subscribed! You will receive emails regarding important about Find Dining or Restaurant promotions.<br><br>      Click the button below to unsubscribe.<br>      <button class="btn btn-primary" (click)="unsubscribeNewsletter()">        Unsubscribe      </button>    </p></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="setting-page">    <h2>Subscribe/Unsubscribe to our notifications</h2>    <p *ngIf="role && !subscribed">      You are unsubscribed.<br><br>      Click the button below to subscribe.<br>      <button class="btn btn-primary" (click)="subscribeNewsletter()">        Subscribe      </button>    </p>    <p *ngIf="role && subscribed">      You are subscribed! You will receive emails regarding important updates about Find Dining or Restaurant promotions.<br><br>      Click the button below to unsubscribe.<br>      <button class="btn btn-primary" (click)="unsubscribeNewsletter()">        Unsubscribe      </button>    </p></div></div>'
     var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'NewsletterComponent'};

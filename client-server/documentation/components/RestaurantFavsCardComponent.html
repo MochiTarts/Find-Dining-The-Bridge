@@ -402,14 +402,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="72"
-                            class="link-to-prism">src/app/components/restaurant-favs-card/restaurant-favs-card.component.ts:72</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="76"
+                            class="link-to-prism">src/app/components/restaurant-favs-card/restaurant-favs-card.component.ts:76</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Performs action to let a user remove a restaurant from their list of favourites</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -418,6 +420,7 @@
                                 <tr>
                                     <td>Name</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -429,6 +432,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the restaurant id</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -753,6 +762,10 @@ export class RestaurantFavsCardComponent implements OnInit {
     this.router.navigate([currentUrl]);
   }
 
+  /**
+   * Performs action to let a user remove a restaurant from their list of favourites
+   * @param restaurnt_id - the restaurant id
+   */
   remove(restaurnt_id) {
     this.userService.removeFavRestaurant(restaurnt_id).subscribe(() &#x3D;&gt; {
       this.reload()

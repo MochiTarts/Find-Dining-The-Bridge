@@ -320,14 +320,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="42"
-                            class="link-to-prism">src/app/pages/profile/profile.component.ts:42</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="45"
+                            class="link-to-prism">src/app/pages/profile/profile.component.ts:45</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Opens the user profile edit form modal</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -458,6 +460,9 @@ export class ProfileComponent implements OnInit {
       })
   }
 
+  /**
+   * Opens the user profile edit form modal
+   */
   openEditModal(): void {
     this.userInfo.open(true);
   }

@@ -361,14 +361,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="54"
-                            class="link-to-prism">src/app/pages/get-involved/get-involved.component.ts:54</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="58"
+                            class="link-to-prism">src/app/pages/get-involved/get-involved.component.ts:58</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Performs action to send email to <a href="mailto:info@finddining.ca">info@finddining.ca</a>, asking about
+the Get Involved activity</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -544,6 +547,10 @@ export class GetInvolvedComponent implements OnInit {
     this.arrowsOutside &#x3D; window.innerWidth &lt; 800 ? false : true;
   }
 
+  /**
+   * Performs action to send email to info@finddining.ca, asking about
+   * the Get Involved activity
+   */
   onSubmit(): void {
     let name &#x3D; this.messageForm.get(&#x27;name&#x27;).value;
     let message &#x3D; this.messageForm.get(&#x27;message&#x27;).value;

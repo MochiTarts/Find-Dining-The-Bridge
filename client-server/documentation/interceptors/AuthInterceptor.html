@@ -223,14 +223,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="61"
-                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:61</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="81"
+                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:81</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Add access token to the header</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -240,6 +242,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -254,6 +257,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the http reequest</li>
+</ul>
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>token</td>
@@ -266,6 +275,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the user&#39;s access token</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -277,7 +292,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>the cloned request with proper headers</p>
+
                     </div>
                 </td>
             </tr>
@@ -307,14 +323,18 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="71"
-                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:71</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="95"
+                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:95</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Handles 401, 403, 405 error (due to expired token) by attempting to refresh the tokens (assuming the old token expired)
+while blocking all requests in between and retry after refresh returns</p>
+<p>BehaviorSubject is used as a semaphore (to block and release requests during the refreshing)</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -324,6 +344,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -338,6 +359,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the http request</li>
+</ul>
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>next</td>
@@ -350,6 +377,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the http handler</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -361,7 +394,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>the BehaviourSubject containing the cloned request with appropriate headers</p>
+
                     </div>
                 </td>
             </tr>
@@ -389,14 +423,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="19"
-                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:19</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="30"
+                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:30</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Intercepts all http request to attach access token to the header and handle error response flows</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -406,6 +442,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -420,6 +457,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the http request</li>
+</ul>
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>next</td>
@@ -432,6 +475,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the http handler</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -443,7 +492,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>the BeahviourSubject containing the cloned request with appropriate headers</p>
+
                     </div>
                 </td>
             </tr>
@@ -473,14 +523,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="56"
-                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:56</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="70"
+                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:70</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Logs the user out</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -578,8 +630,19 @@ export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing &#x3D; false;
   private refreshTokenSubject: BehaviorSubject&lt;any&gt; &#x3D; new BehaviorSubject&lt;any&gt;(null);
 
-  constructor(private router: Router, private authService: AuthService, private tokenStorage: TokenStorageService) { }
-  // intercepts all http request to attach access token to the header and handle error response flows
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private tokenStorage: TokenStorageService,
+  ) { }
+
+  /**
+   * Intercepts all http request to attach access token to the header and handle error response flows
+   * 
+   * @param req - the http request
+   * @param next - the http handler
+   * @returns the BeahviourSubject containing the cloned request with appropriate headers
+   */
   intercept(req: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
     let authReq &#x3D; req;
     const token &#x3D; this.tokenStorage.getToken();
@@ -617,21 +680,34 @@ export class AuthInterceptor implements HttpInterceptor {
     }));
   }
 
+  /**
+   * Logs the user out
+   */
   private logout(): void {
     this.tokenStorage.signOut();
   }
 
-  // add access token to the header
+  /**
+   * Add access token to the header
+   * 
+   * @param req - the http reequest
+   * @param token - the user&#x27;s access token
+   * @returns the cloned request with proper headers
+   */
   private addToken(req: HttpRequest&lt;any&gt;, token: string) {
     return req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, &#x27;Bearer &#x27; + token) });
   }
 
-  /*
-  Handles 401, 403, 405 error (due to expired token) by attempting to refresh the tokens (assuming the old token expired)
-  while blocking all requests in between and retry after refresh returns
-
-  BehaviorSubject is used as a semaphore (to block and release requests during the refreshing)
-  */
+  /**
+   * Handles 401, 403, 405 error (due to expired token) by attempting to refresh the tokens (assuming the old token expired)
+   * while blocking all requests in between and retry after refresh returns
+   * 
+   * BehaviorSubject is used as a semaphore (to block and release requests during the refreshing)
+   * 
+   * @param request - the http request
+   * @param next - the http handler
+   * @returns the BehaviourSubject containing the cloned request with appropriate headers
+   */
   private handleTokenError(request: HttpRequest&lt;any&gt;, next: HttpHandler) {
 
     // haven&#x27;t start refreshing yet. Start refreshing

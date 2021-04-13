@@ -381,14 +381,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="52"
-                            class="link-to-prism">src/app/components/post/post.component.ts:52</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/components/post/post.component.ts:57</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Retrieves the restaurant from the database</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -397,6 +399,7 @@
                                 <tr>
                                     <td>Name</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -408,6 +411,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the restaurant id</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -419,7 +428,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>the restaurant record</p>
+
                     </div>
                 </td>
             </tr>
@@ -740,6 +750,11 @@ export class PostComponent implements OnInit {
     })
   }
 
+  /**
+   * Retrieves the restaurant from the database
+   * @param id - the restaurant id
+   * @returns the restaurant record
+   */
   getPendingOrApproved(id) {
     if (this.authService.isLoggedIn &amp;&amp; this.role &#x3D;&#x3D; &#x27;RO&#x27; &amp;&amp; !this.isQueryRestaurant) {
       return this.restaurantService.getPendingRestaurant();

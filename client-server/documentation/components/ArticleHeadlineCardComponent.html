@@ -379,14 +379,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="30"
-                            class="link-to-prism">src/app/components/article-headline-card/article-headline-card.component.ts:30</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="33"
+                            class="link-to-prism">src/app/components/article-headline-card/article-headline-card.component.ts:33</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Emits the inputed article to be opened on articles page</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -469,8 +471,10 @@ export class ArticleHeadlineCardComponent implements OnInit {
     this.articleTextPreview &#x3D; temp.textContent || temp.innerText || &quot;&quot;;
   }
 
+  /**
+   * Emits the inputed article to be opened on articles page
+   */
   openArticle() {
-    //this.articleService.openArticle(this.article);
     this.articleOutput.emit(this.article);
   }
 
@@ -482,7 +486,8 @@ export class ArticleHeadlineCardComponent implements OnInit {
         <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;card mat-elevation-z8&quot; (click)&#x3D;&quot;openArticle()&quot;&gt;
     &lt;div class&#x3D;&quot;card-body&quot;&gt;
         &lt;h2 class&#x3D;&quot;card-title&quot;&gt;{{ article.title }}&lt;/h2&gt;
-        &lt;h4 class&#x3D;&quot;card-subtitle text-muted&quot;&gt;{{ article.modified_at | date:&#x27;mediumDate&#x27; }}&lt;/h4&gt;
+        &lt;h4 class&#x3D;&quot;card-subtitle text-muted&quot; *ngIf&#x3D;&quot;!article.modified_at&quot;&gt;{{ article.created_at | date:&#x27;mediumDate&#x27; }}&lt;/h4&gt;
+        &lt;h4 class&#x3D;&quot;card-subtitle text-muted&quot; *ngIf&#x3D;&quot;article.modified_at&quot;&gt;{{ article.modified_at | date:&#x27;mediumDate&#x27; }}&lt;/h4&gt;
         &lt;p class&#x3D;&quot;card-text&quot;&gt;
             {{ (articleTextPreview.length &gt; 200) ? (articleTextPreview | slice:0:200)+&#x27;...&#x27;:(articleTextPreview) }}
         &lt;/p&gt;
@@ -544,7 +549,7 @@ p {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="card mat-elevation-z8" (click)="openArticle()">    <div class="card-body">        <h2 class="card-title">{{ article.title }}</h2>        <h4 class="card-subtitle text-muted">{{ article.modified_at | date:\'mediumDate\' }}</h4>        <p class="card-text">            {{ (articleTextPreview.length > 200) ? (articleTextPreview | slice:0:200)+\'...\':(articleTextPreview) }}        </p>    </div></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="card mat-elevation-z8" (click)="openArticle()">    <div class="card-body">        <h2 class="card-title">{{ article.title }}</h2>        <h4 class="card-subtitle text-muted" *ngIf="!article.modified_at">{{ article.created_at | date:\'mediumDate\' }}</h4>        <h4 class="card-subtitle text-muted" *ngIf="article.modified_at">{{ article.modified_at | date:\'mediumDate\' }}</h4>        <p class="card-text">            {{ (articleTextPreview.length > 200) ? (articleTextPreview | slice:0:200)+\'...\':(articleTextPreview) }}        </p>    </div></div></div>'
     var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'ArticleHeadlineCardComponent'};

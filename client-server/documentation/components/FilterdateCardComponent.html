@@ -358,14 +358,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="49"
-                            class="link-to-prism">src/app/components/filterdate-card/filterdate-card.component.ts:49</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/components/filterdate-card/filterdate-card.component.ts:57</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Deselects all the months and years and sets the
+monthCheckMap and yearCheckMap to all false</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -397,14 +400,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="30"
-                            class="link-to-prism">src/app/components/filterdate-card/filterdate-card.component.ts:30</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="34"
+                            class="link-to-prism">src/app/components/filterdate-card/filterdate-card.component.ts:34</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Selects all the months and years and sets the
+monthCheckMap and yearCheckMap to all true</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -436,14 +442,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="68"
-                            class="link-to-prism">src/app/components/filterdate-card/filterdate-card.component.ts:68</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="80"
+                            class="link-to-prism">src/app/components/filterdate-card/filterdate-card.component.ts:80</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Emits the monthCheckMap and yearCheckMap to be used
+in articles page for filtering</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -558,6 +567,10 @@ export class FilterdateCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Selects all the months and years and sets the
+   * monthCheckMap and yearCheckMap to all true
+   */
   selectAll() {
     this.monthCheckMap &#x3D; [];
     this.yearCheckMap &#x3D; [];
@@ -577,6 +590,10 @@ export class FilterdateCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Deselects all the months and years and sets the
+   * monthCheckMap and yearCheckMap to all false
+   */
   reset() {
     this.monthCheckMap &#x3D; [];
     this.yearCheckMap &#x3D; [];
@@ -596,6 +613,10 @@ export class FilterdateCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Emits the monthCheckMap and yearCheckMap to be used
+   * in articles page for filtering
+   */
   sendList() {
     var checkMap &#x3D; {
       month: this.monthCheckMap,

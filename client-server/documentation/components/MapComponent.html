@@ -367,8 +367,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="175"
-                            class="link-to-prism">src/app/components/map/map.component.ts:175</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="184"
+                            class="link-to-prism">src/app/components/map/map.component.ts:184</a></div>
                 </td>
             </tr>
 
@@ -433,14 +433,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="121"
-                            class="link-to-prism">src/app/components/map/map.component.ts:121</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="126"
+                            class="link-to-prism">src/app/components/map/map.component.ts:126</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Gets the location marker on the map of the searched address</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -450,6 +452,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -464,6 +467,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>the searched address</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -475,7 +484,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>the Observable from the http request</p>
+
                     </div>
                 </td>
             </tr>
@@ -612,14 +622,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="126"
-                            class="link-to-prism">src/app/components/map/map.component.ts:126</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="135"
+                            class="link-to-prism">src/app/components/map/map.component.ts:135</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Updates the location markers on the map given the list of restaurants</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -628,6 +640,7 @@
                                 <tr>
                                     <td>Name</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -639,6 +652,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>list of restaurants</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -995,11 +1014,20 @@ export class MapComponent implements OnInit, OnChanges {
     this.updateMap(this.restaurants);
   }
 
+  /**
+   * Gets the location marker on the map of the searched address
+   * @param searchText - the searched address
+   * @returns the Observable from the http request
+   */
   getGeoCode(searchText: string): Observable&lt;any&gt; {
     const url &#x3D; &#x60;https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json?country&#x3D;ca&amp;types&#x3D;place,address,neighborhood,locality&amp;access_token&#x3D;${environment.mapbox.accessToken}&#x60;;
     return this.http.get(url);
   }
 
+  /**
+   * Updates the location markers on the map given the list of restaurants
+   * @param restaurants - list of restaurants
+   */
   updateMap(restaurants) {
     for (let marker of this.currentMarkers) {
       marker.remove();

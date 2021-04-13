@@ -373,14 +373,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="25"
-                            class="link-to-prism">src/app/components/filterlist-card/filterlist-card.component.ts:25</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="29"
+                            class="link-to-prism">src/app/components/filterlist-card/filterlist-card.component.ts:29</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>Emits the checkMap for favourites and all-restaurants page
+to use for filtering</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -458,6 +461,10 @@ export class FilterlistCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Emits the checkMap for favourites and all-restaurants page
+   * to use for filtering
+   */
   sendList() {
     this.events.emit(this.checkMap);
   }

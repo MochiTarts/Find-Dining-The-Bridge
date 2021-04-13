@@ -193,14 +193,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="16"
-                            class="link-to-prism">src/app/_helpers/secure.guard.ts:16</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">src/app/_helpers/secure.guard.ts:20</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>This is the most secured guard that will verify the refresh token on the backend against the database</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -247,7 +249,8 @@
 
                     </div>
                     <div class="io-description">
-                        
+                        <p>boolean (true if refresh token matches the one in the database; false otherwise)</p>
+
                     </div>
                 </td>
             </tr>
@@ -272,7 +275,11 @@ export class SecureGuard implements CanActivate {
         private authService: AuthService,
         private tokenStorage: TokenStorageService,
     ) { }
-    // this is the most secured guard that will verify the refresh token on the backend against the database
+
+    /**
+     * This is the most secured guard that will verify the refresh token on the backend against the database
+     * @returns boolean (true if refresh token matches the one in the database; false otherwise)
+     */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
         if (this.authService.isLoggedIn()){

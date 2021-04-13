@@ -399,14 +399,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="56"
-                            class="link-to-prism">src/app/components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component.ts:56</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="61"
+                            class="link-to-prism">src/app/components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component.ts:61</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>PLEASE UPDATE DOCSTRING</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -416,6 +418,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -430,6 +433,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>?</li>
+</ul>
+
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>value</td>
@@ -442,6 +451,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>?</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -629,14 +644,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="68"
-                            class="link-to-prism">src/app/components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component.ts:68</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="76"
+                            class="link-to-prism">src/app/components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component.ts:76</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>PLEASE UPDATE DOCSTRING</p>
+</div>
 
                     <div class="io-description">
                         <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
@@ -668,14 +685,16 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="72"
-                            class="link-to-prism">src/app/components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component.ts:72</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">src/app/components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component.ts:84</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                    <div class="io-description"><p>PLEASE UPDATE DOCSTRING</p>
+</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -684,6 +703,7 @@
                                 <tr>
                                     <td>Name</td>
                                     <td>Optional</td>
+                                    <td>Description</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -695,6 +715,12 @@
                                     </td>
 
 
+                                    <td>
+                                        <ul>
+<li>?</li>
+</ul>
+
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -963,6 +989,11 @@ export class MultiselectCheckboxDropdownComponent implements OnInit, OnChanges, 
     this.containerWidth &#x3D; this.dropdownContainer.nativeElement.offsetWidth;
   }
 
+  /**
+   * PLEASE UPDATE DOCSTRING
+   * @param checked - ?
+   * @param value - ?
+   */
   getSelectedValue(checked: Boolean, value: String) {
     if (checked) {
       this.checkedList.push(value);
@@ -975,10 +1006,17 @@ export class MultiselectCheckboxDropdownComponent implements OnInit, OnChanges, 
     this.shareCheckedlist();
   }
 
+  /**
+   * PLEASE UPDATE DOCSTRING
+   */
   shareCheckedlist() {
     this.shareCheckedList.emit(this.checkedList);
   }
 
+  /**
+   * PLEASE UPDATE DOCSTRING
+   * @param event - ?
+   */
   toggleDropdown(event) {
     if (this.isFocused) {
       this.showDropDown &#x3D; !this.showDropDown;
