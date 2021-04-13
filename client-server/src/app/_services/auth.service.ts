@@ -70,8 +70,14 @@ export class AuthService {
     }), httpOptions);
   }
 
-  resetPasswordEmail(email: string){
+  resetPasswordEmail(email: string): Observable<any>{
     return this.http.post(AUTH_API + 'password_reset/', JSON.stringify({
+      email
+    }), httpOptions);
+  }
+
+  resendVerificationEmail(email: string): Observable<any>{
+    return this.http.post(AUTH_API + 'resend_verification_email/', JSON.stringify({
       email
     }), httpOptions);
   }

@@ -16,6 +16,8 @@ import { Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
+const TIMER_REMAIN_KEY: string = 'remaining';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -36,9 +38,9 @@ export class LoginComponent implements OnInit {
   };
   isLoggedIn = false;
   isLoginFailed = false;
-  loginErrorMessage: string = '';
+  loginErrorMessage: string = null;
 
-  infoMessage = '';
+  infoMessage = null;
   role: string = 'BU';
   user = {};
   mode: number = 0;
@@ -52,22 +54,32 @@ export class LoginComponent implements OnInit {
   };
   isSignupSuccessful = false;
   isSignUpFailed = false;
-  signupErrorMessage: string = '';
-  signupMessage: string = '';
+  signupErrorMessage: string = null;
+  signupMessage: string = null;
 
   resetForm: any = {
     email: null,
   };
   resetSuccessful = false;
   resetFailed = false;
-  resetErrorMessage: string = '';
+  resetErrorMessage: string = null;
 
+  isResendSuccessful = false;
+  resendFailed = false;
+  resendErrorMessage: string = null;
+  resendMessage: string = null;
+
+  resendForm: any = {
+    email: null,
+  };
 
   showDetails: boolean = true;
   hide: boolean = true;
   strength: number = 0;
   siteKey: string;
   isThirdParty: boolean = false;
+  timerOn: boolean = false;
+
 
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
@@ -104,11 +116,13 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Login In / Register | Find Dining Scarborough");
+
     // if token is already present then the user is logged in using basic credentials
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.authService.updateLoginStatus(true);
       this.role = this.tokenStorage.getUser().role;
+      this.setTimeRemaining(0);
       // otherwise the user is logged in with third party and need to handle authentication on the backend
     } else {
       this.socialAuth.authState.subscribe((user) => {
@@ -130,6 +144,7 @@ export class LoginComponent implements OnInit {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
                 this.authService.updateLoginStatus(true);
                 this.isLoggedIn = true;
+                this.setTimeRemaining(0);
                 this.modalService.dismissAll();
                 this.loginRedirect();
               }, err => {
@@ -162,6 +177,7 @@ export class LoginComponent implements OnInit {
                 this.tokenStorage.updateTokenAndUser(data.access_token);
                 this.authService.updateLoginStatus(true);
                 this.isLoggedIn = true;
+                this.setTimeRemaining(0);
                 this.modalService.dismissAll();
                 this.loginRedirect();
               }, err => {
@@ -249,6 +265,8 @@ export class LoginComponent implements OnInit {
               this.isSignupSuccessful = true;
               this.isSignUpFailed = false;
               this.signupMessage = data.message;
+              this.setTimeRemaining(0);
+              document.getElementById('form_link').style.display = 'none';
               this.ref.detectChanges();
               //let curTab = document.getElementsByClassName("tab-header")[0];
               //let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
@@ -268,6 +286,31 @@ export class LoginComponent implements OnInit {
           this.signupErrorMessage = "password did not match!";
           this.isSignUpFailed = true;
         }
+        break;
+      }
+      case 'resend': {
+        const { email } = this.resendForm;
+        this.signupMessage = null;
+        this.authService.resendVerificationEmail(email).subscribe(
+          data => {
+            //console.log(data);
+            this.resendMessage = data.message;
+            this.isResendSuccessful = true;
+            this.resendFailed = false;
+            this.ref.detectChanges();
+          },
+          // resend failed
+          err => {
+            //console.log(err)
+            this.resendFailed = true;
+            this.resendErrorMessage = err.error.message;
+            // manually trigger change detection to have error messages render
+            this.ref.detectChanges();
+          }
+        );
+        this.timerOn = true;
+        this.setTimeRemaining(60);
+        this.timer(60, 'resend_button');
         break;
       }
       case 'reset': {
@@ -300,6 +343,77 @@ export class LoginComponent implements OnInit {
   reloadPage(): void {
     window.location.reload();
   }
+
+  public getTimeRemaining(): number | null {
+    return parseInt(window.sessionStorage.getItem(TIMER_REMAIN_KEY), 10);
+  }
+
+  // save user to session storage
+  public setTimeRemaining(remaining: number): void {
+    window.sessionStorage.removeItem(TIMER_REMAIN_KEY);
+    if (remaining > 0) {
+      window.sessionStorage.setItem(TIMER_REMAIN_KEY, remaining.toString());
+    }
+  }
+
+  timer(remaining: number, element_id: string): void {
+    if (remaining % 5 == 0) {
+      this.setTimeRemaining(remaining);
+    }
+    var m = Math.floor(remaining / 60);
+    var s = remaining % 60;
+
+    var m_str = m < 10 ? '0' + m : m;
+    var s_str = s < 10 ? '0' + s : s;
+    var elem = document.getElementById(element_id)
+    elem.innerHTML = m_str + ':' + s_str;
+    remaining -= 1;
+
+    if (remaining >= 0 && this.timerOn) {
+      setTimeout(() => {
+        this.timer(remaining, element_id);
+      }, 1000);
+      return;
+    }
+
+    var displayText: string;
+
+    switch (element_id) {
+      case 'resend_button':
+        displayText = 'Resend verification email'
+        break;
+      default:
+        displayText = 'Submit'
+    }
+    elem.innerHTML = displayText;
+    this.timerOn = false;
+    this.ref.detectChanges();
+  }
+
+  toggleLink(): boolean {
+    var link = document.getElementById('form_link');
+    if (link.classList.contains('show_signup')) {
+      link.classList.remove('show_signup');
+      link.innerHTML = "Register for an account?";
+      this.isSignupSuccessful = true;
+      this.ref.detectChanges();
+      if (!this.timerOn) {
+        // set timer for send email button if it is still on cooldown 
+        var remaining = this.getTimeRemaining();
+        if (remaining && remaining > 5) {
+          this.timerOn = true;
+          this.timer(remaining - 5, 'resend_button');
+        }
+      }
+    } else {
+      link.classList.add('show_signup');
+      link.innerHTML = "Didn't receive verification email?";
+      this.isSignupSuccessful = false;
+      this.ref.detectChanges();
+    }
+    return false;
+  }
+
 
   loginRedirect(): void {
     let profileId = this.tokenStorage.getUser().profile_id;

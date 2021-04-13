@@ -17,9 +17,8 @@ from django.urls import path, include, re_path, reverse_lazy
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from sduser.backends import verify_email
-
 from server.admin import admin_site
+from sduser.utils import verify_email
 from sduser.forms import SDPasswordChangeForm, SDPasswordResetForm
 
 import restaurant

@@ -45,7 +45,7 @@ def send_approval_email(names, receiver, profile_title, profile_type):
         content += '<p>Your food profile for <i>' + profile_title + \
             '</i> has been approved and is published to the live site.</p>'
     content += '<p>Thanks,</p>'
-    content += '<p>Your SCDining team</p>'
+    content += '<p>Your Find Dining team</p>'
 
     if profile_type == 'restaurant':
         subject = "Restaurant Profile Approved by Find Dining"
@@ -73,7 +73,7 @@ def send_reject_email(names, receiver, profile_title, profile_type):
     else:
         content += '<p>Once you feel confident about your food profile, feel free to submit it again for us to reivew!</p>'
     content += '<p>Thanks,</p>'
-    content += '<p>Your SCDining team</p>'
+    content += '<p>Your Find Dining team</p>'
 
     if profile_type == 'restaurant':
         subject = "Restaurant Profile Rejected by Find Dining"
@@ -99,7 +99,7 @@ def send_unpublish_email(names, receiver, profile_title, profile_type):
     content += '<p>Please check the comments from administrator for the detail reason.</p>'
     content += '<p>Note: this does not apply to the newest submission that has not been reviewed yet. If you have submitted a newer profile please wait for it to be reviewed.</p>'
     content += '<p>Thanks,</p>'
-    content += '<p>Your SCDining team</p>'
+    content += '<p>Your Find Dining team</p>'
 
     message = ""
     if profile_type == 'restaurant':

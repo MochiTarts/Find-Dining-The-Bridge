@@ -25,7 +25,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 
 from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
-from sduser.utils import send_email_verification, verify_email
+from sduser.utils import send_email_verification
 
 import json
 import jwt
@@ -118,7 +118,7 @@ def create_disable_user_and_send_verification_email(user, password, request):
             return JsonResponse({'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
         except (BadHeaderError, SMTPException):
             user.delete()
-            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact find dining support.'}, status=503)
+            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact Find Dining support.'}, status=503)
 
     # this should never happen
     else:
@@ -132,7 +132,7 @@ def check_user_status(user):
     """
     if user.is_blocked:
         raise AuthenticationFailed(
-            'This user has been blocked. If you think this is a mistake, please contact find dining team to resolve it',
+            'This user has been blocked. If you think this is a mistake, please contact Find Dining team to resolve it',
             'user_blocked',
         )
     elif not user.is_active:

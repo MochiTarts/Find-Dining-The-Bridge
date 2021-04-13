@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.mail import BadHeaderError
-from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned, PermissionDenied
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth import get_user_model
@@ -14,9 +14,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from utils.math import get_nearby_restaurants
-from sduser.utils import send_email_password_reset, send_email_deactivate
+from sduser.utils import send_email_password_reset, send_email_deactivate, send_email_verification
 from sduser.forms import SDPasswordChangeForm
-
+from smtplib import SMTPException
 import json
 import ast
 
@@ -110,8 +110,8 @@ class SDUserPasswordResetView(APIView):
         user = associated_users.first()
         try:
             send_email_password_reset(user=user, request=request)
-        except BadHeaderError:
-            return JsonResponse({'message':'Invalid header found.'}, status=400)
+        except (BadHeaderError, SMTPException):
+            return JsonResponse({'message':'Fail to send email.'}, status=503)
 
         return JsonResponse({'message': 'Password reset email has been sent'})
 
@@ -140,5 +140,33 @@ class SDUserChangePasswordView(APIView):
             return JsonResponse({'message': 'Password have been changed'})
         else:
             return JsonResponse(form.errors.get_json_data(escape_html=True), status=400)
+        
+
+
+class SDUserResentVerificationEmailView(APIView):
+    """ resent verification email view """
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        email = request.data['email']
+
+        try:
+            user = User.objects.get(email=email)
+
+            if user.is_blocked:
+                raise PermissionDenied
+            # resent verification email for unverified user
+            if not user.is_active:
+                send_email_verification(user, request)
+                # send a signal to frontend to ask user to check their inbox
+                return JsonResponse({'message': "verification email has been sent. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
+            else:
+                return JsonResponse({'message': "This email has already been verified."}, status=400)
+        except (BadHeaderError, SMTPException):
+            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact Find Dining support.'}, status=503)
+
+        except User.DoesNotExist:
+            return JsonResponse({'message': "No user found with this email address. Please make sure you have entered the correct email address and try again."}, status=400)
+        
         
 
