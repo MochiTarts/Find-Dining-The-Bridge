@@ -71,7 +71,8 @@ class EmailBackend(ModelBackend):
 
 @swagger_auto_schema(
     method='post', request_body=swagger.UserSignUp,
-    responses=swagger.user_signup_post_response)
+    responses=swagger.user_signup_post_response,
+    operation_id="POST /auth/signup/")
 @api_view(['POST'])
 def signup(request):
     """

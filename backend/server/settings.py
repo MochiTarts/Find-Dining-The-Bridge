@@ -181,7 +181,6 @@ REST_FRAMEWORK = {
         'user': '100/hour'
     },
     'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
-    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema'
 }
 # doesn't work right now because Djongo can't translate aggregation functions in sql
 

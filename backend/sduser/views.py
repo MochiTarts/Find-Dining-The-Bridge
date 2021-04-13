@@ -43,6 +43,7 @@ class DeactivateView(APIView):
     """ Deactivate user """
     #authentication_classes = [JWTAuthentication]
 
+    @swagger_auto_schema(operation_id="POST /user/deactivate/")
     def post(self, request):
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
@@ -71,6 +72,7 @@ class DeactivateView(APIView):
 class editView(APIView):
     """ Edit user """
 
+    @swagger_auto_schema(operation_id="PUT /user/edit/")
     def put(self, request):
         body = request.data
         user = request.user
@@ -88,7 +90,8 @@ class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
     permission_classes = (AllowAny,)
 
-    @swagger_auto_schema(responses=swagger.user_nearby_get_response)
+    @swagger_auto_schema(responses=swagger.user_nearby_get_response,
+        operation_id="GET /user/nearby/")
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
         user = request.user
@@ -107,6 +110,7 @@ class SDUserPasswordResetView(APIView):
     """ password reset view """
     permission_classes = (AllowAny,)
 
+    @swagger_auto_schema(operation_id="POST /auth/password_reset/")
     def post(self, request):
         email = request.data.get('email')
         associated_users = User.objects.filter(Q(email=email))
@@ -127,6 +131,7 @@ class SDUserPasswordResetView(APIView):
 class SDUserChangePasswordView(APIView):
     """ password change view """
 
+    @swagger_auto_schema(operation_id="POST /user/change_password")
     def post(self, request):
         passwords = request.data
         old_password = passwords.get('old_password')

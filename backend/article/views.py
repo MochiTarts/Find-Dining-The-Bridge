@@ -24,7 +24,8 @@ class ArticleList(APIView):
     """ article list """
     permission_classes = (AllowAny,)
 
-    @swagger_auto_schema(responses=swagger.article_all_response)
+    @swagger_auto_schema(responses=swagger.article_all_response,
+        operation_id="GET /article/all/")
     def get(self, request):
         """ Retrieve all intend-for-publish articles from the database (restricted by user's visibility) """
         user = request.user
@@ -42,7 +43,8 @@ class ArticleView(APIView):
     """ article view """
     permission_classes = (AllowAny,)
 
-    @swagger_auto_schema(responses=swagger.article_id_response)
+    @swagger_auto_schema(responses=swagger.article_id_response,
+        operation_id="GET /article/{id}/")
     def get(self, request, id):
         """ Retrieve an article given id (restricted by user's visibility) """
         user = request.user

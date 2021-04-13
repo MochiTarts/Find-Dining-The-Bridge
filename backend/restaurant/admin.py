@@ -24,9 +24,7 @@ import ast
 
 def reject_restr(model_admin, request, queryset):
     """
-    Reject a Restaurant and unpublish it if the current one on
-    live site is the same as the submission.
-    Sends a notification email to the restaurant email for
+    Reject a Restaurant's changes and sends a notification email to the restaurant email for
     each successful rejection.
     """
     count = 0
@@ -213,9 +211,7 @@ approve_restr.short_description = "Approve of restaurant info to be displayed on
 
 def reject_food(model_admin, request, queryset):
     """
-    Reject a Food and unpublish it if the current one on
-    live site is the same as the submission.
-    Sends a notification email to the restaurant email for
+    Reject a Food and sends a notification email to the restaurant email for
     each successful rejection.
     """
     count = 0

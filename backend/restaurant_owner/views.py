@@ -47,7 +47,8 @@ class SignUp(APIView):
     #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(request_body=swagger.RestaurantOwnerInsert,
-        responses=swagger.restaurant_owner_signup_post_response)
+        responses=swagger.restaurant_owner_signup_post_response,
+        operation_id="POST /owner/signup/")
     def post(self, request):
         """ Inserts a new restaurant profile record into the database and
         attaches user_id to the corresponding restaurant
@@ -71,7 +72,8 @@ class RestaurantOwnerView(APIView):
     permission_classes = [ROPermission]
     #permission_classes = (AllowAny,)
 
-    @swagger_auto_schema(responses=swagger.restaurant_owner_profile_get_response)
+    @swagger_auto_schema(responses=swagger.restaurant_owner_profile_get_response,
+        operation_id="GET /owner/profile/")
     def get(self, request):
         """ Retrieves a restaurant owner profile """
         user = request.user
@@ -83,7 +85,8 @@ class RestaurantOwnerView(APIView):
         return JsonResponse(model_to_json(restaurant_owner))
 
     @swagger_auto_schema(request_body=swagger.RestaurantOwnerUpdate,
-        responses=swagger.restaurant_owner_profile_put_response)
+        responses=swagger.restaurant_owner_profile_put_response,
+        operation_id="PUT /owner/profile/")
     def put(self, request):
         """ Updates a restaurant owner profile """
         user = request.user
