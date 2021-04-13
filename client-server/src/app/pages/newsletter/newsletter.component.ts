@@ -47,7 +47,7 @@ export class NewsletterComponent implements OnInit {
     }
     this.chooseEditAPI(userInfo).subscribe(() => {
       this.subscribed = true;
-      alert("You have successfully subscribed! You will now receive emails regarding important about Find Dining or Restaurant promotions.");
+      alert("You have successfully subscribed! You will now receive emails regarding important updates about Find Dining or Restaurant promotions.");
       this.reload();
     });
   }

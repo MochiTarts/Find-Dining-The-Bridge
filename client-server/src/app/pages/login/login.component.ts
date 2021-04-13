@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
   faGoogle = faGoogle;
   faFacebook = faFacebook;
   selectedValue: string;
- 
+
   public recaptchaForm: FormGroup;
 
   loginForm: any = {
@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
     this.recaptchaForm = this.formBuilder.group({
       recaptcha: [null, Validators.required]
     });
-   }
+  }
 
   ngAfterViewInit(): void {
     let curTab = document.getElementsByClassName("tab-header")[0];
@@ -139,7 +139,7 @@ export class LoginComponent implements OnInit {
                 this.isLoggedIn = false;
                 var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
 
-                if (err.error){
+                if (err.error) {
                   switch (err.error.code) {
                     case 'user_disabled':
                       this.infoMessage = verifyEmailInfoMessage;
@@ -167,7 +167,7 @@ export class LoginComponent implements OnInit {
               }, err => {
                 this.authService.updateLoginStatus(false);
                 this.isLoggedIn = false;
-                if (err.error){
+                if (err.error) {
                   this.loginErrorMessage = err.error.message;
                   //console.log(this.loginErrorMessage);
                 }
@@ -217,7 +217,7 @@ export class LoginComponent implements OnInit {
             this.authService.updateLoginStatus(true);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
-            this.role = this.tokenStorage.getUser().role;     
+            this.role = this.tokenStorage.getUser().role;
             this.loginRedirect();
 
           },
@@ -322,9 +322,13 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/restaurant']);
     } else {
       if (profileId == null) {
-        this.router.navigate(['/']);
+        this.router.navigate(['/']).then(() => {
+          window.location.reload();
+        });
       } else {
-        this.router.navigate(['/articles']);
+        this.router.navigate(['/articles']).then(() => {
+          window.location.reload();
+        });
       }
     }
   }
@@ -367,7 +371,7 @@ export class LoginComponent implements OnInit {
     this.modalService.open(facebookSignUp, { ariaLabelledBy: 'modal-basic-title', size: 'sm' });
   }
   reCaptchaPopup(reCaptcha): void {
-    const modalRef = this.modalService.open(reCaptcha, { ariaLabelledBy: 'modal-basic-title', size: 'sm', keyboard: false, centered: true});
+    const modalRef = this.modalService.open(reCaptcha, { ariaLabelledBy: 'modal-basic-title', size: 'sm', keyboard: false, centered: true });
     modalRef.result.then((result) => {
     }, (reason) => {
       // manually trigger changes so that the form logic for the reCaptcha button can be applied immediately
