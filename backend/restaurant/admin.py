@@ -31,13 +31,14 @@ def reject_restr(model_admin, request, queryset):
     total = 0
     restaurant_name = ""
     restaurant_id = None
+    wrong_status = False
     for r in queryset:
         total += 1
         res_dict = model_to_json(r)
         res_status = res_dict['status']
         # note that if the submission is already rejected then it will not be
         # on the live site
-        if res_status != Status.Rejected.value:
+        if res_status == Status.In_Progress.value or res_status == Status.Pending.value:
             count += 1
             restaurant_name = res_dict.get('name', "")
             restaurant_id = res_dict["_id"]
@@ -48,18 +49,16 @@ def reject_restr(model_admin, request, queryset):
                 email,
                 restaurant_name,
                 'restaurant')
-            # restaurant that is being displayed on the live site
-            restaurant = Restaurant.objects.get(_id=restaurant_id)
-            if restaurant:
-                restaurant.delete()
-    # change status to reject
-    queryset.update(status=Status.Rejected.value)
+        else:
+            wrong_status = True
     if count > 1:
         messages.success(
             request,
             "Successfully rejected " +
             str(count) +
             " restaurant profiles.")
+        # change status to reject
+        queryset.update(status=Status.Rejected.value)
     elif count == 1:
         link = reverse(
             "admin:restaurant_pendingrestaurant_change",
@@ -69,6 +68,10 @@ def reject_restr(model_admin, request, queryset):
             link,
             restaurant_name)
         messages.success(request, msg)
+        # change status to reject
+        queryset.update(status=Status.Rejected.value)
+    elif wrong_status:
+        messages.success(request, "You can only reject 'Pending' or 'In_Progress' restaurants")
     else:
         if total > 1:
             msg = "The selected restaurant profiles have been rejected already."
@@ -134,9 +137,9 @@ def approve_restr(model_admin, request, queryset):
     total = 0
     restaurant_name = ""
     restaurant_id = None
+    wrong_status = False
     for r in queryset:
         total += 1
-        print(r._id)
         restaurant = Restaurant(**model_to_json(r))
         old_restaurant = Restaurant.objects.filter(_id=r._id).first()
 
@@ -164,17 +167,15 @@ def approve_restr(model_admin, request, queryset):
                 email,
                 restaurant_name,
                 'restaurant')
-                
-            queryset.update(status=Status.Approved.value, approved_once=True)
         else:
-            messages.error(
-                request, "You can only approve of 'Pending' restaurants")
+            wrong_status = True
     if count > 1:
         messages.success(
             request,
             "Successfully approved " +
             str(count) +
             " restaurant profiles.")
+        queryset.update(status=Status.Approved.value, approved_once=True)
     elif count == 1:
         link = reverse(
             "admin:restaurant_pendingrestaurant_change",
@@ -184,6 +185,9 @@ def approve_restr(model_admin, request, queryset):
             link,
             restaurant_name)
         messages.success(request, msg)
+        queryset.update(status=Status.Approved.value, approved_once=True)
+    elif wrong_status:
+        messages.error(request, "You can only approve of 'Pending' restaurants")
     else:
         if total > 1:
             msg = "The selected restaurant profiles have been approved already."
@@ -202,22 +206,21 @@ def reject_food(model_admin, request, queryset):
     """
     count = 0
     total = 0
+    wrong_status = False
     for f in queryset:
         total += 1
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
         # note that if the submission is already rejected then it will not be
         # on the live site
-        if f.status != Status.Rejected.value:
+        if f.status == Status.Pending.value:
             count += 1
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name
             food_name = f.name
             email = restr.email
             send_reject_email(owner_prefer_names, email, food_name, 'food')
-            # restaurant that is being displayed on the live site
-            food = Food.objects.filter(_id=f._id)
-            if food.exists():
-                food.delete()
+        else:
+            wrong_status = True
     # change status to reject
     queryset.update(status=Status.Rejected.value)
     if count > 1:
@@ -233,6 +236,8 @@ def reject_food(model_admin, request, queryset):
             link,
             f.name)
         messages.success(request, msg)
+    elif wrong_status:
+        messages.error(request, "You can only reject 'Pending' food")
     else:
         if total > 1:
             msg = "The selected food profiles have been rejected already."
@@ -281,12 +286,13 @@ def approve_food(model_admin, request, queryset):
     """ Approve of PendingFood info and insert into Food collection """
     count = 0
     total = 0
+    wrong_status = False
     for f in queryset:
         total += 1
         food = Food(**model_to_json(f))
         old_food = Food.objects.filter(_id=f._id).first()
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
-        if restaurant.exists() and f.status != 'Approved':
+        if restaurant.exists() and f.status == Status.Pending:
             count += 1
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name
@@ -298,13 +304,15 @@ def approve_food(model_admin, request, queryset):
                     delete(old_food.picture)
             food.status = Status.Approved.value
             save_and_clean(food)
-    queryset.update(status=Status.Approved.value)
+        else:
+            wrong_status = True
     if count > 1:
         messages.success(
             request,
             "Successfully approved " +
             str(count) +
             " food profiles.")
+        queryset.update(status=Status.Approved.value)
     elif count == 1:
         link = reverse("admin:restaurant_pendingfood_change", args=[f._id])
         msg = format_html(
@@ -312,6 +320,9 @@ def approve_food(model_admin, request, queryset):
             link,
             f.name)
         messages.success(request, msg)
+        queryset.update(status=Status.Approved.value)
+    elif wrong_status:
+        messages.success(request, "The restaurant this dish belongs to does not exist, or the dish status if not 'Pending'")
     else:
         if total > 1:
             msg = "The selected food profiles have been approved already."
