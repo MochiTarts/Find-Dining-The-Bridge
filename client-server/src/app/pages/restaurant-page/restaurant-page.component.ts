@@ -252,6 +252,11 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Retrieves the user-friendly value of priceLevel
+   * @param priceLevel - the price level (LOW, MID, HIGH, EXHIGH)
+   * @returns the user-friendly value of priceLevel
+   */
   getPricepoint(priceLevel: string) {
     // priceLevels: LOW, MID, HIGH, EXHIGH
     // return: $, $$, $$$, $$$$
@@ -262,10 +267,16 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Redirects to the restaurant-setup page
+   */
   editRestaurant() {
     this.router.navigate(['/restaurant-setup']);
   }
 
+  /**
+   * Redirects to the menu-edit page
+   */
   editMenu() {
     this.router.navigate(['/menu-edit']);
   }
@@ -280,6 +291,10 @@ export class RestaurantPageComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens the edit modal form
+   * @param content - the modal to open
+   */
   openEditModal(content) {
     this.validator.clearAllErrors();
     this.draftValidator.clearAllErrors();
@@ -287,6 +302,10 @@ export class RestaurantPageComponent implements OnInit {
     this.newFile = false;
   }
 
+  /**
+   * Gets the selected image file
+   * @param event - the object containing the image file
+   */
   onStoryImgSelect(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -295,6 +314,10 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Gets the selected video file
+   * @param event - the object containing the video file
+   */
   onVideoFileSelect(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -303,6 +326,10 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Gets the selected image file(s) from the restaurant carousel
+   * @param event - the object containing the restaurant carousel image files
+   */
   onImageFileSelect(event) {
     if (event.target.files.length > 0) {
       const file = event.target.files;
@@ -311,6 +338,9 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Uploads the restaurant story image
+   */
   onSubmitStoryImg() {
     const formData = new FormData();
     formData.append('media_file', this.uploadStoryImgForm.get('file').value);
@@ -321,6 +351,9 @@ export class RestaurantPageComponent implements OnInit {
     this.modalRef.close();
   }
 
+  /**
+   * Sets the full menu url of the restaurant
+   */
   onSubmitFullMenu() {
     let linkInfo = {
       full_menu_url: (<HTMLInputElement>document.getElementById('full_menu_url')).value,
@@ -343,6 +376,9 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Uploads the restaurant's video
+   */
   onSubmitVideo() {
     const formData = new FormData();
     formData.append('media_type', 'VIDEO');
@@ -395,6 +431,9 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Uploads or deletes the restaurant carousel image(s)
+   */
   onSubmitImage() {
     const formData = new FormData();
     if (this.addOrRemove == 'Upload new images') {
@@ -413,11 +452,17 @@ export class RestaurantPageComponent implements OnInit {
     this.modalRef.close();
   }
 
+  /**
+   * Deteremines if video to be uploaded is a youtube link or mp4 file
+   */
   updateUploadMethod() {
     this.uploadMethod = (<HTMLInputElement>document.getElementById('upload_method')).value;
     this.submitVideoAllowed = false;
   }
 
+  /**
+   * Determines if the restaurant carousel images are to be uploaded or deleted
+   */
   updateAddOrRemove() {
     this.addOrRemove = (<HTMLInputElement>document.getElementById('add_or_remove')).value;
     if (this.addOrRemove == 'Delete from existing images') {
@@ -426,10 +471,19 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * Gets the youtube video id of the restaurant video
+   * @param link - the restaurant video url
+   * @returns The id of the restaurant youtube video
+   */
   getVideoId(link: string) {
     return (getVideoId(link) as { id, service }).id;
   }
 
+  /**
+   * Removes the image url from the list of restaurant carousel images
+   * @param imgUrl - the url of the restaurant carousel image to delete
+   */
   deleteImage(imgUrl: string) {
     if (imgUrl != undefined && !this.imageUrlsToDelete.includes(imgUrl)) {
       this.imageUrlsToDelete.push(imgUrl);
@@ -439,6 +493,12 @@ export class RestaurantPageComponent implements OnInit {
     }
   }
 
+  /**
+   * 
+   * @param status - the restaurant's status
+   * @param info - the restaurant info
+   * @returns the updated restaurant record
+   */
   chooseUpdateAPI(status: string, info: Object): Observable<any> {
     info['name'] = this.restaurantDetails.name;
     info['address'] = this.restaurantDetails.address;
@@ -462,6 +522,9 @@ export class RestaurantPageComponent implements OnInit {
     // }
   }
 
+  /**
+   * Performs action to retrieve the 5 or less nearest restaurants
+   */
   getNearbyRestaurants() {
     this.userService.getNearbyRestaurants().subscribe((restaurants) => {
       for (let restaurant of restaurants) {
