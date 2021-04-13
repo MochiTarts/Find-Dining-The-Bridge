@@ -90,12 +90,7 @@ export class AllRestaurantsComponent implements OnInit {
     this.restaurantService.listRestaurants().subscribe((data) => {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
-
-      this.priceFilterRestaurants = data.Restaurants;
-      this.deliveryFilterRestaurants = data.Restaurants;
-      this.cuisineFilterRestaurants = data.Restaurants;
-      this.serviceFilterRestaurants = data.Restaurants;
-      this.searchedRestaurants = data.Restaurants;
+      this.initializeRestaurants();
 
       var selectedPostion: any;
       if (this.location) {
@@ -110,6 +105,7 @@ export class AllRestaurantsComponent implements OnInit {
 
           this.addDistance(selectedPostion);
           this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
+          console.log(this.restaurants);
           this.allRestaurants = this.restaurants;
           this.initializeRestaurants();
 
