@@ -50,7 +50,7 @@ export class TokenStorageService {
   }
 
   /**
-   * Updates user and access token in sessionStorage
+   * Updates user object and access token in sessionStorage
    * @param token - the user's access token
    */
   public updateTokenAndUser(token: string): void {
@@ -83,7 +83,7 @@ export class TokenStorageService {
   }
 
   /**
-   * Saves a user to sessionStorage
+   * Saves the user object to sessionStorage
    * @param user - the current user object
    */
   public saveUser(user: any): void {

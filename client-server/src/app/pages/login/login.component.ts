@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit {
       recaptcha: [null, Validators.required]
     });
   }
-
+  // initialization for the tab UI
   ngAfterViewInit(): void {
     let curTab = document.getElementsByClassName("tab-header")[0];
     let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
@@ -148,8 +148,7 @@ export class LoginComponent implements OnInit {
                 this.modalService.dismissAll();
                 this.loginRedirect();
               }, err => {
-                console.log(err);
-
+                //console.log(err);
                 this.authService.updateLoginStatus(false);
                 this.isLoggedIn = false;
                 var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
@@ -200,7 +199,6 @@ export class LoginComponent implements OnInit {
               this.tokenStorage.signOut();
               this.reloadPage();
           }
-          // redirect to or show profile page if first logged in
         }
       }, (err) => {
         this.authService.updateLoginStatus(false);
@@ -210,12 +208,14 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Performs the actions to properly log a user in or
-   * sign a user up, depending on the parameter provided.
-   * Makes the http request to the appropriate endpoints for
-   * signup or login
+   * Performs the actions to properly log a user in,
+   * sign a user up, resend verification email, or
+   * send a password reset email, depending on the 
+   * parameter provided. (Makes a http request to
+   * the appropriate endpoint)
    * 
-   * @param type - determines the action: login or signup
+   * @param type - determines the action: login, signup, 
+   *               resend verification email, or reset password
    */
   onSubmit(type: string): void {
 
@@ -225,17 +225,13 @@ export class LoginComponent implements OnInit {
 
         this.authService.login(username, password).subscribe(
           data => {
-
             var token = data.access;
-            var errors = [];
-
             this.tokenStorage.updateTokenAndUser(token);
             this.authService.updateLoginStatus(true);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
             this.role = this.tokenStorage.getUser().role;
             this.loginRedirect();
-
           },
           // login failed
           error => {
@@ -315,6 +311,7 @@ export class LoginComponent implements OnInit {
             this.ref.detectChanges();
           }
         );
+        // cooldown
         this.timerOn = true;
         this.setTimeRemaining(60);
         this.timer(60, 'resend_button');
@@ -330,7 +327,7 @@ export class LoginComponent implements OnInit {
             this.ref.detectChanges();
 
           },
-          // signup failed
+          // reset email request failed
           err => {
             // console.log(err)
             this.resetFailed = true;
@@ -341,21 +338,32 @@ export class LoginComponent implements OnInit {
         );
         break;
       }
+      // should never happen
       default:
         console.log('unrecognized submission');
     }
 
   }
 
+  /**
+   * page reload
+   */
   reloadPage(): void {
     window.location.reload();
   }
 
+  /**
+   * get remaining time from session storage
+   * @returns seconds remaining of the timer, null if the time is never set or has been cleared
+   */
   public getTimeRemaining(): number | null {
     return parseInt(window.sessionStorage.getItem(TIMER_REMAIN_KEY), 10);
   }
 
-  // save remaining time to session storage
+  /**
+   * save remaining time to session storage
+   * @param remaining - seconds remaining of the timer
+   */
   public setTimeRemaining(remaining: number): void {
     window.sessionStorage.removeItem(TIMER_REMAIN_KEY);
     if (remaining > 0) {
@@ -363,6 +371,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * timer 'actualized' on an element
+   * @param remaining 
+   * @param element_id 
+   * @returns None
+   */
   timer(remaining: number, element_id: string): void {
     if (remaining % 5 == 0) {
       this.setTimeRemaining(remaining);
@@ -397,6 +411,10 @@ export class LoginComponent implements OnInit {
     this.ref.detectChanges();
   }
 
+  /**
+   * toggle link display text (sets the timer if it was resetted due to refresh)
+   * @returns False to prevent link action
+   */
   toggleLink(): boolean {
     var link = document.getElementById('form_link');
     if (link.classList.contains('show_signup')) {
@@ -409,6 +427,7 @@ export class LoginComponent implements OnInit {
         var remaining = this.getTimeRemaining();
         if (remaining && remaining > 5) {
           this.timerOn = true;
+          // reducing the time to account for time not being counted due to refresh
           this.timer(remaining - 5, 'resend_button');
         }
       }
