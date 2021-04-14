@@ -23,7 +23,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
 from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
 from sduser.utils import send_email_verification
