@@ -179,11 +179,9 @@ export class NewsArticlesComponent implements OnInit {
   toggleFilter() {
     var mobileFilterDiv = document.getElementById("mobile-filter");
 
-    if (mobileFilterDiv.style.opacity === "0") {
-      mobileFilterDiv.style.opacity = "1";
+    if (mobileFilterDiv.style.marginRight === "-400px") {
       mobileFilterDiv.style.marginRight = "0";
     } else {
-      mobileFilterDiv.style.opacity = "0";
       mobileFilterDiv.style.marginRight = "-400px";
     }
   }
