@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AuthService } from '../../_services/auth.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
 
@@ -10,11 +10,12 @@ import {
   faGoogle,
   faFacebook
 } from '@fortawesome/free-brands-svg-icons';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { MatTabGroup } from '@angular/material/tabs';
 
 const TIMER_REMAIN_KEY: string = 'remaining';
 
@@ -81,9 +82,11 @@ export class LoginComponent implements OnInit {
   siteKey: string;
   isThirdParty: boolean = false;
   timerOn: boolean = false;
-
-
+  initialTab: string = 'login';
+  
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
+
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
   constructor(
     public authService: AuthService,
@@ -94,31 +97,38 @@ export class LoginComponent implements OnInit {
     private modalService: NgbModal,
     private titleService: Title,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
   ) {
     this.siteKey = `${environment.captcha.siteKey}`;
     this.recaptchaForm = this.formBuilder.group({
       recaptcha: [null, Validators.required]
     });
+    this.route.queryParams.subscribe(params => {
+      this.initialTab = params['tab'];
+
+    });
   }
-  // initialization for the tab UI
+
   ngAfterViewInit(): void {
-    let curTab = document.getElementsByClassName("tab-header")[0];
-    let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
-
-    for (let i = 0; i < tabPanes.length; i++) {
-      tabPanes[i].addEventListener("click", function () {
-        document.getElementsByClassName("tab-header")[0].getElementsByClassName("active")[0].classList.remove("active");
-        tabPanes[i].classList.add("active");
-
-        document.getElementsByClassName("tab-content")[0].getElementsByClassName("active")[0].classList.remove("active");
-        document.getElementsByClassName("tab-content")[0].getElementsByClassName("tab-body")[i].classList.add("active");
-      });
+    var tabIndex: number;
+    // set the active tab depending on the query param
+    switch (this.initialTab){
+      case 'signup':
+        tabIndex = 1;
+        break;
+      case 'reset':
+        tabIndex = 2;
+        break;
+      case 'signin':
+      default:
+        tabIndex = 0;
     }
+    this.tabGroup.selectedIndex = tabIndex;
   }
 
   ngOnInit(): void {
     this.titleService.setTitle("Login In / Register | Find Dining Scarborough");
-
+    // check for additional param indicating the tab
     // if token is already present then the user is logged in using basic credentials
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
@@ -439,7 +449,7 @@ export class LoginComponent implements OnInit {
       }
     } else {
       link.classList.add('show_signup');
-      link.innerHTML = "Didn't receive verification email?";
+      link.innerHTML = "Didn't receive a verification email?";
       this.isSignupSuccessful = false;
       this.ref.detectChanges();
     }

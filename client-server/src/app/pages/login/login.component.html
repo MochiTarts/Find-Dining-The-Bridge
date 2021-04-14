@@ -178,7 +178,7 @@
           class='show_signup'
           (click)="toggleLink();"
           >
-          Didn't receive verification email?
+          Didn't receive a verification email?
         </a>
 
             <form *ngIf="isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('resend')" #f="ngForm"
