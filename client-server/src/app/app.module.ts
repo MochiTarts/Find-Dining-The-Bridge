@@ -62,7 +62,6 @@ import { FooterComponent } from './components/footer/footer.component';
 import { FilterlistCardComponent } from './components/filterlist-card/filterlist-card.component';
 import { MapComponent } from './components/map/map.component';
 import { RestaurantCardComponent } from './components/restaurant-card/restaurant-card.component';
-import { RestaurantFavsCardComponent } from './components/restaurant-favs-card/restaurant-favs-card.component';
 import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-card/restaurant-nearby-card.component';
 import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.component';
 import { RequiredStarComponent } from './components/required-star/required-star.component';
@@ -99,7 +98,6 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     FilterlistCardComponent,
     MapComponent,
     RestaurantCardComponent,
-    RestaurantFavsCardComponent,
     RestaurantNearbyCardComponent,
     RestaurantSetupComponent,
     DynamicLabelComponent,

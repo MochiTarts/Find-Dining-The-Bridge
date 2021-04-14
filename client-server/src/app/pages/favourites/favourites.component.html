@@ -29,24 +29,35 @@
 
   <div *ngIf="!emptyFavourites" role="main" aria-labelledby="favourites-label">
     <mat-tab-group mat-align-tabs="center">
-      <mat-tab label="Restaurants">
+      <mat-tab label="Restaurants" class="restaurant-container">
         <div class="input-group">
           <div class="input-group-prepend input-group-lg">
             <span class="input-group-text input-addon" id="basic-addon1">
               <fa-icon class="search-icons" [icon]="faSearch"></fa-icon>
             </span>
           </div>
-          <input
-            type="text"
-            class="form-control my-0 py-1 search"
-            placeholder="Search"
-            [(ngModel)]="inputRestaurant"
-            (ngModelChange)="searchRestaurants()"
-          />
+          <input type="text" class="form-control my-0 py-1 search" placeholder="Search" [(ngModel)]="inputRestaurant"
+            (ngModelChange)="searchRestaurants()" aria-label="search" />
         </div>
+
+        <button class="btn filter-button" (click)="filterToggle()">Filter</button>
+
+        <div class="filters-mobile" id="filters-mobile" style="margin-right: -250px;">
+          <app-filterlist-card [category]="'Price'"
+            [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
+            (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">
+          </app-filterlist-card>
+          <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
+            [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
+          </app-filterlist-card>
+          <app-filterlist-card [category]="'Restaurant Characteristics'" [subcategories]="allServices"
+            [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
+          </app-filterlist-card>
+        </div>
+
         <div class="restaruant-listings-box">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4 filters">
               <app-filterlist-card
                 [category]="'Price'"
                 [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']"
@@ -76,10 +87,13 @@
               ></app-filterlist-card>
             </div>
             <div class="col-md-8">
-              <app-restaurant-favs-card
-                *ngFor="let restaurant of restaurants"
-                [restaurant]="restaurant"
-              ></app-restaurant-favs-card>
+              <div class="restaurant-card-container">
+                <app-restaurant-card
+                  *ngFor="let restaurant of restaurants"
+                  [restaurant]="restaurant"
+                >
+                </app-restaurant-card>
+              </div>
             </div>
           </div>
         </div>
