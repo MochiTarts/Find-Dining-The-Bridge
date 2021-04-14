@@ -132,7 +132,7 @@ export class NewsArticlesComponent implements OnInit {
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
@@ -166,7 +166,7 @@ export class NewsArticlesComponent implements OnInit {
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list-mobile");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
@@ -179,11 +179,9 @@ export class NewsArticlesComponent implements OnInit {
   toggleFilter() {
     var mobileFilterDiv = document.getElementById("mobile-filter");
 
-    if (mobileFilterDiv.style.opacity === "0") {
-      mobileFilterDiv.style.opacity = "1";
+    if (mobileFilterDiv.style.marginRight === "-400px") {
       mobileFilterDiv.style.marginRight = "0";
     } else {
-      mobileFilterDiv.style.opacity = "0";
       mobileFilterDiv.style.marginRight = "-400px";
     }
   }

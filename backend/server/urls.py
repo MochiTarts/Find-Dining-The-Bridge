@@ -27,10 +27,14 @@ import restaurant
 import article
 import index
 import auth
+import sduser
 
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
+from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+import datetime
 
 urlpatterns = [
     path('email/', include('index.urls')),
@@ -65,12 +69,12 @@ urlpatterns = [
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Snippets API",
-      default_version='v1',
-      description="Test description",
+      title="Find Dining APIs",
+      default_version='v2',
+      description="Documentation of all APIs used for the Find Dining project",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
+      contact=openapi.Contact(email="info@finddining.ca"),
+      license=openapi.License(name=str(datetime.datetime.now().year)+" Find Dining"),
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
@@ -81,6 +85,7 @@ if settings.DEBUG:
         url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
         url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
         url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+        url(r'^redoc/#operation/POST%20/auth_refresh_create/$', sduser.backends.auth_refresh_view, name='schema-redoc'),
     ]
     urlpatterns.extend(doc_urls)
 
