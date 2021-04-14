@@ -69,7 +69,7 @@
                     </div>
 
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">
-                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">
+                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index" placement="top" ngbTooltip="Go To Page">
                             <a class="nav-link active" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i == 0">{{ i+1 }}</a>
 
                             <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="article-container" id="article-container">
-                    <div class="btn" (click)="closeArticle()">Close Article</div>
+                    <div class="btn" (click)="closeArticle()" placement="top" ngbTooltip="Close Article">Close Article</div>
 
                     <h1 class="article-title">{{ selectedArticle.title }}</h1>
                     <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">
@@ -100,7 +100,7 @@
             <!-- MOBILE LAYOUT BELOW -->
             <div class="col-lg-12 article-mobile">
                 <div fxLayout="row" fxLayoutAlign="start">
-                    <div class="btn" (click)="toggleFilter()">Filter</div>
+                    <div class="btn" (click)="toggleFilter()" ngbTooltip="Open Filter Tab">Filter</div>
                 </div>
 
                 <div class="article-list-mobile col-12" id="article-list-mobile" fxLayout="column" fxLayoutAlign="space-between">
@@ -128,7 +128,7 @@
                 </div>
 
                 <div class="article-container-mobile" id="article-container-mobile" style="overflow: hidden;">
-                    <div class="btn" (click)="closeArticleMobile()">Close Article</div>
+                    <div class="btn" (click)="closeArticleMobile()" placement="top" ngbTooltip="Close Current Article">Close Article</div>
 
                     <h1 class="article-title">{{ selectedArticle.title }}</h1>
                     <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:'mediumDate' }}</h3>
