@@ -84,8 +84,8 @@ export class NewsArticlesComponent implements OnInit {
     }
 
     this.articleService.getArticles().subscribe((data) => {
-      this.allArticles = data.articles.slice(0, 1);
-      this.filteredArticles = data.articles.slice(0, 1);
+      this.allArticles = data.articles;
+      this.filteredArticles = data.articles;
 
       for (let i = 0; i < this.allArticles.length; i++) {
         this.filteredArticles[i].type = 'article';
