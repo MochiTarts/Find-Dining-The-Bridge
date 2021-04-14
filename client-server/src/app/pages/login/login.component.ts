@@ -73,6 +73,8 @@ export class LoginComponent implements OnInit {
     email: null,
   };
 
+  resendReadOnly: boolean = false;
+
   showDetails: boolean = true;
   hide: boolean = true;
   strength: number = 0;
@@ -270,6 +272,10 @@ export class LoginComponent implements OnInit {
               this.signupMessage = data.message;
               this.setTimeRemaining(0);
               document.getElementById('form_link').style.display = 'none';
+              // set the registered email to the resend verification email form
+              this.resendForm.email = email;
+              // make the email field read-only
+              this.resendReadOnly = true;
               this.ref.detectChanges();
               //let curTab = document.getElementsByClassName("tab-header")[0];
               //let tabPanes = curTab ? curTab.getElementsByTagName("div") : [];
