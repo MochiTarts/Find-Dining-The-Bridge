@@ -33,13 +33,16 @@ def get_analytics_data(restaurant_id, format_type):
     dimensions = ''
     if format_type == 'daily':
         start_date = str(date.today().replace(day=1))
-        end_date ='today'
+        end_date = 'today'
         dimensions = 'ga:date'
     elif format_type == 'hourly':
-        start_date ='2daysAgo'
-        end_date ='2daysAgo'
+        start_date = '2daysAgo'
+        end_date = '2daysAgo'
         dimensions = 'ga:hour'
-    # elif format_type == 'ALLTIME':
+    elif format_type == 'alltime':
+        start_date = '2021-05-01'
+        end_date = 'today'
+        dimensions = 'ga:month'
 
     data = analyticService.data().ga().get(
         ids='ga:' + VIEW_ID,

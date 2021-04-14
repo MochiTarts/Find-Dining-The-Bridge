@@ -62,7 +62,7 @@
         <div class="col" id="info-col2">
           <p><b>{{ spotlight.name }}</b> | {{ spotlight.cuisines }} | {{ spotlight.years }} year(s) in business</p>
           <p class="bio">
-            {{ spotlight.bio }}
+            {{ spotlightStory }}
             <a [routerLink]="['/restaurant']" [queryParams]="{restaurantId: spotlight._id}" target="_blank">
               Continue reading
             </a>
