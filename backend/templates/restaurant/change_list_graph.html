@@ -10,45 +10,13 @@
         var b = Math.floor(Math.random() * 255);
         return "rgb(" + r + "," + g + "," + b + ")";
     };
-    var options = {
-        responsive: true,
-        maintainAspectRatio: true,
-        legend: {
-            position: 'right'
-        },
-        title: {
-            display: true,
-            text: "Total Pageviews of All Restaurants",
-            fontColor: 'black',
-            fontSize: 20
-        },
-        animation: {
-            animateScale: true,
-            animateRotate: true
-        },
-        scales: {
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    fontColor: 'black',
-                    fontSize: 16
-                },
-            }],
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Number of Pageviews',
-                    fontColor: 'black',
-                    fontSize: 16
-                }
-            }]
-        }
-
-    };
     var endpoint = "/api/restaurant/traffic/";
+
     function barGraph(format_type) {
         let url = "";
         let chartId = "";
+        let xTitle = "";
+        let graphTitle = "";
         let labels = [];
 
         if (format_type == "daily") {
@@ -62,16 +30,54 @@
                 date = date.toLocaleDateString("en-US");
                 labels.push(date);
             }
-            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Date';
+            xTitle = 'Date';
             chartId = "daily-chart";
         } else if (format_type == "hourly") {
             url = endpoint + "hourly/";
             for (i = 0; i <= 23; i++) {
                 labels.push(i);
             }
-            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour';
+            xTitle = 'Hour';
             chartId = "hourly-chart";
         }
+
+        graphTitle = "Total Pageviews of All Restaurants";
+
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: graphTitle,
+                fontColor: 'black',
+                fontSize: 20
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: xTitle,
+                        fontColor: 'black',
+                        fontSize: 16
+                    },
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of Pageviews',
+                        fontColor: 'black',
+                        fontSize: 16
+                    }
+                }]
+            }
+        };
 
         $.ajax({
             method: "GET",
@@ -108,22 +114,58 @@
         });
     }
 
-    barGraph("daily");
-    // barGraph("hourly");
-
     async function paretoGraph(format_type) {
         let url = "";
         let chartId = "";
-        options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Restaurant';
+        let xTitle = "";
+        let graphTitle = "";
+        xTitle = 'Restaurant';
         if (format_type == "daily") {
             url = endpoint + "daily/";
             chartId = "top-10-daily-chart";
-            options['title']['text'] = 'Total Pageviews of All Restaurants this Month';
+            graphTitle = 'Top 10 Highest Viewed Restaurant this Month';
         } else if (format_type == "alltime") {
             url = endpoint + "alltime/";
             chartId = "top-10-alltime-chart";
-            options['title']['text'] = 'Total Pageviews of All Restaurants Alltime';
+            graphTitle = 'Top 10 Highest Viewed Restaurant Alltime';
         }
+
+        var options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                position: 'right'
+            },
+            title: {
+                display: true,
+                text: graphTitle,
+                fontColor: 'black',
+                fontSize: 20
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: xTitle,
+                        fontColor: 'black',
+                        fontSize: 16
+                    },
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of Pageviews',
+                        fontColor: 'black',
+                        fontSize: 16
+                    }
+                }]
+            }
+        };
+
         await $.ajax({
             method: "GET",
             url: url,
@@ -179,23 +221,22 @@
             }
         });
     }
-    // paretoGraph("daily");
+    $.when(barGraph("daily")).then(barGraph("hourly")).then(paretoGraph("daily"));
     // paretoGraph("alltime");
 </script>
 {% endblock %}
 {% block content %}
-<h1>Graphs</h1>
 <hr>
-<div style="margin:auto; width:50%;">
+<div style="margin:auto; width:800px;">
     <canvas id="daily-chart"></canvas>
 </div>
-<!-- <div style="margin:auto; width:50%;">
+<div style="margin:auto; width:800px;">
     <canvas id="hourly-chart"></canvas>
 </div>
-<div style="margin:auto; width:50%;">
+<div style="margin:auto; width:800px;">
     <canvas id="top-10-daily-chart"></canvas>
 </div>
-<div style="margin:auto; width:50%;">
+<!-- <div style="margin:auto; width:800px;">s
     <canvas id="top-10-alltime-chart"></canvas>
 </div> -->
 {{ block.super }}

@@ -13,46 +13,12 @@
         var b = Math.floor(Math.random() * 255);
         return "rgb(" + r + "," + g + "," + b + ")";
     };
-    var options = {
-        responsive: true,
-        maintainAspectRatio: true,
-        legend: {
-            display: false
-        },
-        title: {
-            display: true,
-            text: '{{ original.name }}',
-            fontColor: 'black',
-            fontSize: 24
-        },
-        animation: {
-            animateScale: true,
-            animateRotate: true
-        },
-        scales: {
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Date',
-                    fontColor: 'black',
-                    fontSize: 16
-                },
-            }],
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Number of Pageviews',
-                    fontColor: 'black',
-                    fontSize: 16
-                }
-            }]
-        }
-    };
     var endpoint = "/api/restaurant/" + window.location.href.split("/")[7] + "/traffic/";
 
     function barGraph(format_type) {
         let url = "";
         let chartId = "";
+        let xTitle = "";
         let labels = [];
 
         if (format_type == "daily") {
@@ -66,16 +32,53 @@
                 date = date.toLocaleDateString("en-US");
                 labels.push(date);
             }
-            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Date';
+            xTitle = "Date";
             chartId = "daily-chart";
         } else if (format_type == "hourly") {
             url = endpoint + "hourly/";
             for (i = 0; i <= 23; i++) {
                 labels.push(i);
             }
-            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour';
+            xTitle = "Hour";
             chartId = "hourly-chart";
         }
+
+        let options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: '{{ original.name }}',
+                fontColor: 'black',
+                fontSize: 24
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: xTitle,
+                        fontColor: 'black',
+                        fontSize: 16
+                    },
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of Pageviews',
+                        fontColor: 'black',
+                        fontSize: 16
+                    }
+                }]
+            }
+        };
+
         $.ajax({
             method: "GET",
             url: url,
@@ -104,18 +107,16 @@
             }
         });
     }
-    barGraph("daily");
-    // barGraph("hourly");
+    $.when(barGraph("daily")).then(barGraph("hourly"));
 </script>
 {% endblock %}
 {% block content %}
-<h1>Graphs</h1>
 <hr>
-<div style="margin:auto; width:50%;">
+<div style="margin:auto; width:800px;">
     <canvas id="daily-chart"></canvas>
 </div>
-<!-- <div style="margin:auto; width:50%;">
+<div style="margin:auto; width:800px;">
     <canvas id="hourly-chart"></canvas>
-</div> -->
+</div>
 {{ block.super }}
 {% endblock %}
