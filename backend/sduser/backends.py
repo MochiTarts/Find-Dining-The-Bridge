@@ -17,6 +17,7 @@ from sduser.forms import SDUserCreateForm
 
 from smtplib import SMTPException
 
+from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
@@ -69,18 +70,15 @@ class EmailBackend(ModelBackend):
         return user if self.user_can_authenticate(user) else None
 
 
-@swagger_auto_schema(
-    method='post', request_body=swagger.UserSignUp,
-    responses=swagger.user_signup_post_response,
-    operation_id="POST /auth/signup/")
-@api_view(['POST'])
-@permission_classes([AllowAny,])
-def signup(request):
+class SDUserSignupView(APIView):
     """
     validate registration form and create a disabled SDUser from the form (and sends verifiication email)
     """
-    if request.method == 'POST':
-        user = json.loads(request.body)
+    permission_classes = (AllowAny,)
+
+    @swagger_auto_schema(operation_id="POST /auth/signup")
+    def post(self, request):
+        user = request.data
         invalid = validate_signup_user(user)
         username = user['username']
         email = user['email']
@@ -99,8 +97,6 @@ def signup(request):
                 return JsonResponse({'message': 'unable to create user'}, status=400)
 
         return JsonResponse({'invalid': invalid, 'message': 'Please make sure all fields are valid!'}, status=400)
-    else:
-        return JsonResponse({'Error': 'invalid request'}, status=404)
 
 
 def create_disable_user_and_send_verification_email(user, password, request):

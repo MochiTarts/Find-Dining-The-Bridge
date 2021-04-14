@@ -194,7 +194,7 @@
               <div fxLayout="column" fxLayoutAlign="center">
                 <mat-form-field>
                   <mat-label>Email</mat-label>
-                  <input matInput name="email" [(ngModel)]="resendForm.email" required email #email="ngModel" autocomplete="email" />
+                  <input matInput name="email" [(ngModel)]="resendForm.email" required email #email="ngModel" autocomplete="email" [readonly]="resendReadOnly" />
                   <mat-icon matSuffix>email</mat-icon>
                   <mat-error *ngIf="email.errors && f.submitted">Email is required</mat-error>
                   <mat-error *ngIf="email.errors && email.errors.email">Email must be a valid email address</mat-error>

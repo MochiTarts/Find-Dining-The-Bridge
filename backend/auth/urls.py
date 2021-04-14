@@ -1,5 +1,5 @@
 from django.urls import path
-from sduser.backends import signup, SDUserCookieTokenObtainPairView, SDUserCookieTokenRefreshView
+from sduser.backends import SDUserSignupView, SDUserCookieTokenObtainPairView, SDUserCookieTokenRefreshView
 from sduser.views import SDUserPasswordResetView, SDUserPasswordResetConfirmView, SDUserPasswordResetCompleteView, SDUserResentVerificationEmailView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -14,7 +14,7 @@ urlpatterns = [
     path('signin/', SDUserCookieTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('refresh/', SDUserCookieTokenRefreshView.as_view(), name='token_refresh'),
     path('verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('signup/', signup),
+    path('signup/', SDUserSignupView.as_view(), name='signup'),
     path('password_reset/', SDUserPasswordResetView.as_view(), name='password_reset_user'),
     path('password_reset/<uidb64>/<token>/', SDUserPasswordResetConfirmView.as_view(), name='password_reset_confirm_user',),
     path('password_reset/done/', SDUserPasswordResetCompleteView.as_view(), name='password_reset_complete_user',),
