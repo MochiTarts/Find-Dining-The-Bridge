@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   gotoRegister(): void {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login'], {queryParams: {tab: 'signup'}});
   }
 
   /**
