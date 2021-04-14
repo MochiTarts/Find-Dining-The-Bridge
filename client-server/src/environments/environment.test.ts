@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  environment: 'uat',
+  environment: 'test',
   mapbox: {
     accessToken:
       'pk.eyJ1IjoiZmluZGRpbmluZyIsImEiOiJja2wydTNybmQwY2I5MzJucmV3c2cyYnJjIn0.TAKkrZdAOdyxPEmFLG5L0w',
