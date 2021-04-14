@@ -46,6 +46,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   photoCourtesy: string = 'Restaurant A';
   spotlight: any;
   spotlightStory: string = "";
+  spotlightCuisines: string = "";
 
   location: string = '';
   find: string = '';
@@ -122,6 +123,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         var wordIndex = str.lastIndexOf(" ");
         this.spotlightStory = str.substr(0, wordIndex) + '...';
       }
+
+      // Format the cuisines
+      let re = /\,/gi;
+      this.spotlightCuisines = this.spotlight.cuisines.toString().replace(re, ", ");
     });
   }
 
