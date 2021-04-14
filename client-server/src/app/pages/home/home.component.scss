@@ -138,6 +138,13 @@
     font-size: 20px;
   }
 
+  #find {
+    @media screen and (max-width: 500px) {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+
   button {
     @media screen and (max-width: 500px) {
       display: none;
@@ -250,7 +257,7 @@
 #info-col1 {
   min-width: 300px;
 
-  @media screen and (max-width:482px) {
+  @media screen and (max-width: 482px) {
     min-width: 0px;
   }
 }
@@ -285,7 +292,7 @@
     margin-bottom: 50px;
   }
 
-  @media screen and (max-width:482px) {
+  @media screen and (max-width: 482px) {
     width: 100%;
     height: auto;
   }

@@ -405,6 +405,16 @@ export class AllRestaurantsComponent implements OnInit {
     this.updateRestarants();
   }
 
+  filterToggle() {
+    var filters = document.getElementById('filters-mobile');
+    
+    if (filters.style.marginRight === "-250px") {
+      filters.style.marginRight = "0px";
+    } else {
+      filters.style.marginRight = "-250px";
+    }
+  }
+
   searchDishes() {
     if (this.inputDishes == '') {
       this.dishes = this.allDishes;
@@ -421,4 +431,5 @@ export class AllRestaurantsComponent implements OnInit {
       }
     }
   }
+
 }

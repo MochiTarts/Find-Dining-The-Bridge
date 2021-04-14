@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   photoCourtesy: string = 'Restaurant A';
   spotlight: any;
+  spotlightStory: string = "";
 
   location: string = '';
   find: string = '';
@@ -113,6 +114,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       // Pick a random restaurant for spotlight
       this.spotlight = data.Restaurants[0];
+
+      // Set spotlight story and only display first 500 characters
+      this.spotlightStory = this.spotlight.bio;
+      if (this.spotlightStory.length > 500) {
+        var str = this.spotlightStory.substr(0, 498);
+        var wordIndex = str.lastIndexOf(" ");
+        this.spotlightStory = str.substr(0, wordIndex) + '...';
+      }
     });
   }
 
@@ -120,7 +129,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Retrieves the user-friendly values for each
    * price level
    * @param priceLevel - the price level (LOW, MID, HIGH, EXHIGH)
-   * @returns 
+   * @returns
    */
   getPricepoint(priceLevel: string) {
     // priceLevels: LOW, MID, HIGH, EXHIGH

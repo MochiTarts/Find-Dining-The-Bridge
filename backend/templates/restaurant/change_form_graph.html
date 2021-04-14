@@ -50,11 +50,13 @@
     };
     var endpoint = "/api/restaurant/" + window.location.href.split("/")[7] + "/traffic/";
 
-    $.ajax({
-        method: "GET",
-        url: endpoint + "daily/",
-        success: function (restaurant) {
-            var labels = []
+    function barGraph(format_type) {
+        let url = "";
+        let chartId = "";
+        let labels = [];
+
+        if (format_type == "daily") {
+            url = endpoint + "daily/";
             var date = new Date();
             y = date.getFullYear();
             m = date.getMonth();
@@ -62,67 +64,48 @@
             for (i = 1; i <= d; i++) {
                 date = new Date(y, m, i);
                 date = date.toLocaleDateString("en-US");
-                labels.push(date)
+                labels.push(date);
             }
-            var restaurantdata = {};
-            var data = [];
-            restaurantdata['label'] = restaurant['name'];
-            restaurantdata['backgroundColor'] = randomColorGenerator();
-            for (i = 0; i < restaurant['rows'].length; i++) {
-                data.push(restaurant['rows'][i][1]);
+            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Date';
+            chartId = "daily-chart";
+        } else if (format_type == "hourly") {
+            url = endpoint + "hourly/";
+            for (i = 0; i <= 23; i++) {
+                labels.push(i);
             }
-            restaurantdata['data'] = data;
-
-            var ctx = document.getElementById("daily-chart");
-            var lineChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [restaurantdata],
-                },
-                options: options
-            })
-        },
-        error: function (err) {
-            console.log(err)
+            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour';
+            chartId = "hourly-chart";
         }
-    });
+        $.ajax({
+            method: "GET",
+            url: url,
+            success: function (restaurant) {
+                var restaurantdata = {};
+                var data = [];
+                restaurantdata['label'] = restaurant['name'];
+                restaurantdata['backgroundColor'] = randomColorGenerator();
+                for (i = 0; i < restaurant['rows'].length; i++) {
+                    data.push(restaurant['rows'][i][1]);
+                }
+                restaurantdata['data'] = data;
 
-    // $.ajax({
-    //     method: "GET",
-    //     url: endpoint + "hourly/",
-    //     success: function (restaurant) {
-    //         labels = []
-    //         for (i = 0; i <= 23; i++) {
-    //             labels.push(i)
-    //         }
-
-    //         var restaurantdata = {};
-    //         var data = [];
-    //         restaurantdata['label'] = restaurant['name'];
-    //         restaurantdata['backgroundColor'] = randomColorGenerator();
-    //         for (i = 0; i < restaurant['rows'].length; i++) {
-    //             data.push(restaurant['rows'][i][1]);
-    //         }
-    //         restaurantdata['data'] = data;
-
-    //         options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour'
-
-    //         var ctx = document.getElementById("hourly-chart");
-    //         var lineChart = new Chart(ctx, {
-    //             type: 'bar',
-    //             data: {
-    //                 labels: labels,
-    //                 datasets: [restaurantdata],
-    //             },
-    //             options: options
-    //         })
-    //     },
-    //     error: function (err) {
-    //         console.log(err)
-    //     }
-    // });
-
+                var ctx = document.getElementById(chartId);
+                var lineChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [restaurantdata],
+                    },
+                    options: options
+                })
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    }
+    barGraph("daily");
+    // barGraph("hourly");
 </script>
 {% endblock %}
 {% block content %}
@@ -131,8 +114,8 @@
 <div style="margin:auto; width:50%;">
     <canvas id="daily-chart"></canvas>
 </div>
-<div style="margin:auto; width:50%;">
+<!-- <div style="margin:auto; width:50%;">
     <canvas id="hourly-chart"></canvas>
-</div>
+</div> -->
 {{ block.super }}
 {% endblock %}

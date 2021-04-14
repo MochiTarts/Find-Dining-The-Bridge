@@ -1,22 +1,30 @@
 <div class="card cardBox">
     <div class="row">
-      <div class="col-md-3">
-        <div *ngIf="restaurant.logo_url">
-          <img
-            src="{{ restaurant.logo_url }}"
-            class="card-img"
-            alt="{{ restaurant.name }}"
-          />
-        </div>
-        <div *ngIf="!restaurant.logo_url">
-          <img
-            src="../../../assets/images/find_dining_logo.png"
-            class="card-img"
-            alt="{{ restaurant.name }}"
-          />
+      <div class="col-md-3" style="min-width: 140px;">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div *ngIf="restaurant.logo_url">
+            <img
+              src="{{ restaurant.logo_url }}"
+              class="card-img"
+              alt="{{ restaurant.name }}"
+            />
+          </div>
+          <div *ngIf="!restaurant.logo_url">
+            <img
+              src="../../../assets/images/find_dining_logo.png"
+              class="card-img"
+              alt="{{ restaurant.name }}"
+            />
+          </div>
+          
+          <div class="card-title-mobile-wrapper">
+            <h2 class="card-title-mobile">
+              {{ restaurant.name | titlecase }}
+            </h2>
+          </div>
         </div>
       </div>
-      <div class="col-md-9">
+      <div class="col">
         <div class="card-body">
           <h2 class="card-title">{{ restaurant.name | titlecase }}</h2>
           <p class="card-text">
@@ -26,29 +34,53 @@
           <p class="card-text">
             {{ serviceList | titlecase }}
           </p>
-          <div class="row" *ngIf="role != 'BU' && role != 'RO'">
-            <div class="col">
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="card-text-mobile-wrapper">
+              <p class="card-text-mobile">
+                {{ cuisineList | titlecase }} •
+                {{ pricepoint | titlecase }}
+              </p>
+              <p class="card-text-mobile">
+                {{ serviceList | titlecase }}
+              </p>
             </div>
-            <div class="col">
-              <div class="row-button">
-                <a
+
+            <div id="empty"></div>
+            <div fxLayout="column" fxLayoutAlign="space-between end">
+              <div>
+                <button
                 class="btn"
                 [routerLink]="['/restaurant']"
-                [queryParams]="{
-                  restaurantId: restaurant._id
-                }"
+                [queryParams]="{restaurantId: restaurant._id}"
                 placement="top" ngbTooltip="Visit Restaurant Page"
-              >
-                View Restaurant
-              </a>
+                >
+                  View Restaurant
+                </button>
+              </div>
+              <div *ngIf="role && pagePath=='/all-listings'">
+                <button
+                class="btn" (click)="addFavourite(restaurant._id)"
+                placement="top" ngbTooltip="Add Restaurant as Favourite"
+                [disabled]="favourited"
+                >
+                  Add Favourite
+                </button>
+              </div>
+              <div *ngIf="role && pagePath=='/favourites'">
+                <button
+                class="btn" (click)="remove(restaurant._id)"
+                placement="top" ngbTooltip="Remove Restaurant as Favourite"
+                >
+                  Remove Favourite
+                </button>
               </div>
             </div>
           </div>
-          <div class="row" *ngIf="role == 'BU' || role == 'RO'">
+          <!--<div class="row">
             <div class="col">
             </div>
             <div class="col">
-              <div class="row-button">
+              <div class="row-button" *ngIf="role">
                 <a
                   class="btn"
                   [routerLink]="['/restaurant']"
@@ -60,7 +92,7 @@
                   View Restaurant
                 </a>
               </div>
-              <div class="row-button">
+              <div class="row-button" *ngIf="role && pagePath=='/all-listings'">
                 <button
                   class="btn" (click)="addFavourite(restaurant._id)"
                   placement="top" ngbTooltip="Add Restaurant as Favourite"
@@ -69,8 +101,16 @@
                   Add Favourite
                 </button>
               </div>
+              <div class="row-button" *ngIf="role && pagePath=='/favourites'">
+                <a
+                  class="btn" (click)="remove(restaurant._id)"
+                  placement="top" ngbTooltip="Remove Restaurant as Favourite"
+                >
+                  Remove Favourite
+                </a>
+              </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
