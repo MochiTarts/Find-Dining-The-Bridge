@@ -84,8 +84,8 @@ export class NewsArticlesComponent implements OnInit {
     }
 
     this.articleService.getArticles().subscribe((data) => {
-      this.allArticles = data.articles;
-      this.filteredArticles = data.articles;
+      this.allArticles = data.articles.slice(0, 1);
+      this.filteredArticles = data.articles.slice(0, 1);
 
       for (let i = 0; i < this.allArticles.length; i++) {
         this.filteredArticles[i].type = 'article';
@@ -132,7 +132,7 @@ export class NewsArticlesComponent implements OnInit {
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
@@ -166,7 +166,7 @@ export class NewsArticlesComponent implements OnInit {
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list-mobile");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
