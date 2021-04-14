@@ -67,6 +67,8 @@ class DeactivateView(APIView):
                 return JsonResponse({'message': 'deactivation failed: token mismatch', 'code': 'deactivation_fail'}, status=400)
         except User.DoesNotExist:
             return JsonResponse({'message': 'deactivation failed: User not found', 'code': 'deactivation_fail'}, status=400)
+        except (BadHeaderError, SMTPException):
+            return JsonResponse({'message':' There is an error sending the notification email. However, this user account has been successfully deactivated. No further action is required.', 'code':'fail_to_send_email'}, status=503)
 
 
 class editView(APIView):
