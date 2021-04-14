@@ -59,7 +59,60 @@
   border-radius: 40px;
 }
 
+.filter-button {
+  display: none;
+}
+
+.filters {
+  display: block;
+}
+
+.filters-mobile {
+  display: none;
+}
+
 .col-md-8 {
   text-align: center;
   overflow: hidden;
+}
+
+@media screen and (max-width: 767px) {
+
+.restaurant-container {
+  position: relative;
+}
+
+.restaruant-listings-box {
+  min-height: 1100px;
+  overflow: hidden;
+}
+
+.row {
+  overflow: hidden;
+}
+
+.filter-button {
+  display: block;
+}
+
+.filters {
+  display: none;
+}
+
+.filters-mobile {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1;
+  background-color: #007faa;
+  transition: 1s;
+}
+
+.restaurant-card-container {
+  width: fit-content;
+  margin: auto;
+}
+
 }

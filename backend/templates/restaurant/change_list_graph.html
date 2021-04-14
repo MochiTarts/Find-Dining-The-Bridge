@@ -30,7 +30,6 @@
             xAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'Date',
                     fontColor: 'black',
                     fontSize: 16
                 },
@@ -47,11 +46,13 @@
 
     };
     var endpoint = "/api/restaurant/traffic/";
-    $.ajax({
-        method: "GET",
-        url: endpoint + "daily/",
-        success: function (restaurants) {
-            var labels = []
+    function barGraph(format_type) {
+        let url = "";
+        let chartId = "";
+        let labels = [];
+
+        if (format_type == "daily") {
+            url = endpoint + "daily/";
             var date = new Date();
             y = date.getFullYear();
             m = date.getMonth();
@@ -59,189 +60,127 @@
             for (i = 1; i <= d; i++) {
                 date = new Date(y, m, i);
                 date = date.toLocaleDateString("en-US");
-                labels.push(date)
+                labels.push(date);
             }
+            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Date';
+            chartId = "daily-chart";
+        } else if (format_type == "hourly") {
+            url = endpoint + "hourly/";
+            for (i = 0; i <= 23; i++) {
+                labels.push(i);
+            }
+            options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour';
+            chartId = "hourly-chart";
+        }
 
-            var restaurantData = {};
-            restaurantData['label'] = "All Restaurants"
-            restaurantData['backgroundColor'] = randomColorGenerator();
-            var data = []
-            for (key in restaurants) {
-                for (i = 0; i < restaurants[key]['rows'].length; i++) {
-                    if (data[i] == null) {
-                        data.push(parseInt(restaurants[key]['rows'][i][1]));
-                    } else {
-                        data[i] += parseInt(restaurants[key]['rows'][i][1]);
+        $.ajax({
+            method: "GET",
+            url: url,
+            success: function (restaurants) {
+                var restaurantData = {};
+                restaurantData['label'] = "All Restaurants";
+                restaurantData['backgroundColor'] = randomColorGenerator();
+                var data = [];
+                for (key in restaurants) {
+                    for (i = 0; i < restaurants[key]['rows'].length; i++) {
+                        if (data[i] == null) {
+                            data.push(parseInt(restaurants[key]['rows'][i][1]));
+                        } else {
+                            data[i] += parseInt(restaurants[key]['rows'][i][1]);
+                        }
                     }
                 }
+                restaurantData['data'] = data;
+
+                var ctx = document.getElementById(chartId);
+                var lineChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [restaurantData],
+                    },
+                    options: options
+                });
+            },
+            error: function (err) {
+                throw err;
             }
-            restaurantData['data'] = data;
+        });
+    }
 
-            var ctx = document.getElementById("daily-chart");
-            var lineChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [restaurantData],
-                },
-                options: options
-            })
-        },
-        error: function (err) {
-            console.log(err)
+    barGraph("daily");
+    // barGraph("hourly");
+
+    async function paretoGraph(format_type) {
+        let url = "";
+        let chartId = "";
+        options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Restaurant';
+        if (format_type == "daily") {
+            url = endpoint + "daily/";
+            chartId = "top-10-daily-chart";
+            options['title']['text'] = 'Total Pageviews of All Restaurants this Month';
+        } else if (format_type == "alltime") {
+            url = endpoint + "alltime/";
+            chartId = "top-10-alltime-chart";
+            options['title']['text'] = 'Total Pageviews of All Restaurants Alltime';
         }
-    });
+        await $.ajax({
+            method: "GET",
+            url: url,
+            success: function (restaurants) {
+                var restaurantList = [];
+                for (key in restaurants) {
+                    let restaurantData = {};
+                    restaurantData['label'] = restaurants[key]['name'];
+                    restaurantData['backgroundColor'] = randomColorGenerator();
+                    let sum = 0;
+                    for (i = 0; i < restaurants[key]['rows'].length; i++) {
+                        sum += parseInt(restaurants[key]['rows'][i][1]);
+                    }
+                    restaurantData['data'] = [sum];
+                    restaurantList.push(restaurantData);
+                }
 
-    // $.ajax({
-    //     method: "GET",
-    //     url: endpoint + "hourly/",
-    //     success: function (restaurants) {
-    //         labels = []
-    //         for (i = 0; i <= 23; i++) {
-    //             labels.push(i)
-    //         }
-
-    //         var restaurantData = {};
-    //         restaurantData['label'] = "All Restaurants"
-    //         restaurantData['backgroundColor'] = randomColorGenerator();
-    //         var data = []
-    //         for (key in restaurants) {
-    //             for (i = 0; i < restaurants[key]['rows'].length; i++) {
-    //                 if (data[i] == null) {
-    //                     data.push(parseInt(restaurants[key]['rows'][i][1]));
-    //                 } else {
-    //                     data[i] += parseInt(restaurants[key]['rows'][i][1]);
-    //                 }
-    //             }
-    //         }
-    //         restaurantData['data'] = data;
-
-    //         options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour'
-
-    //         var ctx = document.getElementById("hourly-chart");
-    //         var lineChart = new Chart(ctx, {
-    //             type: 'bar',
-    //             data: {
-    //                 labels: labels,
-    //                 datasets: [restaurantData],
-    //             },
-    //             options: options
-    //         })
-    //     },
-    //     error: function (err) {
-    //         console.log(err)
-    //     }
-    // });
-
-    // $.ajax({
-    //     method: "GET",
-    //     url: endpoint + "daily/",
-    //     success: function (restaurants) {
-    //         var restaurantList = [];
-    //         for (key in restaurants) {
-    //             let restaurantData = {};
-    //             restaurantData['label'] = restaurants[key]['name']
-    //             restaurantData['backgroundColor'] = randomColorGenerator();
-    //             let sum = 0;
-    //             for (i = 0; i < restaurants[key]['rows'].length; i++) {
-    //                 sum += parseInt(restaurants[key]['rows'][i][1]);
-    //             }
-    //             restaurantData['data'] = [sum];
-    //             restaurantList.push(restaurantData)
-    //         }
-
-    //         var labels = []
-    //         var datasets = []
-    //         var size = 0;
-    //         if (restaurantList.length <= 10) {
-    //             size = restaurantList.length;
-    //         } else {
-    //             size = 10;
-    //         }
-    //         for (let i = 0; i < size; i++) {
-    //             let max = 0;
-    //             let tempIndex = 0;
-    //             let restaurant = {};
-    //             for (let j = 0; j < restaurantList.length; j++) {
-    //                 if (restaurantList[j] != null && restaurantList[j]['data'][0] >= max) {
-    //                     max = restaurantList[j]['data'][0];
-    //                     restaurant = restaurantList[j];
-    //                     tempIndex = j;
-    //                 }
-    //             }
-    //             labels.push(restaurantList[tempIndex]['label']);
-    //             datasets.push(restaurantList[tempIndex]);
-    //             delete restaurantList[tempIndex]
-    //         }
-    //         var ctx = document.getElementById("top-10-daily-chart");
-    //         var lineChart = new Chart(ctx, {
-    //             type: 'bar',
-    //             data: {
-    //                 labels: labels,
-    //                 datasets: datasets,
-    //             },
-    //             options: options
-    //         })
-    //     },
-    //     error: function (err) {
-    //         console.log(err)
-    //     }
-    // });
-
-    // $.ajax({
-    //     method: "GET",
-    //     url: endpoint + "alltime/",
-    //     success: function (restaurants) {
-    //         var restaurantList = [];
-    //         for (key in restaurants) {
-    //             let restaurantData = {};
-    //             restaurantData['label'] = restaurants[key]['name']
-    //             restaurantData['backgroundColor'] = randomColorGenerator();
-    //             let sum = 0;
-    //             for (i = 0; i < restaurants[key]['rows'].length; i++) {
-    //                 sum += parseInt(restaurants[key]['rows'][i][1]);
-    //             }
-    //             restaurantData['data'] = [sum];
-    //             restaurantList.push(restaurantData)
-    //         }
-
-    //         var labels = []
-    //         var datasets = []
-    //         var size = 0;
-    //         if (restaurantList.length <= 10) {
-    //             size = restaurantList.length;
-    //         } else {
-    //             size = 10;
-    //         }
-    //         for (let i = 0; i < size; i++) {
-    //             let max = 0;
-    //             let tempIndex = 0;
-    //             let restaurant = {};
-    //             for (let j = 0; j < restaurantList.length; j++) {
-    //                 if (restaurantList[j] != null && restaurantList[j]['data'][0] >= max) {
-    //                     max = restaurantList[j]['data'][0];
-    //                     restaurant = restaurantList[j];
-    //                     tempIndex = j;
-    //                 }
-    //             }
-    //             labels.push(restaurantList[tempIndex]['label']);
-    //             datasets.push(restaurantList[tempIndex]);
-    //             delete restaurantList[tempIndex]
-    //         }
-    //         var ctx = document.getElementById("top-10-all-time-chart");
-    //         var lineChart = new Chart(ctx, {
-    //             type: 'bar',
-    //             data: {
-    //                 labels: labels,
-    //                 datasets: datasets,
-    //             },
-    //             options: options
-    //         })
-    //     },
-    //     error: function (err) {
-    //         console.log(err)
-    //     }
-    // });
+                var labels = [];
+                var datasets = [];
+                var size = 0;
+                if (restaurantList.length <= 10) {
+                    size = restaurantList.length;
+                } else {
+                    size = 10;
+                }
+                for (let i = 0; i < size; i++) {
+                    let max = 0;
+                    let tempIndex = 0;
+                    let restaurant = {};
+                    for (let j = 0; j < restaurantList.length; j++) {
+                        if (restaurantList[j] != null && restaurantList[j]['data'][0] >= max) {
+                            max = restaurantList[j]['data'][0];
+                            restaurant = restaurantList[j];
+                            tempIndex = j;
+                        }
+                    }
+                    labels.push(restaurantList[tempIndex]['label']);
+                    datasets.push(restaurantList[tempIndex]);
+                    delete restaurantList[tempIndex];
+                }
+                var ctx = document.getElementById(chartId);
+                var lineChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: datasets,
+                    },
+                    options: options
+                });
+            },
+            error: function (err) {
+                throw err;
+            }
+        });
+    }
+    // paretoGraph("daily");
+    // paretoGraph("alltime");
 </script>
 {% endblock %}
 {% block content %}
@@ -252,12 +191,12 @@
 </div>
 <!-- <div style="margin:auto; width:50%;">
     <canvas id="hourly-chart"></canvas>
-</div> -->
-<!-- <div style="margin:auto; width:50%;">
+</div>
+<div style="margin:auto; width:50%;">
     <canvas id="top-10-daily-chart"></canvas>
-</div> -->
-<!-- <div style="margin:auto; width:50%;">
-    <canvas id="top-10-all-time-chart"></canvas>
+</div>
+<div style="margin:auto; width:50%;">
+    <canvas id="top-10-alltime-chart"></canvas>
 </div> -->
 {{ block.super }}
 {% endblock %}
