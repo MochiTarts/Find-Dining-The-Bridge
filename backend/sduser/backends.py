@@ -341,3 +341,32 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
         return super().finalize_response(request, response, *args, **kwargs)
 
     serializer_class = SDUserCookieTokenRefreshSerializer
+
+
+def construct_token_response_for_user(user):
+    """
+    construct authentication response and update user with refresh token
+
+    user -- a SDUser
+
+    returns a response containing access token (and refresh token in httpOnly cookie)
+    """
+    # generate token without username & password
+    # need to use customized one to have all the information we need
+    #token = RefreshToken.for_user(user)
+    token = SDUserCookieTokenObtainPairSerializer.get_token(user)
+
+    response = {}
+    #response['username'] = user.username
+    response['access_token'] = str(token.access_token)
+    #response['refresh_token'] = str(token)
+    cookie_max_age = 3600 * 24
+    # print(dir(token))
+    refresh_token = str(token)
+    user.refresh_token = refresh_token
+    user.save()
+    res = Response(response)
+    res.set_cookie('refresh_token', refresh_token,
+                   max_age=cookie_max_age, httponly=True)
+
+    return res

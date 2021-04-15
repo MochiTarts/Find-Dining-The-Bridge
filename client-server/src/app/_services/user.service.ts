@@ -94,12 +94,16 @@ export class UserService {
 
   /**
    * Changes the user's password
+   * (a new access token is returned and the
+   * refresh token in the cookie is also updated)
    * 
    * @param passwordData - JSON object containing:
    *                        old_password (string),
    *                        new_password1 (string),
    *                        new_password2 (string)
-   * @returns message from the Django server (success or fail with errors)
+   * @returns Observable from password change request
+   * (either containing a new access token or messages
+   * indicating the errors)
    */
   changeUserPassword(passwordData: any): Observable<any> {
     const endpoint = API_URL + 'user/change_password/';

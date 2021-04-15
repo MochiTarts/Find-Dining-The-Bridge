@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 
-from sduser.backends import SDUserCookieTokenObtainPairSerializer, create_disable_user_and_send_verification_email, check_user_status
+from sduser.backends import construct_token_response_for_user, create_disable_user_and_send_verification_email, check_user_status
 from sduser.forms import SDUserCreateForm
 
 from google.oauth2 import id_token
@@ -99,7 +99,7 @@ class GoogleView(APIView):
                     user, password, request)
                 check_user_status(user)
 
-        response = construct_response_for_3rd_party_auth(user)
+        response = construct_token_response_for_user(user)
 
         return response
 
@@ -167,38 +167,9 @@ class FacebookView(APIView):
                 return JsonResponse({'message': 'no user is associated with this facebook account, please register an account first'}, status=400)
             user = create_default_user_for_3rd_party(email, auth_id, role)
 
-        response = construct_response_for_3rd_party_auth(user)
+        response = construct_token_response_for_user(user)
 
         return response
-
-
-def construct_response_for_3rd_party_auth(user):
-    """
-    construct authentication response and update user with refresh token
-
-    user -- a SDUser
-
-    returns a response containing access token (and refresh token in httpOnly cookie)
-    """
-    # generate token without username & password
-    # need to use customized one to have all the information we need
-    #token = RefreshToken.for_user(user)
-    token = SDUserCookieTokenObtainPairSerializer.get_token(user)
-
-    response = {}
-    #response['username'] = user.username
-    response['access_token'] = str(token.access_token)
-    #response['refresh_token'] = str(token)
-    cookie_max_age = 3600 * 24
-    # print(dir(token))
-    refresh_token = str(token)
-    user.refresh_token = refresh_token
-    user.save()
-    res = Response(response)
-    res.set_cookie('refresh_token', refresh_token,
-                   max_age=cookie_max_age, httponly=True)
-
-    return res
 
 
 def create_default_user_for_3rd_party(email, auth_id, role):
