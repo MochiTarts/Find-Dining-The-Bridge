@@ -1,9 +1,10 @@
 <a
-  class="card cardBox" 
+  class="card cardBox"
   [routerLink]="['/restaurant']"
   [queryParams]="{restaurantId: restaurant._id}"
+  (touchend)="gotoRestaurant()"
   target="_blank"
-  placement="bottom" 
+  placement="bottom"
   ngbTooltip="Visit Restaurant Page"
 >
   <div class="img-container">
@@ -15,7 +16,7 @@
       <div class="overlay">
         <div class="text">
           {{ restaurant.name }}
-          <br><br> 
+          <br><br>
           {{ restaurant.cuisinePrice }}
         </div>
       </div>
