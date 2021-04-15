@@ -32,6 +32,7 @@ export class FavouritesComponent implements OnInit {
   inputRestaurant: string = '';
 
   faSearch = faSearch;
+  show: number = 5;
 
   constructor(
     private restaurantService: RestaurantService,

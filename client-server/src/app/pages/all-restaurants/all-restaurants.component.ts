@@ -158,7 +158,8 @@ export class AllRestaurantsComponent implements OnInit {
    * @returns the Observable from the request
    */
   getGeoCode(searchText: string): Observable<any> {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json?country=ca&types=place,address,neighborhood,locality&access_token=${environment.mapbox.accessToken}`;
+    let newSearchText = searchText + ' Scarborough';
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${newSearchText}.json?country=ca&types=place,address,neighborhood,locality&access_token=${environment.mapbox.accessToken}`;
     return this.http.get(url);
   }
 
@@ -207,7 +208,7 @@ export class AllRestaurantsComponent implements OnInit {
 
   /**
    * Sorts the restaurants by location, from closest to furthest
-   * 
+   *
    * @param restaurants - list of all approved restaurants
    * @returns The sorted list of restaurants
    */
@@ -239,7 +240,7 @@ export class AllRestaurantsComponent implements OnInit {
   /**
    * Updates the priceFilterRestaurants list based on the selected pricepoints. Then updates
    * the list of restaurants to display
-   * 
+   *
    * @param list - the list of bools representing which pricepoints were selected on the filter card
    */
   filterPricepoint(list) {
@@ -298,7 +299,7 @@ export class AllRestaurantsComponent implements OnInit {
   /**
    * Updates the cuisineFilterRestaurants list based on the selected cuisines. Then updates
    * the list of restaurants to display
-   * 
+   *
    * @param list - the list of bools representing which cuisines were selected on the filter card
    */
   filterCuisine(list) {
@@ -324,7 +325,7 @@ export class AllRestaurantsComponent implements OnInit {
   /**
    * Updates the serviceFilterRestaurants list based on the selected services. Then updates
    * the list of restaurants to display
-   * 
+   *
    * @param list - the list of bools representing which services were selected on the filter card
    */
   filterService(list) {

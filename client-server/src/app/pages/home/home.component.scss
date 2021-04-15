@@ -4,12 +4,12 @@
 .header-img {
   background-image: url("/assets/images/home/cover.png");
   width: 100%;
-  height: 450px;
+  height: 400px;
   background-size: cover;
 
   @media screen and (max-width: 500px) {
     background-image: url("/assets/images/home/cover_mobile.png");
-    min-height: 600px;
+    min-height: 500px;
   }
 }
 
@@ -174,24 +174,6 @@
 
   @media screen and (max-width: 500px) {
     display: block;
-  }
-}
-
-.photo-courtesy {
-  top: 425px;
-  color: $navigation-color;
-
-  @media screen and (max-width: 770px) {
-    top: 450px;
-    width: 80%;
-  }
-
-  @media screen and (max-width: 550px) {
-    top: 475px;
-  }
-
-  @media screen and (max-width: 500px) {
-    top: 525px;
   }
 }
 

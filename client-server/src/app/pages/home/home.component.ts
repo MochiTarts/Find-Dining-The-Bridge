@@ -43,7 +43,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   formBuilder: any;
 
-  photoCourtesy: string = 'Restaurant A';
   spotlight: any;
   spotlightStory: string = "";
   spotlightCuisines: string = "";
@@ -90,7 +89,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   gotoRegister(): void {
-    this.router.navigate(['/login'], {queryParams: {tab: 'signup'}});
+    this.router.navigate(['/login'], { queryParams: { tab: 'signup' } });
   }
 
   /**
