@@ -84,11 +84,11 @@ There are four MongoDB databases, each one running in a separate MongoDB contain
 - Install MongoDB v4.4.x (https://docs.mongodb.com/manual/installation/)
     - Install MongoDB Compass (optional but recommended if you prefer a non-terminal interface)
 - Connect to the dev database using the host string in ``` DB_HOST ``` variable from .env
-    - mongo "{DB_HOST string}" (if connecting from terminal)
-    - Paste DB_HOST string in MongoDB Compass new connection input (if connecting from compass)
+    - run ``` mongo "{DB_HOST string}" ``` (if connecting from terminal) OR
+    - Paste DB_HOST string in MongoDB Compass new connection input (if connecting from MongoDB Compass)
 
 ## Deployment
-Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```. The respective workflow file: ``` deploy.yml ``` is located inside of ``` .github/workflows ``` folder on each environment branch.
+Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```. The respective workflow file: ``` deploy.yml ``` is located inside of ``` .github/workflows ``` folder on each of the 3 branches.
   
 ### Files required for deploying
 - Django
@@ -104,12 +104,12 @@ Github Actions will run the deployment pipeline upon push to one of the three en
 - Docker
   - _Dockerfile_ in server
   - _Dockerfile_ in client-server
-  - _docker-compose.yml_ in CSC-C01-Find-Dining
+  - _docker-compose.yml_ in Find-Dining-Revamp
 
 ## Permissions and Access
 ### Should be able to SSH into (requires UofT general VPN):
-- \<utorid>@finddining-uat.utsc.utoronto.ca (server for test & uat environment)
-- \<utorid>@finddining.utsc.utoronto.ca (server for prod environment)
+- \<utorid>@finddining-uat.utsc.utoronto.ca (test & uat server)
+- \<utorid>@finddining.utsc.utoronto.ca (prod server)
 
 ```
 You can SSH to the servers to examine running docker containers and do necessary troubleshooting
@@ -123,5 +123,5 @@ You can SSH to the servers to examine running docker containers and do necessary
     - _finddiningutsc/prod_
 
 ```
-You can view latest image tags of docker images that were built and pushed by either the Github workflow or yourself
+You can view the latest image tags of docker images that were built and pushed by either the Github workflow or yourself
 ```
