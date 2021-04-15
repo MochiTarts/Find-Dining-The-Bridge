@@ -19,3 +19,52 @@
   text-align: left;
   width: 160px;
 }
+
+.card-body-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  
+.cardBox {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  width: auto;
+}
+
+.card-body {
+  display: none;
+}
+
+.col {
+  padding: 0;
+}
+
+.card-body-mobile {
+  display: block;
+  width: 100%;
+  padding: 0px;
+  text-align: left;
+}
+
+.dropdown-toggle {
+  width: 100%;
+  margin: 0;
+  border-bottom: solid white 1px;
+  border-radius: 0;
+  font-size: 4vw;
+  text-align: center;
+  height: fit-content;
+  white-space: normal;
+}
+
+.filter-dropdown {
+  width: 100%;
+  padding: 20px 10px;
+  border-radius: 0;
+  transition: 1s;
+}
+
+}

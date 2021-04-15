@@ -29,4 +29,9 @@ export class FilterlistCardComponent implements OnInit {
   sendList() {
     this.events.emit(this.checkMap);
   }
+
+  removeSpace(string) {
+    return string.replace(/\s/g, "");
+  }
+
 }

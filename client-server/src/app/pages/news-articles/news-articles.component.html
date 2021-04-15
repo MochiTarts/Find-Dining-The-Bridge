@@ -43,7 +43,7 @@
                 [cellWidth]="300"
                 [height]="400"
                 [arrowsTheme]="dark"
-                (selectedArticle)="openArticle($event)"
+                (selectedArticle)="openArticleMobile($event)"
                 >
                 </ivy-carousel>
             </div>
@@ -137,8 +137,8 @@
             </div>
         </div>
 
-        <div class="side-filter" id="mobile-filter" style="margin-right: -400px;">
-            <div style="padding: 12px;">
+        <div class="side-filter mat-elevation-z8" id="mobile-filter" style="margin-right: -400px;">
+            <div>
                 <app-filterdate-card [months]="months" [years]="years"
                 (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">
                 </app-filterdate-card>

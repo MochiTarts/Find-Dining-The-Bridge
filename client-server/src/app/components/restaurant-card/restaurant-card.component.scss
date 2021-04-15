@@ -114,12 +114,33 @@
 
 @media screen and (max-width: 400px) {
 
+.cardBox {
+  margin: 10px 0px;
+}
+
 .card-title-mobile {
   font-size: 9vw;
 }
   
 .card-text-mobile {
   font-size: 4vw;
+}
+
+.buttons {
+  width: fit-content;
+}
+
+.btn {
+  width: fit-content;
+  font-size: 4vw;
+}
+
+}
+
+@media screen and (max-width: 332px) {
+  
+.cardBox {
+  width: 300px;
 }
 
 }

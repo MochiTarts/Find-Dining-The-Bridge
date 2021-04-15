@@ -87,7 +87,7 @@
 }
 
 .restaruant-listings-box {
-  min-height: 1100px;
+  min-height: 900px;
   overflow: hidden;
 }
 
@@ -109,9 +109,11 @@
   top: 0;
   right: 0;
   height: 100%;
+  max-width: 200px;
+  width: 60%;
+  min-width: 150px;
   z-index: 1;
-  //background-color: #007faa;
-  background-color: lightgray;
+  background-color: white;
   transition: 1s;
 }
 
@@ -122,7 +124,7 @@
 
 .show-btn {
   margin: 20px auto;
-  width: 600px;
+  width: 100%;
 }
 
 }

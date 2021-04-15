@@ -222,8 +222,7 @@ h1, h2, h3, h4, h5, h6 {
     top: 0;
     right: 0;
     height: 100%;
-    //background-color: #007faa;
-    background-color: lightgray;
+    background-color: white;
     width: 24rem;
     max-width: 70%;
     display: block;
@@ -232,10 +231,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: -400px;
 }
 
-}
-
-@media screen and (max-width: 945px) {
-    
 .carousel-row {
     display: none;
 }
