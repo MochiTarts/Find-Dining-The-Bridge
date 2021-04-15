@@ -4,7 +4,7 @@ from sduser.views import SDUserPasswordResetView, SDUserPasswordResetConfirmView
 from rest_framework_simplejwt.views import TokenVerifyView
 from oauth2 import views as external_auth_view
 
-urlpatterns=[
+urlpatterns = [
     path('signin/', SDUserCookieTokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('refresh/', SDUserCookieTokenRefreshView.as_view(), name='token_refresh'),
