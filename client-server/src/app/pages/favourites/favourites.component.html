@@ -86,14 +86,26 @@
                 (events)="filterService($event)"
               ></app-filterlist-card>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" fxLayout="column" fxLayoutAlign="center">
               <div class="restaurant-card-container">
                 <app-restaurant-card
-                  *ngFor="let restaurant of restaurants"
+                  *ngFor="let restaurant of restaurants | slice:0:show"
                   [restaurant]="restaurant"
                 >
                 </app-restaurant-card>
               </div>
+
+              <button class="btn show-btn" ngbTooltip="Show More Restaurants" placement="top"
+                *ngIf="restaurants.length > 5 && show < restaurants.length"
+                (click)="show = (((restaurants.length - show) >= 5) ? show + 5 : restaurants.length)">
+                Show More
+              </button>
+  
+              <button class="btn show-btn" ngbTooltip="Hide Restaurants" placement="top"
+                *ngIf="show == restaurants.length && restaurants.length > 5"
+                (click)="show = 5">
+                Hide
+              </button>
             </div>
           </div>
         </div>
