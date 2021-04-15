@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant-nearby-card',
@@ -9,9 +10,16 @@ export class RestaurantNearbyCardComponent implements OnInit {
 
   @Input() restaurant: any;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  gotoRestaurant() {
+    const url = this.router.createUrlTree(['/restaurant'], { queryParams: { restaurantId: this.restaurant._id } });
+    window.open(url.toString(), '_blank');
   }
 
 }
