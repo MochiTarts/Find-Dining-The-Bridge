@@ -77,7 +77,6 @@ import { ArticleCommonCardComponent } from './components/article-common-card/art
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
-import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
 import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
 
 
@@ -121,7 +120,6 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     FilterdateCardComponent,
     PrivacyPolicyComponent,
     AboutUsComponent,
-    AboutOurPartnerComponent,
     ArticleHeadlineCardComponent,
   ],
   imports: [
