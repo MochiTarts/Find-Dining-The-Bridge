@@ -35,7 +35,7 @@ export class AllRestaurantsComponent implements OnInit {
   serviceFilterRestaurants: any[];
   searchedRestaurants: any[];
 
-  restaurants: any[];
+  restaurants: any[] = [];
   dishes: any[];
   inputRestaurant: string = '';
   inputDishes: string = '';
@@ -46,6 +46,7 @@ export class AllRestaurantsComponent implements OnInit {
   faSearch = faSearch;
 
   location: string = '';
+  show: number = 5;
 
   constructor(
     private restaurantService: RestaurantService,
