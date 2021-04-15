@@ -108,6 +108,13 @@ export class SubscriberProfileFormComponent implements OnInit {
     }
   }
 
+  addFieldsForProfanityCheck(profile) {
+    let newProfile = Object.assign({}, profile);
+    newProfile['first_name_p'] = profile.first_name;
+    newProfile['last_name_p'] = profile.last_name;
+    return newProfile;
+  }
+
   /**
    * Performs action to update or create the user's profile
    */
@@ -119,6 +126,8 @@ export class SubscriberProfileFormComponent implements OnInit {
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
     };
 
+    let profileForProfanityCheck = this.addFieldsForProfanityCheck(subscriberInfo);
+
     if (!this.profileId) {
       subscriberInfo["consent_status"] = ((<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED")
     }
@@ -126,7 +135,7 @@ export class SubscriberProfileFormComponent implements OnInit {
     // clear formErrors
     this.validator.clearAllErrors();
     //validate all formfields, the callback will throw appropriate errors, return true if any validation failed
-    let failFlagOneTwo = this.validator.validateAll(subscriberInfo, (key) => this.validator.setError(key));
+    let failFlagOneTwo = this.validator.validateAll(profileForProfanityCheck, (key) => this.validator.setError(key));
     //if any validation failed, do not POST
     if (!failFlagOneTwo) {
       subscriberInfo.phone = Number(subscriberInfo.phone);

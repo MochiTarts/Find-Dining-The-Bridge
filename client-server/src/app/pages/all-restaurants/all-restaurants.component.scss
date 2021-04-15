@@ -63,7 +63,13 @@
 
   @media screen and (max-width: 1300px) {
     width: 100%;
+    overflow: hidden;
   }
+}
+
+.show-btn {
+  margin-left: 10px;
+  max-width: 600px;
 }
 
 .dishes-listings-box {
@@ -104,13 +110,19 @@
   right: 0;
   height: 100%;
   z-index: 1;
-  background-color: #007faa;
+  //background-color: #007faa;
+  background-color: lightgray;
   transition: 1s;
 }
 
 .restaurant-card-container {
   width: fit-content;
   margin: auto;
+}
+
+.show-btn {
+  margin: 20px auto;
+  width: 600px;
 }
 
 }

@@ -7,6 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 User = get_user_model()
 
+
 def send_posts_notify_email(post, restaurant_name, request):
     """ Send email to all admins, notifying
     them of a new restaurant post. Email will contain the link
@@ -30,12 +31,12 @@ def send_posts_notify_email(post, restaurant_name, request):
     else:
         link = "https://" + link + "/api/admin/restaurant/restaurantpost/" + \
             str(post._id) + "/change/"
-            
+
     content = "<p>New restaurant post posted by: {}</p>".format(restaurant_name) + \
               "<a href={}>Link to post</a>".format(link)
     send_mail(subject, strip_tags(content), from_email="admin@finddining.ca",
-        recipient_list=admins, html_message=content)
-              
+              recipient_list=admins, html_message=content)
+
 
 def send_approval_email(names, receiver, profile_title, profile_type):
     """ Sends an email to the restaurant owner, informing them

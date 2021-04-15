@@ -3,6 +3,7 @@ from ckeditor.fields import RichTextField
 from article.enum import Visibility
 from django.utils import timezone
 
+
 class Article(models.Model):
     author = models.CharField(max_length=50, blank=True, null=True)
     title = models.CharField(max_length=100)
@@ -16,7 +17,7 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     # update modified timestamp on save
     def save(self, *args, **kwargs):
         if self.created_at:

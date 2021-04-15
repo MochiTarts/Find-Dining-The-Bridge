@@ -71,7 +71,8 @@ def reject_restr(model_admin, request, queryset):
         # change status to reject
         queryset.update(status=Status.Rejected.value)
     elif wrong_status:
-        messages.success(request, "You can only reject 'Pending' or 'In_Progress' restaurants")
+        messages.success(
+            request, "You can only reject 'Pending' or 'In_Progress' restaurants")
     else:
         if total > 1:
             msg = "The selected restaurant profiles have been rejected already."
@@ -197,7 +198,8 @@ def approve_restr(model_admin, request, queryset):
         messages.success(request, msg)
         queryset.update(status=Status.Approved.value, approved_once=True)
     elif wrong_status:
-        messages.error(request, "You can only approve of 'Pending' restaurants")
+        messages.error(
+            request, "You can only approve of 'Pending' restaurants")
     else:
         if total > 1:
             msg = "The selected restaurant profiles have been approved already."
@@ -344,7 +346,8 @@ def approve_food(model_admin, request, queryset):
         messages.success(request, msg)
         queryset.update(status=Status.Approved.value)
     elif wrong_status:
-        messages.success(request, "The restaurant this dish belongs to does not exist, or the dish status if not 'Pending'")
+        messages.success(
+            request, "The restaurant this dish belongs to does not exist, or the dish status if not 'Pending'")
     else:
         if total > 1:
             msg = "The selected food profiles have been approved already."

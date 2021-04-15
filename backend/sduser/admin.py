@@ -25,7 +25,8 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = (EmailFilter, UsernameFilter, 'is_active', 'is_staff',
                    'is_superuser', 'is_blocked',)
     # note that the order of actions will be reversed (in get_actions)
-    actions = ('disable_user','disable_user_notify','enable_user','enable_user_notify', 'email_verification', 'unblock_user', 'block_user', 'promote_user',)
+    actions = ('disable_user', 'disable_user_notify', 'enable_user', 'enable_user_notify',
+               'email_verification', 'unblock_user', 'block_user', 'promote_user',)
     # list_per_page=200
 
     readonly_fields = (
@@ -80,8 +81,10 @@ class UserAdmin(admin.ModelAdmin):
                 email_sent += 1
             count = queryset.update(is_superuser=True, is_staff=True)
             if count > 1:
-                msg = "Selected " + str(count) + " Users have been promoted to administrators."
-                msg += " " + str(email_sent) + " notification emails have been sent."
+                msg = "Selected " + \
+                    str(count) + " Users have been promoted to administrators."
+                msg += " " + str(email_sent) + \
+                    " notification emails have been sent."
             else:
                 msg = "Selected User has been promoted to administrator."
                 if email_sent > 0:
@@ -92,7 +95,6 @@ class UserAdmin(admin.ModelAdmin):
             messages.error(request, msg)
 
     promote_user.short_description = "Promote selected Users to become administrators (will send notification email)"
-
 
     def block_user(self, request, queryset):
         try:
@@ -126,7 +128,8 @@ class UserAdmin(admin.ModelAdmin):
             count = queryset.update(is_active=True)
             if count > 1:
                 msg = "Selected " + str(count) + " Users have been enabled."
-                msg += " " + str(email_sent) + " notification emails have been sent."
+                msg += " " + str(email_sent) + \
+                    " notification emails have been sent."
             else:
                 msg = "Selected User has been enabled."
                 if email_sent > 0:
@@ -137,7 +140,6 @@ class UserAdmin(admin.ModelAdmin):
             messages.error(request, msg)
 
     enable_user_notify.short_description = "Enable selected Users to access the site (will send notification email)"
-
 
     def enable_user(self, request, queryset):
         try:
@@ -163,7 +165,8 @@ class UserAdmin(admin.ModelAdmin):
             count = queryset.update(is_active=False)
             if count > 1:
                 msg = "Selected " + str(count) + " Users have been disabled."
-                msg += " " + str(email_sent) + " notification emails have been sent."
+                msg += " " + str(email_sent) + \
+                    " notification emails have been sent."
             else:
                 msg = "Selected User has been disabled."
                 if email_sent > 0:

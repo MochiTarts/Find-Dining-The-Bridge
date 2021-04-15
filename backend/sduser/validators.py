@@ -2,6 +2,7 @@ from django.core.validators import validate_email, RegexValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 
+
 def validate_signup_user(user):
     invalid = []
     if not validate_email_address(user['email']):
@@ -9,7 +10,7 @@ def validate_signup_user(user):
 
     if not validate_username(user['username']):
         invalid.append('username')
-    
+
     try:
         # validate password against auth AUTH_PASSWORD_VALIDATORS
         validate_password(user['password'])
@@ -22,20 +23,25 @@ def validate_signup_user(user):
 # name should not contain number or symbols
 def validate_name(name):
     try:
-        regexValidator = RegexValidator('^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,0-9]{1,40}$')
+        regexValidator = RegexValidator(
+            '^[^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=.,0-9]{1,40}$')
         regexValidator(name)
         return True
     except ValidationError:
         return False
 
 # username should not contain weird symbols (@, +, -, _, and . are allowed)
+
+
 def validate_username(name):
     try:
-        regexValidator = RegexValidator('^[^±!£$%^&*§¡€#¢§¶•ªº«\\/<>?:;|=,]{1,100}$')
+        regexValidator = RegexValidator(
+            '^[^±!£$%^&*§¡€#¢§¶•ªº«\\/<>?:;|=,]{1,100}$')
         regexValidator(name)
         return True
     except ValidationError:
         return False
+
 
 def validate_email_address(email):
     try:

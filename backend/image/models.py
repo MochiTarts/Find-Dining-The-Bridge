@@ -20,9 +20,9 @@ class Image(models.Model):
     )
 
     image = models.ImageField(blank=True, null=True, help_text=_(
-            'Click save to upload the image to the cloud and see the new url with image preview<br>'
-            '(note that original image will be deleted if a new image is provided)'
-        ))
+        'Click save to upload the image to the cloud and see the new url with image preview<br>'
+        '(note that original image will be deleted if a new image is provided)'
+    ))
 
     uploaded_at = models.DateTimeField(editable=False, null=True)
 
@@ -31,7 +31,6 @@ class Image(models.Model):
         blank=True,
         null=True
     )
-    
 
     def __str__(self):
         if self.name:
@@ -39,7 +38,7 @@ class Image(models.Model):
         if self.url:
             return self.url.split('/')[-1]
         return str(self.id)
-    
+
     # upload image to google cloud, set the url, and remove image on save (so it doesn't get stored to local)
     def save(self, *args, **kwargs):
         if self.image:
@@ -55,4 +54,4 @@ class Image(models.Model):
         super(Image, self).save(*args, **kwargs)
 
     class Meta:
-        ordering = ['-uploaded_at',]
+        ordering = ['-uploaded_at', ]

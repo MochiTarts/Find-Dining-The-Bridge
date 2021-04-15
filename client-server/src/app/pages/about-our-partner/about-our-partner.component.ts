@@ -13,7 +13,7 @@ export class AboutOurPartnerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle("About Our Partner | Find Dining Scarborough");
+    this.titleService.setTitle("About Our Partners | Find Dining Scarborough");
   }
 
 }

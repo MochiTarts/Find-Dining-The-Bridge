@@ -5,17 +5,18 @@
         <hr />
         <div role="group" aria-labelledby="card-title">
           <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
-            <input
-              type="checkbox"
-              class="form-check-input"
-              id="{{ sub }}"
-              [(ngModel)]="checkMap[i]"
-              (ngModelChange)="sendList()"
-            />
-            <label class="form-check-label" for="{{ sub }}">{{ sub }}</label>
+            <label class="form-check-label">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="{{ sub }}"
+                [(ngModel)]="checkMap[i]"
+                (ngModelChange)="sendList()"
+              />
+              {{ sub }}
+            </label>
           </div>
         </div>
       </div>
     </div>
   </div>
-  

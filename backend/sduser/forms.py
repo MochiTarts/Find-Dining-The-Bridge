@@ -16,6 +16,8 @@ from sduser.utils import send_email_verification
 User = get_user_model()
 
 # an instance is used for the second param of send_verification_email function
+
+
 class SDUserCreateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -45,7 +47,7 @@ class AdminForm(ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password', 'password2', 'first_name', 'last_name', 'email',
-                  'role', 'auth_id', 'refresh_token', 'is_blocked', 'is_superuser', 
+                  'role', 'auth_id', 'refresh_token', 'is_blocked', 'is_superuser',
                   'is_staff', 'is_active', 'groups', 'user_permissions')
         #exclude = ['last_login', 'date_joined']
         # change the password input from char field to pwd field (with placeholders)
@@ -57,7 +59,7 @@ class AdminForm(ModelForm):
         help_texts = {
             'password': format_html(pwd_help_text) + format_html(password_validation.password_validators_help_text_html())
         }
-    
+
     def save(self, commit=True):
         user = super(AdminForm, self).save(commit=False)
 
@@ -66,7 +68,8 @@ class AdminForm(ModelForm):
             try:
                 send_email_verification(user=user, site=admin.site.site_url)
             except Exception:
-                print('fail to send email verification to ' + user.username + ' (' + user.email + ')')
+                print('fail to send email verification to ' +
+                      user.username + ' (' + user.email + ')')
         if commit:
             user.save()
 
@@ -115,7 +118,8 @@ class SDPasswordChangeForm(PasswordChangeForm):
 
         if password0 and password1:
             if password0 == password1:
-                raise forms.ValidationError("You may not use the same old password!",code='password_incorrect')
+                raise forms.ValidationError(
+                    "You may not use the same old password!", code='password_incorrect')
         return password1
 
 

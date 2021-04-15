@@ -7,9 +7,9 @@ class Prices(Enum):
     #Medium = "$$"
     #High = "$$$"
     LOW = '$ (under $10)'
-    MID =  '$$ ($11 - $30)'
+    MID = '$$ ($11 - $30)'
     HIGH = '$$$ ($31 - $60)'
-    EXHIGH =  '$$$$ (over $61)'
+    EXHIGH = '$$$$ (over $61)'
 
     @classmethod
     def choices(cls):
@@ -39,6 +39,7 @@ class Categories(Enum):
         """
         return tuple((role.name, role.value) for role in cls)
 
+
 class Status(Enum):
     """ The Status Value a restaurant can have """
     Rejected = "Rejected"
@@ -53,6 +54,7 @@ class Status(Enum):
         :return: categories' name and value in tuple form usable to models
         """
         return tuple((role.name, role.value) for role in cls)
+
 
 class Options(Enum):
     """ The options a restaurant can offer """
@@ -89,6 +91,7 @@ class Options(Enum):
         """
         return tuple(option.value for option in cls)
 
+
 class Payment(Enum):
     """ The types of payment a restaurant can have """
     Credit = 'Credit'
@@ -120,6 +123,7 @@ class Payment(Enum):
         """
         return tuple(payment.value for payment in cls)
 
+
 class MediaType(Enum):
     """ The types of media a restaurant can upload """
     IMAGE = 'image'
@@ -131,6 +135,7 @@ class MediaType(Enum):
         :return: Media type name and value in tuple form
         """
         return tuple((media_type.name, media_type.value) for media_type in cls)
+
 
 class RestaurantSaveLocations(Enum):
     """ The valid locations a restaurant can upload/remove media to/from """
@@ -145,6 +150,7 @@ class RestaurantSaveLocations(Enum):
         :return: Location name and value in tuple form
         """
         return tuple((location.name, location.value) for location in cls)
+
 
 class FoodSaveLocations(Enum):
     """ The valid locations a restaurant dish can upload/remove media to/from """
