@@ -6,20 +6,17 @@
 
 *Project Website (Test)*: https://test.finddining.ca:8443/ (Please include the :8443)
 
-<br/>
-
 ### Table of Contents
 [Prerequisites](#prerequisite)  
 [Development Environment](#run-development-site)  
 [Documentation](#documentation)  
-[Database](#database)  
-[Deployment](#deployment)  
-[Permissions and Access](#permissions-and-access)
+[Database Notes](#database)  
+[Deployment Notes](#deployment)  
+[Permissions and Access](#permissions-and-access)  
 
 <br/>
 
 # Project Setup & Overview (Updated Winter 2021)
-
 ``` backend ``` contains the Django app project for creating API endpoints that writes/updates/retrieves/remove content from the MongoDB database, and sends data to the Angular frontend.
 
 ``` client-server ``` contains the Angular app project for serving static and dynamic content, makes requests to API endpoints defined in Django.
@@ -30,8 +27,8 @@
     - Use this to set environment variables for local development
     - Do not commit .env file to repository
 - Recommended to work in a linux (or linux-similar) environment (if on windows, consider installing a WSL)
-- Install python (3.5, 3.6, 3.7, 3.8, or 3.9)
-- Install node.js (10.13.x/12.11.x or later minor version), and npm (6 or higher)
+- Install python (v3.5, v3.6, v3.7, v3.8, or v3.9)
+- Install node.js (v10.13.x/12.11.x or later minor version), and npm (v6 or higher)
 
 ``` 
 Angular project was generated with [Angular CLI version 9.1.9]
@@ -84,7 +81,7 @@ Compodoc was used to generate Angular documentation
 There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers: ``` mongodb-test, mongodb-uat, mongodb-prod ```.
 
 - The .env file will contain the host string, user, and password for the ``` scdining ``` database
-- Install MongoDB -v 4.4.x (https://docs.mongodb.com/manual/installation/)
+- Install MongoDB v4.4.x (https://docs.mongodb.com/manual/installation/)
     - Install MongoDB Compass (optional but recommended if you prefer a non-terminal interface)
 - Connect to the dev database using the host string in ``` DB_HOST ``` variable from .env
     - mongo "{DB_HOST string}" (if connecting from terminal)
