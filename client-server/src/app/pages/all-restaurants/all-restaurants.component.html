@@ -16,9 +16,9 @@
         (ngModelChange)="searchRestaurants()" aria-label="search" />
     </div>
 
-    <button class="btn filter-button" (click)="filterToggle()">Filter</button>
+    <button class="btn filter-button" (click)="filterToggle()" placement="top" ngbTooltip="Open Filter Tab">Filter</button>
 
-    <div class="filters-mobile" id="filters-mobile" style="margin-right: -250px;">
+    <div class="filters-mobile" id="filters-mobile" style="margin-right: -400px;">
       <app-filterlist-card [category]="'Price'"
         [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
         (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">

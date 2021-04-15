@@ -408,10 +408,10 @@ export class AllRestaurantsComponent implements OnInit {
   filterToggle() {
     var filters = document.getElementById('filters-mobile');
     
-    if (filters.style.marginRight === "-250px") {
+    if (filters.style.marginRight === "-400px") {
       filters.style.marginRight = "0px";
     } else {
-      filters.style.marginRight = "-250px";
+      filters.style.marginRight = "-400px";
     }
   }
 
