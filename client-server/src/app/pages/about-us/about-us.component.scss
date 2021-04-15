@@ -1,5 +1,11 @@
 @import "src/styles";
 
+.page-box {
+  margin: auto;
+  text-align: center;
+  padding: 20px 0px;
+}
+
 .bg2 {
   background-color: $background-color2;
   padding: 30px 5%;
@@ -7,8 +13,6 @@
 
 .titles {
   color: $navigation-color;
-  text-align: center;
-  margin: auto;
 }
 
 .title {
