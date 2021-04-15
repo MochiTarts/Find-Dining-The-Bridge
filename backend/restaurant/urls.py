@@ -6,6 +6,7 @@ urlpatterns = [
     path('dish/approved/<str:rest_id>/', views.DishRestaurantView.as_view(), name='dish'),
     path('dish/pending/', views.PendingDishView.as_view(), name='pending_dish'),
     path('dish/pending/<str:dish_id>/', views.PendingDishModifyDeleteView.as_view(), name='pending_dish_edit'),
+    path('dish/media/<str:dish_id>/', views.DishMediaView.as_view(), name='dish_media'),
     path('restaurant/all/', views.AllRestaurantList.as_view(), name='all_restaurants'),
     path('restaurant/approved/<str:rest_id>/', views.RestaurantView.as_view(), name='restaurant'),
     path('restaurant/draft/', views.RestaurantDraftView.as_view(), name='restaurant_draft'),
@@ -20,5 +21,4 @@ urlpatterns = [
     path('restaurant/post/<str:post_id>/', views.PostDeleteView.as_view(), name='restaurant_post_delete'),
     path('restaurant/public/post/<str:rest_id>/', views.PublicPostView.as_view(), name='restaurant_public_post'),
     path('restaurant/media/', views.RestaurantMediaView.as_view(), name='restaurant_media'),
-    path('dish/media/<str:dish_id>/', views.DishMediaView.as_view(), name='dish_media'),
 ]

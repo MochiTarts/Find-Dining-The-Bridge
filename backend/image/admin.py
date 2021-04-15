@@ -9,8 +9,10 @@ from utils.filters import NameFilter
 from image.models import Image
 import uuid
 
+
 class imageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'imageUrl', 'imagePreview', 'uploaded_at', 'labels',)
+    list_display = ('name', 'imageUrl', 'imagePreview',
+                    'uploaded_at', 'labels',)
     list_filter = (NameFilter, ('uploaded_at', DateFieldListFilter),)
 
     search_fields = ('labels',)
@@ -47,14 +49,15 @@ class imageAdmin(admin.ModelAdmin):
             o.delete()
             count += 1
         if count > 1:
-            messages.success(request, "Successfully removed " + str(count) + " images.")
+            messages.success(request, "Successfully removed " +
+                             str(count) + " images.")
         elif count == 1:
-            messages.success(request, "Successfully removed " + str(count) + " image.")
+            messages.success(
+                request, "Successfully removed " + str(count) + " image.")
         else:
             messages.info(request, 'No image has been removed')
-    
-    remove_selected.short_description = 'remove selected image(s)'
 
+    remove_selected.short_description = 'remove selected image(s)'
 
     def get_actions(self, request):
         actions = super().get_actions(request)
@@ -63,7 +66,6 @@ class imageAdmin(admin.ModelAdmin):
             del actions['delete_selected']
         return actions
 
-    
     def has_delete_permission(self, request, obj=None):
         return False
 
@@ -79,7 +81,6 @@ class imageAdmin(admin.ModelAdmin):
         return format_html("<button class='plus-collapsible' type='button' onclick='toggleImage({id})'>+</button><img class='img-preview' id='{id}' src='{url}'>", url=obj.url, id='img' + str(self.image_id))
 
     imagePreview.short_description = 'image preview'
-
 
 
 admin.site.register(Image, imageAdmin)

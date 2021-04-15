@@ -4,10 +4,12 @@ from django.http import JsonResponse
 
 from django.core.exceptions import MultipleObjectsReturned, ValidationError, ObjectDoesNotExist
 from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied, MethodNotAllowed, ParseError
-from rest_framework_simplejwt.exceptions import AuthenticationFailed 
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from django.db import IntegrityError
 
-import jsonschema, json
+import jsonschema
+import json
+
 
 def views_exception_handler(exc, context):
     """ Custom handler for standardizing exceptions that will be thrown from the API views """

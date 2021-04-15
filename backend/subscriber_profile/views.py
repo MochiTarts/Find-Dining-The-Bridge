@@ -22,8 +22,8 @@ class Signup(APIView):
     """ SubscriberProfile signup view """
 
     @swagger_auto_schema(request_body=swagger.SubscriberProfileInsert,
-        responses=swagger.subscriber_profile_signup_post_response,
-        operation_id="POST /subscriber/signup/")
+                         responses=swagger.subscriber_profile_signup_post_response,
+                         operation_id="POST /subscriber/signup/")
     def post(self, request):
         """ Inserts a new SubscriberProfile record into the database """
         body = request.data
@@ -45,7 +45,7 @@ class SubscriberProfileView(APIView):
     """ SubscriberProfile get and update view """
 
     @swagger_auto_schema(responses=swagger.subscriber_profile_profile_get_response,
-        operation_id="GET /subscriber/profile/")
+                         operation_id="GET /subscriber/profile/")
     def get(self, request):
         """ Retrieves a SubscriberProfile record from the database """
         user = request.user
@@ -60,8 +60,8 @@ class SubscriberProfileView(APIView):
         return JsonResponse(model_to_dict(profile))
 
     @swagger_auto_schema(request_body=swagger.SubscriberProfileUpdate,
-        responses=swagger.subscriber_profile_profile_put_response,
-        operation_id="PUT /subscriber/profile/")
+                         responses=swagger.subscriber_profile_profile_put_response,
+                         operation_id="PUT /subscriber/profile/")
     def put(self, request):
         """ Modifies a SubscriberProfile record in the database """
         body = request.data

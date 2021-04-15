@@ -8,11 +8,13 @@ from rest_framework.response import Response
 
 User = get_user_model()
 
+
 class UserSignUp(serializers.Serializer):
     username = serializers.CharField()
     email = serializers.EmailField()
     password = serializers.CharField()
     role = serializers.CharField()
+
 
 user_signup_post_response = {
     "200": openapi.Response(

@@ -14,17 +14,19 @@ import datetime
 import requests
 
 restaurant_owner_editable = [
-   "restaurant_id", "last_updated",
-   "consent_status", "subscribed_at",
-   "unsubscribed_at", "expired_at"
+    "restaurant_id", "last_updated",
+    "consent_status", "subscribed_at",
+    "unsubscribed_at", "expired_at"
 ]
+
 
 class RestaurantOwner(models.Model):
     """ Find Dining Restaurant Owner profile model """
     user_id = models.IntegerField(default=None)
     restaurant_id = models.CharField(max_length=24, blank=True, default="")
     last_updated = models.DateField(auto_now=True)
-    consent_status = models.CharField(max_length=30, choices=ConsentStatus.choices(), default='IMPLIED', blank=True)
+    consent_status = models.CharField(
+        max_length=30, choices=ConsentStatus.choices(), default='IMPLIED', blank=True)
     subscribed_at = models.DateField(blank=True)
     unsubscribed_at = models.DateField(blank=True)
     expired_at = models.DateField(blank=True)
@@ -33,7 +35,7 @@ class RestaurantOwner(models.Model):
         return str(self.id)
 
     @classmethod
-    def signup(cls, restaurant_owner_data:dict):
+    def signup(cls, restaurant_owner_data: dict):
         """ Constructs and saves a new RestaurantOwner record to the database and
         returns the newly made RestaurantOwner object
 
@@ -52,7 +54,8 @@ class RestaurantOwner(models.Model):
                 'Cannot insert restaurant owner user, a user with this user_id already exists')
         restaurant_filter = PendingRestaurant.objects.filter(_id=restaurant_id)
         if not restaurant_filter.exists():
-            raise ObjectDoesNotExist("This restaurant with _id: "+restaurant_id+" does not exist")
+            raise ObjectDoesNotExist(
+                "This restaurant with _id: "+restaurant_id+" does not exist")
 
         if "consent_status" in restaurant_owner_data:
             restaurant_owner_data.update(
@@ -145,19 +148,22 @@ class RestaurantOwner(models.Model):
             try:
                 datetime.datetime.strptime(fields['last_updated'], '%Y-%m-%d')
             except ValueError:
-                invalid['Invalid'].append('last_updated (format should be YYYY-MM-DD)')
+                invalid['Invalid'].append(
+                    'last_updated (format should be YYYY-MM-DD)')
 
         if 'expired_at' in fields:
             try:
                 datetime.datetime.strptime(fields['last_updated'], '%Y-%m-%d')
             except ValueError:
-                invalid['Invalid'].append('expired_at (format should be YYYY-MM-DD)')
+                invalid['Invalid'].append(
+                    'expired_at (format should be YYYY-MM-DD)')
 
         if invalid['Invalid']:
             raise ValidationError(message=invalid, code="invalid_input")
 
     class Meta:
         verbose_name = 'Restaurant Owner'
+
 
 def handleConsentStatus(consent_status):
     """ Creates a dict containing the fields and values
@@ -175,7 +181,8 @@ def handleConsentStatus(consent_status):
     if consent_status == "EXPRESSED":
         profile["subscribed_at"] = datetime.datetime.today()
     elif consent_status == "IMPLIED":
-        profile["expired_at"] = datetime.datetime.today() + datetime.timedelta(days=+182)
+        profile["expired_at"] = datetime.datetime.today() + \
+            datetime.timedelta(days=+182)
     elif consent_status == "UNSUBSCRIBED":
         profile["unsubscribed_at"] = datetime.datetime.today()
     return profile

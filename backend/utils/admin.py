@@ -3,10 +3,13 @@ from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from bson import ObjectId
 
+
 def isObjectId(oid):
     return ObjectId.is_valid(oid)
 
 # custom input filter (parent) class that works with the default list filter (can create custom filter by subclassing it)
+
+
 class InputFilter(admin.SimpleListFilter):
     template = 'admin/input_filter.html'
 
@@ -28,6 +31,8 @@ class InputFilter(admin.SimpleListFilter):
 ''' custom filters'''
 
 # email filter (not exact match but 'contains' for wider usability)
+
+
 class EmailFilter(InputFilter):
     parameter_name = 'email'
     title = _('email')
@@ -41,6 +46,8 @@ class EmailFilter(InputFilter):
             )
 
 # email filter (not exact match but 'contains' for wider usability)
+
+
 class UsernameFilter(InputFilter):
     parameter_name = 'username'
     title = _('username')
@@ -52,7 +59,6 @@ class UsernameFilter(InputFilter):
             return queryset.filter(
                 Q(username__icontains=username)
             )
-
 
 
 # owner name filter (not exact match but 'contains' for wider usability)
@@ -86,6 +92,8 @@ class NameFilter(InputFilter):
 
 # filter won't work until we change the db schema (change price field from string to number)
 # price max filter (upper bound)
+
+
 class PriceMaxFilter(InputFilter):
     parameter_name = 'price'
     title = _('price (maximum)')
@@ -99,6 +107,8 @@ class PriceMaxFilter(InputFilter):
                 )
 
 # price min filter (lower bound)
+
+
 class PriceMinFilter(InputFilter):
     parameter_name = 'price'
     title = _('price (minimum)')
@@ -109,4 +119,4 @@ class PriceMinFilter(InputFilter):
             if price.isnumeric:
                 return queryset.filter(
                     Q(price__gt=float(price))
-                )   
+                )

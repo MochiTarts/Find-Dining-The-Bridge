@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import ipware.ip
 
+
 def get_client_ip_address(request) -> str:
     """
     Get client IP address as configured by the user.
@@ -30,12 +31,14 @@ def get_client_http_accept(request) -> str:
     return request.META.get("HTTP_ACCEPT", "<unknown>")[:1025]
 
 
-
 class AuditEntry(models.Model):
     action = models.CharField(max_length=64)
-    user_agent = models.CharField(_("user agent"), max_length=255, db_index=True)
-    ip_address = models.GenericIPAddressField(_("ip address"), null=True, db_index=True)
-    username = models.CharField(_("username"), max_length=255, null=True, db_index=True)
+    user_agent = models.CharField(
+        _("user agent"), max_length=255, db_index=True)
+    ip_address = models.GenericIPAddressField(
+        _("ip address"), null=True, db_index=True)
+    username = models.CharField(
+        _("username"), max_length=255, null=True, db_index=True)
     http_accept = models.CharField(_("http accept"), max_length=1025)
     path_info = models.CharField(_("path"), max_length=255)
     attempt_time = models.DateTimeField(_("attempt time"), auto_now_add=True)
@@ -46,12 +49,13 @@ class AuditEntry(models.Model):
     def __str__(self):
         return '[{0}] {1} - {2} ({3})'.format(self.action, self.username, self.ip_address, self.attempt_time)
 
-    class Meta: 
+    class Meta:
         verbose_name = 'Login Log'
         ordering = ["-attempt_time"]
 
+
 @receiver(user_logged_in)
-def user_logged_in_callback(sender, request, user, **kwargs): 
+def user_logged_in_callback(sender, request, user, **kwargs):
     """
     log.info('login user: {user} via ip: {ip}'.format(
         user=user,
@@ -68,8 +72,9 @@ def user_logged_in_callback(sender, request, user, **kwargs):
         http_accept=get_client_http_accept(request)
     )
 
+
 @receiver(user_logged_out)
-def user_logged_out_callback(sender, request, user, **kwargs):  
+def user_logged_out_callback(sender, request, user, **kwargs):
     """
     log.info('logout user: {user} via ip: {ip}'.format(
         user=user,
@@ -86,6 +91,7 @@ def user_logged_out_callback(sender, request, user, **kwargs):
         http_accept=get_client_http_accept(request)
     )
 
+
 @receiver(user_login_failed)
 def user_login_failed_callback(sender, credentials, **kwargs):
     """
@@ -93,7 +99,7 @@ def user_login_failed_callback(sender, credentials, **kwargs):
         credentials=credentials,
     ))
     """
-    #request.META.get('HTTP_X_FORWARDED_FOR').split(',')[0]
+    # request.META.get('HTTP_X_FORWARDED_FOR').split(',')[0]
     AuditEntry.objects.create(
         action='login failed',
         username=credentials.get('username', None),

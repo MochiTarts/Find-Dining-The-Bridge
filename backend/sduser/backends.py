@@ -54,7 +54,8 @@ class EmailBackend(ModelBackend):
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
-            user = UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            user = UserModel.objects.filter(Q(username__iexact=username) | Q(
+                email__iexact=username)).order_by('id').first()
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
         else:
@@ -112,7 +113,7 @@ def create_disable_user_and_send_verification_email(user, password, request):
         # create Admin user if the email belongs to the Admin
         if user['email'] == settings.ADMIN_EMAIL:
             UserModel.objects.create_superuser(
-            username=user['username'], email=user['email'], password=user['password'], role=user['role'], )
+                username=user['username'], email=user['email'], password=user['password'], role=user['role'], )
             return JsonResponse({'message': "An admin account has been created. You can now log in with the registered credentials."})
         user = UserModel.objects.create_user(
             username=user['username'], email=user['email'], password=user['password'], role=user['role'])
@@ -317,7 +318,8 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
                 if old_user['profile_id'] is None:
                     del response.data['access']
                     # need to obtain it manually because we need to update the profile id (by forcing a read from the db)
-                    new_token = SDUserCookieTokenObtainPairSerializer.get_token(user)
+                    new_token = SDUserCookieTokenObtainPairSerializer.get_token(
+                        user)
                     response.data['access'] = str(new_token.access_token)
                     # also update the refresh token
                     new_refresh_token = str(new_token)
