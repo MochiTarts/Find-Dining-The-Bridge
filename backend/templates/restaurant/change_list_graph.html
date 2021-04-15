@@ -32,6 +32,7 @@
             }
             xTitle = 'Date';
             chartId = "daily-chart";
+            graphTitle = "Total Pageviews of All Restaurants of this Month";
         } else if (format_type == "hourly") {
             url = endpoint + "hourly/";
             for (i = 0; i <= 23; i++) {
@@ -39,9 +40,8 @@
             }
             xTitle = 'Hour';
             chartId = "hourly-chart";
+            graphTitle = "Total Pageviews of All Restaurants of Today";
         }
-
-        graphTitle = "Total Pageviews of All Restaurants";
 
         var options = {
             responsive: true,
@@ -123,11 +123,11 @@
         if (format_type == "daily") {
             url = endpoint + "daily/";
             chartId = "top-10-daily-chart";
-            graphTitle = 'Top 10 Highest Viewed Restaurant this Month';
+            graphTitle = 'Top 10 Highest Viewed Restaurants this Month';
         } else if (format_type == "alltime") {
             url = endpoint + "alltime/";
             chartId = "top-10-alltime-chart";
-            graphTitle = 'Top 10 Highest Viewed Restaurant Alltime';
+            graphTitle = 'Top 10 Highest Viewed Restaurants Alltime';
         }
 
         var options = {
@@ -221,7 +221,8 @@
             }
         });
     }
-    $.when(barGraph("daily")).then(barGraph("hourly")).then(paretoGraph("daily"));
+
+    $.when(barGraph("daily")).then(paretoGraph("daily")).then(barGraph("hourly"));
     // paretoGraph("alltime");
 </script>
 {% endblock %}
