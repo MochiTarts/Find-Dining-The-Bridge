@@ -27,6 +27,8 @@ def get_analytics_data(restaurant_id, format_type):
     :return: Google Analytics Core Reporting response data given the specific query
         parameters
     """
+    analyticService = build('analytics', 'v3', credentials=credentials, cache_discovery=False)
+    
     VIEW_ID = settings.GA_VIEW_ID
     start_date = ''
     end_date = ''
