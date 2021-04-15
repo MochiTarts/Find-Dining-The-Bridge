@@ -53,6 +53,9 @@ import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
 import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
 import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { ResourcesComponent } from './pages/resources/resources.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -75,9 +78,8 @@ import { PasswordChangeFormComponent } from './components/password-change-form/p
 import { InfoCardComponent } from './components/info-card/info-card.component';
 import { ArticleCommonCardComponent } from './components/article-common-card/article-common-card.component';
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
-import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
-import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
+
 
 
 @NgModule({
@@ -121,6 +123,7 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     PrivacyPolicyComponent,
     AboutUsComponent,
     ArticleHeadlineCardComponent,
+    ResourcesComponent,
   ],
   imports: [
     BrowserModule,
