@@ -32,6 +32,13 @@
           class="error-label"
           [name]="'errorName'"
           [message]="validator.errors['first_name']"
+          tabindex="validator.errors['first_name'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPost'"
+          [message]="validator.errors['first_name_p']"
+          tabindex="validator.errors['first_name_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
       <div class="form-group">
@@ -49,6 +56,13 @@
           class="error-label"
           [name]="'errorName'"
           [message]="validator.errors['last_name']"
+          tabindex="validator.errors['last_name'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPost'"
+          [message]="validator.errors['last_name_p']"
+          tabindex="validator.errors['last_name_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
       <div class="form-group">
@@ -66,6 +80,7 @@
           class="error-label"
           [name]="'errorPostalCode'"
           [message]="validator.errors['postalCode']"
+          tabindex="validator.errors['postalCode'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
       <div class="form-group">
@@ -81,7 +96,8 @@
         </div>
         <app-dynamic-label class="error-label"
         [name]="'errorPhone'"
-        [message]="validator.errors['phone']" ></app-dynamic-label>
+        [message]="validator.errors['phone']"
+        tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
       </div>
       <div *ngIf="profileId == null">
         <div class="form-group">
