@@ -1,6 +1,7 @@
 from rest_framework import permissions
 from utils.common import get_user
 
+
 class ROPermission(permissions.BasePermission):
     """
     permission check for RO.

@@ -30,14 +30,17 @@ User = get_user_model()
 class AdminPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email_admin.html'
 
+
 class SDUserPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'registration/password_reset_confirm_user.html'
     extra_context = {'home_url': '/'}
     success_url = reverse_lazy('password_reset_complete_user')
 
+
 class SDUserPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'registration/password_reset_complete_user.html'
-    extra_context = {'home_url': '/', 'login_redirect_url': '/login',}
+    extra_context = {'home_url': '/', 'login_redirect_url': '/login', }
+
 
 class DeactivateView(APIView):
     """ Deactivate user """
@@ -68,7 +71,7 @@ class DeactivateView(APIView):
         except User.DoesNotExist:
             return JsonResponse({'message': 'deactivation failed: User not found', 'code': 'deactivation_fail'}, status=400)
         except (BadHeaderError, SMTPException):
-            return JsonResponse({'message':' There is an error sending the notification email. However, this user account has been successfully deactivated. No further action is required.', 'code':'fail_to_send_email'}, status=503)
+            return JsonResponse({'message': ' There is an error sending the notification email. However, this user account has been successfully deactivated. No further action is required.', 'code': 'fail_to_send_email'}, status=503)
 
 
 class editView(APIView):
@@ -93,7 +96,7 @@ class NearbyRestaurantsView(APIView):
     permission_classes = (AllowAny,)
 
     @swagger_auto_schema(responses=swagger.user_nearby_get_response,
-        operation_id="GET /user/nearby/")
+                         operation_id="GET /user/nearby/")
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
         user = request.user
@@ -116,16 +119,17 @@ class SDUserPasswordResetView(APIView):
     def post(self, request):
         email = request.data.get('email')
         associated_users = User.objects.filter(Q(email=email))
-        
+
         if not associated_users.exists():
             raise ObjectDoesNotExist("No user associated with email: " + email)
         if associated_users.count() > 1:
-            raise MultipleObjectsReturned("There are more than one User associated with email: " + email)
+            raise MultipleObjectsReturned(
+                "There are more than one User associated with email: " + email)
         user = associated_users.first()
         try:
             send_email_password_reset(user=user, request=request)
         except (BadHeaderError, SMTPException):
-            return JsonResponse({'message':'Fail to send email.'}, status=503)
+            return JsonResponse({'message': 'Fail to send email.'}, status=503)
 
         return JsonResponse({'message': 'Password reset email has been sent'})
 
@@ -142,20 +146,18 @@ class SDUserChangePasswordView(APIView):
 
         user = request.user
 
-        #if not user.check_password(old_password):
-
+        # if not user.check_password(old_password):
 
         # Django way of validation
         form = SDPasswordChangeForm(user=user, data=passwords)
 
         if form.is_valid():
             form.save()
-            #user.set_password(form.cleaned_data['new_password2'])
-            #user.save()
+            # user.set_password(form.cleaned_data['new_password2'])
+            # user.save()
             return JsonResponse({'message': 'Password have been changed'})
         else:
             return JsonResponse(form.errors.get_json_data(escape_html=True), status=400)
-        
 
 
 class SDUserResentVerificationEmailView(APIView):
@@ -182,6 +184,3 @@ class SDUserResentVerificationEmailView(APIView):
 
         except User.DoesNotExist:
             return JsonResponse({'message': "No user found with this email address. Please make sure you have entered the correct email address and try again."}, status=400)
-        
-        
-

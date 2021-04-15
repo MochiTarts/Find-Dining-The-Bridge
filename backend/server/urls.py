@@ -87,19 +87,13 @@ if settings.DEBUG:
     ]
     urlpatterns.extend(doc_urls)
 
-# prefix all URLpatterns with api/ i.e. api/urlpattern
 urlpatterns = [
-    #path('verification/', include('verify_email.urls')),
     path('verification/<uidb64>/<token>/',verify_email, name='verify_email'), 
     path('login/', index.views.angularLogIn, name="login"),
+    # prefix all URLpatterns with api/ i.e. api/urlpattern
     path('api/', include(urlpatterns))]
 
 '''
-# prefix all URLpatterns with api/ i.e. api/urlpattern
-urlpatterns = [
-    path('api/', include(urlpatterns)),
-    re_path(r'^(?!ng/).*$', include('index.urls')),]
-
 from django.conf import settings
 from django.conf.urls.static import static
 

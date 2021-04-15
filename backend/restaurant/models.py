@@ -1260,7 +1260,8 @@ class RestaurantPost(models.Model):
         post = save_and_clean(post)
 
         rest_id = post_data["restaurant_id"]
-        restaurant_name = PendingRestaurant.objects.filter(_id=rest_id).first().name
+        restaurant_name = PendingRestaurant.objects.filter(
+            _id=rest_id).first().name
         send_posts_notify_email(post, restaurant_name, request)
         return post
 

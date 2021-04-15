@@ -109,6 +109,7 @@ dish_pending_get_response = {
     )
 }
 
+
 class PendingFoodInsertUpdate(serializers.Serializer):
     name = serializers.CharField()
     description = serializers.CharField()
@@ -119,6 +120,7 @@ class PendingFoodInsertUpdate(serializers.Serializer):
 
     class Meta:
         ref_name = None
+
 
 dish_pending_post_response = {
     "200": openapi.Response(
@@ -158,12 +160,14 @@ dish_pending_dish_id_put_response = {
     )
 }
 
+
 class PendingFoodDelete(serializers.Serializer):
     name = serializers.CharField()
     category = serializers.CharField()
 
     class Meta:
         ref_name = None
+
 
 dish_pending_dish_id_delete_response = {
     "200": openapi.Response(
@@ -184,12 +188,14 @@ dish_pending_dish_id_delete_response = {
     )
 }
 
+
 class UserFavRest(serializers.Serializer):
     name = serializers.CharField()
     category = serializers.CharField()
 
     class Meta:
         ref_name = None
+
 
 user_favourite_post_response = {
     "200": openapi.Response(
@@ -658,6 +664,7 @@ restaurant_all_get_response = {
     )
 }
 
+
 class PendingRestaurantDraftInsertUpdate(serializers.Serializer):
     name = serializers.CharField(max_length=30)
     years = serializers.CharField(required=False)
@@ -668,7 +675,8 @@ class PendingRestaurantDraftInsertUpdate(serializers.Serializer):
 
     phone = serializers.IntegerField(required=False)
     email = serializers.EmailField()
-    pricepoint = serializers.ChoiceField(required=False, choices=Prices.choices())
+    pricepoint = serializers.ChoiceField(
+        required=False, choices=Prices.choices())
     cuisines = serializers.ListField(required=False)
 
     offer_options = serializers.ListField(required=False)
@@ -678,7 +686,8 @@ class PendingRestaurantDraftInsertUpdate(serializers.Serializer):
     owner_preferred_name = serializers.ListField(required=False)
 
     deliveryDetails = serializers.CharField(required=False, max_length=2000)
-    dineinPickupDetails = serializers.CharField(required=False, max_length=2000)
+    dineinPickupDetails = serializers.CharField(
+        required=False, max_length=2000)
     locationNotes = serializers.CharField(required=False, max_length=2000)
 
     bio = serializers.CharField(required=False)
@@ -687,10 +696,12 @@ class PendingRestaurantDraftInsertUpdate(serializers.Serializer):
     twitter = serializers.CharField(required=False, max_length=200)
     instagram = serializers.CharField(required=False, max_length=200)
     open_hours = serializers.CharField(required=False)
-    payment_methods = serializers.ChoiceField(required=False, choices=Payment.choices())
+    payment_methods = serializers.ChoiceField(
+        required=False, choices=Payment.choices())
 
     class Meta:
         ref_name = None
+
 
 restaurant_draft_post_response = {
     "200": openapi.Response(
@@ -786,6 +797,7 @@ restaurant_draft_put_response = {
     )
 }
 
+
 class PendingRestaurantSubmit(serializers.Serializer):
     name = serializers.CharField(max_length=30)
     years = serializers.CharField()
@@ -806,7 +818,8 @@ class PendingRestaurantSubmit(serializers.Serializer):
     owner_preferred_name = serializers.ListField(required=False)
 
     deliveryDetails = serializers.CharField(required=False, max_length=2000)
-    dineinPickupDetails = serializers.CharField(required=False, max_length=2000)
+    dineinPickupDetails = serializers.CharField(
+        required=False, max_length=2000)
     locationNotes = serializers.CharField(required=False, max_length=2000)
 
     bio = serializers.CharField()
@@ -819,6 +832,7 @@ class PendingRestaurantSubmit(serializers.Serializer):
 
     class Meta:
         ref_name = None
+
 
 restaurant_submit_put_response = {
     "200": openapi.Response(
@@ -867,12 +881,14 @@ restaurant_submit_put_response = {
     )
 }
 
+
 class RestaurantPostInsert(serializers.Serializer):
     restaurant_id = serializers.CharField()
     content = serializers.CharField(max_length=4096)
 
     class Meta:
         ref_name = None
+
 
 restaurant_post_post_response = {
     "200": openapi.Response(
@@ -929,9 +945,12 @@ restaurant_media_put_request = [
     openapi.Parameter(
         'save_location', in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True,
         enum=["cover_photo_url", "logo_url", "restaurant_video_url", "restaurant_image_url"]),
-    openapi.Parameter('media_file', in_=openapi.IN_FORM, type=openapi.TYPE_FILE),
-    openapi.Parameter('media_link', in_=openapi.IN_FORM, type=openapi.TYPE_STRING),
-    openapi.Parameter('submit_for_approval', in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True, enum=["True", "False"]),
+    openapi.Parameter('media_file', in_=openapi.IN_FORM,
+                      type=openapi.TYPE_FILE),
+    openapi.Parameter('media_link', in_=openapi.IN_FORM,
+                      type=openapi.TYPE_STRING),
+    openapi.Parameter('submit_for_approval', in_=openapi.IN_FORM,
+                      type=openapi.TYPE_STRING, required=True, enum=["True", "False"]),
 ]
 
 restaurant_media_put_response = {
@@ -998,7 +1017,8 @@ restaurant_media_put_response = {
 }
 
 restaurant_media_delete_request = [
-    openapi.Parameter('restaurant_images', in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True)
+    openapi.Parameter('restaurant_images', in_=openapi.IN_FORM,
+                      type=openapi.TYPE_STRING, required=True)
 ]
 
 restaurant_media_delete_response = {
@@ -1067,7 +1087,8 @@ dish_media_put_request = [
         'media_type', in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True, enum=["IMAGE"]),
     openapi.Parameter(
         'save_location', in_=openapi.IN_FORM, type=openapi.TYPE_STRING, required=True, enum=["picture"]),
-    openapi.Parameter('media_file', in_=openapi.IN_FORM, type=openapi.TYPE_FILE, required=True)
+    openapi.Parameter('media_file', in_=openapi.IN_FORM,
+                      type=openapi.TYPE_FILE, required=True)
 ]
 
 dish_media_put_response = {

@@ -15,44 +15,50 @@ from article.enum import Visibility
 from article.models import Article
 from article import swagger
 
-from utils.model_util import models_to_json,model_to_json
+from utils.model_util import models_to_json, model_to_json
 import json
 
 from drf_yasg.utils import swagger_auto_schema
+
 
 class ArticleList(APIView):
     """ article list """
     permission_classes = (AllowAny,)
 
     @swagger_auto_schema(responses=swagger.article_all_response,
-        operation_id="GET /article/all/")
+                         operation_id="GET /article/all/")
     def get(self, request):
         """ Retrieve all intend-for-publish articles from the database (restricted by user's visibility) """
         user = request.user
         if user.is_anonymous:
-            articles = Article.objects.filter(visibility="ALL", published=True).values()
+            articles = Article.objects.filter(
+                visibility="ALL", published=True).values()
         else:
-            articles = Article.objects.filter(visibility__in=[user.role, "ALL"], published=True).values()
+            articles = Article.objects.filter(
+                visibility__in=[user.role, "ALL"], published=True).values()
 
         response = {'articles': articles}
         # model to dict (and therefore model to json) does not work for date fields
         # so we get the queryset by calling values() and let DRF handles the serialization (Response)
         return Response(response)
 
+
 class ArticleView(APIView):
     """ article view """
     permission_classes = (AllowAny,)
 
     @swagger_auto_schema(responses=swagger.article_id_response,
-        operation_id="GET /article/{id}/")
+                         operation_id="GET /article/{id}/")
     def get(self, request, id):
         """ Retrieve an article given id (restricted by user's visibility) """
         user = request.user
 
         if user.is_anonymous:
-            article = Article.objects.filter(visibility="ALL", published=True, id=id).values()
+            article = Article.objects.filter(
+                visibility="ALL", published=True, id=id).values()
         else:
-            article = Article.objects.filter(visibility__in=[user.role, "ALL"], published=True, id=id).values()
+            article = Article.objects.filter(
+                visibility__in=[user.role, "ALL"], published=True, id=id).values()
         # evaluate it instead of calling exists() because we need the cached result in response
         if article:
             response = {'article': article[0]}

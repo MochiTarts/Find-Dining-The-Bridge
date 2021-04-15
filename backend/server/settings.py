@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import sys
 import os
 import datetime
 from datetime import timedelta
@@ -40,8 +41,9 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    'server', # This is added for my admin.py to take effect first (which replaces admin site with my custom one)
-    #'whitenoise.runserver_nostatic',
+    # This is added for my admin.py to take effect first (which replaces admin site with my custom one)
+    'server',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,16 +65,17 @@ INSTALLED_APPS = [
     'image',
     'django.contrib.admindocs',
     'drf_yasg',
-    
-    #'user.apps.SDUserConfig',
+
+    # 'user.apps.SDUserConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    #'whitenoise.middleware.WhiteNoiseMiddleware',
-    #'spa.middleware.SPAMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'spa.middleware.SPAMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # this should be above common middleware
+    # this should be above common middleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -109,8 +112,8 @@ DATABASES = {
         'ENGINE': os.environ.get('DB_ENGINE'),
         'NAME': os.environ.get('DB_NAME'),
         'HOST': os.environ.get('DB_HOST'),
-        #'USER': os.environ.get('DB_USER'),
-        #'PASSWORD': os.environ.get('DB_PASS')
+        # 'USER': os.environ.get('DB_USER'),
+        # 'PASSWORD': os.environ.get('DB_PASS')
     }
 }
 
@@ -131,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
-    {   
+    {
         'NAME': 'utils.validators.UserPasswordValidator',
     },
 ]
@@ -158,13 +161,13 @@ AUTHENTICATION_BACKENDS = ['sduser.backends.EmailBackend']
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
-        #'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
@@ -203,13 +206,13 @@ CSRF_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = os.environ.get('SSL_REDIRECT') == 'True'
 
 CORS_ALLOW_METHODS = (
-'GET',
-'POST',
-'PUT',
-'PATCH',
-'DELETE',
-'OPTIONS'
- )
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)
 
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:4200",
@@ -243,8 +246,8 @@ JWT_ALGORITHM = 'HS256'
 # JWT settings
 SIMPLE_JWT = {
     # for testing
-    #'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
-    #'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
+    # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
@@ -274,12 +277,10 @@ SIMPLE_JWT = {
 }
 
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-import sys
 # set staticfiles_dirs for django templates to render static files on development server
 if len(sys.argv) > 2 and sys.argv[1] == 'runserver':
     STATICFILES_DIRS = [
@@ -323,7 +324,7 @@ CACHES = {
 }
 
 
-GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
+GOOGLE_OAUTH2_CLIENT_ID = os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
 
 # reCaptcha v2 for admin portal (still need to add the ip on recaptcha settings)
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAP_PRIV_KEY')
@@ -335,8 +336,10 @@ GA_VIEW_ID = os.environ.get('GA_VIEW_ID')
 
 GOOGLE_OAUTH2_CLIENT_EMAIL = os.environ.get('GOOGLE_OAUTH2_CLIENT_EMAIL')
 # note that the replace is required after reading
-GOOGLE_OAUTH2_PRIVATE_KEY = os.environ.get('GOOGLE_OAUTH2_PRIVATE_KEY').replace('\\n', '\n')
+GOOGLE_OAUTH2_PRIVATE_KEY = os.environ.get(
+    'GOOGLE_OAUTH2_PRIVATE_KEY').replace('\\n', '\n')
 
 GOOGLE_ANALYTICS_CLIENT_EMAIL = os.environ.get('GOOGLE_ANALYTICS_CLIENT_EMAIL')
 # note that the replace is required after reading
-GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get('GOOGLE_ANALYTICS_PRIVATE_KEY').replace('\\n', '\n')
+GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get(
+    'GOOGLE_ANALYTICS_PRIVATE_KEY').replace('\\n', '\n')

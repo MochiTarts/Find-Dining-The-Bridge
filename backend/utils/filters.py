@@ -41,6 +41,8 @@ class EmailFilter(InputFilter):
             )
 
 # username filter (not exact match but 'contains' for wider usability)
+
+
 class UsernameFilter(InputFilter):
     parameter_name = 'username'
     title = _('username')
@@ -84,6 +86,8 @@ class NameFilter(InputFilter):
             )
 
 # title filter (not exact match but 'contains' for wider usability)
+
+
 class TitleFilter(InputFilter):
     parameter_name = 'title'
     title = _('title')
@@ -98,6 +102,7 @@ class TitleFilter(InputFilter):
 
 # user id filter (exact match)
 
+
 class UserIDFilter(InputFilter):
     parameter_name = 'user_id'
     title = _('user_id')
@@ -110,6 +115,7 @@ class UserIDFilter(InputFilter):
             )
 
 # restaurant id filter (exact match)
+
 
 class RestaurantIDFilter(InputFilter):
     parameter_name = 'restaurant_id'

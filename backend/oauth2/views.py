@@ -54,13 +54,13 @@ class GoogleView(APIView):
         r = requests.get(
             'https://www.googleapis.com/oauth2/v2/userinfo', params=payload)
         data = json.loads(r.text)
-        #print(data)
+        # print(data)
 
         if 'error' in data:
             content = {
                 'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
-        
+
         auth_id = data['id']
         # this should be the same as the one obtained from google idToken
         email = data['email']
@@ -70,7 +70,7 @@ class GoogleView(APIView):
             googleJWT = id_token.verify_oauth2_token(request.data.get(
                 'idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
             #print('user info from google idToken:')
-            #print(googleJWT)
+            # print(googleJWT)
             # this is definitive as it is not modifiable
             email = googleJWT['email']
             # get user by auth Id (3rd party id) Or email
@@ -95,7 +95,8 @@ class GoogleView(APIView):
             if not googleJWT['email_verified']:
                 user.is_active = False
                 user.save()
-                create_disable_user_and_send_verification_email(user, password, request)
+                create_disable_user_and_send_verification_email(
+                    user, password, request)
                 check_user_status(user)
 
         response = construct_response_for_3rd_party_auth(user)
@@ -137,7 +138,7 @@ class FacebookView(APIView):
         data = json.loads(r.text)
 
         #print('user profile fields from facebook:')
-        #print(data)
+        # print(data)
 
         if 'error' in data:
             content = {'message': 'invalid facebook token or user id'}
