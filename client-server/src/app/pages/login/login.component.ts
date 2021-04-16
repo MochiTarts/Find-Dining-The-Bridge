@@ -520,7 +520,7 @@ export class LoginComponent implements OnInit {
     this.modalService.open(facebookSignUp, { ariaLabelledBy: 'modal-basic-title', size: 'sm' });
   }
   reCaptchaPopup(reCaptcha): void {
-    const modalRef = this.modalService.open(reCaptcha, { ariaLabelledBy: 'modal-basic-title', size: 'sm', keyboard: false, centered: true });
+    const modalRef = this.modalService.open(reCaptcha, { ariaLabelledBy: 'modal-basic-title', size: 'md', keyboard: false, centered: true });
     modalRef.result.then((result) => {
     }, (reason) => {
       // manually trigger changes so that the form logic for the reCaptcha button can be applied immediately
