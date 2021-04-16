@@ -37,8 +37,8 @@ def get_analytics_data(restaurant_id, format_type):
         end_date = 'today'
         dimensions = 'ga:date'
     elif format_type == 'hourly':
-        start_date = '2daysAgo'
-        end_date = '2daysAgo'
+        start_date = str(date.today().replace(day=1))
+        end_date = 'today'
         dimensions = 'ga:hour'
     elif format_type == 'alltime':
         start_date = '2021-05-01'
