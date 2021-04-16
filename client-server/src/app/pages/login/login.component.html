@@ -300,7 +300,7 @@
 <ng-template #reCaptcha let-modal role="form">
 <div class="modal-body">
 <form [formGroup]="recaptchaForm" *ngIf="recaptchaForm.invalid || closeRecaptchaPopup(modal)">
-  <div class="form-group" style="margin-top: 20px;">
+  <div class="form-group"   style="margin-top: 15px; margin-left: 0px;">
     <ngx-recaptcha2
       #captchaElem
       [size]="'normal'"
