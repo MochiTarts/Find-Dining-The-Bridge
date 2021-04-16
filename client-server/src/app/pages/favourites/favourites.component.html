@@ -1,10 +1,6 @@
 <div *ngIf="restaurants != undefined" class="map">
-    <app-map
-      [restaurants]="restaurants"
-      [userId]="userId"
-      [role]="role"
-    ></app-map>
-  </div>
+  <app-map [restaurants]="restaurants" [userId]="userId" [role]="role"></app-map>
+</div>
 
   <div class="center" style="margin-top: 40px;" id="favourites-label">
     <h2>Favourites</h2>
