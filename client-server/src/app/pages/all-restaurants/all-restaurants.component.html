@@ -60,14 +60,14 @@
           </div>
 
           <button class="btn show-btn" ngbTooltip="Show More Restaurants" placement="top"
-            *ngIf="restaurants.length > 5 && show < restaurants.length"
-            (click)="show = (((restaurants.length - show) >= 5) ? show + 5 : restaurants.length)">
+            *ngIf="restaurants.length > 2 && show < restaurants.length"
+            (click)="show = (((restaurants.length - show) >= 2) ? show + 2 : restaurants.length)">
             Show More
           </button>
 
           <button class="btn show-btn" ngbTooltip="Hide Restaurants" placement="top"
-            *ngIf="show == restaurants.length && restaurants.length > 5"
-            (click)="show = 5">
+            *ngIf="show == restaurants.length && restaurants.length > 2"
+            (click)="show = 2">
             Hide
           </button>
         </div>

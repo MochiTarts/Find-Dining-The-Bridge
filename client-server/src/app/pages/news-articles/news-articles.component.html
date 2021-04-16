@@ -131,7 +131,12 @@
                     <div class="btn" (click)="closeArticleMobile()" placement="top" ngbTooltip="Close Current Article">Close Article</div>
 
                     <h1 class="article-title">{{ selectedArticle.title }}</h1>
-                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:'mediumDate' }}</h3>
+                    <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">
+                        Last Updated {{ (selectedArticle.created_at) | date:'mediumDate' }}
+                    </h3>
+                    <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">
+                        Last Updated {{ (selectedArticle.modified_at) | date:'mediumDate' }}
+                    </h3>
                     <div class="article-content" [innerHTML]="selectedArticle.content"></div>
                 </div>
             </div>

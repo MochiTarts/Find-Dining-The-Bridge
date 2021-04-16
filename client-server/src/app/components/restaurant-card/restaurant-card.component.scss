@@ -67,6 +67,13 @@
   border-color: #84bcdb;
 }
 
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
 @media screen and (max-width: 767px) {
 
 .cardBox {
@@ -108,6 +115,11 @@
   font-size: 15px;
   margin: 0;
   padding-right: 10px;
+}
+
+.btn-container {
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 }

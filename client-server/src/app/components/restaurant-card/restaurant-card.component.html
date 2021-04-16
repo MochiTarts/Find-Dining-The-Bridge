@@ -47,17 +47,7 @@
             </div>
 
             <div id="empty"></div>
-            <div fxLayout="column" fxLayoutAlign="space-between end">
-              <div class="buttons">
-                <button
-                class="btn"
-                [routerLink]="['/restaurant']"
-                [queryParams]="{restaurantId: restaurant._id}"
-                placement="top" ngbTooltip="Visit Restaurant Page"
-                >
-                  View Restaurant
-                </button>
-              </div>
+            <div class="btn-container">
               <div *ngIf="role && pagePath=='/all-listings'">
                 <button
                 class="btn" (click)="addFavourite(restaurant._id)"
@@ -73,6 +63,16 @@
                 placement="top" ngbTooltip="Remove Restaurant as Favourite"
                 >
                   Remove Favourite
+                </button>
+              </div>
+              <div class="buttons">
+                <button
+                class="btn"
+                [routerLink]="['/restaurant']"
+                [queryParams]="{restaurantId: restaurant._id}"
+                placement="top" ngbTooltip="Visit Restaurant Page"
+                >
+                  View Restaurant
                 </button>
               </div>
             </div>
