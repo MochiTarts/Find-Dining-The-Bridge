@@ -24,6 +24,7 @@
           </div>
         </div>
       </div>
+      
       <div class="col">
         <div class="card-body">
           <h2 class="card-title">{{ restaurant.name | titlecase }}</h2>
@@ -76,41 +77,6 @@
               </div>
             </div>
           </div>
-          <!--<div class="row">
-            <div class="col">
-            </div>
-            <div class="col">
-              <div class="row-button" *ngIf="role">
-                <a
-                  class="btn"
-                  [routerLink]="['/restaurant']"
-                  [queryParams]="{
-                    restaurantId: restaurant._id
-                  }"
-                  placement="top" ngbTooltip="Visit Restaurant Page"
-                >
-                  View Restaurant
-                </a>
-              </div>
-              <div class="row-button" *ngIf="role && pagePath=='/all-listings'">
-                <button
-                  class="btn" (click)="addFavourite(restaurant._id)"
-                  placement="top" ngbTooltip="Add Restaurant as Favourite"
-                  [disabled]="favourited"
-                >
-                  Add Favourite
-                </button>
-              </div>
-              <div class="row-button" *ngIf="role && pagePath=='/favourites'">
-                <a
-                  class="btn" (click)="remove(restaurant._id)"
-                  placement="top" ngbTooltip="Remove Restaurant as Favourite"
-                >
-                  Remove Favourite
-                </a>
-              </div>
-            </div>
-          </div>-->
         </div>
       </div>
     </div>

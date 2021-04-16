@@ -49,15 +49,23 @@
   text-align: left;
 }
 
-.dropdown-toggle {
+.dropdown-toggle-btn {
   width: 100%;
   margin: 0;
   border-bottom: solid white 1px;
   border-radius: 0;
-  font-size: 4vw;
+  //font-size: 4vw;
   text-align: center;
   height: fit-content;
   white-space: normal;
+}
+
+.dropdown-toggle-btn:hover .icons {
+  color: #00a4e5;
+}
+
+.dropdown-toggle-btn:hover .number {
+  color: white;
 }
 
 .filter-dropdown {
@@ -65,6 +73,19 @@
   padding: 20px 10px;
   border-radius: 0;
   transition: 1s;
+}
+
+.number {
+  background-color: #00a4e5;
+  height: 21px;
+  width: 21px;
+  border-radius: 50%;
+}
+
+.icons {
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0;
 }
 
 }

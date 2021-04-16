@@ -140,7 +140,11 @@
 @media screen and (max-width: 332px) {
   
 .cardBox {
-  width: 300px;
+  width: 100%;
+}
+
+.card-title-mobile {
+  font-size: 7vw;
 }
 
 }

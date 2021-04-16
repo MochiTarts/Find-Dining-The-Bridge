@@ -1,4 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  faCaretDown
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-filterlist-card',
@@ -13,6 +16,7 @@ export class FilterlistCardComponent implements OnInit {
   @Output() events: EventEmitter<any> = new EventEmitter<any>();
 
   checkMap: boolean[] = new Array(length);
+  faCaretDown = faCaretDown;
 
   constructor() {}
 
@@ -32,6 +36,10 @@ export class FilterlistCardComponent implements OnInit {
 
   removeSpace(string) {
     return string.replace(/\s/g, "");
+  }
+
+  getSelecteds() {
+    return this.checkMap.filter(Boolean).length;
   }
 
 }

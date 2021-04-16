@@ -20,11 +20,38 @@
     </div>
 
     <div class="card-body-mobile">
-      <button class="btn dropdown-toggle" type="button" data-toggle="collapse" [attr.data-target]="'#' + removeSpace(category)">
-        {{ category }}
+      <button class="btn dropdown-toggle-btn" type="button" data-toggle="collapse" [attr.data-target]="'#' + removeSpace(category)">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+          <div style="font-size: 0.9rem;" fxFlexAlign="center">{{ category }}</div>
+          <div style="font-size: 0.6rem;" class="number" fxLayout="column" fxLayoutAlign="center"
+            *ngIf="getSelecteds() > 0">
+            <div>{{ getSelecteds() }}</div>
+          </div>
+
+          <div>
+            <fa-icon [icon]="faCaretDown" class="icons"></fa-icon>
+          </div>
+        </div>
       </button>
 
-      <div role="group" aria-labelledby="card-title" class="filter-dropdown collapse" id="{{removeSpace(category)}}">
+      <div *ngIf="removeSpace(category) === 'Price'" role="group"
+        class="filter-dropdown collapse show" id="{{removeSpace(category)}}">
+        <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
+          <label class="form-check-label">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="{{ sub }}"
+              [(ngModel)]="checkMap[i]"
+              (ngModelChange)="sendList()"
+            />
+            {{ sub }}
+          </label>
+        </div>
+      </div>
+
+      <div *ngIf="removeSpace(category) !== 'Price'" role="group" aria-labelledby="card-title"
+        class="filter-dropdown collapse" id="{{removeSpace(category)}}">
         <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
           <label class="form-check-label">
             <input
