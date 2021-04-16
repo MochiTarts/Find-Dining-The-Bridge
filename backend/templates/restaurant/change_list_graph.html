@@ -40,7 +40,7 @@
             }
             xTitle = 'Hour';
             chartId = "hourly-chart";
-            graphTitle = "Total Pageviews of All Restaurants of Today";
+            graphTitle = "Total Pageviews of All Restaurants Per Hour of this Month";
         }
 
         var options = {
@@ -83,6 +83,7 @@
             method: "GET",
             url: url,
             success: function (restaurants) {
+                //Use the data and create objects with the required parameters
                 var restaurantData = {};
                 restaurantData['label'] = "All Restaurants";
                 restaurantData['backgroundColor'] = randomColorGenerator();
@@ -97,13 +98,12 @@
                     }
                 }
                 restaurantData['data'] = data;
-
                 var ctx = document.getElementById(chartId);
                 var lineChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: labels,
-                        datasets: [restaurantData],
+                        datasets: [restaurantData]
                     },
                     options: options
                 });
@@ -134,7 +134,7 @@
             responsive: true,
             maintainAspectRatio: true,
             legend: {
-                position: 'right'
+                display: false
             },
             title: {
                 display: true,
@@ -153,7 +153,7 @@
                         labelString: xTitle,
                         fontColor: 'black',
                         fontSize: 16
-                    },
+                    }
                 }],
                 yAxes: [{
                     scaleLabel: {
@@ -170,6 +170,7 @@
             method: "GET",
             url: url,
             success: function (restaurants) {
+                //Use the data and create objects with the required parameters
                 var restaurantList = [];
                 for (key in restaurants) {
                     let restaurantData = {};
@@ -191,27 +192,42 @@
                 } else {
                     size = 10;
                 }
+
+                //From the data, select the top 10 highest viewed restaurant
                 for (let i = 0; i < size; i++) {
                     let max = 0;
                     let tempIndex = 0;
-                    let restaurant = {};
                     for (let j = 0; j < restaurantList.length; j++) {
                         if (restaurantList[j] != null && restaurantList[j]['data'][0] >= max) {
                             max = restaurantList[j]['data'][0];
-                            restaurant = restaurantList[j];
                             tempIndex = j;
                         }
+                    }
+                    if (max == 0) {
+                        break;
                     }
                     labels.push(restaurantList[tempIndex]['label']);
                     datasets.push(restaurantList[tempIndex]);
                     delete restaurantList[tempIndex];
                 }
+
+                //Separate labels are not needed so we must create new objects without label property
+                let backgroundColor = [];
+                let data = [];
+                for (let i = 0; i < datasets.length; i++) {
+                    backgroundColor.push(datasets[i]['backgroundColor']);
+                    data.push(datasets[i]['data'][0]);
+                }
+
                 var ctx = document.getElementById(chartId);
                 var lineChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: labels,
-                        datasets: datasets,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: backgroundColor
+                        }]
                     },
                     options: options
                 });
@@ -221,24 +237,38 @@
             }
         });
     }
-
-    $.when(barGraph("daily")).then(paretoGraph("daily")).then(barGraph("hourly"));
+    $.when(paretoGraph("daily")).then(barGraph("daily")).then(barGraph("hourly"));
     // paretoGraph("alltime");
+
+    function toggleGraphs() {
+        var graphs = document.getElementById('graphs');
+        if (graphs.style.display == "none") {
+            graphs.style.display = "block";
+        } else {
+            graphs.style.display = "none";
+        }
+    }
+
 </script>
 {% endblock %}
 {% block content %}
-<hr>
-<div style="margin:auto; width:800px;">
-    <canvas id="daily-chart"></canvas>
+<button class="button" type="button" onclick="toggleGraphs()" style="margin-bottom: 10px;">Toggle Graphs</button>
+<div id="graphs" style="display: none; padding-top: 15px; padding-bottom: 75px;">
+    <hr>
+    <h1 style="font-weight: bold; font-size: 32px;">All Restaurants</h1>
+    <div style="margin:auto; width:1000px;">
+        <canvas id="daily-chart"></canvas>
+    </div>
+    <div style="margin:auto; width:1000px;">
+        <canvas id="hourly-chart"></canvas>
+    </div>
+    <div style="margin:auto; width:1000px;">
+        <canvas id="top-10-daily-chart"></canvas>
+    </div>
+    <!-- <div style="margin:auto; width:800px;">s
+        <canvas id="top-10-alltime-chart"></canvas>
+    </div> -->
+    <hr>
 </div>
-<div style="margin:auto; width:800px;">
-    <canvas id="hourly-chart"></canvas>
-</div>
-<div style="margin:auto; width:800px;">
-    <canvas id="top-10-daily-chart"></canvas>
-</div>
-<!-- <div style="margin:auto; width:800px;">s
-    <canvas id="top-10-alltime-chart"></canvas>
-</div> -->
 {{ block.super }}
 {% endblock %}

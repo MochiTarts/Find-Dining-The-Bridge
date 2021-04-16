@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from utils.math import get_nearby_restaurants
 from sduser.utils import send_email_password_reset, send_email_deactivate, send_email_verification
 from sduser.forms import SDPasswordChangeForm
+from sduser.backends import construct_token_response_for_user
 from smtplib import SMTPException
 import json
 import ast
@@ -155,7 +156,9 @@ class SDUserChangePasswordView(APIView):
             form.save()
             # user.set_password(form.cleaned_data['new_password2'])
             # user.save()
-            return JsonResponse({'message': 'Password have been changed'})
+
+            # need to renew the JWT
+            return construct_token_response_for_user(user)
         else:
             return JsonResponse(form.errors.get_json_data(escape_html=True), status=400)
 
