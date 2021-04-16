@@ -528,6 +528,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  closeRecaptchaPopup(modal): void {
+    modal.dismiss();
+  }
+
   onStrengthChanged(strength: number) {
     this.strength = strength;
   }
@@ -535,6 +539,7 @@ export class LoginComponent implements OnInit {
   // just in case
   onError(event: any) {
     this.signupErrorMessage = "We're sorry, something went wrong with authentication. If this keeps up, please contact info@finddining.ca for more inquiries.";
+    this.isSignUpFailed = true;
     // manually trigger change detection to have error messages render
     this.ref.detectChanges();
   }
