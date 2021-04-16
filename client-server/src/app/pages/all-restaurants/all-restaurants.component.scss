@@ -47,7 +47,7 @@
 }
 
 .filters {
-  display: block;
+  margin-top: 20px;
 }
 
 .filters-mobile {
@@ -87,8 +87,7 @@
 }
 
 .restaruant-listings-box {
-  min-height: 900px;
-
+  min-height: 200px;
 }
 
 .filter-button {
@@ -111,6 +110,7 @@
   z-index: 1;
   background-color: white;
   transition: 1s;
+  overflow-y: scroll;
 }
 
 .restaurant-card-container {

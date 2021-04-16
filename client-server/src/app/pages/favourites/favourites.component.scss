@@ -88,8 +88,7 @@
 }
 
 .restaruant-listings-box {
-  min-height: 1100px;
-  overflow: hidden;
+  min-height: 200px;
 }
 
 .row {
@@ -116,6 +115,7 @@
   z-index: 1;
   background-color: white;
   transition: 1s;
+  overflow-y: scroll;
 }
 
 .restaurant-card-container {
