@@ -6,14 +6,16 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
 <script>
+    var endpoint = "/api/restaurant/" + window.location.href.split("/")[7] + "/traffic/";
+    
     var randomColorGenerator = function () {
         var r = Math.floor(Math.random() * 255);
         var g = Math.floor(Math.random() * 255);
         var b = Math.floor(Math.random() * 255);
         return "rgb(" + r + "," + g + "," + b + ")";
     };
-    var endpoint = "/api/restaurant/" + window.location.href.split("/")[7] + "/traffic/";
 
     function barGraph(format_type) {
         let url = "";
@@ -121,6 +123,25 @@
         }
     }
 
+    function downloadAll() {
+        var barDaily = document.getElementById("daily-chart");
+        var barHourly = document.getElementById("hourly-chart");
+        var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext("2d");
+
+        ctx.canvas.width = 1000;
+        ctx.canvas.height = 1000;
+        ctx.drawImage(barDaily, 0, 0);
+        ctx.drawImage(barHourly, 0, 500);
+
+        var pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "pt",
+            format: [750, 750]
+        });
+        pdf.addImage(canvas, 'PNG', 0, 0);
+        pdf.save('{{original.email}}' + '.pdf');
+    }
 </script>
 {% endblock %}
 {% block content %}
@@ -128,6 +149,7 @@
 <div id="graphs" style="display: none; padding-top: 15px; padding-bottom: 75px;">
     <hr>
     <h1 style="font-weight: bold; font-size: 32px;">{{ original }}</h1>
+    <button class="button" type="button" onclick="downloadAll()" style="float: right;">Export Graphs</button>
     <div style="margin:auto; width:1000px;">
         <canvas id="daily-chart"></canvas>
     </div>
