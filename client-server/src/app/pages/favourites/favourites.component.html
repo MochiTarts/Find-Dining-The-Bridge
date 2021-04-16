@@ -42,17 +42,19 @@
 
         <button class="btn filter-button" (click)="filterToggle()">Filter</button>
 
-        <div class="filters-mobile" id="filters-mobile" style="margin-right: -250px;">
-          <app-filterlist-card [category]="'Price'"
-            [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
-            (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">
-          </app-filterlist-card>
-          <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
-            [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
-          </app-filterlist-card>
-          <app-filterlist-card [category]="'Restaurant Characteristics'" [subcategories]="allServices"
-            [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
-          </app-filterlist-card>
+        <div class="filters-mobile mat-elevation-z8" id="filters-mobile" style="margin-right: -400px;">
+          <div fxLayout="column">
+            <app-filterlist-card [category]="'Price'"
+              [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
+              (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">
+            </app-filterlist-card>
+            <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
+              [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
+            </app-filterlist-card>
+            <app-filterlist-card [category]="'Characteristics'" [subcategories]="allServices"
+              [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
+            </app-filterlist-card>
+          </div>
         </div>
 
         <div class="restaruant-listings-box">

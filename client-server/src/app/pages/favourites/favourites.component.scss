@@ -110,8 +110,11 @@
   top: 0;
   right: 0;
   height: 100%;
+  max-width: 200px;
+  width: 60%;
+  min-width: 150px;
   z-index: 1;
-  background-color: #007faa;
+  background-color: white;
   transition: 1s;
 }
 
