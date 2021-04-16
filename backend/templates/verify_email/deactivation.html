@@ -1,6 +1,6 @@
 <p>Hello {{ user.username }},</p>
 <p>Your account for Find Dining has been deactivated.</p>
-<p>If this was not requested by you, please follow the link below to reactivate and we suggest you to change your password immediately.</p>
+<p>If this was not requested by you, please follow the link below to reactivate. We suggest you change your password immediately.</p>
 <p><a href="{{ protocal }}://{{ domain }}{% url 'verify_email' uidb64=uid token=token %}" class="verification" >Reactivate my account for Find Dining</a></p>
 
 <p>Thanks,</p>

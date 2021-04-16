@@ -121,9 +121,9 @@
                   <mat-error *ngIf="password1.errors && password1.errors.required && f.submitted">Password is required</mat-error>
                   <mat-error *ngIf="password1.errors && password1.errors.minlength && f.submitted">Password must be at least 8 characters</mat-error>
                 </mat-form-field>
-                <mat-hint align="end" aria-live="polite" *ngIf="password1.value">
+                <!--mat-hint align="end" aria-live="polite" *ngIf="password1.value">
                   {{password1.value.length}} / {{passwordComponent.max}}
-                </mat-hint>
+                </mat-hint-->
                 <!--@angular-material-extensions/password-strength's main component-->
                 <mat-password-strength #passwordComponent (onStrengthChanged)="onStrengthChanged($event)"
                   [password]="password1.value">
@@ -298,15 +298,18 @@
 
 <!-- Popup reCaptcha -->
 <ng-template #reCaptcha let-modal role="form">
-<form [formGroup]="recaptchaForm">
+<div class="modal-body">
+<form [formGroup]="recaptchaForm" *ngIf="recaptchaForm.invalid || closeRecaptchaPopup(modal)">
   <div class="form-group" style="margin-top: 20px;">
     <ngx-recaptcha2
       #captchaElem
+      [size]="'normal'"
       [siteKey]="siteKey"
       formControlName="recaptcha"
     ></ngx-recaptcha2>
   </div>
 </form>
+</div>
 </ng-template>
 
 

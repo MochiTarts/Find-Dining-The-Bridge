@@ -131,6 +131,38 @@
   <button type="button" class="register-btn" (click)="gotoRegister()">Register Now</button>
 </div>
 
+<!-- part 6 -->
+<div class="box-4" id="contact_us">
+  <div class="form">
+    <p class="title-4" tabindex="0" id="contact_us_label">We would love to hear from you!</p>
+    <form [formGroup]="messageForm" role="form" aria-labelledby="contact_us_label">
+      <div class="form-group">
+        <label for="name">Name <app-required-star></app-required-star></label>
+        <input type="text" class="form-control" id="name" formControlName="name" aria-required="true" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email <app-required-star></app-required-star></label>
+        <input type="text" class="form-control" id="email" formControlName="email" aria-required="true" />
+      </div>
+      <div class="form-group">
+        <label for="message">Message <app-required-star></app-required-star></label>
+        <textarea type="text" class="form-control" id="message" name="message" rows="3"
+          formControlName="message" aria-required="true"></textarea>
+      </div>
+      <div style="text-align: center;">
+        <button
+          type="button"
+          class="register-btn"
+          (click)="onSubmit()"
+          [disabled]="messageForm.invalid"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="bg2" style="padding: 10px;"></div>
 
 <!-- Subscriber Profile Form -->
