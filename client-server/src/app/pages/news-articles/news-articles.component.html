@@ -18,7 +18,7 @@
         <div class="carousel-row">
             <div class="carousel">
                 <ivy-carousel
-                style="max-width: fit-content;"
+                style="max-width: fit-content; margin: auto;"
                 *ngIf="latestArticles.length"
                 [images]="latestArticles"
                 [margin]="30"
@@ -51,7 +51,7 @@
     </div>
 
     <div class="main-container">
-        <div class="row no-gutters article-row" *ngIf="filteredArticles.length">
+        <div class="row no-gutters article-row">
             <div class="col-lg-10 article-list-col">
                 <div class="article-list col-12" id="article-list" fxLayout="column" fxLayoutAlign="space-between">
                     <div class="tab-content" id="pills-tabContent">
