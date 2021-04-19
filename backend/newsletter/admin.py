@@ -29,7 +29,6 @@ class NLUserAdmin(admin.ModelAdmin):
         actions = OrderedDict(reversed(list(actions.items())))
         return actions
 
-    
     def generate_google_spreadsheet(self, request, queryset):
         try:
             # TODO create_user_emails_sheets_NLUser
@@ -39,11 +38,10 @@ class NLUserAdmin(admin.ModelAdmin):
             messages.error(
                 request, 'Google spreadsheet generation failed, please try again or contact Find Dining team for support.')
 
-
         generate_google_spreadsheet.short_description = 'generate google spreadsheet (of newsletter users)'
 
-
     # override changelist_view to allow certain action (e.g. generate google sheet) to run without selecting any object
+
     def changelist_view(self, request, extra_context=None):
         actions = self.get_actions(request)
         if (actions and request.method == 'POST' and 'index' in request.POST and

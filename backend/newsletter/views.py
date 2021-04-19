@@ -66,7 +66,7 @@ class NLUserSignupView(APIView):
         """ insert a newsletter user into the db provided all the user fields """
         try:
             validate(instance=request.data,
-                    schema=newsletter_signup_schema)
+                     schema=newsletter_signup_schema)
             body = request.data
 
             ip = get_client_ip_address(request)
@@ -78,7 +78,7 @@ class NLUserSignupView(APIView):
             if invalid:
                 return JsonResponse(invalid, status=400)
             user = NLUser.signup(first_name=body['first_name'], last_name=body['last_name'], email=body['email'],
-                                consent_status=body['consent_status'], expired_at=date.today() + relativedelta(months=+6))
+                                 consent_status=body['consent_status'], expired_at=date.today() + relativedelta(months=+6))
             return JsonResponse(model_to_dict(user))
         except jsonschema.ValidationError as e:
             try:

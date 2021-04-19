@@ -44,11 +44,12 @@ class NLUser(models.Model):
         :param consent_status: consent status regarding user's choice of receiving project updates
         :return: new NLUser Object
         """
-        
+
         try:
-            user = cls(first_name=first_name, last_name=last_name, email=email, consent_status=consent_status, expired_at=expired_at)
+            user = cls(first_name=first_name, last_name=last_name, email=email,
+                       consent_status=consent_status, expired_at=expired_at)
             if consent_status == "EXPRESSED":
-                user.subscribed_at=date.today()
+                user.subscribed_at = date.today()
             NLUser.objects.get(pk=email)
             raise ValueError('This email has already signed up.')
         except ObjectDoesNotExist:
@@ -72,7 +73,7 @@ class NLUser(models.Model):
             try:
                 validate_name(fields['first_name'])
             except ValidationError as e:
-                invalid['Invalid'].append('first_name')  
+                invalid['Invalid'].append('first_name')
         else:
             invalid['Invalid'].append('first_name')
 
@@ -80,7 +81,7 @@ class NLUser(models.Model):
             try:
                 validate_name(fields['last_name'])
             except ValidationError as e:
-                invalid['Invalid'].append('last_name')  
+                invalid['Invalid'].append('last_name')
         else:
             invalid['Invalid'].append('last_name')
 
@@ -129,7 +130,7 @@ class NLAudit(models.Model):
         if created:
             audit_log.count_daily = 1
             audit_log.count = 1
-            audit_log.last_signup_time=timezone.now()
+            audit_log.last_signup_time = timezone.now()
             audit_log.save()
         # update existing
         else:
@@ -138,7 +139,7 @@ class NLAudit(models.Model):
             else:
                 audit_log.count_daily = 1
             audit_log.count = audit_log.count + 1
-            audit_log.last_signup_time=timezone.now()
+            audit_log.last_signup_time = timezone.now()
             if audit_log.count_daily > 100:
                 audit_log.temp_blocked = True
             elif audit_log.count > 2000:
@@ -150,5 +151,5 @@ class NLAudit(models.Model):
 
             if audit_log.perm_blocked:
                 return True
-        
+
         return audit_log.temp_blocked
