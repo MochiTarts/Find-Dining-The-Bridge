@@ -19,7 +19,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
   pricepoints: any = [];
   pricepoint: string = '';
   serviceList: string = '';
-  currentPage: string = '';
+  pagePath: string = '';
 
   constructor(
     private userService: UserService,
@@ -29,39 +29,39 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-    this.userId = user.user_id
-    this.role = user.role
-    this.currentPage = this.router.url;
+      this.userId = user.user_id
+      this.role = user.role
+      this.pagePath = this.router.url;
 
-    this.pricepoints = [
-      {key: "$", value: "LOW"},
-      {key: "$$", value: "MID"},
-      {key: "$$$", value: "HIGH"},
-      {key: "$$$$", value: "EXHIGH"}
-    ]
+      this.pricepoints = [
+        {key: "$", value: "LOW"},
+        {key: "$$", value: "MID"},
+        {key: "$$$", value: "HIGH"},
+        {key: "$$$$", value: "EXHIGH"}
+      ]
 
-    for (let cuisine of this.restaurant.cuisines) {
-      if (this.cuisineList == '') {
-        this.cuisineList = String(cuisine);
-      } else {
-        this.cuisineList = this.cuisineList + ", " + String(cuisine);
+      for (let cuisine of this.restaurant.cuisines) {
+        if (this.cuisineList == '') {
+          this.cuisineList = String(cuisine);
+        } else {
+          this.cuisineList = this.cuisineList + ", " + String(cuisine);
+        }
       }
-    }
 
-    let price = String(this.restaurant.pricepoint);
-    for (let p of this.pricepoints) {
-      if (p["value"] == price) {
-        this.pricepoint = p["key"];
+      let price = String(this.restaurant.pricepoint);
+      for (let p of this.pricepoints) {
+        if (p["value"] == price) {
+          this.pricepoint = p["key"];
+        }
       }
-    }
 
-    for (let service of this.restaurant.offer_options) {
-      if (this.serviceList == '') {
-        this.serviceList = String(service);
-      } else {
-        this.serviceList = this.serviceList + " | " + String(service);
+      for (let service of this.restaurant.offer_options) {
+        if (this.serviceList == '') {
+          this.serviceList = String(service);
+        } else {
+          this.serviceList = this.serviceList + " | " + String(service);
+        }
       }
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {

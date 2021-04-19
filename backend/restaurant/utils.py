@@ -7,6 +7,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 User = get_user_model()
 
+
 def send_posts_notify_email(post, restaurant_name, request):
     """ Send email to all admins, notifying
     them of a new restaurant post. Email will contain the link
@@ -30,12 +31,12 @@ def send_posts_notify_email(post, restaurant_name, request):
     else:
         link = "https://" + link + "/api/admin/restaurant/restaurantpost/" + \
             str(post._id) + "/change/"
-            
+
     content = "<p>New restaurant post posted by: {}</p>".format(restaurant_name) + \
               "<a href={}>Link to post</a>".format(link)
     send_mail(subject, strip_tags(content), from_email="admin@finddining.ca",
-        recipient_list=admins, html_message=content)
-              
+              recipient_list=admins, html_message=content)
+
 
 def send_approval_email(names, receiver, profile_title, profile_type):
     """ Sends an email to the restaurant owner, informing them
@@ -63,7 +64,7 @@ def send_approval_email(names, receiver, profile_title, profile_type):
         content += '<p>Your food profile for <i>' + profile_title + \
             '</i> has been approved and is published to the live site.</p>'
     content += '<p>Thanks,</p>'
-    content += '<p>Your SCDining team</p>'
+    content += '<p>Your Find Dining team</p>'
 
     if profile_type == 'restaurant':
         subject = "Restaurant Profile Approved by Find Dining"
@@ -105,7 +106,7 @@ def send_reject_email(names, receiver, profile_title, profile_type):
     else:
         content += '<p>Once you feel confident about your food profile, feel free to submit it again for us to reivew!</p>'
     content += '<p>Thanks,</p>'
-    content += '<p>Your SCDining team</p>'
+    content += '<p>Your Find Dining team</p>'
 
     if profile_type == 'restaurant':
         subject = "Restaurant Profile Rejected by Find Dining"
@@ -145,7 +146,7 @@ def send_unpublish_email(names, receiver, profile_title, profile_type):
     content += '<p>Please check the comments from administrator for the detail reason.</p>'
     content += '<p>Note: this does not apply to the newest submission that has not been reviewed yet. If you have submitted a newer profile please wait for it to be reviewed.</p>'
     content += '<p>Thanks,</p>'
-    content += '<p>Your SCDining team</p>'
+    content += '<p>Your Find Dining team</p>'
 
     message = ""
     if profile_type == 'restaurant':

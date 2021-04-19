@@ -6,15 +6,18 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.response import Response
 
+
 class SubscriberProfileInsert(serializers.Serializer):
     first_name = serializers.CharField(max_length=30)
     last_name = serializers.CharField(max_length=150)
     postalCode = serializers.CharField(max_length=7)
     phone = serializers.IntegerField()
-    consent_status = serializers.ChoiceField(required=False, choices=ConsentStatus.choices())
+    consent_status = serializers.ChoiceField(
+        required=False, choices=ConsentStatus.choices())
 
     class Meta:
         ref_name = None
+
 
 subscriber_profile_signup_post_response = {
     "200": openapi.Response(
@@ -62,15 +65,18 @@ subscriber_profile_profile_get_response = {
     )
 }
 
+
 class SubscriberProfileUpdate(serializers.Serializer):
     first_name = serializers.CharField(max_length=30, required=False)
     last_name = serializers.CharField(max_length=150, required=False)
     postalCode = serializers.CharField(max_length=7, required=False)
     phone = serializers.IntegerField()
-    consent_status = serializers.ChoiceField(required=False, choices=ConsentStatus.choices())
+    consent_status = serializers.ChoiceField(
+        required=False, choices=ConsentStatus.choices())
 
     class Meta:
         ref_name = None
+
 
 subscriber_profile_profile_put_response = {
     "200": openapi.Response(

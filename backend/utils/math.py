@@ -8,6 +8,7 @@ from restaurant.models import PendingRestaurant, Restaurant
 from operator import itemgetter
 import ast
 
+
 def calculate_distance(user_coord, restr_coord):
     """ Calculates the distance between two coordinates
 
@@ -25,7 +26,8 @@ def calculate_distance(user_coord, restr_coord):
     lat_distance = restr_lat - user_lat
     lng_distance = restr_lng - user_lng
 
-    a = sin(lat_distance/2)**2 + cos(user_lat)*cos(restr_lat)*sin(lng_distance/2)**2
+    a = sin(lat_distance/2)**2 + cos(user_lat) * \
+        cos(restr_lat)*sin(lng_distance/2)**2
     c = 2*atan2(sqrt(a), sqrt(1-a))
 
     distance = radius * c
@@ -56,7 +58,8 @@ def get_nearby_restaurants(user_id, role):
             owner_user_id=user_id).first()
 
     if not user:
-        raise ObjectDoesNotExist("The user with the given user_id: "+ str(user_id) +" does not exist")
+        raise ObjectDoesNotExist(
+            "The user with the given user_id: " + str(user_id) + " does not exist")
 
     user_location = ast.literal_eval(user.GEO_location)
     nearest = []

@@ -17,16 +17,17 @@ from sduser.forms import SDUserCreateForm
 
 from smtplib import SMTPException
 
+from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
 from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
-from sduser.utils import send_email_verification, verify_email
+from sduser.utils import send_email_verification
 
 import json
 import jwt
@@ -53,7 +54,8 @@ class EmailBackend(ModelBackend):
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
-            user = UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
+            user = UserModel.objects.filter(Q(username__iexact=username) | Q(
+                email__iexact=username)).order_by('id').first()
             if user.check_password(password) and self.user_can_authenticate(user):
                 return user
         else:
@@ -69,17 +71,15 @@ class EmailBackend(ModelBackend):
         return user if self.user_can_authenticate(user) else None
 
 
-@swagger_auto_schema(
-    method='post', request_body=swagger.UserSignUp,
-    responses=swagger.user_signup_post_response,
-    operation_id="POST /auth/signup/")
-@api_view(['POST'])
-def signup(request):
+class SDUserSignupView(APIView):
     """
     validate registration form and create a disabled SDUser from the form (and sends verifiication email)
     """
-    if request.method == 'POST':
-        user = json.loads(request.body)
+    permission_classes = (AllowAny,)
+
+    @swagger_auto_schema(operation_id="POST /auth/signup")
+    def post(self, request):
+        user = request.data
         invalid = validate_signup_user(user)
         username = user['username']
         email = user['email']
@@ -98,8 +98,6 @@ def signup(request):
                 return JsonResponse({'message': 'unable to create user'}, status=400)
 
         return JsonResponse({'invalid': invalid, 'message': 'Please make sure all fields are valid!'}, status=400)
-    else:
-        return JsonResponse({'Error': 'invalid request'}, status=404)
 
 
 def create_disable_user_and_send_verification_email(user, password, request):
@@ -115,7 +113,7 @@ def create_disable_user_and_send_verification_email(user, password, request):
         # create Admin user if the email belongs to the Admin
         if user['email'] == settings.ADMIN_EMAIL:
             UserModel.objects.create_superuser(
-            username=user['username'], email=user['email'], password=user['password'], role=user['role'], )
+                username=user['username'], email=user['email'], password=user['password'], role=user['role'], )
             return JsonResponse({'message': "An admin account has been created. You can now log in with the registered credentials."})
         user = UserModel.objects.create_user(
             username=user['username'], email=user['email'], password=user['password'], role=user['role'])
@@ -128,7 +126,7 @@ def create_disable_user_and_send_verification_email(user, password, request):
             return JsonResponse({'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
         except (BadHeaderError, SMTPException):
             user.delete()
-            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact find dining support.'}, status=503)
+            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact Find Dining support.'}, status=503)
 
     # this should never happen
     else:
@@ -142,7 +140,7 @@ def check_user_status(user):
     """
     if user.is_blocked:
         raise AuthenticationFailed(
-            'This user has been blocked. If you think this is a mistake, please contact find dining team to resolve it',
+            'This user has been blocked. If you think this is a mistake, please contact Find Dining team to resolve it',
             'user_blocked',
         )
     elif not user.is_active:
@@ -320,7 +318,8 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
                 if old_user['profile_id'] is None:
                     del response.data['access']
                     # need to obtain it manually because we need to update the profile id (by forcing a read from the db)
-                    new_token = SDUserCookieTokenObtainPairSerializer.get_token(user)
+                    new_token = SDUserCookieTokenObtainPairSerializer.get_token(
+                        user)
                     response.data['access'] = str(new_token.access_token)
                     # also update the refresh token
                     new_refresh_token = str(new_token)
@@ -342,3 +341,32 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
         return super().finalize_response(request, response, *args, **kwargs)
 
     serializer_class = SDUserCookieTokenRefreshSerializer
+
+
+def construct_token_response_for_user(user):
+    """
+    construct authentication response and update user with refresh token
+
+    user -- a SDUser
+
+    returns a response containing access token (and refresh token in httpOnly cookie)
+    """
+    # generate token without username & password
+    # need to use customized one to have all the information we need
+    #token = RefreshToken.for_user(user)
+    token = SDUserCookieTokenObtainPairSerializer.get_token(user)
+
+    response = {}
+    #response['username'] = user.username
+    response['access_token'] = str(token.access_token)
+    #response['refresh_token'] = str(token)
+    cookie_max_age = 3600 * 24
+    # print(dir(token))
+    refresh_token = str(token)
+    user.refresh_token = refresh_token
+    user.save()
+    res = Response(response)
+    res.set_cookie('refresh_token', refresh_token,
+                   max_age=cookie_max_age, httponly=True)
+
+    return res

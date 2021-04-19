@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class ConsentStatus(Enum):
     """ The consent status a user can have """
     EXPRESSED = 'Expressed Consent'

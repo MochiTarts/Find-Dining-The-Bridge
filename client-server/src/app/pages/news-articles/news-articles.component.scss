@@ -66,16 +66,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .carousel-row {
     min-height: 400px;
+    padding: 0 20vw;
     background-color: rgba($color: #fff, $alpha: 0.75);
 }
 
 .carousel-row-mobile {
     display: none;
-}
-
-.carousel {
-    margin: auto;
-    padding: 0px 5rem;
 }
 
 /* DISPLAYED ARTICLES */
@@ -178,7 +174,11 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (max-width: 1301px) {
 
 .main-container {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-bottom: 50px;
     position: relative;
+    min-height: 745px;
 }
 
 .article-row {
@@ -195,7 +195,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .article-mobile {
     display: block;
-    position: relative;
 }
 
 .article-list-mobile {
@@ -204,6 +203,10 @@ h1, h2, h3, h4, h5, h6 {
     transition: 1s;
     display: block;
     opacity: 1;
+}
+
+.headline-card {
+    padding: 10px 0px;
 }
 
 .article-container-mobile {
@@ -216,22 +219,18 @@ h1, h2, h3, h4, h5, h6 {
 
 .side-filter {
     position: absolute;
-    margin-top: 75px;
     top: 0;
     right: 0;
     height: 100%;
-    width: 18rem;
-    opacity: 1;
+    background-color: white;
+    width: 24rem;
+    max-width: 70%;
     display: block;
     -webkit-transition: 1s;
     transition: 1s;
     margin-right: -400px;
 }
 
-}
-
-@media screen and (max-width: 945px) {
-    
 .carousel-row {
     display: none;
 }
@@ -243,20 +242,12 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0 5rem;
 }
 
-.carousel {
-    padding: 0 0rem;
-}
-
 }
 
 @media screen and (max-width: 839px) {
 
 .underline {
     padding-top: 0px;
-}
-
-.headline-card {
-    padding: 10px 0px;
 }
 
 .nav-pills {
@@ -292,6 +283,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-header .nav-item {
     font-size: 0.9rem;
+}
+
+.carousel-row-mobile {
+    padding: 0 1rem;
 }
 
 .main-container {

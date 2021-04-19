@@ -22,6 +22,7 @@ def geocode(address):
     else:
         return results[0]['geometry']['location']
 
+
 def in_scarborough(coord):
     """
     param: a tuple containing the geographic coordinates

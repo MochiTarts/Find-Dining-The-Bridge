@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 
-from sduser.backends import SDUserCookieTokenObtainPairSerializer, create_disable_user_and_send_verification_email, check_user_status
+from sduser.backends import construct_token_response_for_user, create_disable_user_and_send_verification_email, check_user_status
 from sduser.forms import SDUserCreateForm
 
 from google.oauth2 import id_token
@@ -54,13 +54,13 @@ class GoogleView(APIView):
         r = requests.get(
             'https://www.googleapis.com/oauth2/v2/userinfo', params=payload)
         data = json.loads(r.text)
-        #print(data)
+        # print(data)
 
         if 'error' in data:
             content = {
                 'message': 'wrong google token / this google token is already expired.'}
             return Response(content)
-        
+
         auth_id = data['id']
         # this should be the same as the one obtained from google idToken
         email = data['email']
@@ -70,7 +70,7 @@ class GoogleView(APIView):
             googleJWT = id_token.verify_oauth2_token(request.data.get(
                 'idToken'), google_requests.Request(), settings.GOOGLE_OAUTH2_CLIENT_ID)
             #print('user info from google idToken:')
-            #print(googleJWT)
+            # print(googleJWT)
             # this is definitive as it is not modifiable
             email = googleJWT['email']
             # get user by auth Id (3rd party id) Or email
@@ -95,10 +95,11 @@ class GoogleView(APIView):
             if not googleJWT['email_verified']:
                 user.is_active = False
                 user.save()
-                create_disable_user_and_send_verification_email(user, password, request)
+                create_disable_user_and_send_verification_email(
+                    user, password, request)
                 check_user_status(user)
 
-        response = construct_response_for_3rd_party_auth(user)
+        response = construct_token_response_for_user(user)
 
         return response
 
@@ -137,7 +138,7 @@ class FacebookView(APIView):
         data = json.loads(r.text)
 
         #print('user profile fields from facebook:')
-        #print(data)
+        # print(data)
 
         if 'error' in data:
             content = {'message': 'invalid facebook token or user id'}
@@ -166,38 +167,9 @@ class FacebookView(APIView):
                 return JsonResponse({'message': 'no user is associated with this facebook account, please register an account first'}, status=400)
             user = create_default_user_for_3rd_party(email, auth_id, role)
 
-        response = construct_response_for_3rd_party_auth(user)
+        response = construct_token_response_for_user(user)
 
         return response
-
-
-def construct_response_for_3rd_party_auth(user):
-    """
-    construct authentication response and update user with refresh token
-
-    user -- a SDUser
-
-    returns a response containing access token (and refresh token in httpOnly cookie)
-    """
-    # generate token without username & password
-    # need to use customized one to have all the information we need
-    #token = RefreshToken.for_user(user)
-    token = SDUserCookieTokenObtainPairSerializer.get_token(user)
-
-    response = {}
-    #response['username'] = user.username
-    response['access_token'] = str(token.access_token)
-    #response['refresh_token'] = str(token)
-    cookie_max_age = 3600 * 24
-    # print(dir(token))
-    refresh_token = str(token)
-    user.refresh_token = refresh_token
-    user.save()
-    res = Response(response)
-    res.set_cookie('refresh_token', refresh_token,
-                   max_age=cookie_max_age, httponly=True)
-
-    return res
 
 
 def create_default_user_for_3rd_party(email, auth_id, role):

@@ -11,8 +11,6 @@ credentials = service_account.Credentials.from_service_account_info({
     scopes=['https://www.googleapis.com/auth/analytics.readonly'],
 )
 
-analyticService = build('analytics', 'v3', credentials=credentials, cache_discovery=False)
-
 
 def get_access_token():
     """ Function for retrieving OAuth2 access token """
@@ -27,19 +25,25 @@ def get_analytics_data(restaurant_id, format_type):
     :return: Google Analytics Core Reporting response data given the specific query
         parameters
     """
+    analyticService = build(
+        'analytics', 'v3', credentials=credentials, cache_discovery=False)
+
     VIEW_ID = settings.GA_VIEW_ID
     start_date = ''
     end_date = ''
     dimensions = ''
     if format_type == 'daily':
         start_date = str(date.today().replace(day=1))
-        end_date ='today'
+        end_date = 'today'
         dimensions = 'ga:date'
     elif format_type == 'hourly':
-        start_date ='2daysAgo'
-        end_date ='2daysAgo'
+        start_date = str(date.today().replace(day=1))
+        end_date = 'today'
         dimensions = 'ga:hour'
-    # elif format_type == 'ALLTIME':
+    elif format_type == 'alltime':
+        start_date = '2021-05-01'
+        end_date = 'today'
+        dimensions = 'ga:month'
 
     data = analyticService.data().ga().get(
         ids='ga:' + VIEW_ID,
@@ -52,4 +56,4 @@ def get_analytics_data(restaurant_id, format_type):
         fields='totalsForAllResults,rows').execute()
     return data
 
-#print(get_analytics_data('605b55d192c9e40e98c1877a'))
+# print(get_analytics_data('605b55d192c9e40e98c1877a'))

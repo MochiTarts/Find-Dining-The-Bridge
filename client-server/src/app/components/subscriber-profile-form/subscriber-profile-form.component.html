@@ -32,6 +32,13 @@
           class="error-label"
           [name]="'errorName'"
           [message]="validator.errors['first_name']"
+          tabindex="validator.errors['first_name'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPost'"
+          [message]="validator.errors['first_name_p']"
+          tabindex="validator.errors['first_name_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
       <div class="form-group">
@@ -49,6 +56,13 @@
           class="error-label"
           [name]="'errorName'"
           [message]="validator.errors['last_name']"
+          tabindex="validator.errors['last_name'] ? 0 : -1"
+        ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorPost'"
+          [message]="validator.errors['last_name_p']"
+          tabindex="validator.errors['last_name_p'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
       <div class="form-group">
@@ -66,6 +80,7 @@
           class="error-label"
           [name]="'errorPostalCode'"
           [message]="validator.errors['postalCode']"
+          tabindex="validator.errors['postalCode'] ? 0 : -1"
         ></app-dynamic-label>
       </div>
       <div class="form-group">
@@ -81,29 +96,34 @@
         </div>
         <app-dynamic-label class="error-label"
         [name]="'errorPhone'"
-        [message]="validator.errors['phone']" ></app-dynamic-label>
+        [message]="validator.errors['phone']"
+        tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
       </div>
       <div *ngIf="profileId == null">
         <div class="form-group">
-          <div class="input-group" *ngIf="!closeButton">
-            <input
-              id="casl"
-              type="checkbox"
-            />
-            <label for="casl" style="padding-left: 5px;">
+          <div class="input-group form-check" *ngIf="!closeButton">
+            <label class="form-check-label" for="casl" style="margin-right: 10px;">
+              <input
+                id="casl"
+                type="checkbox"
+                class="form-check-input"
+              />
               <b>Please add me to your mailing list so I can receive information on promotions and updates to Find Dining!</b>
             </label>
           </div>
         </div>
         <div class="form-group">
-          <div class="input-group">
-            <input
-              id="terms-of-service"
-              type="checkbox"
-              formControlName="terms"
-              aria-required="true"
-            />
-            <label for="terms-of-service" style="padding-left: 5px;">I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
+          <div class="input-group form-check">
+            <label class="form-check-label" for="terms-of-service" style="margin-right: 10px;">
+              <input
+                id="terms-of-service"
+                type="checkbox"
+                formControlName="terms"
+                aria-required="true"
+                class="form-check-input"
+              />
+              I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a>
+            </label>
           </div>
         </div>
       </div>

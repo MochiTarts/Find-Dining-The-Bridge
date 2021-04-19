@@ -11,8 +11,6 @@ credentials = service_account.Credentials.from_service_account_info({
     scopes=['https://www.googleapis.com/auth/spreadsheets'],
     subject="info@finddining.ca")
 
-sheetsService = build(
-    'sheets', 'v4', credentials=credentials, cache_discovery=False)
 spreadsheet_id = "1xkY8ORsca41mJsIbxBhbsZUJ-3hDRetlbpns3ATFU1k"
 
 
@@ -23,6 +21,9 @@ def create_user_emails_sheets():
         Void, creates google sheets under info@finddining.ca
     """
     input_range = "Sheet1"
+
+    sheetsService = build(
+        'sheets', 'v4', credentials=credentials, cache_discovery=False)
 
     # Empty sheet
     sheetsService.spreadsheets().values().clear(

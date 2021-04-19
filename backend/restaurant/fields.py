@@ -1,6 +1,7 @@
 from djongo import models
 from django import forms
 
+
 class StringListField(forms.CharField):
     def prepare_value(self, value):
         return ', '.join(value)

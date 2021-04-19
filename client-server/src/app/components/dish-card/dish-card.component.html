@@ -36,15 +36,17 @@
   </div>
 
   <ng-template #content let-modal>
-    <h2></h2>
-    <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-basic-title">Dish Detail</h2>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <div class="modal-body">
       <div class="row" id="row-modal">
         <div *ngIf="dish.picture">

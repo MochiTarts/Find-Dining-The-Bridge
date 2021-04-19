@@ -399,6 +399,7 @@ export class RestaurantSetupComponent implements OnInit {
           if (option.includes('SETUP')) {
             let roInfo = {
               restaurant_id: data._id,
+              consent_status: "IMPLIED"
             };
             this.restaurantService.roSignup(roInfo).subscribe((profile) => {
               var sduserInfo = {

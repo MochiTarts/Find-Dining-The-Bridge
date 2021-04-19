@@ -14,6 +14,7 @@ from sduser.tokens import sduser_activation_token_generator
 
 UserModel = get_user_model()
 
+
 def verify_email(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -42,19 +43,21 @@ def verify_email(request, uidb64, token):
             }
         )
 
+
 def send_email_verification(user, request=None, site=None):
-    domain, protocal = get_domain_and_protocal(request, site, django_template=True)
+    domain, protocal = get_domain_and_protocal(
+        request, site, django_template=True)
     subject = 'Verify Your Email for Find Dining'
     email_template_name = 'verify_email/verification.html'
     message = render_to_string(email_template_name, {
-                'user': user,
-                'domain': domain,
-                'protocal': protocal,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': sduser_activation_token_generator.make_token(user),
-            })
+        'user': user,
+        'domain': domain,
+        'protocal': protocal,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': sduser_activation_token_generator.make_token(user),
+    })
     send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
-                        recipient_list=[user.email], html_message=message, fail_silently=False)
+              recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
 def send_email_deactivate(user, request=None, site=None):
@@ -62,14 +65,14 @@ def send_email_deactivate(user, request=None, site=None):
     subject = 'Account Deactivation for Find Dining'
     email_template_name = 'verify_email/deactivation.html'
     message = render_to_string(email_template_name, {
-                'user': user,
-                'domain': domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': sduser_activation_token_generator.make_token(user),
-                'protocal': protocal,
-            })
+        'user': user,
+        'domain': domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': sduser_activation_token_generator.make_token(user),
+        'protocal': protocal,
+    })
     send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
-                        recipient_list=[user.email], html_message=message, fail_silently=False)
+              recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
 def send_email_deactivate_notify(user, request=None, site=None):
@@ -78,12 +81,12 @@ def send_email_deactivate_notify(user, request=None, site=None):
     subject = 'Account Deactivation for Find Dining'
     email_template_name = 'verify_email/deactivation_notify.html'
     message = render_to_string(email_template_name, {
-                'user': user,
-                'domain': domain,
-                'protocal': protocal,
-            })
+        'user': user,
+        'domain': domain,
+        'protocal': protocal,
+    })
     send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
-                        recipient_list=[user.email], html_message=message, fail_silently=False)
+              recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
 def send_email_activate_notify(user, request=None, site=None):
@@ -91,13 +94,12 @@ def send_email_activate_notify(user, request=None, site=None):
     subject = 'Account activation for Find Dining'
     email_template_name = 'verify_email/activation_notify.html'
     message = render_to_string(email_template_name, {
-                'user': user,
-                'domain': domain,
-                'protocal': protocal,
-            })
+        'user': user,
+        'domain': domain,
+        'protocal': protocal,
+    })
     send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
-                        recipient_list=[user.email], html_message=message, fail_silently=False)
-
+              recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
 def send_email_promote_notify(user, request=None, site=None):
@@ -105,31 +107,30 @@ def send_email_promote_notify(user, request=None, site=None):
     subject = 'Account promotion for Find Dining'
     email_template_name = 'verify_email/promotion_notify.html'
     message = render_to_string(email_template_name, {
-                'user': user,
-                'domain': domain,
-                'protocal': protocal,
-            })
+        'user': user,
+        'domain': domain,
+        'protocal': protocal,
+    })
     send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
-                        recipient_list=[user.email], html_message=message, fail_silently=False)
-
-
+              recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
 def send_email_password_reset(user, request=None, site=None):
-    domain, protocal = get_domain_and_protocal(request, site, django_template=True)
+    domain, protocal = get_domain_and_protocal(
+        request, site, django_template=True)
     subject = "Password Reset on Find Dining"
     email_template_name = 'registration/password_reset_email_user.html'
     message = render_to_string(email_template_name, {
-    "email":user.email,
-    'site_name': 'Find Dining',
-    'protocol': protocal,
-    'domain': domain,
-    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-    'user': user,
-    'token': default_token_generator.make_token(user),
+        "email": user.email,
+        'site_name': 'Find Dining',
+        'protocol': protocal,
+        'domain': domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'user': user,
+        'token': default_token_generator.make_token(user),
     })
     send_mail(subject, strip_tags(message), from_email='noreply<noreply@gmail.com>',
-                        recipient_list=[user.email], html_message=message, fail_silently=False)
+              recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
 def get_domain_and_protocal(request, site, django_template=False):

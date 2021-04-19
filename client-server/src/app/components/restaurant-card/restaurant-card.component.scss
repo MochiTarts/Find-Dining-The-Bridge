@@ -3,7 +3,6 @@
 .cardBox {
   width: 600px;
   height: auto;
-  flex: 0 0 auto;
   margin: 10px;
   padding: 15px;
   border-radius: 10px;
@@ -23,25 +22,32 @@
   height: 120px;
   border-radius: 5px;
   object-fit: cover;
-  margin: auto;
-  display: block;
 }
 
 .card-body {
   padding: 10px;
   text-align: left;
-  //max-width: 500px;
+  //width: 500px;
+}
+
+.card-title-mobile-wrapper {
+  display: none;
 }
 
 .card-text {
   font-size: 15px;
   margin: 0;
-  //max-width: 400px;
+  //width: 400px;
+}
+
+.card-text-mobile-wrapper {
+  display: none;
 }
 
 .btn {
-  height: 35px;
-  margin: 0;
+  height: fit-content;
+  min-height: 40px;
+  margin: 5px 0px;
   background-color: $secondary-color;
   color: white;
 }
@@ -59,4 +65,98 @@
   background-color: #84bcdb;
   color: white;
   border-color: #84bcdb;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+@media screen and (max-width: 767px) {
+
+.cardBox {
+  max-width: 600px;
+}
+
+.card-body {
+  padding: 0;
+}
+
+.card-title {
+  display: none;
+  width: 100px;
+}
+
+.card-text {
+  display: none;
+}
+
+.card-title-mobile-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.card-title-mobile {
+  line-height: 30px;
+  padding-left: 10px;
+  text-align: center;
+  //word-break: break-all;
+}
+
+.card-text-mobile-wrapper {
+  display: block;
+  width: 65%;
+  padding-top: 10px;
+}
+
+.card-text-mobile {
+  font-size: 15px;
+  margin: 0;
+  padding-right: 10px;
+}
+
+.btn-container {
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+}
+
+@media screen and (max-width: 400px) {
+
+.cardBox {
+  margin: 10px 0px;
+}
+
+.card-title-mobile {
+  font-size: 9vw;
+}
+  
+.card-text-mobile {
+  font-size: 4vw;
+}
+
+.buttons {
+  width: fit-content;
+}
+
+.btn {
+  width: fit-content;
+  font-size: 4vw;
+}
+
+}
+
+@media screen and (max-width: 332px) {
+  
+.cardBox {
+  width: 100%;
+}
+
+.card-title-mobile {
+  font-size: 7vw;
+}
+
 }

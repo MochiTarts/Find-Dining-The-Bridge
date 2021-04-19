@@ -132,7 +132,7 @@ export class NewsArticlesComponent implements OnInit {
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
@@ -166,7 +166,7 @@ export class NewsArticlesComponent implements OnInit {
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list-mobile");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
@@ -179,11 +179,9 @@ export class NewsArticlesComponent implements OnInit {
   toggleFilter() {
     var mobileFilterDiv = document.getElementById("mobile-filter");
 
-    if (mobileFilterDiv.style.opacity === "0") {
-      mobileFilterDiv.style.opacity = "1";
+    if (mobileFilterDiv.style.marginRight === "-400px") {
       mobileFilterDiv.style.marginRight = "0";
     } else {
-      mobileFilterDiv.style.opacity = "0";
       mobileFilterDiv.style.marginRight = "-400px";
     }
   }
@@ -217,7 +215,8 @@ export class NewsArticlesComponent implements OnInit {
         if (monthList.every(isFalse)) {
           this.filterMonthArticles = this.allArticles;
         } else {
-          var date = new Date(article.modified_at);
+          // Compare with the article's modified_at date or created_at date
+          var date = (article.modified_at) ? (new Date(article.modified_at)) : (new Date(article.created_at));
           var monthNumber = date.getMonth();
           for (var i = 0; i < this.months.length; i++) {
             if (monthList[i] && i == monthNumber) {
@@ -229,7 +228,7 @@ export class NewsArticlesComponent implements OnInit {
         if (yearList.every(isFalse)) {
           this.filterYearArticles = this.allArticles;
         } else {
-          var date = new Date(article.modified_at);
+          var date = (article.modified_at) ? (new Date(article.modified_at)) : (new Date(article.created_at));
           var year = date.getFullYear();
           for (var i = 0; i < this.years.length; i++) {
             if (yearList[i] && this.years[i] == year) {

@@ -6,12 +6,15 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.response import Response
 
+
 class RestaurantOwnerInsert(serializers.Serializer):
     restaurant_id = serializers.CharField(max_length=24)
-    consent_status = serializers.ChoiceField(required=False, choices=ConsentStatus.choices())
+    consent_status = serializers.ChoiceField(
+        required=False, choices=ConsentStatus.choices())
 
     class Meta:
         ref_name = None
+
 
 restaurant_owner_signup_post_response = {
     "200": openapi.Response(
@@ -51,11 +54,14 @@ restaurant_owner_profile_get_response = {
     )
 }
 
+
 class RestaurantOwnerUpdate(serializers.Serializer):
-    consent_status = serializers.ChoiceField(required=False, choices=ConsentStatus.choices())
+    consent_status = serializers.ChoiceField(
+        required=False, choices=ConsentStatus.choices())
 
     class Meta:
         ref_name = None
+
 
 restaurant_owner_profile_put_response = {
     "200": openapi.Response(

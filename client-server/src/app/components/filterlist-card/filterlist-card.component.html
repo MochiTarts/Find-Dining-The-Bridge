@@ -1,10 +1,12 @@
 <div class="card cardBox">
-    <div class="col">
-      <div class="card-body">
-        <h5 class="card-title" id="card-title">{{ category }}</h5>
-        <hr />
-        <div role="group" aria-labelledby="card-title">
-          <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
+  <div class="col">
+    <div class="card-body">
+
+      <h5 *ngIf="length <= 4" style="font-size: 0.9rem; text-align: left;">{{ category }}</h5>
+      <div *ngIf="length <= 4" role="group" aria-labelledby="card-title"
+        class="checkboxes">
+        <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
+          <label class="form-check-label">
             <input
               type="checkbox"
               class="form-check-input"
@@ -12,10 +14,89 @@
               [(ngModel)]="checkMap[i]"
               (ngModelChange)="sendList()"
             />
-            <label class="form-check-label" for="{{ sub }}">{{ sub }}</label>
+            {{ sub }}
+          </label>
+        </div>
+      </div>
+      
+      <button class="btn dropdown-toggle-btn" type="button" data-toggle="collapse" [attr.data-target]="'#' + removeSpace(category)"
+        *ngIf="length > 4">
+        <div fxLayout="row" fxLayoutAlign="space-between center" style="margin: 0; padding: 0;">
+          <div style="font-size: 0.9rem; text-align: left;" fxFlexAlign="center">{{ category }}</div>
+          <div>
+            <fa-icon [icon]="faCaretDown" class="icons"></fa-icon>
           </div>
+        </div>
+      </button>
+      <div role="group" aria-labelledby="card-title" role="group" aria-labelledby="card-title"
+        class="filter-dropdown collapse checkboxes" id="{{removeSpace(category)}}"
+        *ngIf="length > 4">
+        <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
+          <label class="form-check-label">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="{{ sub }}"
+              [(ngModel)]="checkMap[i]"
+              (ngModelChange)="sendList()"
+            />
+            {{ sub }}
+          </label>
         </div>
       </div>
     </div>
+
+    <div class="card-body-mobile">
+
+      <h5 *ngIf="length <= 4" style="font-size: 0.9rem; text-align: left; padding: 10px 10px 0px 10px;">{{ category }}</h5>
+      <div *ngIf="length <= 4" role="group" aria-labelledby="card-title"
+        class="checkboxes">
+        <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
+          <label class="form-check-label">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="{{ sub }}"
+              [(ngModel)]="checkMap[i]"
+              (ngModelChange)="sendList()"
+            />
+            {{ sub }}
+          </label>
+        </div>
+      </div>
+
+      <button class="btn dropdown-toggle-btn" type="button" data-toggle="collapse" [attr.data-target]="'#' + removeSpace(category)"
+        *ngIf="length > 4">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="5px">
+            <div style="font-size: 0.9rem;" fxFlexAlign="center">{{ category }}</div>
+            <div style="font-size: 0.6rem;" class="number" fxLayout="column" fxLayoutAlign="center"
+              *ngIf="getSelecteds() > 0">
+              <div>{{ getSelecteds() }}</div>
+            </div>
+          </div>
+
+          <div>
+            <fa-icon [icon]="faCaretDown" class="icons"></fa-icon>
+          </div>
+        </div>
+      </button>
+      <div role="group" aria-labelledby="card-title" class="filter-dropdown collapse checkboxes" id="{{removeSpace(category)}}"
+        *ngIf="length > 4">
+        <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
+          <label class="form-check-label">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="{{ sub }}"
+              [(ngModel)]="checkMap[i]"
+              (ngModelChange)="sendList()"
+            />
+            {{ sub }}
+          </label>
+        </div>
+      </div>
+
+    </div>
   </div>
-  
+</div>

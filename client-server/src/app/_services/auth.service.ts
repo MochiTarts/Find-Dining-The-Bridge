@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   /**
-   * Performs action to log a user in
+   * Performs action to log a user in while tracking the user's ip for rate limit/abuse prevention
    * 
    * @param username - user's username or email
    * @param password - user's password
@@ -98,14 +98,27 @@ export class AuthService {
    * @param email - user's email
    * @returns the Observable from password reset request
    */
-  resetPasswordEmail(email: string){
+  resetPasswordEmail(email: string): Observable<any>{
     return this.http.post(AUTH_API + 'password_reset/', JSON.stringify({
       email
     }), httpOptions);
   }
 
   /**
+   * Performs action for resending verification email
+   * 
+   * @param email - user's email
+   * @returns the Observable from resend verification email request
+   */
+  resendVerificationEmail(email: string): Observable<any>{
+    return this.http.post(AUTH_API + 'resend_verification_email/', JSON.stringify({
+      email
+    }), httpOptions);
+  }
+
+  /**
    * Verifies the user's access token
+   * Note: only suppose to be used (for user) to verify token, not validate
    * 
    * @param token - the user's access token
    * @returns the Observable from verifying a user's token
@@ -117,7 +130,9 @@ export class AuthService {
   }
 
   /**
-   * Retrieves a new token from Django backend
+   * Retrieves a new access token from Django backend
+   * (the refresh token in the cookie is also updated)
+   * 
    * @returns the Observable from the refresh token request
    */
   refreshToken(): Observable<any> {
@@ -132,10 +147,10 @@ export class AuthService {
 
   /**
    * Handles authentication with google oauth2 on the Django backend
-   * PLEASE UPDATE DOCSTRING
+   * (exchange tokens from google for tokens for our site)
    * 
-   * @param idToken - ?
-   * @param authToken - ?
+   * @param idToken - google's oauth2_token
+   * @param authToken - google's access Token
    * @param role - the user's role
    * @returns the Observable from the google authentication request
    */
@@ -145,10 +160,10 @@ export class AuthService {
 
   /**
    * Handles authentication with facebook oauth2 on the Django backend
-   * PLEASE UPDATE DOCSTRING
+   * (exchange tokens from facebook for tokens for our site)
    * 
-   * @param id - ?
-   * @param authToken - ? 
+   * @param id - facebook's user id
+   * @param authToken - facebook's access token
    * @param role - the user's role
    * @returns the Observable from the facebook authentication request
    */

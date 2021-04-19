@@ -119,14 +119,6 @@ class Food(models.Model):
         """
         return list(Food.objects.filter(restaurant_id=rest_id))
 
-    def clean_description(self):
-        description = {food for food in self.description.split(' ')}
-        clean_description = set()
-        for word in description:  # clean word, remove non alphabetical
-            clean_description.add(''.join(e for e in word if e.isalpha()))
-        clean_description = set(map(str.lower, clean_description))
-        return clean_description
-
 
 class PendingFood(models.Model):
     """ Pending version of the model for the Food Items on the Menu """
@@ -400,14 +392,6 @@ class PendingFood(models.Model):
 
         if invalid['Invalid']:
             raise ValidationError(message=invalid, code="invalid_input")
-
-    def clean_description(self):
-        description = {food for food in self.description.split(' ')}
-        clean_description = set()
-        for word in description:  # clean word, remove non alphabetical
-            clean_description.add(''.join(e for e in word if e.isalpha()))
-        clean_description = set(map(str.lower, clean_description))
-        return clean_description
 
     @classmethod
     def upload_media(self, dish, form_data, form_file):
@@ -1276,7 +1260,8 @@ class RestaurantPost(models.Model):
         post = save_and_clean(post)
 
         rest_id = post_data["restaurant_id"]
-        restaurant_name = PendingRestaurant.objects.filter(_id=rest_id).first().name
+        restaurant_name = PendingRestaurant.objects.filter(
+            _id=rest_id).first().name
         send_posts_notify_email(post, restaurant_name, request)
         return post
 

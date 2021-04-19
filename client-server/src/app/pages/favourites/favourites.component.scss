@@ -59,7 +59,73 @@
   border-radius: 40px;
 }
 
+.filter-button {
+  display: none;
+}
+
+.filters {
+  display: block;
+}
+
+.filters-mobile {
+  display: none;
+}
+
+.show-btn {
+  margin-left: 10px;
+  max-width: 600px;
+}
+
 .col-md-8 {
   text-align: center;
   overflow: hidden;
+}
+
+@media screen and (max-width: 767px) {
+
+.restaurant-container {
+  position: relative;
+}
+
+.restaruant-listings-box {
+  min-height: 200px;
+}
+
+.row {
+  overflow: hidden;
+}
+
+.filter-button {
+  display: block;
+}
+
+.filters {
+  display: none;
+}
+
+.filters-mobile {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  max-width: 200px;
+  width: 60%;
+  min-width: 150px;
+  z-index: 1;
+  background-color: white;
+  transition: 1s;
+  overflow-y: scroll;
+}
+
+.restaurant-card-container {
+  width: fit-content;
+  margin: auto;
+}
+
+.show-btn {
+  margin: 20px auto;
+  width: 100%;
+}
+
 }

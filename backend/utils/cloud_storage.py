@@ -58,6 +58,7 @@ def generate_name():
            str(datetime.datetime.now()) + '.png'
     return name
 
+
 def generate_video_name():
     """ Generate a randomized filename
     for video files

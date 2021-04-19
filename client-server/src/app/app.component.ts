@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     */
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        if (event.urlAfterRedirects.includes('restaurant?')) {
+        if (event.urlAfterRedirects.includes('restaurant?restaurantId')) {
           const restaurantId = event.urlAfterRedirects.split('?restaurantId=')[1]
           gtag('config', `${environment.googleAnalytics.trackingTag}`, {
             'page_title': "Restaurant Page Id="+restaurantId+" ("+`${environment.environment}`+")",

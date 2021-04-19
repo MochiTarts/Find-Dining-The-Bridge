@@ -149,10 +149,10 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * Redirects to restaurant-setup page
+   * Redirects to resources page
    */
-  restaurantSetup() {
-    this.router.navigate(['/restaurant-setup'])
+  resources() {
+    this.router.navigate(['/resources'])
   }
 
   /**

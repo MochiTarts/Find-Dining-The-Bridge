@@ -42,6 +42,18 @@
   border-radius: 40px;
 }
 
+.filter-button {
+  display: none;
+}
+
+.filters {
+  margin-top: 20px;
+}
+
+.filters-mobile {
+  display: none;
+}
+
 .restaruant-listings-box {
   margin: auto;
   padding: 20px;
@@ -51,7 +63,13 @@
 
   @media screen and (max-width: 1300px) {
     width: 100%;
+    overflow: hidden;
   }
+}
+
+.show-btn {
+  margin-left: 10px;
+  max-width: 600px;
 }
 
 .dishes-listings-box {
@@ -60,4 +78,49 @@
   width: 100%;
   height: auto;
   padding: 5%;
+}
+
+@media screen and (max-width: 767px) {
+
+.restaurant-container {
+  position: relative;
+}
+
+.restaruant-listings-box {
+  min-height: 200px;
+}
+
+.filter-button {
+  display: block;
+}
+
+.filters {
+  display: none;
+}
+
+.filters-mobile {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  max-width: 200px;
+  width: 60%;
+  min-width: 150px;
+  z-index: 1;
+  background-color: white;
+  transition: 1s;
+  overflow-y: scroll;
+}
+
+.restaurant-card-container {
+  width: fit-content;
+  margin: auto;
+}
+
+.show-btn {
+  margin: 20px auto;
+  width: 100%;
+}
+
 }

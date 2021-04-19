@@ -1,8 +1,10 @@
 from bson import ObjectId
 from sduser.backends import jwt_decode
 
+
 def isObjectId(oid):
     return ObjectId.is_valid(oid)
+
 
 def save_and_clean(model, updated_fields=None):
     """
@@ -21,6 +23,7 @@ def save_and_clean(model, updated_fields=None):
     except Exception as err:
         print(err)
         raise err
+
 
 def get_user(request):
     """

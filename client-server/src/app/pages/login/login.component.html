@@ -82,7 +82,7 @@
         <mat-card class="login-card mat-elevation-z8">
           <mat-card-title>Signing Up</mat-card-title>
           <mat-card-content>
-            <div class="alert alert-success" *ngIf="isSignupSuccessful">
+            <div class="alert alert-success" *ngIf="isSignupSuccessful && signupMessage">
               {{ signupMessage }}
             </div>
             <form *ngIf="!isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('signup')" #f="ngForm"
@@ -121,9 +121,9 @@
                   <mat-error *ngIf="password1.errors && password1.errors.required && f.submitted">Password is required</mat-error>
                   <mat-error *ngIf="password1.errors && password1.errors.minlength && f.submitted">Password must be at least 8 characters</mat-error>
                 </mat-form-field>
-                <mat-hint align="end" aria-live="polite" *ngIf="password1.value">
+                <!--mat-hint align="end" aria-live="polite" *ngIf="password1.value">
                   {{password1.value.length}} / {{passwordComponent.max}}
-                </mat-hint>
+                </mat-hint-->
                 <!--@angular-material-extensions/password-strength's main component-->
                 <mat-password-strength #passwordComponent (onStrengthChanged)="onStrengthChanged($event)"
                   [password]="password1.value">
@@ -167,6 +167,58 @@
                     mat-raised-button
                     type="submit">
                   Register
+                </button>
+              </div>
+            </form>
+
+          <br>
+          <a
+          id='form_link'
+          href='#'
+          class='show_signup'
+          (click)="toggleLink();"
+          >
+          Didn't receive a verification email?
+        </a>
+
+            <form *ngIf="isSignupSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit('resend')" #f="ngForm"
+            novalidate>
+            <div class="alert alert-success" *ngIf="isResendSuccessful">
+              {{ resendMessage }}
+            </div>
+              <div class="form-element">
+                <div class="alert alert-warning" *ngIf="f.submitted && resendFailed && resendErrorMessage">
+                  {{ resendErrorMessage }}
+                </div>
+              </div>
+              <div fxLayout="column" fxLayoutAlign="center">
+                <mat-form-field>
+                  <mat-label>Email</mat-label>
+                  <input matInput name="email" [(ngModel)]="resendForm.email" required email #email="ngModel" autocomplete="email" [readonly]="resendReadOnly" />
+                  <mat-icon matSuffix>email</mat-icon>
+                  <mat-error *ngIf="email.errors && f.submitted">Email is required</mat-error>
+                  <mat-error *ngIf="email.errors && email.errors.email">Email must be a valid email address</mat-error>
+                </mat-form-field>
+
+                <button
+                (click)="reCaptchaPopup(reCaptcha)"
+                style="margin-bottom: 10px;"
+                color="seconary"
+                type="button"
+                *ngIf="recaptchaForm.invalid"
+                mat-button>
+                I am a human
+                <mat-icon matSuffix>mood</mat-icon>
+                </button>
+
+                <button
+                    id="resend_button"
+                    style="margin-top: 10px;"
+                    color="primary"
+                    [disabled]="recaptchaForm.invalid || timerOn"
+                    mat-raised-button
+                    type="submit">
+                  Resend verification email
                 </button>
               </div>
             </form>
@@ -227,6 +279,7 @@
                 </button>
 
                 <button
+                    id="reset_button"
                     style="margin-top: 10px;"
                     color="primary"
                     [disabled]="recaptchaForm.invalid"
@@ -245,15 +298,18 @@
 
 <!-- Popup reCaptcha -->
 <ng-template #reCaptcha let-modal role="form">
-<form [formGroup]="recaptchaForm">
-  <div class="form-group" style="margin-top: 20px;">
+<div class="modal-body">
+<form [formGroup]="recaptchaForm" *ngIf="recaptchaForm.invalid || closeRecaptchaPopup(modal)">
+  <div class="form-group"   style="margin-top: 15px; margin-left: 0px;">
     <ngx-recaptcha2
       #captchaElem
+      [size]="'normal'"
       [siteKey]="siteKey"
       formControlName="recaptcha"
     ></ngx-recaptcha2>
   </div>
 </form>
+</div>
 </ng-template>
 
 
