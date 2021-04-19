@@ -50,7 +50,7 @@ class NLUser(models.Model):
             if consent_status == "EXPRESSED":
                 user.subscribed_at=date.today()
             NLUser.objects.get(pk=email)
-            raise ValueError('Cannot insert newsletter user, an object with this email already exists')
+            raise ValueError('This email has already signed up.')
         except ObjectDoesNotExist:
             user.clean_fields()
             user.clean()
