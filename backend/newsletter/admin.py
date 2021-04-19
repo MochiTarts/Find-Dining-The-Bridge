@@ -18,7 +18,7 @@ class NLUserAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'consent_status',
                     'subscribed_at', 'unsubscribed_at', 'expired_at',)
     list_display_links = ('first_name', 'last_name', 'email',)
-    #readonly_fields = ('status',)
+    readonly_fields = ('email',)
 
     # note that the order of actions will be reversed (in get_actions)
     actions = ('generate_google_spreadsheet',)
@@ -59,7 +59,7 @@ class NLUserAdmin(admin.ModelAdmin):
             if response:
                 return response
 
-        return super(SignupNewsletterUserAdmin, self).changelist_view(request, extra_context)
+        return super(NLUserAdmin, self).changelist_view(request, extra_context)
 
 
 class NewsletterAuditAdmin(admin.ModelAdmin):
