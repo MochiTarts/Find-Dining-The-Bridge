@@ -85,15 +85,23 @@
               ></app-filterlist-card>
             </div>
             <div class="col-md-8">
-              <!--<app-restaurant-favs-card
-                *ngFor="let restaurant of restaurants"
-                [restaurant]="restaurant"
-              ></app-restaurant-favs-card>-->
-              <app-restaurant-card
-                *ngFor="let restaurant of restaurants"
-                [restaurant]="restaurant"
-              >
-              </app-restaurant-card>
+              <div class="restaurant-card-container" fxLayout="column" fxLayoutAlign="space-between">
+                <app-restaurant-card *ngFor="let restaurant of restaurants | slice:0:show"
+                  [restaurant]="restaurant">
+                </app-restaurant-card>
+
+                <button class="btn show-btn" ngbTooltip="Show More Restaurants" placement="top"
+                  *ngIf="restaurants.length > 2 && show < restaurants.length"
+                  (click)="show = (((restaurants.length - show) >= 2) ? show + 2 : restaurants.length)">
+                  Show More
+                </button>
+  
+                <button class="btn show-btn" ngbTooltip="Hide Restaurants" placement="top"
+                  *ngIf="show == restaurants.length && restaurants.length > 2"
+                  (click)="show = 3">
+                  Hide
+                </button>
+              </div>
             </div>
           </div>
         </div>

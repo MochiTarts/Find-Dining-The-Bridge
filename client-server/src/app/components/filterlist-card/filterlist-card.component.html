@@ -2,7 +2,13 @@
   <div class="col">
     <div class="card-body">
 
-      <h5 *ngIf="length <= 4" style="font-size: 0.9rem; text-align: left;">{{ category }}</h5>
+      <div fxLayout="row" fxLayoutGap="5px" *ngIf="length <= 4">
+        <h5 style="font-size: 0.9rem; text-align: left;" fxFlexAlign="center">{{ category }}</h5>
+        <div style="font-size: 0.6rem;" class="number" fxLayout="column" fxLayoutAlign="center center" *ngIf="getSelecteds() > 0">
+          <div>{{ getSelecteds() }}</div>
+        </div>
+      </div>
+      
       <div *ngIf="length <= 4" role="group" aria-labelledby="card-title"
         class="checkboxes">
         <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
@@ -22,7 +28,13 @@
       <button class="btn dropdown-toggle-btn" type="button" data-toggle="collapse" [attr.data-target]="'#' + removeSpace(category)"
         *ngIf="length > 4">
         <div fxLayout="row" fxLayoutAlign="space-between center" style="margin: 0; padding: 0;">
-          <div style="font-size: 0.9rem; text-align: left;" fxFlexAlign="center">{{ category }}</div>
+          <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="5px">
+            <div style="font-size: 0.9rem;" fxFlexAlign="center">{{ category }}</div>
+            <div style="font-size: 0.6rem;" class="number" fxLayout="column" fxLayoutAlign="center"
+              *ngIf="getSelecteds() > 0">
+              <div>{{ getSelecteds() }}</div>
+            </div>
+          </div>
           <div>
             <fa-icon [icon]="faCaretDown" class="icons"></fa-icon>
           </div>
@@ -48,7 +60,12 @@
 
     <div class="card-body-mobile">
 
-      <h5 *ngIf="length <= 4" style="font-size: 0.9rem; text-align: left; padding: 10px 10px 0px 10px;">{{ category }}</h5>
+      <div fxLayout="row" fxLayoutGap="5px" *ngIf="length <= 4" style="padding: 10px 10px 0px 10px;">
+        <h5 style="font-size: 0.9rem; text-align: left;" fxFlexAlign="center">{{ category }}</h5>
+        <div style="font-size: 0.6rem;" class="number" fxLayout="column" fxLayoutAlign="center center" *ngIf="getSelecteds() > 0">
+          <div>{{ getSelecteds() }}</div>
+        </div>
+      </div>
       <div *ngIf="length <= 4" role="group" aria-labelledby="card-title"
         class="checkboxes">
         <div *ngFor="let sub of subcategories; let i = index" class="form-check" >
