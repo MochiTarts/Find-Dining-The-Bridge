@@ -62,6 +62,7 @@ urlpatterns = [
     path('dish/', include('restaurant.dish_urls')),
     path('restaurant/', include('restaurant.urls')),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
+    path('newsletter/', include('newsletter.urls')),
 ]
 
 schema_view = get_schema_view(
