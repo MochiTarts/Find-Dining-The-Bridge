@@ -72,6 +72,12 @@
           </a>
         </li>
 
+        <li class="nav-item" *ngIf="!authService.isLoggedIn()" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0" (keyup.enter)="newsletter_signup()">
+          <a routerLink="/newsletter-signup" routerLinkActive="active" (click)="newsletter_signup()" class="nav-link">
+            Newsletter Sign-Up
+          </a>
+        </li>
+
         <li *ngIf="!tokenStorageService.RO && authService.isLoggedIn()" class="nav-item">
           <p class="nav-link address nav-link" *ngIf="this.userAddress" tabindex="0">
             <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>

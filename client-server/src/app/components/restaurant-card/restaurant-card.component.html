@@ -1,83 +1,83 @@
 <div class="card cardBox">
-    <div class="row">
-      <div class="col-md-3" style="min-width: 140px;">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <div *ngIf="restaurant.logo_url">
-            <img
-              src="{{ restaurant.logo_url }}"
-              class="card-img"
-              alt="{{ restaurant.name }}"
-            />
-          </div>
-          <div *ngIf="!restaurant.logo_url">
-            <img
-              src="../../../assets/images/find_dining_logo.png"
-              class="card-img"
-              alt="{{ restaurant.name }}"
-            />
-          </div>
-          
-          <div class="card-title-mobile-wrapper">
-            <h2 class="card-title-mobile">
-              {{ restaurant.name | titlecase }}
-            </h2>
-          </div>
+  <div class="row">
+    <div class="col-md-3" style="min-width: 140px;">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div *ngIf="restaurant.logo_url">
+          <img
+            src="{{ restaurant.logo_url }}"
+            class="card-img"
+            alt="{{ restaurant.name }}"
+          />
+        </div>
+        <div *ngIf="!restaurant.logo_url">
+          <img
+            src="../../../assets/images/find_dining_logo.png"
+            class="card-img"
+            alt="{{ restaurant.name }}"
+          />
+        </div>
+        
+        <div class="card-title-mobile-wrapper">
+          <h2 class="card-title-mobile">
+            {{ restaurant.name | titlecase }}
+          </h2>
         </div>
       </div>
-      
-      <div class="col">
-        <div class="card-body">
-          <h2 class="card-title">{{ restaurant.name | titlecase }}</h2>
-          <p class="card-text">
-            {{ cuisineList | titlecase }} •
-            {{ pricepoint | titlecase }}
-          </p>
-          <p class="card-text">
-            {{ serviceList | titlecase }}
-          </p>
-          <div fxLayout="row" fxLayoutAlign="space-between center">
-            <div class="card-text-mobile-wrapper">
-              <p class="card-text-mobile">
-                {{ cuisineList | titlecase }} •
-                {{ pricepoint | titlecase }}
-              </p>
-              <p class="card-text-mobile">
-                {{ serviceList | titlecase }}
-              </p>
-            </div>
+    </div>
+    
+    <div class="col">
+      <div class="card-body">
+        <h2 class="card-title">{{ restaurant.name | titlecase }}</h2>
+        <p class="card-text">
+          {{ cuisineList | titlecase }} •
+          {{ pricepoint | titlecase }}
+        </p>
+        <p class="card-text">
+          {{ serviceList | titlecase }}
+        </p>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div class="card-text-mobile-wrapper">
+            <p class="card-text-mobile">
+              {{ cuisineList | titlecase }} •
+              {{ pricepoint | titlecase }}
+            </p>
+            <p class="card-text-mobile">
+              {{ serviceList | titlecase }}
+            </p>
+          </div>
 
-            <div id="empty"></div>
-            <div class="btn-container">
-              <div *ngIf="role && pagePath=='/all-listings'">
-                <button
-                class="btn" (click)="addFavourite(restaurant._id)"
-                placement="top" ngbTooltip="Add Restaurant as Favourite"
-                [disabled]="favourited"
-                >
-                  Add Favourite
-                </button>
-              </div>
-              <div *ngIf="role && pagePath=='/favourites'">
-                <button
-                class="btn" (click)="remove(restaurant._id)"
-                placement="top" ngbTooltip="Remove Restaurant as Favourite"
-                >
-                  Remove Favourite
-                </button>
-              </div>
-              <div class="buttons">
-                <button
-                class="btn"
-                [routerLink]="['/restaurant']"
-                [queryParams]="{restaurantId: restaurant._id}"
-                placement="top" ngbTooltip="Visit Restaurant Page"
-                >
-                  View Restaurant
-                </button>
-              </div>
+          <div id="empty"></div>
+          <div class="btn-container">
+            <div *ngIf="role && pagePath=='/all-listings'">
+              <button
+              class="btn" (click)="addFavourite(restaurant._id)"
+              placement="top" ngbTooltip="Add Restaurant as Favourite"
+              [disabled]="favourited" style="width: 100%;"
+              >
+                Add Favourite
+              </button>
+            </div>
+            <div *ngIf="role && pagePath=='/favourites'">
+              <button
+              class="btn" (click)="remove(restaurant._id)"
+              placement="top" ngbTooltip="Remove Restaurant as Favourite"
+              >
+                Remove Favourite
+              </button>
+            </div>
+            <div class="buttons">
+              <button
+              class="btn"
+              [routerLink]="['/restaurant']"
+              [queryParams]="{restaurantId: restaurant._id}"
+              placement="top" ngbTooltip="Visit Restaurant Page"
+              >
+                View Restaurant
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

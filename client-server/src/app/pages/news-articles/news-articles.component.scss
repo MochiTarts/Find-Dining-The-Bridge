@@ -66,16 +66,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .carousel-row {
     min-height: 400px;
+    padding: 0 20vw;
     background-color: rgba($color: #fff, $alpha: 0.75);
 }
 
 .carousel-row-mobile {
     display: none;
-}
-
-.carousel {
-    margin: auto;
-    padding: 0px 5rem;
 }
 
 /* DISPLAYED ARTICLES */
@@ -209,6 +205,10 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
 }
 
+.headline-card {
+    padding: 10px 0px;
+}
+
 .article-container-mobile {
     min-height: 620px;
     opacity: 1;
@@ -242,20 +242,12 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0 5rem;
 }
 
-.carousel {
-    padding: 0 0rem;
-}
-
 }
 
 @media screen and (max-width: 839px) {
 
 .underline {
     padding-top: 0px;
-}
-
-.headline-card {
-    padding: 10px 0px;
 }
 
 .nav-pills {
