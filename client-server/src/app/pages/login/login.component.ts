@@ -493,6 +493,7 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
       //this.modalService.dismissAll();
+      this.loginRedirect();
     }).catch(error => {
       console.log(error);
     });
@@ -508,6 +509,7 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID).then(() => {
       //this.modalService.dismissAll();
+      this.loginRedirect();
     }).catch(error => {
       console.log(error);
     });
