@@ -20,6 +20,8 @@ from dateutil.relativedelta import relativedelta
 
 import jsonschema
 from jsonschema import validate
+import datetime
+from datetime import date
 
 # jsonschema validation scheme
 newsletter_signup_schema = {
