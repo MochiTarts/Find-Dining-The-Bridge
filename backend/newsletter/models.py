@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import URLValidator, validate_email
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import IntegrityError
 
 from subscriber_profile.enum import ConsentStatus
 from utils.validators import check_script_injections, validate_name, validate_url, validate_postal_code
@@ -36,31 +37,35 @@ class NLUser(models.Model):
 
     @classmethod
     def signup(cls, first_name, last_name, email, consent_status, expired_at):
-        """
-        Constructs & Saves User to DB returning the newly signed up user object
+        """ Constructs & Saves User to DB returning the newly signed up user object
+
         :param first_name: first name of user
+        :type first_name: str
         :param last_name: last name of user
+        :type last_name: str
         :param email: email of user
+        :type email: str
         :param consent_status: consent status regarding user's choice of receiving project updates
-        :return: new NLUser Object
+        :type consent_stautus: str
+        :return: new NLUser
+        :rtype: :class:`NLUser` object
         """
+
+        if cls.objects.filter(email=email).exists():
+            raise IntegrityError('This email has already signed up.')
+        user = cls(first_name=first_name, last_name=last_name, email=email, consent_status=consent_status)
+        if consent_status == "EXPRESSED":
+            user.subscribed_at = date.today()
+        else:
+            user.expired_at = expired_at
         
-        try:
-            user = cls(first_name=first_name, last_name=last_name, email=email, consent_status=consent_status, expired_at=expired_at)
-            if consent_status == "EXPRESSED":
-                user.subscribed_at=date.today()
-            NLUser.objects.get(pk=email)
-            raise ValueError('This email has already signed up.')
-        except ObjectDoesNotExist:
-            user.clean_fields()
-            user.clean()
-            user.save()
-            return user
+        user = save_and_clean(user)
+        return user
 
     @classmethod
     def field_validate(self, fields):
-        """
-        Validates fields
+        """ Validates fields
+
         :param fields: Dictionary of fields to validate
         :return: A list of fields that were invalid. Returns None if all fields are valid
         """
@@ -72,7 +77,7 @@ class NLUser(models.Model):
             try:
                 validate_name(fields['first_name'])
             except ValidationError as e:
-                invalid['Invalid'].append('first_name')  
+                invalid['Invalid'].append('first_name')
         else:
             invalid['Invalid'].append('first_name')
 
@@ -80,7 +85,7 @@ class NLUser(models.Model):
             try:
                 validate_name(fields['last_name'])
             except ValidationError as e:
-                invalid['Invalid'].append('last_name')  
+                invalid['Invalid'].append('last_name')
         else:
             invalid['Invalid'].append('last_name')
 
@@ -129,7 +134,7 @@ class NLAudit(models.Model):
         if created:
             audit_log.count_daily = 1
             audit_log.count = 1
-            audit_log.last_signup_time=timezone.now()
+            audit_log.last_signup_time = timezone.now()
             audit_log.save()
         # update existing
         else:
@@ -138,7 +143,7 @@ class NLAudit(models.Model):
             else:
                 audit_log.count_daily = 1
             audit_log.count = audit_log.count + 1
-            audit_log.last_signup_time=timezone.now()
+            audit_log.last_signup_time = timezone.now()
             if audit_log.count_daily > 100:
                 audit_log.temp_blocked = True
             elif audit_log.count > 2000:
@@ -150,5 +155,5 @@ class NLAudit(models.Model):
 
             if audit_log.perm_blocked:
                 return True
-        
+
         return audit_log.temp_blocked
