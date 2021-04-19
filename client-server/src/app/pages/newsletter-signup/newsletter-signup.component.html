@@ -2,7 +2,7 @@
 <div class="page-box">
   <h2 id="newsletter-label">Newsletter Sign-Up</h2>
   <div class="form-box">
-    <ngb-alert *ngIf="displayError" [dismissible]="false" [type]="'danger'" id="alert" tabindex="0">
+    <ngb-alert [hidden]="!displayError" [dismissible]="false" [type]="'danger'" id="alert" tabindex="0">
       {{ errorMessage }}
     </ngb-alert>
     <p style="color: gray;" tabindex="0">
