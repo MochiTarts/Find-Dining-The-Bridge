@@ -23,6 +23,7 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ResourcesComponent } from './pages/resources/resources.component';
 import { NewsletterSignupComponent } from './pages/newsletter-signup/newsletter-signup.component';
+import { ThankyouPageComponent } from './pages/thankyou-page/thankyou-page.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'about-us', component: AboutUsComponent, },
   { path: 'resources', component: ResourcesComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'newsletter-signup', component: NewsletterSignupComponent, },
+  { path: 'thank-you', component: ThankyouPageComponent, },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {
