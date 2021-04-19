@@ -8,6 +8,8 @@ from django.utils.html import format_html
 from utils.validators import validate_profane_content
 
 # for ordering and hiding info
+
+
 class RestaurantAdminForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -26,10 +28,12 @@ class RestaurantAdminForm(ModelForm):
 class RestaurantMediaForm(forms.Form):
     """ For validating form data of restaurant media API requests """
     media_type = forms.ChoiceField(choices=MediaType.choices(), required=True)
-    save_location = forms.ChoiceField(choices=RestaurantSaveLocations.choices(), required=True)
+    save_location = forms.ChoiceField(
+        choices=RestaurantSaveLocations.choices(), required=True)
     media_file = forms.FileField(required=False)
     media_link = forms.CharField(required=False)
-    first_time_submission = forms.ChoiceField(choices=(('True', 'True'), ('False', 'False')))
+    submit_for_approval = forms.ChoiceField(
+        choices=(('True', 'True'), ('False', 'False')))
 
 
 class RestaurantImageDeleteForm(forms.Form):
@@ -40,5 +44,6 @@ class RestaurantImageDeleteForm(forms.Form):
 class FoodMediaForm(forms.Form):
     """ For validating form data of dish media API requestes """
     media_type = forms.ChoiceField(choices=MediaType.choices(), required=True)
-    save_location = forms.ChoiceField(choices=FoodSaveLocations.choices(), required=True)
+    save_location = forms.ChoiceField(
+        choices=FoodSaveLocations.choices(), required=True)
     media_file = forms.FileField(required=True)

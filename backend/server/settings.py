@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import sys
 import os
 import datetime
 from datetime import timedelta
@@ -17,6 +18,7 @@ from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -37,8 +39,9 @@ if DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
-    'server', # This is added for my admin.py to take effect first (which replaces admin site with my custom one)
-    #'whitenoise.runserver_nostatic',
+    # This is added for my admin.py to take effect first (which replaces admin site with my custom one)
+    'server',
+    # 'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,16 +61,19 @@ INSTALLED_APPS = [
     'ckeditor',
     'article',
     'image',
-    
-    #'user.apps.SDUserConfig',
+    'django.contrib.admindocs',
+    'drf_yasg',
+
+    # 'user.apps.SDUserConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    #'whitenoise.middleware.WhiteNoiseMiddleware',
-    #'spa.middleware.SPAMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'spa.middleware.SPAMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # this should be above common middleware
+    # this should be above common middleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -125,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
-    {   
+    {
         'NAME': 'utils.validators.UserPasswordValidator',
     },
 ]
@@ -152,13 +158,13 @@ AUTHENTICATION_BACKENDS = ['sduser.backends.EmailBackend']
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
-        #'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
@@ -174,11 +180,15 @@ REST_FRAMEWORK = {
         'anon': '100/hour',
         'user': '100/hour'
     },
-    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler'
+    'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
 }
 # doesn't work right now because Djongo can't translate aggregation functions in sql
 
-
+SWAGGER_SETTINGS = {
+    'SUPPORTED_SUBMIT_METHODS': [],
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': None,
+}
 
 '''
 JWT_AUTH = {
@@ -199,18 +209,21 @@ if os.environ.get('CORS_ALLOWED') != None:
     CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED').split(',')
 
 CORS_ALLOW_METHODS = (
-'GET',
-'POST',
-'PUT',
-'PATCH',
-'DELETE',
-'OPTIONS'
- )
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+)
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:4200",
-    "http://127.0.0.1:4200",
+    #"http://localhost:4200",
+    #"http://127.0.0.1:4200",
+    ".finddining.ca",
 ]
+
+MAIN_SITE_URL = os.environ.get('MAIN_SITE_URL')
 
 #CSRF_COOKIE_NAME = 'XSRF-TOKEN'
 #CSRF_HEADER_NAME = 'HTTP_X_XSRF_TOKEN'
@@ -231,8 +244,8 @@ JWT_ALGORITHM = 'HS256'
 # JWT settings
 SIMPLE_JWT = {
     # for testing
-    #'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
-    #'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
+    # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
+    # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
@@ -262,18 +275,22 @@ SIMPLE_JWT = {
 }
 
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = ''
-import sys
-if len(sys.argv) < 2 or sys.argv[1] not in ['runserver', 'makemigrations', 'migrate']:
+# set staticfiles_dirs for django templates to render static files on development server
+if len(sys.argv) > 2 and sys.argv[1] == 'runserver':
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static/"),
+    ]
+else:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static/"),
-]
+
+# Try uncommenting STATICFILES_DIRS and commenting out STATIC_ROOT to read static files in DEV
+# STATICFILES_DIRS = [
+#   os.path.join(BASE_DIR, "static/"),
+# ]
 
 
 #SESSION_COOKIE_DOMAIN = '.localhost'
@@ -305,7 +322,7 @@ CACHES = {
 }
 
 
-GOOGLE_OAUTH2_CLIENT_ID=os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
+GOOGLE_OAUTH2_CLIENT_ID = os.environ.get('GOOGLE_OAUTH2_CLIENT_ID')
 
 # reCaptcha v2 for admin portal (still need to add the ip on recaptcha settings)
 RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAP_PRIV_KEY')
@@ -317,8 +334,10 @@ GA_VIEW_ID = os.environ.get('GA_VIEW_ID')
 
 GOOGLE_OAUTH2_CLIENT_EMAIL = os.environ.get('GOOGLE_OAUTH2_CLIENT_EMAIL')
 # note that the replace is required after reading
-GOOGLE_OAUTH2_PRIVATE_KEY = os.environ.get('GOOGLE_OAUTH2_PRIVATE_KEY').replace('\\n', '\n')
+GOOGLE_OAUTH2_PRIVATE_KEY = os.environ.get(
+    'GOOGLE_OAUTH2_PRIVATE_KEY').replace('\\n', '\n')
 
 GOOGLE_ANALYTICS_CLIENT_EMAIL = os.environ.get('GOOGLE_ANALYTICS_CLIENT_EMAIL')
 # note that the replace is required after reading
-GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get('GOOGLE_ANALYTICS_PRIVATE_KEY').replace('\\n', '\n')
+GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get(
+    'GOOGLE_ANALYTICS_PRIVATE_KEY').replace('\\n', '\n')

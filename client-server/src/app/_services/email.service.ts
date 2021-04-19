@@ -15,10 +15,14 @@ export class EmailService {
   constructor(private http: HttpClient) {
    }
 
-  /*
-  @Input: JSON object containing subject and content (can be html)
-  @Output: JSON object with messages indicating whether email is successfully sent or not
-  */
+  /**
+   * Sends an email to info@finddining.ca
+   * 
+   * @param emailData - JSON object containing:
+   *                      subject (string),
+   *                      content (string; plain text or html)
+   * @returns JSON object with messages indicating whether email is successfully sent or not
+   */
    sendEmail(emailData): Observable<any> {
     const endpoint = API_URL + 'email/send/'
     return this.http.post<any>(endpoint, emailData, httpOptions);

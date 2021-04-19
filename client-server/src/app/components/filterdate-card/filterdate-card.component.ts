@@ -27,6 +27,10 @@ export class FilterdateCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Selects all the months and years and sets the
+   * monthCheckMap and yearCheckMap to all true
+   */
   selectAll() {
     this.monthCheckMap = [];
     this.yearCheckMap = [];
@@ -46,6 +50,10 @@ export class FilterdateCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Deselects all the months and years and sets the
+   * monthCheckMap and yearCheckMap to all false
+   */
   reset() {
     this.monthCheckMap = [];
     this.yearCheckMap = [];
@@ -65,6 +73,10 @@ export class FilterdateCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Emits the monthCheckMap and yearCheckMap to be used
+   * in articles page for filtering
+   */
   sendList() {
     var checkMap = {
       month: this.monthCheckMap,

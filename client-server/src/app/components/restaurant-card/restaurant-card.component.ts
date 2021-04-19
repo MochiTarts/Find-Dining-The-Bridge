@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
 
@@ -18,16 +19,19 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
   pricepoints: any = [];
   pricepoint: string = '';
   serviceList: string = '';
+  pagePath: string = '';
 
   constructor(
     private userService: UserService,
     private tokenStorage: TokenStorageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
       this.userId = user.user_id
       this.role = user.role
+      this.pagePath = this.router.url;
 
       this.pricepoints = [
         {key: "$", value: "LOW"},
@@ -73,6 +77,10 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * Performs action to let user add a restaurant to their list of favourites
+   * @param restaurnt_id - the restaurant id
+   */
   addFavourite(restaurnt_id) {
     var data = {
       restaurant: restaurnt_id
@@ -83,6 +91,25 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
     },(error) => {
       alert(error.error.message)
     })
+  }
+
+  /**
+   * Performs action to let a user remove a restaurant from their list of favourites
+   * @param restaurnt_id - the restaurant id
+   */
+   remove(restaurnt_id) {
+    this.userService.removeFavRestaurant(restaurnt_id).subscribe(() => {
+      this.reload()
+    },(error) => {
+      alert(error.error.message)
+    })
+  }
+
+  reload() {
+    let currentUrl = this.router.url;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate([currentUrl]);
   }
 
 }

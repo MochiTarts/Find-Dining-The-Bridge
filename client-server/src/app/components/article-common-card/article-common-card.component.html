@@ -1,7 +1,8 @@
-<div class="card" (click)="openArticle()">
+<div class="card" (click)="openArticle()" (touchend)="openArticle()" placement="top" ngbTooltip="Open Article">
     <img class="card-img-top" src="../../../assets/images/food/indian.jpg" alt="Card image cap">
     <div class="card-body">
-        <h2 class="card-title">{{ article.modified_at | date:'mediumDate' }}</h2>
+        <h2 class="card-title" *ngIf="!article.modified_at">{{ article.created_at | date:'mediumDate' }}</h2>
+        <h2 class="card-title" *ngIf="article.modified_at">{{ article.modified_at | date:'mediumDate' }}</h2>
         <p class="card-text">
             {{ (articleTextPreview.replace(' ','').length > 50) ? (articleTextPreview | slice:0:50)+'...':(articleTextPreview) }}
         </p>

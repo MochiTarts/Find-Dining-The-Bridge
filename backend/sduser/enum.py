@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Roles(Enum):
     """ The Roles a user can have """
     RO = "Restaurant Owner"

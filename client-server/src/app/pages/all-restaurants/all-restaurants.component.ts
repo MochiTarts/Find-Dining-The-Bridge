@@ -35,7 +35,7 @@ export class AllRestaurantsComponent implements OnInit {
   serviceFilterRestaurants: any[];
   searchedRestaurants: any[];
 
-  restaurants: any[];
+  restaurants: any[] = [];
   dishes: any[];
   inputRestaurant: string = '';
   inputDishes: string = '';
@@ -46,6 +46,7 @@ export class AllRestaurantsComponent implements OnInit {
   faSearch = faSearch;
 
   location: string = '';
+  show: number = 5;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -83,10 +84,14 @@ export class AllRestaurantsComponent implements OnInit {
     this.titleService.setTitle("Browse | Find Dining Scarborough");
   }
 
+  /**
+   * Retrieves all approved restaurants
+   */
   loadRestaurants() {
     this.restaurantService.listRestaurants().subscribe((data) => {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
+      this.initializeRestaurants();
 
       var selectedPostion: any;
       if (this.location) {
@@ -101,6 +106,7 @@ export class AllRestaurantsComponent implements OnInit {
 
           this.addDistance(selectedPostion);
           this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
+          console.log(this.restaurants);
           this.allRestaurants = this.restaurants;
           this.initializeRestaurants();
 
@@ -124,6 +130,9 @@ export class AllRestaurantsComponent implements OnInit {
     });
   }
 
+  /**
+   * Retrieves all approved dishes
+   */
   loadDishes() {
     this.restaurantService.getDishes().subscribe((data) => {
       this.dishes = data.Dishes;
@@ -131,6 +140,9 @@ export class AllRestaurantsComponent implements OnInit {
     });
   }
 
+  /**
+   * Sets the filter lists to be used when filtering restaurants
+   */
   initializeRestaurants() {
     this.restaurants_total = this.allRestaurants.length;
     this.priceFilterRestaurants = this.allRestaurants;
@@ -140,11 +152,21 @@ export class AllRestaurantsComponent implements OnInit {
     this.searchedRestaurants = this.allRestaurants;
   }
 
+  /**
+   * Retrieves the location stamp of the searched restaurant's address
+   * @param searchText - the searched address
+   * @returns the Observable from the request
+   */
   getGeoCode(searchText: string): Observable<any> {
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json?country=ca&types=place,address,neighborhood,locality&access_token=${environment.mapbox.accessToken}`;
+    let newSearchText = searchText + ' Scarborough';
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${newSearchText}.json?country=ca&types=place,address,neighborhood,locality&access_token=${environment.mapbox.accessToken}`;
     return this.http.get(url);
   }
 
+  /**
+   * PLEASE UPDATE THIS DOCSTRING
+   * @param selectedPostion - ?
+   */
   addDistance(selectedPostion) {
     for (var i = 0; i < this.restaurants.length; i++) {
       var index = this.restaurants[i];
@@ -168,6 +190,9 @@ export class AllRestaurantsComponent implements OnInit {
     }
   }
 
+  /**
+   * Updates the list of restaurants to be displayed
+   */
   updateRestarants() {
     this.restaurants = [];
     for (var i = 0; i < this.priceFilterRestaurants.length; i++) {
@@ -181,6 +206,12 @@ export class AllRestaurantsComponent implements OnInit {
     }
   }
 
+  /**
+   * Sorts the restaurants by location, from closest to furthest
+   *
+   * @param restaurants - list of all approved restaurants
+   * @returns The sorted list of restaurants
+   */
   sortClosestCurrentLoc(restaurants: Array<any>) {
     return restaurants.sort((rest1, rest2) => {
       let result = 0;
@@ -198,11 +229,20 @@ export class AllRestaurantsComponent implements OnInit {
     });
   }
 
-  // This is for the enter key press on check boxes.
+  /**
+   * Clicks the checkbox on enter key
+   * @param event - the event that triggers this function
+   */
   filterEnter(event) {
     event.srcElement.click();
   }
 
+  /**
+   * Updates the priceFilterRestaurants list based on the selected pricepoints. Then updates
+   * the list of restaurants to display
+   *
+   * @param list - the list of bools representing which pricepoints were selected on the filter card
+   */
   filterPricepoint(list) {
     const isFalse = (currentValue) => !currentValue;
     if (list.every(isFalse)) {
@@ -256,6 +296,12 @@ export class AllRestaurantsComponent implements OnInit {
     // this.updateRestarants();
   }
 
+  /**
+   * Updates the cuisineFilterRestaurants list based on the selected cuisines. Then updates
+   * the list of restaurants to display
+   *
+   * @param list - the list of bools representing which cuisines were selected on the filter card
+   */
   filterCuisine(list) {
     const isFalse = (currentValue) => !currentValue;
 
@@ -276,6 +322,12 @@ export class AllRestaurantsComponent implements OnInit {
     this.updateRestarants();
   }
 
+  /**
+   * Updates the serviceFilterRestaurants list based on the selected services. Then updates
+   * the list of restaurants to display
+   *
+   * @param list - the list of bools representing which services were selected on the filter card
+   */
   filterService(list) {
     const isFalse = (currentValue) => !currentValue;
 
@@ -323,6 +375,10 @@ export class AllRestaurantsComponent implements OnInit {
     }
   }
 
+  /**
+   * Updates the list of searchedRestaurants based on search
+   * criteria
+   */
   searchRestaurants() {
     if (this.inputRestaurant == '') {
       this.searchedRestaurants = this.allRestaurants;
@@ -351,6 +407,16 @@ export class AllRestaurantsComponent implements OnInit {
     this.updateRestarants();
   }
 
+  filterToggle() {
+    var filters = document.getElementById('filters-mobile');
+    
+    if (filters.style.marginRight === "-400px") {
+      filters.style.marginRight = "0px";
+    } else {
+      filters.style.marginRight = "-400px";
+    }
+  }
+
   searchDishes() {
     if (this.inputDishes == '') {
       this.dishes = this.allDishes;
@@ -367,4 +433,5 @@ export class AllRestaurantsComponent implements OnInit {
       }
     }
   }
+
 }

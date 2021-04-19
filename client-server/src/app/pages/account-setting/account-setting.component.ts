@@ -15,6 +15,7 @@ import { PasswordChangeFormComponent } from '../../components/password-change-fo
 export class AccountSettingComponent implements OnInit {
   modalRef: any;
   userId: string;
+  isThirdParty: boolean = false;
   @ViewChild('changePassword') changePassword: PasswordChangeFormComponent;
   
   constructor(
@@ -28,21 +29,40 @@ export class AccountSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Account Settings | Find Dining Scarborough");
+    if (this.tokenStorage.getProvider()){
+      this.isThirdParty = true;
+    }
   }
 
+  /**
+   * Opens the modal asking for confirmation on account deactivation
+   * @param content - the modal to open
+   */
   openConfirmModal(content) {
     this.modalRef = this.modalService.open(content, { backdrop: 'static', keyboard: false });
   }
 
+  /**
+   * Performs action to deactivate the current user
+   */
   deactivateAccount() {
     var user = this.tokenStorage.getUser();
     this.userService.deactivateUser(user.user_id).subscribe(data => {
       this.modalRef.close();
-      this.reload()
+      this.reload();
       this.tokenStorage.signOut();
       this.authService.updateLoginStatus(false);
-      this.router.navigate([''])
+      this.router.navigate(['']);
     }, err => {
+      alert(err.error.message);
+      // fail to send email but account is successfully deactivated
+      if (err.error.code == 'fail_to_send_email'){
+        this.modalRef.close();
+        this.reload();
+        this.tokenStorage.signOut();
+        this.authService.updateLoginStatus(false);
+        this.router.navigate(['']);
+      }
       // console.log(err);
     });
 

@@ -136,40 +136,43 @@
 
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Our Story">
-      <div class="row">
-        <div class="col-md-8">
-          <p class="tab-info-left section_p">{{ restaurantDetails.bio }}</p>
-          <div class="tab-info-left section_p" style="margin-top: 25px;">
-            <b>Restaurant Owners: </b><br />
-            <div *ngFor="let owner of restaurantDetails.owner_first_name; let i=index;">
-              <div>
-                {{ restaurantDetails.owner_first_name[i] + ' ' + restaurantDetails.owner_last_name[i] }}
-                <span *ngIf="restaurantDetails.owner_preferred_name[i]">( {{ restaurantDetails.owner_preferred_name[i] }} )</span>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-8">
+            <p class="tab-info-left section_p">{{ restaurantDetails.bio }}</p>
+            <div class="tab-info-left section_p" style="margin-top: 25px;">
+              <b>Restaurant Owners: </b><br />
+              <div *ngFor="let owner of restaurantDetails.owner_first_name; let i=index;">
+                <div>
+                  {{ restaurantDetails.owner_first_name[i] + ' ' + restaurantDetails.owner_last_name[i] }}
+                  <span *ngIf="restaurantDetails.owner_preferred_name[i]">( {{ restaurantDetails.owner_preferred_name[i] }} )</span>
+                </div>
               </div>
             </div>
+            <div *ngIf="restaurantDetails.owner_story && restaurantDetails.owner_story != restaurantDetails.bio" class="tab-info-left section_p" style="margin-top: 25px;">
+              <b>Owner Story: </b><br />
+              <p>{{ restaurantDetails.owner_story }}</p>
+            </div>
           </div>
-          <div *ngIf="restaurantDetails.owner_story && restaurantDetails.owner_story != restaurantDetails.bio" class="tab-info-left section_p" style="margin-top: 25px;">
-            <b>Owner Story: </b><br />
-            <p>{{ restaurantDetails.owner_story }}</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url != 'https://storage.googleapis.com/default-assets/cover.jpg'">
-            <img
-              src="{{ restaurantDetails.cover_photo_url }}"
-              width="100%"
-              alt="Story photo"
-            />
-          </div>
-          <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url == 'https://storage.googleapis.com/default-assets/cover.jpg'">
-            <img
-              src="/assets/images/undraw_chef.png"
-              width="100%"
-              alt="Story photo"
-            />
+          <div class="col-md-4">
+            <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url != 'https://storage.googleapis.com/default-assets/cover.jpg'">
+              <img
+                src="{{ restaurantDetails.cover_photo_url }}"
+                width="100%"
+                alt="Story photo"
+              />
+            </div>
+            <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url == 'https://storage.googleapis.com/default-assets/cover.jpg'">
+              <img
+                src="/assets/images/undraw_chef.png"
+                width="100%"
+                alt="Story photo"
+              />
+            </div>
           </div>
         </div>
       </div>
+
       <div style="text-align: center; padding-bottom: 50px;">
         <button
           *ngIf="role == 'RO' && !isQueryRestaurant"
@@ -246,88 +249,91 @@
     </mat-tab>
 
     <mat-tab label="Details">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="tab-info-left">
-            <div>
-              <h1 class="section-title">Hours of Operation</h1>
-              <p class="section_p">{{ restaurantDetails.open_hours }}</p>
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="tab-info-left">
+              <div>
+                <h1 class="section-title">Hours of Operation</h1>
+                <p class="section_p">{{ restaurantDetails.open_hours }}</p>
+              </div>
+              <div>
+                <p class="section_p">{{ paymentList }}</p>
+              </div>
+              <div *ngIf="restaurantDetails.web_url">
+                <a class="section_p web_url" href="{{ restaurantDetails.web_url }}" target="_blank">{{ restaurantDetails.web_url }}</a>
+              </div>
             </div>
-            <div>
-              <p class="section_p">{{ paymentList }}</p>
+
+            <div class="row tab-info-left" style="margin-top: 10px;">
+              <a
+                *ngIf="restaurantDetails.web_url != ''"
+                href="{{ restaurantDetails.web_url }}"
+                target="_blank"
+                aria-label="View our Website"
+              >
+                <fa-icon class="contact-icon" [icon]="faShareAlt" placement="bottom" ngbTooltip="View our Website"></fa-icon>
+              </a>
+              <a
+                *ngIf="restaurantDetails.facebook != ''"
+                href="{{ restaurantDetails.facebook }}"
+                target="_blank"
+                aria-label="View our Facebook"
+              >
+                <fa-icon class="contact-icon" [icon]="faFacebookF" placement="bottom" ngbTooltip="View our Facebook"></fa-icon>
+              </a>
+              <a
+                *ngIf="restaurantDetails.twitter != ''"
+                href="{{ restaurantDetails.twitter }}"
+                target="_blank"
+                aria-label="View our Twitter"
+              >
+                <fa-icon class="contact-icon" [icon]="faTwitter" placement="bottom" ngbTooltip="View our Twitter"></fa-icon>
+              </a>
+              <a
+                *ngIf="restaurantDetails.instagram != ''"
+                href="{{ restaurantDetails.instagram }}"
+                target="_blank"
+                aria-label="View our Instagram"
+              >
+                <fa-icon class="contact-icon" [icon]="faInstagram" placement="bottom" ngbTooltip="View our Instagram"></fa-icon>
+              </a>
             </div>
-            <div *ngIf="restaurantDetails.web_url">
-              <a class="section_p web_url" href="{{ restaurantDetails.web_url }}" target="_blank">{{ restaurantDetails.web_url }}</a>
+
+            <div class="tab-info-left" style="margin-top: 10px;">
+              <app-virtual-scrolling [restaurantName]="restaurantDetails.name"></app-virtual-scrolling>
             </div>
           </div>
+          <div class="col-md-8">
+            <div class="tab-info-right tab-detail-right">
+              <ngb-alert
+                *ngIf="restaurantDetails.deliveryDetails.length == 0
+                        && restaurantDetails.dineinPickupDetails.length == 0
+                        && restaurantDetails.locationNotes.length == 0"
+                [dismissible]="false"
+              >
+                No updates available. Please check again at a later time.
+              </ngb-alert>
 
-          <div class="row tab-info-left" style="margin-top: 10px;">
-            <a
-              *ngIf="restaurantDetails.web_url != ''"
-              href="{{ restaurantDetails.web_url }}"
-              target="_blank"
-              aria-label="View our Website"
-            >
-              <fa-icon class="contact-icon" [icon]="faShareAlt" placement="bottom" ngbTooltip="View our Website"></fa-icon>
-            </a>
-            <a
-              *ngIf="restaurantDetails.facebook != ''"
-              href="{{ restaurantDetails.facebook }}"
-              target="_blank"
-              aria-label="View our Facebook"
-            >
-              <fa-icon class="contact-icon" [icon]="faFacebookF" placement="bottom" ngbTooltip="View our Facebook"></fa-icon>
-            </a>
-            <a
-              *ngIf="restaurantDetails.twitter != ''"
-              href="{{ restaurantDetails.twitter }}"
-              target="_blank"
-              aria-label="View our Twitter"
-            >
-              <fa-icon class="contact-icon" [icon]="faTwitter" placement="bottom" ngbTooltip="View our Twitter"></fa-icon>
-            </a>
-            <a
-              *ngIf="restaurantDetails.instagram != ''"
-              href="{{ restaurantDetails.instagram }}"
-              target="_blank"
-              aria-label="View our Instagram"
-            >
-              <fa-icon class="contact-icon" [icon]="faInstagram" placement="bottom" ngbTooltip="View our Instagram"></fa-icon>
-            </a>
-          </div>
+              <div *ngIf="restaurantDetails.deliveryDetails" class="sub_section">
+                <h1 class="section-title">Delivery Details</h1>
+                <p class="section_p">{{ restaurantDetails.deliveryDetails }}</p>
+              </div>
 
-          <div class="tab-info-left" style="margin-top: 10px;">
-            <app-virtual-scrolling [restaurantName]="restaurantDetails.name"></app-virtual-scrolling>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="tab-info-right tab-detail-right">
-            <ngb-alert
-              *ngIf="restaurantDetails.deliveryDetails.length == 0
-                      && restaurantDetails.dineinPickupDetails.length == 0
-                      && restaurantDetails.locationNotes.length == 0"
-              [dismissible]="false"
-            >
-              No updates available. Please check again at a later time.
-            </ngb-alert>
+              <div *ngIf="restaurantDetails.dineinPickupDetails" class="sub_section">
+                <h1 class="section-title">Dine-in / Pick-up Details</h1>
+                <p class="section_p">{{ restaurantDetails.dineinPickupDetails }}</p>
+              </div>
 
-            <div *ngIf="restaurantDetails.deliveryDetails" class="sub_section">
-              <h1 class="section-title">Delivery Details</h1>
-              <p class="section_p">{{ restaurantDetails.deliveryDetails }}</p>
-            </div>
-
-            <div *ngIf="restaurantDetails.dineinPickupDetails" class="sub_section">
-              <h1 class="section-title">Dine-in / Pick-up Details</h1>
-              <p class="section_p">{{ restaurantDetails.dineinPickupDetails }}</p>
-            </div>
-
-            <div *ngIf="restaurantDetails.locationNotes" class="sub_section">
-              <h1 class="section-title">Location Notes</h1>
-              <p class="section_p">{{ restaurantDetails.locationNotes }}</p>
+              <div *ngIf="restaurantDetails.locationNotes" class="sub_section">
+                <h1 class="section-title">Location Notes</h1>
+                <p class="section_p">{{ restaurantDetails.locationNotes }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
     </mat-tab>
 
     <mat-tab label="Photo & Videos">

@@ -1,9 +1,11 @@
 {% extends "admin/change_form.html" %}
 {% load staticfiles %}
 {% block extrahead %}
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
-<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
 <script>
     var randomColorGenerator = function () {
         var r = Math.floor(Math.random() * 255);
@@ -11,48 +13,16 @@
         var b = Math.floor(Math.random() * 255);
         return "rgb(" + r + "," + g + "," + b + ")";
     };
-    var options = {
-        responsive: true,
-        maintainAspectRatio: true,
-        legend: {
-            display: false
-        },
-        title: {
-            display: true,
-            text: '{{ original.name }}',
-            fontColor: 'black',
-            fontSize: 24
-        },
-        animation: {
-            animateScale: true,
-            animateRotate: true
-        },
-        scales: {
-            xAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Date',
-                    fontColor: 'black',
-                    fontSize: 16
-                },
-            }],
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Number of Pageviews',
-                    fontColor: 'black',
-                    fontSize: 16
-                }
-            }]
-        }
-    };
     var endpoint = "/api/restaurant/" + window.location.href.split("/")[7] + "/traffic/";
 
-    $.ajax({
-        method: "GET",
-        url: endpoint + "daily/",
-        success: function (restaurant) {
-            var labels = []
+    function barGraph(format_type) {
+        let url = "";
+        let chartId = "";
+        let xTitle = "";
+        let graphTitle = "";
+        let labels = [];
+        if (format_type == "daily") {
+            url = endpoint + "daily/";
             var date = new Date();
             y = date.getFullYear();
             m = date.getMonth();
@@ -60,77 +30,110 @@
             for (i = 1; i <= d; i++) {
                 date = new Date(y, m, i);
                 date = date.toLocaleDateString("en-US");
-                labels.push(date)
+                labels.push(date);
             }
-            var restaurantdata = {};
-            var data = [];
-            restaurantdata['label'] = restaurant['name'];
-            restaurantdata['backgroundColor'] = randomColorGenerator();
-            for (i = 0; i < restaurant['rows'].length; i++) {
-                data.push(restaurant['rows'][i][1]);
+            xTitle = "Date";
+            chartId = "daily-chart";
+            graphTitle = "Total Pageviews of this Month";
+        } else if (format_type == "hourly") {
+            url = endpoint + "hourly/";
+            for (i = 0; i <= 23; i++) {
+                labels.push(i);
             }
-            restaurantdata['data'] = data;
-
-            var ctx = document.getElementById("daily-chart");
-            var lineChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [restaurantdata],
-                },
-                options: options
-            })
-        },
-        error: function (err) {
-            console.log(err)
+            xTitle = "Hour";
+            chartId = "hourly-chart";
+            graphTitle = "Total Pageviews Per Hour of this Month";
         }
-    });
 
-    // $.ajax({
-    //     method: "GET",
-    //     url: endpoint + "hourly/",
-    //     success: function (restaurant) {
-    //         labels = []
-    //         for (i = 0; i <= 23; i++) {
-    //             labels.push(i)
-    //         }
+        let options = {
+            responsive: true,
+            maintainAspectRatio: true,
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: graphTitle,
+                fontColor: 'black',
+                fontSize: 24
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: xTitle,
+                        fontColor: 'black',
+                        fontSize: 16
+                    },
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Number of Pageviews',
+                        fontColor: 'black',
+                        fontSize: 16
+                    }
+                }]
+            }
+        };
 
-    //         var restaurantdata = {};
-    //         var data = [];
-    //         restaurantdata['label'] = restaurant['name'];
-    //         restaurantdata['backgroundColor'] = randomColorGenerator();
-    //         for (i = 0; i < restaurant['rows'].length; i++) {
-    //             data.push(restaurant['rows'][i][1]);
-    //         }
-    //         restaurantdata['data'] = data;
+        $.ajax({
+            method: "GET",
+            url: url,
+            success: function (restaurant) {
+                //Use the data and create objects with the required parameters
+                var restaurantdata = {};
+                var data = [];
+                restaurantdata['label'] = restaurant['name'];
+                restaurantdata['backgroundColor'] = randomColorGenerator();
+                for (i = 0; i < restaurant['rows'].length; i++) {
+                    data.push(restaurant['rows'][i][1]);
+                }
+                restaurantdata['data'] = data;
 
-    //         options['scales']['xAxes'][0]['scaleLabel']['labelString'] = 'Hour'
+                var ctx = document.getElementById(chartId);
+                var lineChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [restaurantdata],
+                    },
+                    options: options
+                })
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        });
+    }
+    $.when(barGraph("daily")).then(barGraph("hourly"));
 
-    //         var ctx = document.getElementById("hourly-chart");
-    //         var lineChart = new Chart(ctx, {
-    //             type: 'bar',
-    //             data: {
-    //                 labels: labels,
-    //                 datasets: [restaurantdata],
-    //             },
-    //             options: options
-    //         })
-    //     },
-    //     error: function (err) {
-    //         console.log(err)
-    //     }
-    // });
+    function toggleGraphs() {
+        var graphs = document.getElementById('graphs');
+        if (graphs.style.display == "none") {
+            graphs.style.display = "block";
+        } else {
+            graphs.style.display = "none";
+        }
+    }
 
 </script>
 {% endblock %}
 {% block content %}
-<h1>Graphs</h1>
-<hr>
-<div style="margin:auto; width:50%;">
-    <canvas id="daily-chart"></canvas>
-</div>
-<div style="margin:auto; width:50%;">
-    <canvas id="hourly-chart"></canvas>
+<button class="button" type="button" onclick="toggleGraphs()" style="margin-bottom: 10px;">Toggle Graphs</button>
+<div id="graphs" style="display: none; padding-top: 15px; padding-bottom: 75px;">
+    <hr>
+    <h1 style="font-weight: bold; font-size: 32px;">{{ original }}</h1>
+    <div style="margin:auto; width:1000px;">
+        <canvas id="daily-chart"></canvas>
+    </div>
+    <div style="margin:auto; width:1000px;">
+        <canvas id="hourly-chart"></canvas>
+    </div>
 </div>
 {{ block.super }}
 {% endblock %}

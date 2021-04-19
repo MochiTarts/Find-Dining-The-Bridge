@@ -92,18 +92,22 @@ export class NewsArticlesComponent implements OnInit {
       }
       this.latestArticles = this.filteredArticles.slice(0, 8);
 
-      this.selectedArticle = this.filteredArticles[1];
+      this.selectedArticle = this.filteredArticles[0];
       length = Math.ceil(this.filteredArticles.length/10);
       this.totalTabs = Array(length);
     })
   }
 
   ngAfterViewInit(): void {
-    if (this.role && this.role == 'BU' && this.profileId == null) {
-      this.userInfo.open(false);
-    }
   }
 
+  /**
+   * Sets the selectedArticle to the input article for display
+   * Performs css transitions to display article instead of
+   * articles headlines list
+   * 
+   * @param article - the article to open
+   */
   openArticle(article) {
     this.selectedArticle = article;
 
@@ -118,18 +122,27 @@ export class NewsArticlesComponent implements OnInit {
     }, 10);
   }
 
+  /**
+   * Performs css transitions to close selectedArticle and display
+   * the articles headelins list again
+   */
   closeArticle() {
     var articleDiv = document.getElementById("article-container");
     articleDiv.style.display = "none";
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
   }
 
+  /**
+   * The mobile equivalent of openArticle function
+   * 
+   * @param article - the article to open
+   */
   openArticleMobile(article) {
     this.selectedArticle = article;
 
@@ -144,26 +157,31 @@ export class NewsArticlesComponent implements OnInit {
     }, 10);
   }
 
+  /**
+   * The mobile equivalent of closeArticle function
+   */
   closeArticleMobile() {
     var articleDiv = document.getElementById("article-container-mobile");
     articleDiv.style.display = "none";
     articleDiv.style.opacity = "0";
 
     var articleListDiv = document.getElementById("article-list-mobile");
-    articleListDiv.style.display = "block";
+    articleListDiv.style.display = "flex";
     setTimeout(() => {
       articleListDiv.style.opacity = "1";
     }, 10);
   }
 
+  /**
+   * Performs css transition to toggle the filter by date
+   * card
+   */
   toggleFilter() {
     var mobileFilterDiv = document.getElementById("mobile-filter");
 
-    if (mobileFilterDiv.style.opacity === "0") {
-      mobileFilterDiv.style.opacity = "1";
+    if (mobileFilterDiv.style.marginRight === "-400px") {
       mobileFilterDiv.style.marginRight = "0";
     } else {
-      mobileFilterDiv.style.opacity = "0";
       mobileFilterDiv.style.marginRight = "-400px";
     }
   }
@@ -172,6 +190,13 @@ export class NewsArticlesComponent implements OnInit {
     event.srcElement.click();
   }
 
+  /**
+   * Updates the list of displayed articles to match the selected months/years
+   * 
+   * @param map - the JSON object containing the list of booleans representing which months/years were selected
+   *                (month) list of bool,
+   *                (year) list of bool
+   */
   filterDate(map) {
     const isFalse = (currentValue) => !currentValue;
 
@@ -223,11 +248,17 @@ export class NewsArticlesComponent implements OnInit {
     this.latestArticles = this.filteredArticles;
   }
 
+  /**
+   * Display all visible articles
+   */
   seeAll() {
     this.filteredArticles = this.allArticles;
     this.latestArticles = this.allArticles;
   }
 
+  /**
+   * Display the most recent articles (the top 8)
+   */
   seeMostRecent() {
     this.filteredArticles = this.allArticles.slice(0, 8);
     this.latestArticles = this.allArticles.slice(0, 8);

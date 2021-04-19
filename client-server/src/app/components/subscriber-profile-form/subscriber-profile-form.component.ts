@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { UserService } from 'src/app/_services/user.service';
+import { formValidation } from 'src/app/_validation/forms';
 import { formValidator } from 'src/app/_validation/formValidator';
 import { userValidator } from 'src/app/_validation/userValidator';
 import { environment } from 'src/environments/environment';
@@ -72,25 +73,29 @@ export class SubscriberProfileFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Opens the modal for user profile form
+   * @param closeButton - determines if the close button should be displayed on the modal
+   */
   open(closeButton: boolean): void {
     if (this.authService.isLoggedIn) {
       this.siteKey = `${environment.captcha.siteKey}`;
       if (!closeButton) {
         this.aFormGroup = this.formBuilder.group({
           recaptcha: ['', Validators.required],
-          firstname: ['', Validators.required],
-          lastname: ['', Validators.required],
-          postalcode: ['', Validators.required],
-          phone: ['', Validators.required],
+          firstname: [''],
+          lastname: [''],
+          postalcode: [''],
+          phone: [''],
           terms: ['', Validators.requiredTrue],
         });
       } else {
         this.aFormGroup = this.formBuilder.group({
           recaptcha: ['', Validators.required],
-          firstname: ['', Validators.required],
-          lastname: ['', Validators.required],
-          postalcode: ['', Validators.required],
-          phone: ['', Validators.required],
+          firstname: [''],
+          lastname: [''],
+          postalcode: [''],
+          phone: [''],
         });
       }
 
@@ -104,14 +109,25 @@ export class SubscriberProfileFormComponent implements OnInit {
     }
   }
 
+  addFieldsForProfanityCheck(profile) {
+    let newProfile = Object.assign({}, profile);
+    newProfile['first_name_p'] = profile.first_name;
+    newProfile['last_name_p'] = profile.last_name;
+    return newProfile;
+  }
+
+  /**
+   * Performs action to update or create the user's profile
+   */
   updateProfile(): void {
     var subscriberInfo = {
-      user_id: this.userId,
       first_name: (<HTMLInputElement>document.getElementById('firstname')).value,
       last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
     };
+
+    let profileForProfanityCheck = this.addFieldsForProfanityCheck(subscriberInfo);
 
     if (!this.profileId) {
       subscriberInfo["consent_status"] = ((<HTMLInputElement>document.getElementById('casl')).checked ? "EXPRESSED" : "IMPLIED")
@@ -120,7 +136,7 @@ export class SubscriberProfileFormComponent implements OnInit {
     // clear formErrors
     this.validator.clearAllErrors();
     //validate all formfields, the callback will throw appropriate errors, return true if any validation failed
-    let failFlagOneTwo = this.validator.validateAll(subscriberInfo, (key) => this.validator.setError(key));
+    let failFlagOneTwo = this.validator.validateAll(profileForProfanityCheck, (key) => this.validator.setError(key));
     //if any validation failed, do not POST
     if (!failFlagOneTwo) {
       subscriberInfo.phone = Number(subscriberInfo.phone);
@@ -134,7 +150,12 @@ export class SubscriberProfileFormComponent implements OnInit {
         this.userService.editSubscriberProfile(subscriberInfo).subscribe(() => {
           this.modalRef.close();
           this.reload();
-        })
+        },
+          (error) => {
+            if (formValidation.isInvalidResponse(error.error.detail)) {
+              formValidation.HandleInvalid(error.error.detail, (key) => this.validator.setError(key));
+            }
+          })
       } else {
         this.userService.createSubscriberProfile(subscriberInfo).subscribe((profile) => {
           var sduserInfo = {
@@ -145,19 +166,23 @@ export class SubscriberProfileFormComponent implements OnInit {
             this.authService.refreshToken().subscribe((token) => {
               this.tokenStorageService.updateTokenAndUser(token.access);
               this.modalRef.close();
-              this.reload();
+              setTimeout(() => {
+                this.reload();
+              }, 100);
             })
           })
-        })
+        },
+          (error) => {
+            if (formValidation.isInvalidResponse(error.error.detail)) {
+              formValidation.HandleInvalid(error.error.detail, (key) => this.validator.setError(key));
+            }
+          })
       }
     }
   }
 
   reload() {
-    let currentUrl = this.router.url;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([currentUrl]);
+    window.location.reload();
   }
 
 }

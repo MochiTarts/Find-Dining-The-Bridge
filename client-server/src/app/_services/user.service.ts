@@ -21,203 +21,136 @@ export class UserService {
 
 
 
-  // a get request to Django that has a template containing csrf token will set the token in the cookie
-  // this is needed for Django to handle api calls from the browser
+  /**
+   * a get request to Django that has a template containing csrf token will set the token in the cookie
+   * this is needed for Django to handle api calls from the browser
+   * @returns a response object from the Django server
+   */
   setCSRFToken(): Observable<any> {
     return this.http.get(API_URL + 'admin', { responseType: 'text' });
   }
 
-  /*
-  @Input: JSON object containing fields to be modified for an sduser
-  @Ouput: JSON object representing the updated sduser
-  Modified an sduser
-  */
+  /**
+   * Modifies an sduser
+   * 
+   * @param userData - JSON object containing fields to be modified for an sduser:
+   *                    Required fields:
+   *                     profile_id (string)
+   * @returns JSON object representing the updated sduser
+   */
   editAccountUser(userData): Observable<any> {
     const endpoint = SDUSER_ENDPOINT + 'edit/'
     return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
-  /*
-  @Input: JSON object containing required fields for making a subscriber profile
-  @Output: JSON object representing the created subscriber profile
-  Makes a new subscriber profile
-  */
+  /**
+   * Creates a new subscriber profile for the sduser
+   * 
+   * @param userData - JSON object containing:
+   *                     first_name (string),
+   *                     last_name (string),
+   *                     postalCode (string),
+   *                     phone (number)
+   * @returns JSON object representing the newly made subscriber profile
+   */
   createSubscriberProfile(userData): Observable<any> {
     const endpoint = SUBSCRIBER_ENDPOINT + 'signup/'
     return this.http.post<any>(endpoint, userData, httpOptions);
   }
 
-  /*
-  @Input: JSON object containing user email and fields of subscriber profile to be modified
-  @Output: JSON object representing the updated subscriber profile
-  Modifies an existing subscriber profile
-  */
+  /**
+   * Modifies an existing subscriber profile
+   * 
+   * @param userData - JSON object containing:
+   *                     first_name (string),
+   *                     last_name (string),
+   *                     postalCode (string),
+   *                     phone (number)
+   * @returns JSON object representing the updated subscriber profile
+   */
   editSubscriberProfile(userData): Observable<any> {
     const endpoint = SUBSCRIBER_ENDPOINT + 'profile/';
     return this.http.put<any>(endpoint, userData, httpOptions);
   }
 
-  /*
-  @Input: the logged in user's user_id from their token
-  @Output: Return all fields of a subscriber
-  Get all fields of subscriber
-  */
+  /**
+   * Retrieves the subscriber profile of a user
+   * @returns JSON object representing the obtained subscriber profile
+   */
   getSubscriberProfile(): Observable<any> {
     const endpoint = SUBSCRIBER_ENDPOINT + 'profile/'
     return this.http.get(endpoint);
   }
 
-  /*
-  @Input: JSON object containing restaurant_id of restaurant that will be part of this new relation
-  @Output: Message from request or error
-  Add a new restaurant to a user's list of favourites
-  */
-  addFavouriteRestaurant(data): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `favourite/`
-    return this.http.post<any>(endpoint, data)
-  }
-
-  /*
-  @Input: None
-  @Output: List of favourited restaurants
-  Get all restaurants favourited by a user
-  */
-  getFavouriteRestaurants(): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `favourite/`
-    return this.http.get(endpoint)
-  }
-
-  /*
-  @Input: id of the restaurant to be removed from user's favourites
-  @Output: Message from request
-  Removes a restaurant from a user's list of favourites
-  */
-  removeFavRestaurant(restaurant_id): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `favourite/${restaurant_id}/`
-    return this.http.delete<any>(endpoint)
-  }
-
-  /*
-  @Input: None
-  @Output: list of nearby restaurants from the user
-  Returns a list of up to 5 json objects, each object contains
-  the restaurant_id and the distance from the user
-  List is ordered from nearest to furthest
-  */
-  getNearbyRestaurants(): Observable<any> {
-    const endpoint = SDUSER_ENDPOINT + `nearby/`
-    return this.http.get(endpoint);
-  }
-
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-  /*
-  BELOW ARE THE OLD SERVICE METHODS FROM PREVIOUS REPO
-  SOME CAN BE MOVED OVER, SOME CAN BE SCRAPPED
-  */
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-  /*
-  @Input: JSON object from auth
-  @Output: Return all fields of a user
-  Get all fields of a user
-  */
-  getConsumer(userData): Observable<any> {
-    const endpoint = API_URL + 'consumer_subscriber_data/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
-  }
-
-  /*
-  @Input: JSON object from auth
-  @Output: Return all fields of a user
-  Get all fields of a user
-  */
-  getOwner(userData): Observable<any> {
-    const endpoint = API_URL + 'restaurant_owner_data/';
-    const userObject = {
-      email: userData.email
-    };
-    return this.http.get(endpoint, { params: userObject });
-  }
-
-
-  editConsumer(userData): Observable<any> {
-    const endpoint = API_URL + 'consumer_subscriber_edit/';
-    return this.http.post<any>(endpoint, userData);
-  }
-
-
-  editOwner(userData): Observable<any> {
-    const endpoint = API_URL + 'restaurant_owner_edit/';
-    return this.http.post<any>(endpoint, userData);
-  }
-
-
-  /*
-  @Input: JSON object from auth
-  @Output: Return True if user is in database, False otherwise
-  Check if user exists in the database
-  */
-  editUser(userData): Observable<any> {
-    const endpoint = API_URL + 'edit/';
-
-    return this.http.post<any>(endpoint, userData);
-  }
-
-  /*
-  @Input: JSON object from auth
-  @Output: Return True if user is in database, False otherwise
-  Check if user exists in the database
-  */
-  checkUserExists(userData): Observable<any> {
-    const endpoint = API_URL + 'exists/';
-    const userObject = {
-      email: userData.email,
-    };
-    return this.http.get(endpoint, { params: userObject });
-  }
-
-  uploadUserMedia(formData, id): Observable<any> {
-    const endpoint = API_URL + UserService.UPLOAD_ENDPOINT;
-
-    formData.append('save_location', 'picture');
-    formData.append('app', 'user_SDUserMedia');
-    formData.append('email', id);
-
-    return this.http.post<any>(endpoint, formData);
-  }
-
-  /*
-  @Input: JSON object from auth
-  @Output: None
-  Update user in the database after logging in
-  */
-  updateUserInfo(userData): Observable<any> {
-    const endpoint = API_URL + 'user/update/';
-    return this.http.post<any>(endpoint, userData);
-  }
-
-
-  /*
-  @Input: user id
-  @Output: Observable
-  Deactivate the user account
-  */
+  /**
+   * Deacivates the user's account (does not delete user from the database)
+   * @param id - user_id of the sduser
+   * @returns message from the Django server (success or fail with errors)
+   */
   deactivateUser(id: string): Observable<any> {
     const endpoint = API_URL + 'user/deactivate/';
     return this.http.post<any>(endpoint, JSON.stringify({ 'id': id }), httpOptions);
   }
 
-  /*
-  @Input: None
-  @Output: Observable
-  Deactivate the user account
-  */
+  /**
+   * Changes the user's password
+   * (a new access token is returned and the
+   * refresh token in the cookie is also updated)
+   * 
+   * @param passwordData - JSON object containing:
+   *                        old_password (string),
+   *                        new_password1 (string),
+   *                        new_password2 (string)
+   * @returns Observable from password change request
+   * (either containing a new access token or messages
+   * indicating the errors)
+   */
   changeUserPassword(passwordData: any): Observable<any> {
     const endpoint = API_URL + 'user/change_password/';
     return this.http.post<any>(endpoint, passwordData, httpOptions);
+  }
+
+  /**
+   * Adds a new restaurant to the user's favourites list
+   * 
+   * @param data - JSON object containing:
+   *                restaurant_id (string)
+   * @returns successful message or an error
+   */
+  addFavouriteRestaurant(data): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `favourite/`
+    return this.http.post<any>(endpoint, data)
+  }
+
+  /**
+   * Retrieves all restaurants favourited by the user
+   * @returns list of JSON objects representing restaurants
+   */
+  getFavouriteRestaurants(): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `favourite/`
+    return this.http.get(endpoint)
+  }
+
+  /**
+   * Removes a restaurant from the user's favourites list
+   * 
+   * @param restaurant_id - id of the restaurant to be
+   *  removed from the user's favourites list
+   * @returns successful message or an error
+   */
+  removeFavRestaurant(restaurant_id): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `favourite/${restaurant_id}/`
+    return this.http.delete<any>(endpoint)
+  }
+
+  /**
+   * Retrieves a list of up to 5 JSON objects, each one contains
+   * the restaurant_id and the distance from the user
+   * @returns list of JSON objects (max up to 5)
+   */
+  getNearbyRestaurants(): Observable<any> {
+    const endpoint = SDUSER_ENDPOINT + `nearby/`
+    return this.http.get(endpoint);
   }
 
 }

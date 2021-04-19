@@ -118,11 +118,20 @@ export class MapComponent implements OnInit, OnChanges {
     this.updateMap(this.restaurants);
   }
 
+  /**
+   * Gets the location marker on the map of the searched address
+   * @param searchText - the searched address
+   * @returns the Observable from the http request
+   */
   getGeoCode(searchText: string): Observable<any> {
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchText}.json?country=ca&types=place,address,neighborhood,locality&access_token=${environment.mapbox.accessToken}`;
     return this.http.get(url);
   }
 
+  /**
+   * Updates the location markers on the map given the list of restaurants
+   * @param restaurants - list of restaurants
+   */
   updateMap(restaurants) {
     for (let marker of this.currentMarkers) {
       marker.remove();

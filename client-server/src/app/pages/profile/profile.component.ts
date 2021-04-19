@@ -39,6 +39,9 @@ export class ProfileComponent implements OnInit {
       })
   }
 
+  /**
+   * Opens the user profile edit form modal
+   */
   openEditModal(): void {
     this.userInfo.open(true);
   }

@@ -24,20 +24,21 @@ import ast
 
 def reject_restr(model_admin, request, queryset):
     """
-    Reject a Restaurant and unpublish it if the current one on live site is the same as the submission
-    Sends a notification email to the restaurant email for each successful rejection
+    Reject a Restaurant's changes and sends a notification email to the restaurant email for
+    each successful rejection.
     """
     count = 0
     total = 0
     restaurant_name = ""
     restaurant_id = None
+    wrong_status = False
     for r in queryset:
         total += 1
         res_dict = model_to_json(r)
         res_status = res_dict['status']
         # note that if the submission is already rejected then it will not be
         # on the live site
-        if res_status != Status.Rejected.value:
+        if res_status == Status.In_Progress.value or res_status == Status.Pending.value:
             count += 1
             restaurant_name = res_dict.get('name', "")
             restaurant_id = res_dict["_id"]
@@ -48,18 +49,16 @@ def reject_restr(model_admin, request, queryset):
                 email,
                 restaurant_name,
                 'restaurant')
-            # restaurant that is being displayed on the live site
-            restaurant = Restaurant.objects.get(_id=restaurant_id)
-            if restaurant:
-                restaurant.delete()
-    # change status to reject
-    queryset.update(status=Status.Rejected.value)
+        else:
+            wrong_status = True
     if count > 1:
         messages.success(
             request,
             "Successfully rejected " +
             str(count) +
             " restaurant profiles.")
+        # change status to reject
+        queryset.update(status=Status.Rejected.value)
     elif count == 1:
         link = reverse(
             "admin:restaurant_pendingrestaurant_change",
@@ -69,6 +68,11 @@ def reject_restr(model_admin, request, queryset):
             link,
             restaurant_name)
         messages.success(request, msg)
+        # change status to reject
+        queryset.update(status=Status.Rejected.value)
+    elif wrong_status:
+        messages.success(
+            request, "You can only reject 'Pending' or 'In_Progress' restaurants")
     else:
         if total > 1:
             msg = "The selected restaurant profiles have been rejected already."
@@ -82,15 +86,16 @@ reject_restr.short_description = "Reject a restaurant submission (and unpublish 
 
 def unpublish_restr(model_admin, request, queryset):
     """
-    Unpublish a live Restaurant Profile and updates the status of pendingRestaurant accordingly
-    Sends a notification email to the restaurant email for each successful unpublish action
+    Unpublish a live Restaurant Profile and updates the
+    status of pendingRestaurant accordingly.
+    Sends a notification email to the restaurant email for
+    each successful unpublish action.
     """
     count = 0
     restaurant_name = ""
     for r in queryset:
         count += 1
         res_dict = model_to_json(r)
-        #res_status = res_dict['status']
 
         owner_prefer_names = res_dict.get('owner_preferred_name', "")
         restaurant_name = res_dict.get('name', "")
@@ -107,8 +112,8 @@ def unpublish_restr(model_admin, request, queryset):
         if pendingRestaurant.status == Status.Approved.value:
             pendingRestaurant.status = Status.Rejected.value
             pendingRestaurant.save()
-        # Remove all user-restaurant favourites for the restaurant to be
-        # unpublished
+        # Remove all user-restaurant favourite relation records
+        # that contains the unpublished restaurant
         UserFavRestrs.objects.filter(restaurant=restaurant_id).delete()
     queryset.delete()
     if count > 1:
@@ -127,33 +132,43 @@ unpublish_restr.short_description = "Unpublish a restaurant (remove it from live
 
 def approve_restr(model_admin, request, queryset):
     """
-    Approve of PendingRestaurant info and insert into Restaurant collection
-    Sends a notification email to the restaurant email for each successful approval
+    Approve of PendingRestaurant record and insert it into Restaurant collection,
+    or updates the existing record in Restaurant collection that corresponds to
+    this PendingRestaurant record.
+    Sends a notification email to the restaurant email
+    for each successful approval.
     """
     count = 0
     total = 0
     restaurant_name = ""
     restaurant_id = None
+    wrong_status = False
     for r in queryset:
         total += 1
-        print(r._id)
         restaurant = Restaurant(**model_to_json(r))
         old_restaurant = Restaurant.objects.filter(_id=r._id).first()
 
         if r.status == Status.Pending.value:
             count += 1
+
+            # If there's already an approved restaurant record in Restaurant collection
+            # check if the restaurant's media (image or video) is oudated, by comparing the url
+            # to the url in the PendingRestaurant's media fields. If they don't match
+            # delete the approved restaurant record's media file from google cloud bucket
             if old_restaurant:
                 if old_restaurant.logo_url != r.logo_url:
                     delete(old_restaurant.logo_url)
                 if old_restaurant.cover_photo_url != r.cover_photo_url:
                     delete(old_restaurant.cover_photo_url)
-                if old_restaurant.restaurant_video_url != r.restaurant_video_url and 'youtube' not in old_restaurant.restaurant_video_url:
+                if (old_restaurant.restaurant_video_url != r.restaurant_video_url
+                        and 'youtube' not in old_restaurant.restaurant_video_url):
                     delete(old_restaurant.restaurant_video_url)
             edit_model(
                 restaurant, {
                     "status": Status.Approved.value, "approved_once": True}, [
                     "status", "approved_once"])
             save_and_clean(restaurant)
+
             owner_prefer_names = r.owner_preferred_name
             restaurant_name = r.name
             email = r.email
@@ -164,15 +179,14 @@ def approve_restr(model_admin, request, queryset):
                 restaurant_name,
                 'restaurant')
         else:
-            messages.error(
-                request, "You can only approve of 'Pending' restaurants")
-    queryset.update(status=Status.Approved.value, approved_once=True)
+            wrong_status = True
     if count > 1:
         messages.success(
             request,
             "Successfully approved " +
             str(count) +
             " restaurant profiles.")
+        queryset.update(status=Status.Approved.value, approved_once=True)
     elif count == 1:
         link = reverse(
             "admin:restaurant_pendingrestaurant_change",
@@ -182,6 +196,10 @@ def approve_restr(model_admin, request, queryset):
             link,
             restaurant_name)
         messages.success(request, msg)
+        queryset.update(status=Status.Approved.value, approved_once=True)
+    elif wrong_status:
+        messages.error(
+            request, "You can only approve of 'Pending' restaurants")
     else:
         if total > 1:
             msg = "The selected restaurant profiles have been approved already."
@@ -195,27 +213,26 @@ approve_restr.short_description = "Approve of restaurant info to be displayed on
 
 def reject_food(model_admin, request, queryset):
     """
-    Reject a Food and unpublish it if the current one on live site is the same as the submission
-    Sends a notification email to the restaurant email for each successful rejection
+    Reject a Food and sends a notification email to the restaurant email for
+    each successful rejection.
     """
     count = 0
     total = 0
+    wrong_status = False
     for f in queryset:
         total += 1
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
         # note that if the submission is already rejected then it will not be
         # on the live site
-        if f.status != Status.Rejected.value:
+        if f.status == Status.Pending.value:
             count += 1
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name
             food_name = f.name
             email = restr.email
             send_reject_email(owner_prefer_names, email, food_name, 'food')
-            # restaurant that is being displayed on the live site
-            food = Food.objects.filter(_id=f._id)
-            if food.exists():
-                food.delete()
+        else:
+            wrong_status = True
     # change status to reject
     queryset.update(status=Status.Rejected.value)
     if count > 1:
@@ -231,6 +248,8 @@ def reject_food(model_admin, request, queryset):
             link,
             f.name)
         messages.success(request, msg)
+    elif wrong_status:
+        messages.error(request, "You can only reject 'Pending' food")
     else:
         if total > 1:
             msg = "The selected food profiles have been rejected already."
@@ -244,8 +263,10 @@ reject_food.short_description = "Reject a food submission (and unpublish from li
 
 def unpublish_food(model_admin, request, queryset):
     """
-    Unpublish a live Restaurant Dish Profile and updates the status of pendingDish accordingly
-    Sends a notification email to the restaurant email for each successful unpublish action
+    Unpublish a live Restaurant Dish Profile and updates
+    the status of pendingDish accordingly.
+    Sends a notification email to the restaurant email for
+    each successful unpublish action.
     """
     count = 0
     for f in queryset:
@@ -276,33 +297,46 @@ unpublish_food.short_description = "Unpublish a food (remove it from live site a
 
 
 def approve_food(model_admin, request, queryset):
-    """ Approve of PendingFood info and insert into Food collection """
+    """ Approve of PendingFood record and insert it into Food collection,
+    or updates the existing record in Food collection that corresponds to
+    this PendingFood record.
+    Sends a notification email to the restaurant email
+    for each successful approval.
+    """
     count = 0
     total = 0
+    wrong_status = False
     for f in queryset:
         total += 1
         food = Food(**model_to_json(f))
         old_food = Food.objects.filter(_id=f._id).first()
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
-        if restaurant.exists() and f.status != 'Approved':
+        if restaurant.exists() and f.status == Status.Pending:
             count += 1
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name
             food_name = f.name
             email = restr.email
             send_approval_email(owner_prefer_names, email, food_name, 'food')
+
+            # If there's already an approved food record in Food collection
+            # check if the food's picture is oudated, by comparing the url
+            # to the url in the PendingFood's picture field. If they don't match
+            # delete the approved food record's picture from google cloud bucket
             if old_food:
                 if old_food.picture != f.picture:
                     delete(old_food.picture)
             food.status = Status.Approved.value
             save_and_clean(food)
-    queryset.update(status=Status.Approved.value)
+        else:
+            wrong_status = True
     if count > 1:
         messages.success(
             request,
             "Successfully approved " +
             str(count) +
             " food profiles.")
+        queryset.update(status=Status.Approved.value)
     elif count == 1:
         link = reverse("admin:restaurant_pendingfood_change", args=[f._id])
         msg = format_html(
@@ -310,6 +344,10 @@ def approve_food(model_admin, request, queryset):
             link,
             f.name)
         messages.success(request, msg)
+        queryset.update(status=Status.Approved.value)
+    elif wrong_status:
+        messages.success(
+            request, "The restaurant this dish belongs to does not exist, or the dish status if not 'Pending'")
     else:
         if total > 1:
             msg = "The selected food profiles have been approved already."

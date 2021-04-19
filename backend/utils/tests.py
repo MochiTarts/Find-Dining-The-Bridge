@@ -17,4 +17,3 @@ class GeoControllerTest(TestCase):
     def test_exception(self):
         """Test if exception is raised upon invalid query"""
         self.assertRaises(ValueError, geo_controller.geocode, self.query2)
-

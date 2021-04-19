@@ -32,6 +32,7 @@ export class FavouritesComponent implements OnInit {
   inputRestaurant: string = '';
 
   faSearch = faSearch;
+  show: number = 5;
 
   constructor(
     private restaurantService: RestaurantService,
@@ -53,6 +54,10 @@ export class FavouritesComponent implements OnInit {
     this.titleService.setTitle("Favourites | Find Dining Scarborough");
   }
 
+  /**
+   * Retrieves the list of favourited restaurants by the user
+   * @param userId - the user's user_id
+   */
   loadRestaurant(userId: string): void {
     /* Replace this with method for calling list
        of favourite restaurants by userId */
@@ -70,6 +75,9 @@ export class FavouritesComponent implements OnInit {
     })
   }
 
+  /**
+   * Updates the list of favourited restaurants to be displayed
+   */
   updateRestarants() {
     this.restaurants = [];
     for (var i = 0; i < this.priceFilterRestaurants.length; i++) {
@@ -84,6 +92,10 @@ export class FavouritesComponent implements OnInit {
     }
   }
 
+  /**
+   * Updates the list of searchedRestaurants based on search
+   * criteria
+   */
   searchRestaurants() {
     if (this.inputRestaurant == '') {
       this.searchedRestaurants = this.allRestaurants;
@@ -112,11 +124,20 @@ export class FavouritesComponent implements OnInit {
     this.updateRestarants();
   }
 
-  // This is for the enter key press on check boxes.
+  /**
+   * Clicks the checkbox on enter key
+   * @param event - the event that triggers this function
+   */
   filterEnter(event){
     event.srcElement.click();
   }
 
+  /**
+   * Updates the cuisineFilterRestaurants list based on the selected cuisines. Then updates
+   * the list of favourited restaurants to display
+   * 
+   * @param list - the list of bools representing which cuisines were selected on the filter card
+   */
   filterCuisine(list) {
     const isFalse = (currentValue) => !currentValue;
 
@@ -137,6 +158,12 @@ export class FavouritesComponent implements OnInit {
     this.updateRestarants();
   }
 
+  /**
+   * Updates the serviceFilterRestaurants list based on the selected services. Then updates
+   * the list of favourited restaurants to display
+   * 
+   * @param list - the list of bools representing which services were selected on the filter card
+   */
   filterService(list) {
     const isFalse = (currentValue) => !currentValue;
 
@@ -156,6 +183,12 @@ export class FavouritesComponent implements OnInit {
     this.updateRestarants();
   }
 
+  /**
+   * Updates the priceFilterRestaurants list based on the selected pricepoints. Then updates
+   * the list of favourited restaurants to display
+   * 
+   * @param list - the list of bools representing which pricepoints were selected on the filter card
+   */
   filterPricepoint(list) {
     const isFalse = (currentValue) => !currentValue;
 
@@ -183,6 +216,16 @@ export class FavouritesComponent implements OnInit {
       }
     }
     this.updateRestarants();
+  }
+
+  filterToggle() {
+    var filters = document.getElementById('filters-mobile');
+    
+    if (filters.style.marginRight === "-250px") {
+      filters.style.marginRight = "0px";
+    } else {
+      filters.style.marginRight = "-250px";
+    }
   }
 
 }

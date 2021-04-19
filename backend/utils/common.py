@@ -1,8 +1,10 @@
 from bson import ObjectId
 from sduser.backends import jwt_decode
 
+
 def isObjectId(oid):
     return ObjectId.is_valid(oid)
+
 
 def save_and_clean(model, updated_fields=None):
     """
@@ -22,14 +24,18 @@ def save_and_clean(model, updated_fields=None):
         print(err)
         raise err
 
+
 def get_user(request):
-    '''
+    """
     get user from decoding the access token in the request header
 
     note that request.user will return a SDUser object for
     requests obtained inside any DRF API View so it is not needed
     for those views
-    '''
+
+    :param request: the HttpRequest
+    :return: the decoded user or False
+    """
     if not request:
         return False
 

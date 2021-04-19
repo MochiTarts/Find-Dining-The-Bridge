@@ -21,7 +21,7 @@ import { GetInvolvedComponent } from './pages/get-involved/get-involved.componen
 import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
-import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
+import { ResourcesComponent } from './pages/resources/resources.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -40,7 +40,7 @@ const routes: Routes = [
   { path: 'articles', component: NewsArticlesComponent, },
   { path: 'privacy-policy', component: PrivacyPolicyComponent, },
   { path: 'about-us', component: AboutUsComponent, },
-  { path: 'about-our-partner', component: AboutOurPartnerComponent, },
+  { path: 'resources', component: ResourcesComponent, canActivate: [AuthGuard, ROGuard] },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {

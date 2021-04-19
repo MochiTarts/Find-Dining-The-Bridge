@@ -17,7 +17,9 @@ export class DynamicLabelComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  //checks changes to the field to modify its open/closed state 
+  /**
+   * Checks changes to the field to modify its open/closed state
+   */
   ngDoCheck(){
       const change = this.differ.diff(this);
       if(change){

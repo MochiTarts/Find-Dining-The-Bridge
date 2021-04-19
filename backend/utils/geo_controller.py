@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 # geolocation library
 import googlemaps
@@ -15,11 +16,12 @@ def geocode(address):
     """
     results = client.geocode(address)
     if len(results) == 0:
-        raise ValueError('No results')
-    elif len(results) == 1:
-        return results[0]['geometry']['location']
+        raise ValidationError(
+            message='No results from the given address: ' + address,
+            code='location_not_exist')
     else:
-        raise ValueError('Ambiguous query')
+        return results[0]['geometry']['location']
+
 
 def in_scarborough(coord):
     """

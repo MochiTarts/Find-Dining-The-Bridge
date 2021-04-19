@@ -1,0 +1,1716 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>client-server documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">client-server documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li>CarouselWithThumbnailComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts</code>
+</p>
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="https://angular.io/api/core/OnDestroy" target="_blank" >OnDestroy</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+            <tr>
+                <td class="col-md-3">changeDetection</td>
+                <td class="col-md-9"><code>ChangeDetectionStrategy.OnPush</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-carousel-with-thumbnail</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./carousel-with-thumbnail.component.scss,<br>../carousel/carousel.component.sass</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./carousel-with-thumbnail.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_activeSlides">_activeSlides</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#_direction">_direction</a>
+                            </li>
+                            <li>
+                                <a href="#currentInterval">currentInterval</a>
+                            </li>
+                            <li>
+                                <a href="#differ">differ</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getAnimationSlideState">getAnimationSlideState</a>
+                            </li>
+                            <li>
+                                <a href="#getDirection">getDirection</a>
+                            </li>
+                            <li>
+                                <a href="#getPreviousCurrentNextIndexes">getPreviousCurrentNextIndexes</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnDestroy">ngOnDestroy</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit">ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#resetTimer">resetTimer</a>
+                            </li>
+                            <li>
+                                <a href="#select">select</a>
+                            </li>
+                            <li>
+                                <a href="#startTimer">startTimer</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#animation">animation</a>
+                            </li>
+                            <li>
+                                <a href="#arrowsOutside">arrowsOutside</a>
+                            </li>
+                            <li>
+                                <a href="#autoPlayDuration">autoPlayDuration</a>
+                            </li>
+                            <li>
+                                <a href="#darkArrows">darkArrows</a>
+                            </li>
+                            <li>
+                                <a href="#isNavigationVisible">isNavigationVisible</a>
+                            </li>
+                            <li>
+                                <a href="#isThumbnailsVisible">isThumbnailsVisible</a>
+                            </li>
+                            <li>
+                                <a href="#slides">slides</a>
+                            </li>
+                            <li>
+                                <a href="#slideTemplateRef">slideTemplateRef</a>
+                            </li>
+                            <li>
+                                <a href="#thumbnailTemplateRef">thumbnailTemplateRef</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#direction">direction</a>
+                                </li>
+                                <li>
+                                    <a href="#activeSlides">activeSlides</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(cd: <a href="https://angular.io/api/core/ChangeDetectorRef" target="_blank">ChangeDetectorRef</a>, differs: <a href="https://angular.io/api/core/KeyValueDiffers" target="_blank">KeyValueDiffers</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="90" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:90</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>cd</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/core/ChangeDetectorRef" target="_blank" >ChangeDetectorRef</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>differs</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/core/KeyValueDiffers" target="_blank" >KeyValueDiffers</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="animation"></a>
+                        <b>animation</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#Animation" target="_self" >Animation</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>Animation.Fade</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:66</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="arrowsOutside"></a>
+                        <b>arrowsOutside</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="71" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:71</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="autoPlayDuration"></a>
+                        <b>autoPlayDuration</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>0</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="67" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:67</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="darkArrows"></a>
+                        <b>darkArrows</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="70" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:70</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isNavigationVisible"></a>
+                        <b>isNavigationVisible</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:64</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="isThumbnailsVisible"></a>
+                        <b>isThumbnailsVisible</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="65" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:65</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="slides"></a>
+                        <b>slides</b>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="63" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:63</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="slideTemplateRef"></a>
+                        <b>slideTemplateRef</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="68" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:68</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="thumbnailTemplateRef"></a>
+                        <b>thumbnailTemplateRef</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>TemplateRef&lt;any&gt;</code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="69" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:69</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAnimationSlideState"></a>
+                    <span class="name">
+                        <b>
+                            getAnimationSlideState
+                        </b>
+                        <a href="#getAnimationSlideState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAnimationSlideState(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:142</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>index</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>&quot;&quot; | &quot;current&quot; | &quot;next&quot; | &quot;previous&quot;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDirection"></a>
+                    <span class="name">
+                        <b>
+                            getDirection
+                        </b>
+                        <a href="#getDirection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDirection(oldIndex: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, newIndex: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="120"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:120</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>oldIndex</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>newIndex</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/enumerations.html#Direction" target="_self" >Direction</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPreviousCurrentNextIndexes"></a>
+                    <span class="name">
+                        <b>
+                            getPreviousCurrentNextIndexes
+                        </b>
+                        <a href="#getPreviousCurrentNextIndexes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPreviousCurrentNextIndexes(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="132"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:132</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>index</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/ActiveSlides.html" target="_self" >ActiveSlides</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnDestroy"></a>
+                    <span class="name">
+                        <b>
+                            ngOnDestroy
+                        </b>
+                        <a href="#ngOnDestroy"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnDestroy()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="104"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:104</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <b>
+                            ngOnInit
+                        </b>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="94"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:94</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resetTimer"></a>
+                    <span class="name">
+                        <b>
+                            resetTimer
+                        </b>
+                        <a href="#resetTimer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resetTimer()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="154"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:154</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="select"></a>
+                    <span class="name">
+                        <b>
+                            select
+                        </b>
+                        <a href="#select"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>select(index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="109"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:109</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>index</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="startTimer"></a>
+                    <span class="name">
+                        <b>
+                            startTimer
+                        </b>
+                        <a href="#startTimer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>startTimer()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="146"
+                            class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:146</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_activeSlides"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            _activeSlides</b>
+                            <a href="#_activeSlides"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/ActiveSlides.html" target="_self" >ActiveSlides</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:84</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="_direction"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Private</span>
+                            _direction</b>
+                            <a href="#_direction"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../miscellaneous/enumerations.html#Direction" target="_self" >Direction</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>Direction.Next</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="76" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:76</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="currentInterval"></a>
+                        <span class="name">
+                            <b>
+                            currentInterval</b>
+                            <a href="#currentInterval"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="73" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:73</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="differ"></a>
+                        <span class="name">
+                            <b>
+                            differ</b>
+                            <a href="#differ"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../interfaces/ActiveSlides.html" target="_self" >KeyValueDiffer&lt;ActiveSlides | any&gt;</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:74</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="direction"></a>
+                        <span class="name"><b>direction</b><a href="#direction"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>direction()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="77" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:77</a></div>
+                                </td>
+                            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>direction(direction)</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="80" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:80</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>direction</td>
+                                                    
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="activeSlides"></a>
+                        <span class="name"><b>activeSlides</b><a href="#activeSlides"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>activeSlides()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="85" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:85</a></div>
+                                </td>
+                            </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>set</b><code>activeSlides(activeSlides)</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="88" class="link-to-prism">src/app/components/carousel-with-thumbnail/carousel-with-thumbnail.component.ts:88</a></div>
+                                </td>
+                            </tr>
+                    <tr>
+                        <td class="col-md-4">
+
+                                <div class="io-description">
+                                        <b>Parameters :</b>
+                                        <table class="params">
+                                            <thead>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>Optional</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                            <td>activeSlides</td>
+                                                    
+                                                    
+                                                        <td>
+                                                                No
+                                                        </td>
+                                                        
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div>
+                                </div>
+                                <div class="io-description">
+                                    <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                                </div>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { 
+  Component, 
+  Input,
+  OnDestroy,
+  TemplateRef,
+  ChangeDetectionStrategy,
+  OnInit,
+  ChangeDetectorRef,
+  KeyValueDiffer,
+  KeyValueDiffers 
+} from &#x27;@angular/core&#x27;;
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition
+} from &#x27;@angular/animations&#x27;;
+
+export enum Direction {
+  Next,
+  Prev
+}
+
+export enum Animation {
+  Fade &#x3D; &#x27;fade&#x27;,
+  Slide &#x3D; &#x27;slide&#x27;
+}
+
+export interface ActiveSlides {
+  previous: number;
+  current: number;
+  next: number;
+}
+
+@Component({
+  selector: &#x27;app-carousel-with-thumbnail&#x27;,
+  templateUrl: &#x27;./carousel-with-thumbnail.component.html&#x27;,
+  styleUrls: [&#x27;./carousel-with-thumbnail.component.scss&#x27;, &#x27;../carousel/carousel.component.sass&#x27;],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger(&#x27;slideState&#x27;, [
+      state(&#x27;current&#x27;, style({
+        transform: &#x27;translateX(0%)&#x27;,
+        zIndex: 1
+      })),
+      state(&#x27;next&#x27;, style({
+        transform: &#x27;translateX(100%)&#x27;,
+        zIndex: 1
+      })),
+      state(&#x27;previous&#x27;, style({
+        transform: &#x27;translateX(-100%)&#x27;,
+        zIndex: 1
+      })),
+      transition(&#x27;current &#x3D;&gt; previous&#x27;, animate(&#x27;400ms ease-out&#x27;)),
+      transition(&#x27;next &#x3D;&gt; current&#x27;, animate(&#x27;400ms ease-out&#x27;)),
+    ])
+  ]
+})
+export class CarouselWithThumbnailComponent implements OnInit, OnDestroy {
+  @Input() slides;
+  @Input() isNavigationVisible &#x3D; false;
+  @Input() isThumbnailsVisible &#x3D; false;
+  @Input() animation: Animation &#x3D; Animation.Fade;
+  @Input() autoPlayDuration &#x3D; 0;
+  @Input() slideTemplateRef: TemplateRef&lt;any&gt;;
+  @Input() thumbnailTemplateRef: TemplateRef&lt;any&gt;;
+  @Input() darkArrows &#x3D; false;
+  @Input() arrowsOutside &#x3D; false;
+
+  currentInterval;
+  differ: KeyValueDiffer&lt;ActiveSlides, any&gt;;
+
+  private _direction: Direction &#x3D; Direction.Next;
+  get direction() {
+    return this._direction;
+  }
+  set direction(direction: Direction) {
+    this._direction &#x3D; direction;
+  }
+
+  private _activeSlides: ActiveSlides;
+  get activeSlides() {
+    return this._activeSlides;
+  }
+  set activeSlides(activeSlides: ActiveSlides) {
+    this._activeSlides &#x3D; activeSlides;
+  }
+
+  constructor(private cd: ChangeDetectorRef, private differs: KeyValueDiffers) { }
+
+  ngOnInit(): void {
+    if (this.slides) {
+      this.activeSlides &#x3D; this.getPreviousCurrentNextIndexes(0);
+      this.differ &#x3D; this.differs.find(this.activeSlides).create();
+      if (this.slides.length &gt; 1 &amp;&amp; this.autoPlayDuration &gt; 0) {
+        this.startTimer();
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.resetTimer();
+    this.cd.detach();
+  }
+
+  select(index: number): void {
+    this.resetTimer();
+    this.activeSlides &#x3D; this.getPreviousCurrentNextIndexes(index);
+    this.direction &#x3D; this.getDirection(this.activeSlides.current, index);
+    this.startTimer();
+
+    if (this.differ.diff(this.activeSlides)) {
+      this.cd.detectChanges();
+    }
+  }
+
+  getDirection(oldIndex: number, newIndex: number): Direction {
+    const images &#x3D; this.slides;
+
+    if (oldIndex &#x3D;&#x3D;&#x3D; images.length - 1 &amp;&amp; newIndex &#x3D;&#x3D;&#x3D; 0) {
+      return Direction.Next;
+    } else if (oldIndex &#x3D;&#x3D;&#x3D; 0 &amp;&amp; newIndex &#x3D;&#x3D;&#x3D; images.length - 1) {
+      return Direction.Prev;
+    }
+
+    return oldIndex &lt; newIndex ? Direction.Next : Direction.Prev;
+  }
+
+  getPreviousCurrentNextIndexes(index: number): ActiveSlides {
+    const images &#x3D; this.slides;
+
+    return {
+      previous: (index &#x3D;&#x3D;&#x3D; 0 ? images.length - 1 : index - 1) % images.length,
+      current: index % images.length,
+      next: (index &#x3D;&#x3D;&#x3D; images.length - 1 ? 0 : index + 1) % images.length
+    };
+  }
+
+  getAnimationSlideState(index: number) {
+    return index &#x3D;&#x3D;&#x3D; this.activeSlides.current ? &#x27;current&#x27; : index &#x3D;&#x3D;&#x3D; this.activeSlides.next ? &#x27;next&#x27; : index &#x3D;&#x3D;&#x3D; this.activeSlides.previous ? &#x27;previous&#x27; : &#x27;&#x27;
+  }
+
+  startTimer(): void {
+    this.resetTimer();
+
+    if (this.autoPlayDuration &gt; 0) {
+      this.currentInterval &#x3D; setInterval(() &#x3D;&gt; this.select(this.activeSlides.next), this.autoPlayDuration);
+    }
+  }
+
+  resetTimer(): void {
+    if (this.currentInterval) {
+      clearInterval(this.currentInterval);
+    }
+  }
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;carousel&quot;&gt;
+	&lt;!-- slides --&gt;
+	&lt;ul class&#x3D;&quot;slides&quot;&gt;
+		&lt;li class&#x3D;&quot;slide&quot; *ngFor&#x3D;&quot;let slide of slides; let i &#x3D; index;&quot; [@slideState]&#x3D;&quot;getAnimationSlideState(i)&quot;&gt;
+			&lt;ng-container *ngTemplateOutlet&#x3D;&quot;slideTemplateRef; context: { $implicit: slide }&quot;&gt;&lt;/ng-container&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;!-- navigations &amp; thumbnails --&gt;
+	&lt;div
+			class&#x3D;&quot;carousel-arrows&quot;
+			[class.carousel-arrows-outside]&#x3D;&quot;arrowsOutside&quot;
+			[class.carousel-dark-arrows]&#x3D;&quot;darkArrows&quot;
+			*ngIf&#x3D;&quot;slides.length &gt; 1 &amp;&amp; isNavigationVisible&quot;
+	&gt;
+		&lt;div
+			class&#x3D;&quot;carousel-arrow carousel-arrow-prev&quot;
+			(click)&#x3D;&quot;select(activeSlides.previous)&quot; 
+		&gt;&lt;/div&gt;
+		&lt;div
+			class&#x3D;&quot;carousel-arrow carousel-arrow-next&quot;
+			(click)&#x3D;&quot;select(activeSlides.next)&quot;
+		&gt;&lt;/div&gt; 
+	&lt;/div&gt;
+
+	&lt;div class&#x3D;&quot;navigations&quot;&gt;
+		&lt;!-- &lt;button type&#x3D;&quot;button&quot; (click)&#x3D;&quot;select(activeSlides.previous)&quot; *ngIf&#x3D;&quot;slides.length &gt; 1 &amp;&amp; isNavigationVisible&quot;&gt;
+        &lt;span&gt;left&lt;/span&gt; 
+    &lt;/button&gt; --&gt;
+		&lt;div&gt;
+			&lt;ol class&#x3D;&quot;thumbnails&quot; *ngIf&#x3D;&quot;slides.length &gt; 1 &amp;&amp; isThumbnailsVisible&quot;&gt;
+				&lt;li *ngFor&#x3D;&quot;let slide of slides; let i &#x3D; index;&quot; [class.is-active]&#x3D;&quot;i &#x3D;&#x3D;&#x3D; activeSlides.current&quot; (click)&#x3D;&quot;select(i)&quot;&gt;
+					&lt;ng-container *ngTemplateOutlet&#x3D;&quot;thumbnailTemplateRef; context: { $implicit: slide }&quot;&gt;&lt;/ng-container&gt;
+				&lt;/li&gt;
+			&lt;/ol&gt;
+		&lt;/div&gt;
+		&lt;!-- &lt;button type&#x3D;&quot;button&quot; (click)&#x3D;&quot;select(activeSlides.next)&quot; *ngIf&#x3D;&quot;slides.length &gt; 1 &amp;&amp; isNavigationVisible&quot;&gt;
+        &lt;span&gt;right&lt;/span&gt; 
+    &lt;/button&gt; --&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./carousel-with-thumbnail.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.carousel {
+  width: 100%;
+  height: 100%;
+  // min-height: var(--min-height-carousel);
+  min-height: 650px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.slides {
+  position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+  list-style: none;
+  margin: var(--unit-1);
+  // border: 2px solid var(--color-brand-1);
+}
+
+.slide {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* navigation */
+.navigations {
+  display: flex;
+  padding: var(--unit-1);
+  // border: 2px solid var(--color-brand-1);
+  margin: var(--unit-1);
+}
+
+.navigations &gt; div {
+  flex: 1;
+}
+
+.navigations button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-brand-1);
+  flex-shrink: 0;
+  padding: 0 calc(var(--unit-1) * 2);
+  background-color: transparent;
+  margin: 0;
+  border-color: transparent;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+  width: calc(var(--unit-1) * 16);
+  text-align: center;
+  // border: 2px solid var(--color-brand-1);
+}
+
+.thumbnails {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.thumbnails li {
+  cursor: pointer;
+  padding: var(--unit-1);
+  border: 2px solid transparent;
+  width: calc(var(--unit-1) * 12);
+  height: calc(var(--unit-1) * 12);
+  opacity: 0.2;
+  transition: opacity var(--transition-duration) var(--transition-function);
+}
+.thumbnails li.is-active {
+  border-color: var(--color-brand-1);
+  opacity: 1;
+}</code></pre>
+                <p class="comment">
+                    <code>../carousel/carousel.component.sass</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">@import &#x27;variables&#x27;
+
+\:host
+  position: relative 
+  display: block
+  top: 0
+  left: 0
+  width: 100% 
+  height: 100%
+  user-select: none 
+  transform-origin: top left
+  box-sizing: border-box
+  .carousel-container
+    overflow: hidden
+    width: 100% 
+    height: 100%
+    cursor: grab
+  .carousel-container.carousel-moving
+    cursor: grabbing
+  .carousel-counter
+    text-align: right
+    position: absolute
+    z-index: 30
+    transition: opacity 200ms
+    top: 8px 
+    right: 24px
+    border-radius: 13px
+    background-color: rgba(23, 37, 68, 0.3)
+    font-size: 11px
+    color: #ffffff
+    padding: 5px 7px
+    line-height: initial
+  .carousel-cells
+    transition: transform 200ms
+    width: 100% 
+    height: 100%
+    display: block 
+    ::ng-deep
+      .carousel-cell.swiper-prev-image
+        transform: translate3d(-100%, 0, 0)
+      .carousel-cell.swiper-next-image
+        transform: translate3d(100%, 0, 0)
+      .carousel-cell
+        width: 100% 
+        height: 100%
+        text-align: center
+        position: absolute
+        display: flex
+        align-items: center
+        justify-content: center
+        overflow: hidden
+        img,
+        video
+          width: 100%
+          height: 100%
+          position: relative
+          object-fit: contain
+        img.swiper-hide 
+          display: none 
+        .carousel-play
+          position: absolute
+          top: 0
+          left: 0
+          bottom: 0
+          right: 0
+          z-index: 1
+        .bottomleft 
+          position: absolute
+          bottom: 8px
+          left: 16px
+          color: white
+          text-shadow: 1px 1px #000
+          font-size: 18px
+          font-weight: 700
+      .carousel-cell-cards
+        img
+          width: 100%
+          height: 200px
+          object-fit: cover
+
+  .carousel-arrow
+    width: 40px
+    height: 40px
+    background-color: #fff
+    background-repeat: no-repeat
+    background-size: 31px
+    background-position: center
+    border-radius: 100px
+    position: absolute
+    top: 50%
+    margin-top: -20px
+    z-index: 10
+    cursor: pointer
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15)
+  .carousel-arrow-prev
+    left: 10px
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMTUuNDEgMTYuNTlMMTAuODMgMTJsNC41OC00LjU5TDE0IDZsLTYgNiA2IDYgMS40MS0xLjQxeiIvPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMFYweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg&#x3D;&#x3D;)
+  .carousel-arrow-next 
+    right: 10px
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNOC41OSAxNi41OUwxMy4xNyAxMiA4LjU5IDcuNDEgMTAgNmw2IDYtNiA2LTEuNDEtMS40MXoiLz48cGF0aCBkPSJNMCAwaDI0djI0SDBWMHoiIGZpbGw9Im5vbmUiLz48L3N2Zz4&#x3D;)
+  .carousel-arrows-outside
+    .carousel-arrow-prev
+      left: -60px
+    .carousel-arrow-next
+      right: -60px
+  .carousel-dark-arrows
+    .carousel-arrow
+      filter: invert(1)
+  .carousel-arrow-disabled
+    cursor: default
+    opacity: 0.5
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="carousel">	<!-- slides -->	<ul class="slides">		<li class="slide" *ngFor="let slide of slides; let i = index;" [@slideState]="getAnimationSlideState(i)">			<ng-container *ngTemplateOutlet="slideTemplateRef; context: { $implicit: slide }"></ng-container>		</li>	</ul>	<!-- navigations & thumbnails -->	<div			class="carousel-arrows"			[class.carousel-arrows-outside]="arrowsOutside"			[class.carousel-dark-arrows]="darkArrows"			*ngIf="slides.length > 1 && isNavigationVisible"	>		<div			class="carousel-arrow carousel-arrow-prev"			(click)="select(activeSlides.previous)" 		></div>		<div			class="carousel-arrow carousel-arrow-next"			(click)="select(activeSlides.next)"		></div> 	</div>	<div class="navigations">		<!-- <button type="button" (click)="select(activeSlides.previous)" *ngIf="slides.length > 1 && isNavigationVisible">        <span>left</span>     </button> -->		<div>			<ol class="thumbnails" *ngIf="slides.length > 1 && isThumbnailsVisible">				<li *ngFor="let slide of slides; let i = index;" [class.is-active]="i === activeSlides.current" (click)="select(i)">					<ng-container *ngTemplateOutlet="thumbnailTemplateRef; context: { $implicit: slide }"></ng-container>				</li>			</ol>		</div>		<!-- <button type="button" (click)="select(activeSlides.next)" *ngIf="slides.length > 1 && isNavigationVisible">        <span>right</span>     </button> -->	</div></div></div>'
+    var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'CarouselWithThumbnailComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'CarouselWithThumbnailComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -13,22 +13,13 @@ export class GetInvolvedComponent implements OnInit {
 
   arrowsOutside = true;
 
-  cuisines = [
-    {
-      type: 'partner',
-      path: 'assets/images/partners/city.png',
-      name: 'City of Toronto',
-    },
-    {
-      type: 'partner',
-      path: 'assets/images/partners/utsc.png',
-      name: 'University of Toronto Scarborough',
-    },
-    {
-      type: 'partner',
-      path: 'assets/images/partners/centennial.png',
-      name: 'Centennial College',
-    },
+  partners = [
+    // Example:
+    // {
+    //   type: 'partner',
+    //   path: 'assets/images/partners/city.png',
+    //   name: 'City of Toronto',
+    // },
   ];
 
   constructor(
@@ -51,6 +42,10 @@ export class GetInvolvedComponent implements OnInit {
     this.arrowsOutside = window.innerWidth < 800 ? false : true;
   }
 
+  /**
+   * Performs action to send email to info@finddining.ca, asking about
+   * the Get Involved activity
+   */
   onSubmit(): void {
     let name = this.messageForm.get('name').value;
     let message = this.messageForm.get('message').value;
@@ -65,9 +60,9 @@ export class GetInvolvedComponent implements OnInit {
       alert("Your message is submitted!");
       window.location.reload();
     },
-    err => {
-      alert(err.error.message);
-    });
+      err => {
+        alert(err.error.message);
+      });
   }
 
 }

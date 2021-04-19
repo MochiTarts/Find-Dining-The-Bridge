@@ -105,18 +105,32 @@ export class RestaurantSetupComponent implements OnInit {
     this.paymentItems = paymentsStr;
   }
 
+  /**
+   * Retrieves the owner names of the restaurant
+   */
   get ownerNames() {
     return this.uploadForm.get('owner_names') as FormArray;
   }
 
+  /**
+   * Adds an owner to the ownerNames FormArray
+   */
   addOwner() {
     this.ownerNames.push(this.formBuilder.group({ first_name: '', last_name: '', preferred_name: '' }));
   }
 
+  /**
+   * Removes an owner from the ownerNames FormArray
+   * @param index - the index where the owner to be be removed resides in ownerNames
+   */
   deleteOwner(index) {
     this.ownerNames.removeAt(index);
   }
 
+  /**
+   * Sets the fields for owner names in restaurant form with the info in
+   * ownerNames FormArray
+   */
   setOwnerNames() {
     for (let i = 1; i < this.restaurantDetails.owner_first_name.length; i++) {
       this.resOwnerNames.push({
@@ -127,6 +141,10 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
+  /**
+   * Retrieves user-friendly value for the pricepoint
+   * @returns The user-friendly value for the pricepoint
+   */
   getPricepoint() {
     let price = String(this.restaurantDetails.pricepoint);
     for (let p of this.pricepoints) {
@@ -136,6 +154,10 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
+  /**
+   * Retrieves and sets the image file
+   * @param event - the object containing the image file
+   */
   onFileSelect(event) {
     if (event.target.files.length > 0) {
       this.newImage = true;
@@ -144,13 +166,22 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
+  /**
+   * Performs the action to upload the restaurant's logo image
+   * @param option - determines to save restaurant form as draft or to submit for approval
+   * @returns the Observable from uploadRestaurantMedia service
+   */
   onSubmit(option) {
     const formData = new FormData();
     formData.append('media_file', this.uploadForm.get('file').value);
-    return this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'logo_url', option.includes('SETUP') ? 'True' : 'False');
+    return this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'logo_url', option.includes('SUBMIT') ? 'True' : 'False');
     // this.newImage = false;
   }
 
+  /**
+   * Sanitizes the user input for http request
+   * @returns The restaurant form containing the user's input
+   */
   getAnswer() {
     // Extract form inputs from the user
     let price = (<HTMLInputElement>document.getElementById('pricepoint')).value;
@@ -214,6 +245,11 @@ export class RestaurantSetupComponent implements OnInit {
     return restaurantInfo;
   }
 
+  /**
+   * Checks if all content in restaurant setup form is clear of profanity
+   * @param restaurantInfo - the restaurant setup form
+   * @returns The restaurant setup form
+   */
   getAnswerForProfanityCheck(restaurantInfo) {
     let newRestaurantInfo = Object.assign({}, restaurantInfo);
     newRestaurantInfo['name_p'] = restaurantInfo.name;
@@ -231,6 +267,14 @@ export class RestaurantSetupComponent implements OnInit {
     return newRestaurantInfo;
   }
 
+  /**
+   * Performs the action to create the new restaurant either as a draft or
+   * as a submission for admin approval
+   * 
+   * @param option - determines which service to call for http request
+   * @param restaurantInfo - the restaurant setup form
+   * @returns the Observable from the service
+   */
   chooseAPI(option: string, restaurantInfo: Object): Observable<any> {
     switch (option) {
       case 'SETUP-DRAFT':
@@ -246,6 +290,13 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
+  /**
+   * Validates the restaurant setup form against the criteria for either
+   * draft or submit
+   * 
+   * @param option - determines which validator to run the form against
+   * @returns the results of the validator
+   */
   chooseValidator(option: string) {
     switch (option) {
       case 'SETUP-DRAFT':
@@ -261,6 +312,11 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
+  /**
+   * Displays alert that restaurant is now saved as draft or is pending for
+   * admin approval
+   * @param option - determines which alert to show
+   */
   chooseAlert(option: string) {
     if (option.includes('DRAFT')) {
       alert("Changes to restaurant are now saved as draft");
@@ -269,6 +325,11 @@ export class RestaurantSetupComponent implements OnInit {
     }
   }
 
+  /**
+   * Sets default values for years and phone field
+   * @param restaurantInfo - the restaurant setup form
+   * @returns the updated restaurant setup form
+   */
   improveDraftAnswer(restaurantInfo) {
     if (!restaurantInfo.years) {
       restaurantInfo.years = "0";
@@ -279,6 +340,12 @@ export class RestaurantSetupComponent implements OnInit {
     return restaurantInfo;
   }
 
+  /**
+   * Converts the years and phone field values to numbers to be
+   * compatible with the Django backend
+   * @param restaurantInfo - the restaurant setup form
+   * @returns the updated restaurant setup form
+   */
   typeConversion(restaurantInfo) {
     // Convert type of fields to match with backend
     restaurantInfo.years = Number(restaurantInfo.years);
@@ -292,6 +359,12 @@ export class RestaurantSetupComponent implements OnInit {
     return restaurantInfo;
   }
 
+  /**
+   * Performs action to create new restaurant and new restaurant owner records
+   * 
+   * @param option - determines if restaurant is setup as draft or pending for admin approval
+   * @returns None
+   */
   setupROProfile(option: string) {
 
     let restaurantInfo = this.getAnswer();
@@ -326,6 +399,7 @@ export class RestaurantSetupComponent implements OnInit {
           if (option.includes('SETUP')) {
             let roInfo = {
               restaurant_id: data._id,
+              consent_status: "IMPLIED"
             };
             this.restaurantService.roSignup(roInfo).subscribe((profile) => {
               var sduserInfo = {
@@ -379,6 +453,10 @@ export class RestaurantSetupComponent implements OnInit {
     });
   }
 
+  /**
+   * Displays alert and redirects back to restaurant page is ok is pressed
+   * @returns None
+   */
   cancel() {
     if (!window.confirm('Are you sure you want to navigate away? Any unsubmitted changes will be lost.')) {
       return;
@@ -386,18 +464,33 @@ export class RestaurantSetupComponent implements OnInit {
     this.router.navigate(['/restaurant']);
   }
 
+  /**
+   * Redirects to edit-posts page
+   */
   gotoEditPosts() {
     this.router.navigate(['/edit-posts']);
   }
 
+  /**
+   * Sets the cuisines field to the list of selected cuisines
+   * @param cuisines - list of selected cuisines
+   */
   updateCuisineList(cuisines: any[]) {
     this.uploadForm.get('cuisines').setValue(cuisines);
   }
 
+  /**
+   * Sets the payments field to the list of selected payment methods
+   * @param payments - list of selected payment methods
+   */
   updatePaymentList(payments: any[]) {
     this.uploadForm.get('payments').setValue(payments);
   }
 
+  /**
+   * Sets the services field to the list of selected services
+   * @param services - list of selected services
+   */
   updateServiceList(services: any[]) {
     this.uploadForm.get('services').setValue(services);
   }

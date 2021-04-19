@@ -53,17 +53,18 @@ import { MenuEditComponent } from './pages/menu-edit/menu-edit.component';
 import { GetInvolvedComponent } from './pages/get-involved/get-involved.component';
 import { AccountSettingComponent } from './pages/account-setting/account-setting.component';
 import { NewsArticlesComponent } from './pages/news-articles/news-articles.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { ResourcesComponent } from './pages/resources/resources.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
 import { DishCardComponent } from './components/dish-card/dish-card.component';
-import { OwnerCardComponent } from './components/owner-card/owner-card.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { FilterlistCardComponent } from './components/filterlist-card/filterlist-card.component';
 import { MapComponent } from './components/map/map.component';
 import { RestaurantCardComponent } from './components/restaurant-card/restaurant-card.component';
-import { RestaurantFavsCardComponent } from './components/restaurant-favs-card/restaurant-favs-card.component';
 import { RestaurantNearbyCardComponent } from './components/restaurant-nearby-card/restaurant-nearby-card.component';
 import { DynamicLabelComponent } from './components/dynamic-label/dynamic-label.component';
 import { RequiredStarComponent } from './components/required-star/required-star.component';
@@ -75,13 +76,10 @@ import { PartnerCardComponent } from './components/partner-card/partner-card.com
 import { MultiselectCheckboxDropdownComponent } from './components/multiselect-checkbox-dropdown/multiselect-checkbox-dropdown.component';
 import { PasswordChangeFormComponent } from './components/password-change-form/password-change-form.component';
 import { InfoCardComponent } from './components/info-card/info-card.component';
-import { ArticleLatestCardComponent } from './components/article-latest-card/article-latest-card.component';
 import { ArticleCommonCardComponent } from './components/article-common-card/article-common-card.component';
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
-import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
-import { AboutUsComponent } from './pages/about-us/about-us.component';
-import { AboutOurPartnerComponent } from './pages/about-our-partner/about-our-partner.component';
 import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
+
 
 
 @NgModule({
@@ -90,7 +88,6 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     IvyCarouselComponent,
     CarouselWithThumbnailComponent,
     DishCardComponent,
-    OwnerCardComponent,
     LoginComponent,
     HomeComponent,
     ProfileComponent,
@@ -102,7 +99,6 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     FilterlistCardComponent,
     MapComponent,
     RestaurantCardComponent,
-    RestaurantFavsCardComponent,
     RestaurantNearbyCardComponent,
     RestaurantSetupComponent,
     DynamicLabelComponent,
@@ -122,13 +118,12 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     AccountSettingComponent,
     InfoCardComponent,
     NewsArticlesComponent,
-    ArticleLatestCardComponent,
     ArticleCommonCardComponent,
     FilterdateCardComponent,
     PrivacyPolicyComponent,
     AboutUsComponent,
-    AboutOurPartnerComponent,
     ArticleHeadlineCardComponent,
+    ResourcesComponent,
   ],
   imports: [
     BrowserModule,

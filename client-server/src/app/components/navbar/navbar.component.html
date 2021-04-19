@@ -26,13 +26,13 @@
           </a>
         </li>
 
-        <li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">
+        <li class="nav-item" *ngIf="authService.isLoggedIn()">
           <div ngbDropdown class="d-inline-block">
             <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle tabindex="0">
               User Info
             </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownProfile">
-              <button ngbDropdownItem (click)="profile()" tabindex="0">
+            <div ngbDropdownMenu aria-labelledby="dropdownProfile" data-toggle="collapse" data-target=".navbar-collapse.show">
+              <button ngbDropdownItem (click)="profile()" tabindex="0" *ngIf="!tokenStorageService.RO">
                 Profile
               </button>
               <button ngbDropdownItem (click)="favourites()" tabindex="0">
@@ -49,56 +49,28 @@
         </li>
 
         <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
-          <a (click)="accountSetting()" routerLink="/account-setting" routerLinkActive="active" class="nav-link">
-            Account Settings
-          </a>
-        </li>
-
-        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0">
           <a (click)="restaurant()" routerLink="/restaurant" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
             Restaurant Page
           </a>
         </li>
-
-        <!-- li class="nav-item" *ngIf="authService.isLoggedIn() && !tokenStorageService.RO">
-          <div ngbDropdown class="d-inline-block">
-            <button class="btn dropdown nav-link" id="dropdownBasic1" ngbDropdownToggle>
-              Go Find Dining
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBrowse">
-              <button ngbDropdownItem (click)="browse()">
-                Restaurants
-              </button>
-              <button ngbDropdownItem (click)="timeline()">
-                Timeline
-              </button>
-              <button ngbDropdownItem (click)="owners()">
-                Owner Stories
-              </button>
-            </div>
-          </div>
-        </li> -->
 
         <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">
           <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">
             Go Find Dining
           </a>
         </li>
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" *ngIf="tokenStorageService.RO">
-          <a routerLink="/favourites" routerLinkActive="active" class="nav-link" (click)="favourites()">
-            Favourites
+
+        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0" (keyup.enter)="article()">
+          <a routerLink="/articles" routerLinkActive="active" (click)="article()" class="nav-link">
+            Articles
           </a>
         </li>
-        <!-- <li class="nav-item nav-link" *ngIf="authService.isLoggedIn() || tokenStorageService.RO">
-          <a routerLinkActive="active" class="nav-link" (click)="timeline()">
-            Timeline
+
+        <li class="nav-item" *ngIf="authService.isLoggedIn() && tokenStorageService.RO" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0" (keyup.enter)="resources()">
+          <a routerLink="/resources" routerLinkActive="active" (click)="resources()" class="nav-link">
+            Resources
           </a>
         </li>
-        <li class="nav-item nav-link" *ngIf="authService.isLoggedIn()">
-          <a routerLinkActive="active" class="nav-link" (click)="owners()">
-            Owner Stories
-          </a>
-        </li> -->
 
         <li *ngIf="!tokenStorageService.RO && authService.isLoggedIn()" class="nav-item">
           <p class="nav-link address nav-link" *ngIf="this.userAddress" tabindex="0">

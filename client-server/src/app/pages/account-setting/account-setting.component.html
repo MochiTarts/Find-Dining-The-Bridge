@@ -2,6 +2,7 @@
   <h2>Account Settings</h2>
 
   <button
+  *ngIf="!isThirdParty"
   class="btn change-password"
   (click)="changePassword.open(false)"
 >

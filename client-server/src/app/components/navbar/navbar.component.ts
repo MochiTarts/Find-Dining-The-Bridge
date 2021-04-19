@@ -57,6 +57,9 @@ export class NavbarComponent implements OnInit {
     window.location.reload();
   }
 
+  /**
+   * Redirects to all-listings page
+   */
   browse() {
     this.router.navigate(['/all-listings']).then(() => {
       setTimeout(function () {
@@ -65,6 +68,9 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  /**
+   * Redirects to home page
+   */
   home() {
     this.router.navigate(['/']).then(() => {
       setTimeout(function () {
@@ -73,7 +79,9 @@ export class NavbarComponent implements OnInit {
     })
   }
 
-
+  /**
+   * Redirects to all-owners page
+   */
   owners() {
     this.router.navigate(['/all-owners']).then(() => {
       setTimeout(function () {
@@ -82,6 +90,9 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  /**
+   * Redirects to favourites page
+   */
   favourites() {
     this.router.navigate(['/favourites']).then(() => {
       setTimeout(function () {
@@ -90,6 +101,9 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  /**
+   * Redirects to profile page
+   */
   profile() {
     this.router.navigate(['/profile']).then(() => {
       setTimeout(function () {
@@ -98,10 +112,16 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  /**
+   * Redirects to restaurant page
+   */
   restaurant() {
     this.router.navigate(['/restaurant'])
   }
 
+  /**
+   * Redirects to accountSettings page
+   */
   accountSetting() {
     this.router.navigate(['/account-setting']).then(() => {
       setTimeout(function () {
@@ -110,6 +130,9 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  /**
+   * Redirects to newsletter page
+   */
   newsletter() {
     this.router.navigate(['/newsletter']).then(() => {
       setTimeout(function () {
@@ -118,19 +141,39 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  restaurantSetup() {
-    this.router.navigate(['/restaurant-setup'])
+  /**
+   * Redirects to articles page
+   */
+  article() {
+    this.router.navigate(['/articles']);
   }
 
+  /**
+   * Redirects to resources page
+   */
+  resources() {
+    this.router.navigate(['/resources'])
+  }
+
+  /**
+   * Opens the modal
+   * @param content - the modal to open
+   */
   openModal(content) {
     this.modalRef = this.modalService.open(content);
   }
 
+  /**
+   * Redirects to restaurant-setup page
+   */
   goToSetup() {
     this.modalRef.close();
     this.router.navigate(['/restaurant-setup']);
   }
 
+  /**
+   * Redirects to login page
+   */
   onLoginRegisterClicked() {
     if (this.authService.isLoggedIn()) {
       this.logout();
@@ -139,6 +182,9 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  /**
+   * Logs user out
+   */
   logout(): void {
     this.authService.updateLoginStatus(false);
     this.tokenStorageService.signOut();

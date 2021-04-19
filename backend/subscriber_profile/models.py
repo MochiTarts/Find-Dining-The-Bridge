@@ -12,6 +12,7 @@ import datetime
 
 User = get_user_model()
 
+
 class SubscriberProfile(models.Model):
     user_id = models.IntegerField()
     first_name = models.CharField(max_length=30, default="", blank=True)
@@ -26,10 +27,10 @@ class SubscriberProfile(models.Model):
     expired_at = models.DateField(null=True, blank=True)
     subscribed_at = models.DateField(null=True, blank=True)
     unsubscribed_at = models.DateField(null=True, blank=True)
-    
+
     class Meta:
         db_table = 'subscriber_profile'
-    
+
     def __str__(self):
         return str(self.id)
 
@@ -54,22 +55,24 @@ class SubscriberProfile(models.Model):
                     invalid['Invalid'].append(attr)
 
         if 'user_id' not in fields:
-            invalid['Invalid'].append("user_id must be passed and be equal to the user's id")
+            invalid['Invalid'].append(
+                "user_id must be passed and be equal to the user's id")
         elif User.objects.get(pk=fields['user_id']) == None:
-            invalid['Invalid'].append("SDUser with this user_id does not exist")
+            invalid['Invalid'].append(
+                "SDUser with this user_id does not exist")
 
         if 'first_name' in fields:
             try:
                 validate_name(fields['first_name'])
             except ValidationError as e:
-                invalid['Invalid'].append('first_name')  
+                invalid['Invalid'].append('first_name')
 
         if 'last_name' in fields:
             try:
                 validate_name(fields['last_name'])
             except ValidationError as e:
                 invalid['Invalid'].append('last_name')
-        
+
         if 'expired_at' in fields:
             try:
                 datetime.datetime.strptime(fields['last_updated'], '%Y-%m-%d')
@@ -100,9 +103,10 @@ class SubscriberProfile(models.Model):
         :rtype: :class:`SubscriberProfile`
         """
         SubscriberProfile.field_validate(subscriber_data)
-        
+
         if "consent_status" in subscriber_data:
-            subscriber_data.update(handleConsentStatus(subscriber_data['consent_status']))
+            subscriber_data.update(handleConsentStatus(
+                subscriber_data['consent_status']))
         profile = cls(**subscriber_data)
         profile.GEO_location = geocode(profile.postalCode)
         profile = save_and_clean(profile)
@@ -116,25 +120,27 @@ class SubscriberProfile(models.Model):
         :return: SubscriberProfile Object
         """
         SubscriberProfile.field_validate(subscriber_data)
-        profile = SubscriberProfile.objects.get(user_id=subscriber_data['user_id'])
+        profile = SubscriberProfile.objects.get(
+            user_id=subscriber_data['user_id'])
         if not profile:
-            raise ObjectDoesNotExist('No subscriber profile found with owner user id of this: ' + subscriber_data['user_id'])
+            raise ObjectDoesNotExist(
+                'No subscriber profile found with owner user id of this: ' + subscriber_data['user_id'])
 
         for field in subscriber_data:
             setattr(profile, field, subscriber_data[field])
         profile.GEO_location = geocode(profile.postalCode)
         if "consent_status" in subscriber_data:
-            consent_data = handleConsentStatus(subscriber_data["consent_status"])
+            consent_data = handleConsentStatus(
+                subscriber_data["consent_status"])
             for field in consent_data:
                 setattr(profile, field, consent_data[field])
         profile = save_and_clean(profile)
         return profile
 
+
 def handleConsentStatus(consent_status):
     """ Creates a dict containing the fields and values
-    related to a user's consent status. Meant to be added
-    to the restaurant_owner_data dict before creating the
-    RestaurantOwner record
+    related to a user's consent status.
 
     :param consent_status: the consent status value (ie. 'EXPRESSED', 'IMPLIED')
     :type consent_status: str
@@ -148,7 +154,8 @@ def handleConsentStatus(consent_status):
     if consent_status == "EXPRESSED":
         profile["subscribed_at"] = datetime.datetime.today()
     elif consent_status == "IMPLIED":
-        profile["expired_at"] = datetime.datetime.today() + datetime.timedelta(days=+182)
+        profile["expired_at"] = datetime.datetime.today() + \
+            datetime.timedelta(days=+182)
     elif consent_status == "UNSUBSCRIBED":
         profile["unsubscribed_at"] = datetime.datetime.today()
     return profile
