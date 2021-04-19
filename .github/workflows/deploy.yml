@@ -32,8 +32,8 @@ jobs:
       GOOGLE_OAUTH2_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH2_CLIENT_ID }}
       GOOGLE_OAUTH2_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH2_CLIENT_SECRET }}
       VIEW_REDIRECT_URL: ${{ secrets.VIEW_REDIRECT_URL }}
-      RECAP_PRIV_KEY: ${{ secrets.RECAP_PRIV_KEY }}
-      RECAP_PUB_KEY: ${{ secrets.RECAP_PUB_KEY }}
+      RECAP_PRIV_KEY: ${{ secrets.RECAP_PRIV_KEY_PROD }}
+      RECAP_PUB_KEY: ${{ secrets.RECAP_PUB_KEY_PROD }}
       GEOCODE_API_KEY: ${{ secrets.GEOCODE_API_KEY }}
       GA_VIEW_ID: ${{ secrets.GA_VIEW_ID }}
       GOOGLE_OAUTH2_CLIENT_EMAIL: ${{ secrets.GOOGLE_OAUTH2_CLIENT_EMAIL }}
