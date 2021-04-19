@@ -32,7 +32,7 @@
               User Info
             </button>
             <div ngbDropdownMenu aria-labelledby="dropdownProfile" data-toggle="collapse" data-target=".navbar-collapse.show">
-              <button ngbDropdownItem (click)="profile()" tabindex="0" *ngIf="!tokenStorageService.RO">
+              <button ngbDropdownItem (click)="profile()" tabindex="0" *ngIf="!tokenStorageService.RO" class="nav-link">
                 Profile
               </button>
               <button ngbDropdownItem (click)="favourites()" tabindex="0">

@@ -66,6 +66,10 @@ br {
   color: $navigation-color;
   margin: 0;
   cursor: pointer;
+
+  @media screen and (max-width: 1186px) {
+    font-size: 13px;
+  }
 }
 
 .btn {
@@ -122,6 +126,16 @@ br {
   background-color: $primary-color;
   margin: 0;
   padding: 0;
+
+  @media screen and (max-width: 1186px) {
+    font-size: 13px;
+  }
+}
+
+.dropdown button {
+  @media screen and (max-width: 1186px) {
+    font-size: 13px;
+  }
 }
 
 .address:hover {
@@ -154,7 +168,7 @@ br {
   color: rgb(77, 77, 77);
   margin: 7px 10px;
 
-  @media screen and (max-width: 1000px) {
-    display: none;
+  @media screen and (max-width: 1186px) {
+    margin: 7px 0;
   }
 }
