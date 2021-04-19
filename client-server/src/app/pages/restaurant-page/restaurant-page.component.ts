@@ -226,7 +226,7 @@ export class RestaurantPageComponent implements OnInit {
   /**
    * Retrieves the restaurant from the database, either the pending
    * one or the approved one depending on the role
-   * 
+   *
    * @param id - the restaurant's id
    * @returns the retrieved restaurant record
    */
@@ -240,7 +240,7 @@ export class RestaurantPageComponent implements OnInit {
 
   /**
    * Retrieves the restaurant dishes from the database
-   * 
+   *
    * @param id - the restaurant's id
    * @returns the restaurant dishes
    */
@@ -494,12 +494,13 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * @param status - the restaurant's status
    * @param info - the restaurant info
    * @returns the updated restaurant record
    */
   chooseUpdateAPI(status: string, info: Object): Observable<any> {
+    info['email'] = this.restaurantDetails.email;
     info['name'] = this.restaurantDetails.name;
     info['address'] = this.restaurantDetails.address;
     info['postalCode'] = this.restaurantDetails.postalCode;
