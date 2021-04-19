@@ -23,18 +23,20 @@
   height: 120px;
   border-radius: 5px;
   object-fit: cover;
+  margin: auto;
+  display: block;
 }
 
 .card-body {
   padding: 10px;
   text-align: left;
-  width: 500px;
+  //max-width: 500px;
 }
 
 .card-text {
   font-size: 15px;
   margin: 0;
-  width: 400px;
+  //max-width: 400px;
 }
 
 .btn {

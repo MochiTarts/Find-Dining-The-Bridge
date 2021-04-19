@@ -76,10 +76,15 @@
               ></app-filterlist-card>
             </div>
             <div class="col-md-8">
-              <app-restaurant-favs-card
+              <!--<app-restaurant-favs-card
                 *ngFor="let restaurant of restaurants"
                 [restaurant]="restaurant"
-              ></app-restaurant-favs-card>
+              ></app-restaurant-favs-card>-->
+              <app-restaurant-card
+                *ngFor="let restaurant of restaurants"
+                [restaurant]="restaurant"
+              >
+              </app-restaurant-card>
             </div>
           </div>
         </div>
