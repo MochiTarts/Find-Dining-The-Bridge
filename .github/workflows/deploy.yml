@@ -40,6 +40,7 @@ jobs:
       GOOGLE_OAUTH2_PRIVATE_KEY: ${{ secrets.GOOGLE_OAUTH2_PRIVATE_KEY }}
       GOOGLE_ANALYTICS_PRIVATE_KEY: ${{ secrets.GOOGLE_ANALYTICS_PRIVATE_KEY }}
       GOOGLE_ANALYTICS_CLIENT_EMAIL: ${{ secrets.GOOGLE_ANALYTICS_CLIENT_EMAIL }}
+      ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
