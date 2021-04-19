@@ -113,6 +113,9 @@ DATABASES = {
         'ENGINE': os.environ.get('DB_ENGINE'),
         'NAME': os.environ.get('DB_NAME'),
         'HOST': os.environ.get('DB_HOST'),
+        'TEST': {
+            'NAME': 'scdining-unit-tests'
+        }
         # 'USER': os.environ.get('DB_USER'),
         # 'PASSWORD': os.environ.get('DB_PASS')
     }
