@@ -12,6 +12,11 @@ export class ResourcesComponent implements OnInit {
     private titleService: Title,
   ) { }
 
+  // File names of .pdf files stored in the folder /assets/pdf/
+  pdfsFromAssets = [
+    'COVID-19_Tax_Information_Session_for_Restaurant_Ownersv2.pdf',
+  ];
+
   ngOnInit(): void {
     this.titleService.setTitle("Resources | Find Dining Scarborough");
   }
