@@ -16,6 +16,14 @@
 
 <br/>
 
+### Contact Info
+minqi.zhang@mail.utoronto.ca - Min Qi Zhang (frontend)  
+isaac.mou@mail.utoronto.ca - Isaac Mou (backend)  
+jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)  
+zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
+
+<br/>
+
 # Project Setup & Overview (Updated Winter 2021)
 ``` backend ``` contains the Django app project for creating API endpoints that writes/updates/retrieves/remove content from the MongoDB database, and sends data to the Angular frontend.
 
@@ -116,6 +124,12 @@ You can SSH to the servers to examine running docker containers and do necessary
 ```
 
 ### Should be added to:
+- Google Cloud Console: scdining-winter2021
+  - ``` Please ask a member of the Find Dining team (that can login with info@finddining.ca) to add you as an owner of the project ```
+  - GCP services being used:
+    - Google Cloud Storage
+    - Geocoding
+    - Google Analytics
 - Dockerhub Organization: findiningutsc
   - Repositories
     - _finddiningutsc/test_
