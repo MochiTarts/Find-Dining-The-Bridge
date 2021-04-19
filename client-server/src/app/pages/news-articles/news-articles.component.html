@@ -18,7 +18,7 @@
         <div class="carousel-row">
             <div class="carousel">
                 <ivy-carousel
-                style="max-width: fit-content;"
+                style="max-width: fit-content; margin: auto;"
                 *ngIf="latestArticles.length"
                 [images]="latestArticles"
                 [margin]="30"
@@ -43,7 +43,7 @@
                 [cellWidth]="300"
                 [height]="400"
                 [arrowsTheme]="dark"
-                (selectedArticle)="openArticle($event)"
+                (selectedArticle)="openArticleMobile($event)"
                 >
                 </ivy-carousel>
             </div>
@@ -51,7 +51,7 @@
     </div>
 
     <div class="main-container">
-        <div class="row no-gutters article-row" *ngIf="filteredArticles.length">
+        <div class="row no-gutters article-row">
             <div class="col-lg-10 article-list-col">
                 <div class="article-list col-12" id="article-list" fxLayout="column" fxLayoutAlign="space-between">
                     <div class="tab-content" id="pills-tabContent">
@@ -131,14 +131,19 @@
                     <div class="btn" (click)="closeArticleMobile()" placement="top" ngbTooltip="Close Current Article">Close Article</div>
 
                     <h1 class="article-title">{{ selectedArticle.title }}</h1>
-                    <h3 class="article-subtitle">Last Updated {{ selectedArticle.modified_at | date:'mediumDate' }}</h3>
+                    <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">
+                        Last Updated {{ (selectedArticle.created_at) | date:'mediumDate' }}
+                    </h3>
+                    <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">
+                        Last Updated {{ (selectedArticle.modified_at) | date:'mediumDate' }}
+                    </h3>
                     <div class="article-content" [innerHTML]="selectedArticle.content"></div>
                 </div>
             </div>
         </div>
 
-        <div class="side-filter" id="mobile-filter" style="margin-right: -400px;">
-            <div style="padding: 12px;">
+        <div class="side-filter mat-elevation-z8" id="mobile-filter" style="margin-right: -400px;">
+            <div>
                 <app-filterdate-card [months]="months" [years]="years"
                 (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">
                 </app-filterdate-card>

@@ -81,3 +81,14 @@ hr {
   background-color: white;
   color: #00a4e5;
 }
+
+@media screen and (max-width: 767px) {
+  
+.cardBox {
+  border: none;
+  margin-top: 15px;
+  border-radius: 0;
+  padding: 0px 10px;
+}
+
+}
