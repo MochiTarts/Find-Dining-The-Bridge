@@ -6,6 +6,7 @@ import { formValidation } from "../../_validation/forms";
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from '../../_services/auth.service';
+import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-newletter-signup',
@@ -24,6 +25,7 @@ export class NewsletterSignupComponent implements OnInit {
     private router: Router,
     private titleService: Title,
     private authService: AuthService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -58,20 +60,20 @@ export class NewsletterSignupComponent implements OnInit {
     );
 
     if (!failFlag) {
-      // this.signupService.newsletterSignup(userInfo).subscribe((data) => {
-      //   this.router.navigate(['/thank-you']);
-      // }, (error) => {
-      //   if (error.error && formValidation.isInvalidResponse(error.error)) {
-      //     formValidation.HandleInvalid(error.error, (key) =>
-      //       this.validator.setError(key)
-      //     );
-      //     this.errorMessage = "Please make sure all the information is valid!"
-      //   } else {
-      //     this.errorMessage = error.error.message;
-      //   }
-      //   this.displayError = true;
-      //   this.gotoTop();
-      // });
+      this.userService.newsletterSignup(userInfo).subscribe((data) => {
+        this.router.navigate(['/thank-you']);
+      }, (error) => {
+        if (error.error && formValidation.isInvalidResponse(error.error)) {
+          formValidation.HandleInvalid(error.error, (key) =>
+            this.validator.setError(key)
+          );
+          this.errorMessage = "Please make sure all the information is valid!"
+        } else {
+          this.errorMessage = error.error.message;
+        }
+        this.displayError = true;
+        this.gotoTop();
+      });
     } else {
       this.errorMessage = "Please make sure all the information is valid!"
       this.displayError = true;
