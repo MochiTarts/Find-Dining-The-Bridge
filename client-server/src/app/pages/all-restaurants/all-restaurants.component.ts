@@ -46,7 +46,7 @@ export class AllRestaurantsComponent implements OnInit {
   faSearch = faSearch;
 
   location: string = '';
-  show: number = 5;
+  show: number = 3;
 
   constructor(
     private restaurantService: RestaurantService,

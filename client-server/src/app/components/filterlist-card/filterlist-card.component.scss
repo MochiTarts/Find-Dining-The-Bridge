@@ -1,13 +1,16 @@
 @import "src/styles";
 
 .cardBox {
-  width: 200px;
+  width: 250px;
   height: auto;
   flex: 0 0 auto;
-  margin: 20px;
-  padding: 5px;
-  border-radius: 10px;
-  background-color: white;
+  margin: 0px;
+  border: none;
+  border-radius: 0;
+
+  @media screen and (max-width: 1300px) {
+    margin: auto;
+  }
 }
 
 .cardBox::-webkit-scrollbar {
@@ -15,7 +18,103 @@
 }
 
 .card-body {
-  padding: 15px 5px;
+  padding: 0;
   text-align: left;
-  width: 160px;
+  width: 100%;
+}
+
+.card-body-mobile {
+  display: none;
+}
+
+.dropdown-toggle-btn {
+  width: 100%;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid lightgray 1px;
+  background-color: white;
+  color: black;
+  text-align: center;
+  height: fit-content;
+  white-space: normal;
+}
+
+.dropdown-toggle-btn:hover {
+  color: black;
+  border-bottom: solid lightgray 1px;
+}
+
+.dropdown-toggle-btn[aria-expanded="true"] {
+  border-bottom: none;
+}
+
+.dropdown-toggle-btn:hover .icons {
+  color: black;
+}
+
+.number {
+  background-color: #00a4e5;
+  color: white;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+}
+
+.checkboxes {
+  padding: 0px 10px 20px 10px;
+  border-bottom: solid lightgray 1px;
+}
+
+.icons {
+  color: black;
+}
+
+@media screen and (max-width: 767px) {
+  
+.cardBox {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  width: auto;
+}
+
+.card-body {
+  display: none;
+}
+
+.col {
+  padding: 0;
+}
+
+.card-body-mobile {
+  display: block;
+  width: 100%;
+  padding: 0px;
+  text-align: left;
+}
+
+.dropdown-toggle-btn {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.filter-dropdown {
+  width: 100%;
+  padding: 20px 10px;
+  border-radius: 0;
+  transition: 1s;
+}
+
+.icons {
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0;
+}
+
 }

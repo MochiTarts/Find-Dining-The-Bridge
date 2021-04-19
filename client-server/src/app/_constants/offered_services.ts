@@ -8,7 +8,7 @@ export const OfferedServices = [
   { service_id: "live_music", service_value: "Live Music" },
   { service_id: "wifi", service_value: "Wifi" },
   { service_id: "parking", service_value: "Parking" },
-  { service_id: "accessible_access", service_value: "Accessible Access (ramps, one floor etc.)" },
+  { service_id: "accessibility", service_value: "Accessibility (ramps, one floor etc.)" },
   { service_id: "llbo", service_value: "LLBO (Liquor License Board of Ontario)" },
   { service_id: "cash_only", service_value: "Cash Only" },
   { service_id: "vegetarian", service_value: "Vegetarian Options" },

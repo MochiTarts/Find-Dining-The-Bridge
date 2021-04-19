@@ -214,7 +214,7 @@ restaurant_edit_draft_schema = {
         "full_menu_url": {"type": "string"},
         "restaurant_video_desc": {"type": "string"}
     },
-    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
+    "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
 }
 

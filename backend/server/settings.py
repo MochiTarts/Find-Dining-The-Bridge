@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'image',
     'django.contrib.admindocs',
     'drf_yasg',
+    'newsletter',
 
     # 'user.apps.SDUserConfig',
 ]

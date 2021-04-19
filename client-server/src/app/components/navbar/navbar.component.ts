@@ -131,7 +131,7 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * Redirects to newsletter page
+   * Redirects to newsletter page for logged in user
    */
   newsletter() {
     this.router.navigate(['/newsletter']).then(() => {
@@ -139,6 +139,13 @@ export class NavbarComponent implements OnInit {
         //window.location.reload();
       }, 100);
     });
+  }
+
+  /**
+   * Redirects to newsletter page for public
+   */
+  newsletter_signup() {
+    this.router.navigate(['/newsletter-signup']);
   }
 
   /**

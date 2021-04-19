@@ -1,7 +1,14 @@
-import os
+from django.conf import settings
+
+from subscriber_profile.models import SubscriberProfile
+from restaurant_owner.models import RestaurantOwner
+from newsletter.models import NLUser
+
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from django.conf import settings
+
+import os
+
 
 credentials = service_account.Credentials.from_service_account_info({
     "client_email": settings.GOOGLE_OAUTH2_CLIENT_EMAIL,
@@ -29,12 +36,10 @@ def create_user_emails_sheets():
     sheetsService.spreadsheets().values().clear(
         spreadsheetId=spreadsheet_id, range=input_range).execute()
 
-    #verified = get_all_verified_email_from_SDUser()
-    #verified = get_all_verified_email_from_firebase()
-
     # Get all users' first name, last name, consent status, expired at, and email
-    # SDUsers = list(SDUser.objects.all().values('firstname', 'lastname', 'email', 'consent_status', 'expired_at'))
-    # newsletter_users = list(NLUser.objects.all().values('first_name', 'last_name', 'email', 'consent_status', 'subscribed_at', 'expired_at'))
+    #basic_users = list(SubscriberProfile.objects.all().values('firstname', 'lastname', 'email', 'consent_status', 'expired_at'))
+    #ro_users = list(RestaurantOwner.objects.all().values('firstname', 'lastname', 'email', 'consent_status', 'expired_at'))
+    #newsletter_users = list(NLUser.objects.all().values('first_name', 'last_name', 'email', 'consent_status', 'subscribed_at', 'expired_at'))
 
     # Append user info into values (only users that has email verified)
     values = [['First name', 'Last name', 'Email', 'Consent Status']]

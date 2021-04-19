@@ -1,10 +1,6 @@
 <div *ngIf="restaurants != undefined" class="map">
-    <app-map
-      [restaurants]="restaurants"
-      [userId]="userId"
-      [role]="role"
-    ></app-map>
-  </div>
+  <app-map [restaurants]="restaurants" [userId]="userId" [role]="role"></app-map>
+</div>
 
   <div class="center" style="margin-top: 40px;" id="favourites-label">
     <h2>Favourites</h2>
@@ -42,17 +38,19 @@
 
         <button class="btn filter-button" (click)="filterToggle()">Filter</button>
 
-        <div class="filters-mobile" id="filters-mobile" style="margin-right: -250px;">
-          <app-filterlist-card [category]="'Price'"
-            [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
-            (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">
-          </app-filterlist-card>
-          <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
-            [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
-          </app-filterlist-card>
-          <app-filterlist-card [category]="'Restaurant Characteristics'" [subcategories]="allServices"
-            [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
-          </app-filterlist-card>
+        <div class="filters-mobile mat-elevation-z8" id="filters-mobile" style="margin-right: -400px;">
+          <div fxLayout="column">
+            <app-filterlist-card [category]="'Price'"
+              [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
+              (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">
+            </app-filterlist-card>
+            <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
+              [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
+            </app-filterlist-card>
+            <app-filterlist-card [category]="'Characteristics'" [subcategories]="allServices"
+              [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
+            </app-filterlist-card>
+          </div>
         </div>
 
         <div class="restaruant-listings-box">
@@ -86,26 +84,24 @@
                 (events)="filterService($event)"
               ></app-filterlist-card>
             </div>
-            <div class="col-md-8" fxLayout="column" fxLayoutAlign="center">
-              <div class="restaurant-card-container">
-                <app-restaurant-card
-                  *ngFor="let restaurant of restaurants | slice:0:show"
-                  [restaurant]="restaurant"
-                >
+            <div class="col-md-8">
+              <div class="restaurant-card-container" fxLayout="column" fxLayoutAlign="space-between">
+                <app-restaurant-card *ngFor="let restaurant of restaurants | slice:0:show"
+                  [restaurant]="restaurant">
                 </app-restaurant-card>
-              </div>
 
-              <button class="btn show-btn" ngbTooltip="Show More Restaurants" placement="top"
-                *ngIf="restaurants.length > 5 && show < restaurants.length"
-                (click)="show = (((restaurants.length - show) >= 5) ? show + 5 : restaurants.length)">
-                Show More
-              </button>
+                <button class="btn show-btn" ngbTooltip="Show More Restaurants" placement="top"
+                  *ngIf="restaurants.length > 2 && show < restaurants.length"
+                  (click)="show = (((restaurants.length - show) >= 2) ? show + 2 : restaurants.length)">
+                  Show More
+                </button>
   
-              <button class="btn show-btn" ngbTooltip="Hide Restaurants" placement="top"
-                *ngIf="show == restaurants.length && restaurants.length > 5"
-                (click)="show = 5">
-                Hide
-              </button>
+                <button class="btn show-btn" ngbTooltip="Hide Restaurants" placement="top"
+                  *ngIf="show == restaurants.length && restaurants.length > 2"
+                  (click)="show = 3">
+                  Hide
+                </button>
+              </div>
             </div>
           </div>
         </div>
