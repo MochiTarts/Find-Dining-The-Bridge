@@ -172,21 +172,6 @@ class PendingFood(models.Model):
             raise IntegrityError(
                 "Cannot insert dish, this already exists for this restaurant")
 
-        pricepoint = PendingRestaurant.objects.filter(_id=rest_id).first().pricepoint
-        if pricepoint:
-            if pricepoint == Prices.LOW.name:
-                if not (float(food_data['price']) <= 10.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $10.00 or less")
-            elif pricepoint == Prices.MID.name:
-                if not (11.00 <= float(food_data['price']) <= 30.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $11.00 - $30.00")
-            elif pricepoint == Prices.HIGH.name:
-                if not (31.00 <= float(food_data['price']) <= 60.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $31.00 - $60.00")
-            else:
-                if not (float(food_data['price']) >= 61.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $61.00 or greater")
-
         dish = cls(
             name=food_data['name'],
             restaurant_id=rest_id,
@@ -233,21 +218,6 @@ class PendingFood(models.Model):
         if check_dish.exists() and dish_id != str(check_dish.first()._id):
             raise IntegrityError(
                 "You already have a dish named "+food_data['name']+" in the "+food_data['category']+" category")
-
-        pricepoint = PendingRestaurant.objects.filter(_id=rest_id).first().pricepoint
-        if pricepoint:
-            if pricepoint == Prices.LOW.name:
-                if not (float(food_data['price']) <= 10.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $10.00 or less")
-            elif pricepoint == Prices.MID.name:
-                if not (11.00 <= float(food_data['price']) <= 30.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $11.00 - $30.00")
-            elif pricepoint == Prices.HIGH.name:
-                if not (31.00 <= float(food_data['price']) <= 60.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $31.00 - $60.00")
-            else:
-                if not (float(food_data['price']) >= 61.00):
-                    raise IntegrityError("Range for "+pricepoint+" pricepoint is $61.00 or greater")
 
         restaurant_editable = ["status"]
         restaurant_editable_values = {'status': Status.In_Progress.value}
