@@ -477,7 +477,7 @@ export class LoginComponent implements OnInit {
           window.location.reload();
         });
       } else {
-        this.router.navigate(['/articles']).then(() => {
+        this.router.navigate(['/media']).then(() => {
           window.location.reload();
         });
       }

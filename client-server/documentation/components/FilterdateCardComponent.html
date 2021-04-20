@@ -633,10 +633,10 @@ export class FilterdateCardComponent implements OnInit {
         <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;card cardBox&quot;&gt;
     &lt;div class&#x3D;&quot;row no-gutters d-flex nowrap&quot;&gt;
         &lt;div class&#x3D;&quot;col-6&quot;&gt;
-            &lt;button class&#x3D;&quot;btn btn-select-all&quot; (click)&#x3D;&quot;selectAll()&quot;&gt;Select All&lt;/button&gt;
+            &lt;button class&#x3D;&quot;btn btn-select-all&quot; (click)&#x3D;&quot;selectAll()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Select All Dates&quot;&gt;Select All&lt;/button&gt;
         &lt;/div&gt;
         &lt;div class&#x3D;&quot;col-6 justify-content-end&quot;&gt;
-            &lt;button class&#x3D;&quot;btn btn-reset&quot; (click)&#x3D;&quot;reset()&quot;&gt;Reset&lt;/button&gt;
+            &lt;button class&#x3D;&quot;btn btn-reset&quot; (click)&#x3D;&quot;reset()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Reset All Dates&quot;&gt;Reset&lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;hr /&gt;
@@ -681,7 +681,7 @@ export class FilterdateCardComponent implements OnInit {
 
     &lt;div class&#x3D;&quot;row no-gutters&quot;&gt;
         &lt;div class&#x3D;&quot;col-6&quot;&gt;
-            &lt;button class&#x3D;&quot;btn btn-apply&quot; (click)&#x3D;&quot;sendList()&quot;&gt;Apply&lt;/button&gt;
+            &lt;button class&#x3D;&quot;btn btn-apply&quot; (click)&#x3D;&quot;sendList()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Apply Filters&quot;&gt;Apply&lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;
@@ -699,8 +699,8 @@ hr {
 }
 
 .cardBox {
-  width: 100%;
-  margin: 0;
+  max-width: 18rem;
+  margin: 0 auto;
   padding: 5px;
   border: none !important;
   background-color: white;
@@ -774,6 +774,17 @@ hr {
 .btn-apply:hover {
   background-color: white;
   color: #00a4e5;
+}
+
+@media screen and (max-width: 767px) {
+  
+.cardBox {
+  border: none;
+  margin-top: 15px;
+  border-radius: 0;
+  padding: 0px 10px;
+}
+
 }</code></pre>
     </div>
 
@@ -802,8 +813,8 @@ hr {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="card cardBox">    <div class="row no-gutters d-flex nowrap">        <div class="col-6">            <button class="btn btn-select-all" (click)="selectAll()">Select All</button>        </div>        <div class="col-6 justify-content-end">            <button class="btn btn-reset" (click)="reset()">Reset</button>        </div>    </div>    <hr />    <div class="row no-gutters d-flex nowrap">        <div class="col-6">            <div class="card-body">            <h5 class="card-title" id="card-title">Month</h5>            <div role="group" aria-labelledby="card-title">                <div *ngFor="let sub of months; let i = index" class="form-check" >                <input                    type="checkbox"                    name="months"                    class="form-check-input"                    id="{{ sub }}"                    value="{{ sub }}"                    [(ngModel)]="monthCheckMap[i]"                />                <label class="form-check-label" for="{{ sub }}">{{ sub }}</label>                </div>            </div>            </div>        </div>            <div class="col-6">            <div class="card-body">            <h5 class="card-title" id="card-title">Year</h5>            <div role="group" aria-labelledby="card-title">                <div *ngFor="let sub of years; let i = index" class="form-check" >                <input                    type="checkbox"                    name="years"                    class="form-check-input"                    id="{{ sub }}"                    [(ngModel)]="yearCheckMap[i]"                />                <label class="form-check-label" for="{{ sub }}">{{ sub }}</label>                </div>            </div>            </div>        </div>    </div>    <div class="row no-gutters">        <div class="col-6">            <button class="btn btn-apply" (click)="sendList()">Apply</button>        </div>    </div></div>  </div>'
-    var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
+        var COMPONENT_TEMPLATE = '<div><div class="card cardBox">    <div class="row no-gutters d-flex nowrap">        <div class="col-6">            <button class="btn btn-select-all" (click)="selectAll()" placement="top" ngbTooltip="Select All Dates">Select All</button>        </div>        <div class="col-6 justify-content-end">            <button class="btn btn-reset" (click)="reset()" placement="top" ngbTooltip="Reset All Dates">Reset</button>        </div>    </div>    <hr />    <div class="row no-gutters d-flex nowrap">        <div class="col-6">            <div class="card-body">            <h5 class="card-title" id="card-title">Month</h5>            <div role="group" aria-labelledby="card-title">                <div *ngFor="let sub of months; let i = index" class="form-check" >                <input                    type="checkbox"                    name="months"                    class="form-check-input"                    id="{{ sub }}"                    value="{{ sub }}"                    [(ngModel)]="monthCheckMap[i]"                />                <label class="form-check-label" for="{{ sub }}">{{ sub }}</label>                </div>            </div>            </div>        </div>            <div class="col-6">            <div class="card-body">            <h5 class="card-title" id="card-title">Year</h5>            <div role="group" aria-labelledby="card-title">                <div *ngFor="let sub of years; let i = index" class="form-check" >                <input                    type="checkbox"                    name="years"                    class="form-check-input"                    id="{{ sub }}"                    [(ngModel)]="yearCheckMap[i]"                />                <label class="form-check-label" for="{{ sub }}">{{ sub }}</label>                </div>            </div>            </div>        </div>    </div>    <div class="row no-gutters">        <div class="col-6">            <button class="btn btn-apply" (click)="sendList()" placement="top" ngbTooltip="Apply Filters">Apply</button>        </div>    </div></div>  </div>'
+    var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'NewsletterSignupComponent', 'selector': 'app-newletter-signup'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'ResourcesComponent', 'selector': 'app-resources'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'ThankyouPageComponent', 'selector': 'app-thankyou-page'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'FilterdateCardComponent'};
 </script>

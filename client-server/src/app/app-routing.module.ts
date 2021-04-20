@@ -39,7 +39,7 @@ const routes: Routes = [
   { path: 'edit-posts', component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'get-involved', component: GetInvolvedComponent, },
-  { path: 'articles', component: NewsArticlesComponent, },
+  { path: 'media', component: NewsArticlesComponent, },
   { path: 'privacy-policy', component: PrivacyPolicyComponent, },
   { path: 'about-us', component: AboutUsComponent, },
   { path: 'resources', component: ResourcesComponent, canActivate: [AuthGuard, ROGuard] },

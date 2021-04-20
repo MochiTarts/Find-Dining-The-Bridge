@@ -35,7 +35,7 @@
 
 <ol class="breadcrumb">
   <li>Components</li>
-  <li>PageErrorComponent</li>
+  <li>ThankyouPageComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -61,7 +61,7 @@
     <h3>File</h3>
 </p>
 <p class="comment">
-    <code>src/app/components/page-error/page-error.component.ts</code>
+    <code>src/app/pages/thankyou-page/thankyou-page.component.ts</code>
 </p>
 
 
@@ -91,19 +91,19 @@
 
             <tr>
                 <td class="col-md-3">selector</td>
-                <td class="col-md-9"><code>app-page-error</code></td>
+                <td class="col-md-9"><code>app-thankyou-page</code></td>
             </tr>
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
-                <td class="col-md-9"><code>./page-error.component.scss</code></td>
+                <td class="col-md-9"><code>./thankyou-page.component.scss</code></td>
             </tr>
 
 
 
             <tr>
                 <td class="col-md-3">templateUrl</td>
-                <td class="col-md-9"><code>./page-error.component.html</code></td>
+                <td class="col-md-9"><code>./thankyou-page.component.html</code></td>
             </tr>
 
 
@@ -121,6 +121,20 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#faCheckIcon">faCheckIcon</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -151,15 +165,57 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor()</code>
+<code>constructor(router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>, titleService: <a href="https://angular.io/api/platform-browser/Title" target="_blank">Title</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/app/components/page-error/page-error.component.ts:8</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/pages/thankyou-page/thankyou-page.component.ts:11</a></div>
                             </td>
                         </tr>
 
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>titleService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/platform-browser/Title" target="_blank" >Title</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
 </section>
@@ -195,8 +251,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="12"
-                            class="link-to-prism">src/app/components/page-error/page-error.component.ts:12</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="15"
+                            class="link-to-prism">src/app/pages/thankyou-page/thankyou-page.component.ts:15</a></div>
                 </td>
             </tr>
 
@@ -213,23 +269,59 @@
         </tbody>
     </table>
 </section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="faCheckIcon"></a>
+                        <span class="name">
+                            <b>
+                            faCheckIcon</b>
+                            <a href="#faCheckIcon"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>faCheck</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/pages/thankyou-page/thankyou-page.component.ts:14</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
 
 </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
-
+import { Router } from &#x27;@angular/router&#x27;;
+import { faCheck } from &#x27;@fortawesome/free-solid-svg-icons&#x27;;
+import { Title } from &#x27;@angular/platform-browser&#x27;;
+//import {MatIconModule} from &#x27;@angular/material/icon&#x27;;
 @Component({
-  selector: &#x27;app-page-error&#x27;,
-  templateUrl: &#x27;./page-error.component.html&#x27;,
-  styleUrls: [&#x27;./page-error.component.scss&#x27;]
+  selector: &#x27;app-thankyou-page&#x27;,
+  templateUrl: &#x27;./thankyou-page.component.html&#x27;,
+  styleUrls: [&#x27;./thankyou-page.component.scss&#x27;]
 })
-export class PageErrorComponent implements OnInit {
+export class ThankyouPageComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private router: Router, private titleService: Title,) {}
+  faCheckIcon &#x3D; faCheck;
   ngOnInit(): void {
+    this.titleService.setTitle(&quot;Thank You | Find Dining Scarborough&quot;); 
   }
 
 }
@@ -237,34 +329,72 @@ export class PageErrorComponent implements OnInit {
     </div>
 
     <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;center&quot;&gt;
-  &lt;h2&gt;Looks like this page doesn&#x27;t exist!&lt;/h2&gt;
-  &lt;img
-    src&#x3D;&quot;assets/images/undraw_page_not_found_su7k.png&quot;
-    alt&#x3D;&quot;404&quot;
-    class&#x3D;&quot;image&quot;
-  /&gt;
-  &lt;p&gt;Please check if you have the right URL or head back.&lt;/p&gt;
+        <pre class="line-numbers"><code class="language-html">&lt;div role&#x3D;&quot;main&quot;&gt;
+    &lt;div class&#x3D;&quot;container&quot; tabindex&#x3D;&quot;0&quot;&gt;
+        &lt;fa-icon aria-hidden&#x3D;&quot;false&quot; aria-label&#x3D;&quot;check icon&quot; class&#x3D;&quot;icon checkIcon&quot; [icon]&#x3D;&quot;faCheckIcon&quot;&gt;&lt;/fa-icon&gt;
+        &lt;div class&#x3D;&quot;title&quot;&gt;
+            Thank You for Signing Up for Find Dining Scarborough!
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;subtitle&quot;&gt;
+            Please monitor your email regularly to receive updates.
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;subtitle&quot;&gt;
+            Contact &lt;a href&#x3D;&quot;mailto:info@finddining.ca&quot;&gt;&lt;i&gt;info@finddining.ca&lt;/i&gt;&lt;/a&gt; for any more information.
+        &lt;/div&gt;
+    &lt;/div&gt;
+
 &lt;/div&gt;</code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-styleData">
                 <p class="comment">
-                    <code>./page-error.component.scss</code>
+                    <code>./thankyou-page.component.scss</code>
                 </p>
                 <pre class="line-numbers"><code class="language-scss">@import &quot;src/styles&quot;;
 
-.center {
-  margin-top: 40px;
-  padding: 30px;
-  text-align: center;
+.container {
+    background-color: rgba(237,237,238,255);
+    padding: 50px;
+    margin: auto;
+    width: 100%;
+    height: fit-content;
+    min-height: 500px;
 }
 
-.image {
-  width: 50%;
-  height: auto;
-}
-</code></pre>
+.title {
+    font-size: 24px;
+    line-height: 24px;
+    margin: 20px 0px;
+    font-weight: bold;
+    white-space: nowrap;
+    color: black;
+    text-align:center;
+    font-family: Arial, Helvetica, sans-serif;
+
+    @media screen  and (max-width: 800px) {
+      white-space: normal;
+    }
+  }
+  
+  .subtitle {
+    font-size: 20px;
+    line-height: 20px;
+    margin: 5px 0px;
+    color: rgba(119,119,119,255);
+    text-align:center;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .checkIcon {
+    display:inline-block;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    width: 100%;
+    height: 100%;
+    font-size: 136px;
+    text-align: center;
+    color: rgba(169,208,142,255);
+  }</code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-tree">
@@ -292,10 +422,10 @@ export class PageErrorComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="center">  <h2>Looks like this page doesn\'t exist!</h2>  <img    src="assets/images/undraw_page_not_found_su7k.png"    alt="404"    class="image"  />  <p>Please check if you have the right URL or head back.</p></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div role="main">    <div class="container" tabindex="0">        <fa-icon aria-hidden="false" aria-label="check icon" class="icon checkIcon" [icon]="faCheckIcon"></fa-icon>        <div class="title">            Thank You for Signing Up for Find Dining Scarborough!        </div>        <div class="subtitle">            Please monitor your email regularly to receive updates.        </div>        <div class="subtitle">            Contact <a href="mailto:info@finddining.ca"><i>info@finddining.ca</i></a> for any more information.        </div>    </div></div></div>'
     var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'NewsletterSignupComponent', 'selector': 'app-newletter-signup'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'ResourcesComponent', 'selector': 'app-resources'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'ThankyouPageComponent', 'selector': 'app-thankyou-page'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
-    var ACTUAL_COMPONENT = {'name': 'PageErrorComponent'};
+    var ACTUAL_COMPONENT = {'name': 'ThankyouPageComponent'};
 </script>
 <script src="../js/tree.js"></script>
 
@@ -330,7 +460,7 @@ export class PageErrorComponent implements OnInit {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
-            var COMPODOC_CURRENT_PAGE_URL = 'PageErrorComponent.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'ThankyouPageComponent.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
