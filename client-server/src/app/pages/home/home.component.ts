@@ -13,6 +13,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Title } from '@angular/platform-browser';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
+import { dollarPricepointsObj } from '../../_constants/pricepoints';
 
 @Component({
   selector: 'app-home',
@@ -39,7 +40,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
 
   restaurants: any[] = [];
-  pricepoints: any[] = [];
+  pricepoints: any[] = dollarPricepointsObj;
 
   spotlight: any;
   spotlightStory: string = "";
@@ -58,13 +59,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.titleService.setTitle("Home | Find Dining Scarborough");
-
-    this.pricepoints = [
-      { key: "$", value: "LOW" },
-      { key: "$$", value: "MID" },
-      { key: "$$$", value: "HIGH" },
-      { key: "$$$$", value: "EXHIGH" }
-    ]
 
     this.publicContent = "public content";
     if (this.authService.isLoggedIn) {
