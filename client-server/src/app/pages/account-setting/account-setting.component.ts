@@ -14,7 +14,9 @@ import { PasswordChangeFormComponent } from '../../components/password-change-fo
 })
 export class AccountSettingComponent implements OnInit {
   modalRef: any;
-  userId: string;
+  userId: string = '';
+  profileId: string = '';
+  role: string = '';
   isThirdParty: boolean = false;
   @ViewChild('changePassword') changePassword: PasswordChangeFormComponent;
   
@@ -31,6 +33,21 @@ export class AccountSettingComponent implements OnInit {
     this.titleService.setTitle("Account Settings | Find Dining Scarborough");
     if (this.tokenStorage.getProvider()){
       this.isThirdParty = true;
+    }
+
+    this.userId = this.tokenStorage.getUser().user_id;
+    this.role = this.tokenStorage.getUser().role;
+    this.profileId = this.tokenStorage.getUser().profile_id;
+
+    if (!this.profileId) {
+      if (this.role == 'BU') {
+        // Will open profile modal on home page
+        this.router.navigate(['/']);
+        return;
+      } else {
+        this.router.navigate(['/restaurant-setup']);
+        return;
+      }
     }
   }
 
