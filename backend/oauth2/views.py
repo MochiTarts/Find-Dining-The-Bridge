@@ -12,7 +12,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 
 from sduser.backends import construct_token_response_for_user, create_disable_user_and_send_verification_email, check_user_status
-from sduser.forms import SDUserCreateForm
 
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
