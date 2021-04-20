@@ -95,19 +95,19 @@
               </div>
               <div fxLayout="column" fxLayoutAlign="center">
                 <mat-form-field>
-                  <mat-label>Username</mat-label>
-                  <input matInput required type="text" name="username" [(ngModel)]="signupForm.username" minlength="3" maxlength="20" #username="ngModel" autocomplete="Username" >
+                  <mat-label>Username (can be used for login)</mat-label>
+                  <input matInput type="text" name="username" [(ngModel)]="signupForm.username" maxlength="150" #username="ngModel" autocomplete="Username" >
                   <mat-icon matSuffix>person</mat-icon>
-                  <mat-error *ngIf="username.errors && f.submitted">Username is required</mat-error>
-                  <mat-error *ngIf="username.errors && username.errors.maxlength">Username must be at most 20 characters</mat-error>
+                  <mat-error *ngIf="username.errors && username.errors.maxlength">Username must be at most 150 characters</mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                   <mat-label>Email</mat-label>
-                  <input matInput name="email" [(ngModel)]="signupForm.email" required email #email="ngModel" autocomplete="email" />
+                  <input matInput name="email" [(ngModel)]="signupForm.email" required email #email="ngModel" maxlength="254" autocomplete="email" />
                   <mat-icon matSuffix>email</mat-icon>
                   <mat-error *ngIf="email.errors && f.submitted">Email is required</mat-error>
                   <mat-error *ngIf="email.errors && email.errors.email">Email must be a valid email address</mat-error>
+                  <mat-error *ngIf="email.errors && email.errors.maxlength">Email must be at most 254 characters</mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
