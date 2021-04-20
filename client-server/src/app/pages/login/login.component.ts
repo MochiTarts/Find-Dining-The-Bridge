@@ -465,9 +465,6 @@ export class LoginComponent implements OnInit {
    */
   loginRedirect(): void {
     let profileId = this.tokenStorage.getUser().profile_id;
-    alert("Now Here")
-    alert(profileId)
-    alert(this.role)
 
     if (this.role == 'RO') {
       if (profileId == null)
