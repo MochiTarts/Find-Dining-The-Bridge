@@ -93,7 +93,9 @@ import { GetInvolvedComponent } from &#x27;./pages/get-involved/get-involved.com
 import { NewsArticlesComponent } from &#x27;./pages/news-articles/news-articles.component&#x27;;
 import { PrivacyPolicyComponent } from &#x27;./pages/privacy-policy/privacy-policy.component&#x27;;
 import { AboutUsComponent } from &#x27;./pages/about-us/about-us.component&#x27;;
-import { AboutOurPartnerComponent } from &#x27;./pages/about-our-partner/about-our-partner.component&#x27;;
+import { ResourcesComponent } from &#x27;./pages/resources/resources.component&#x27;;
+import { NewsletterSignupComponent } from &#x27;./pages/newsletter-signup/newsletter-signup.component&#x27;;
+import { ThankyouPageComponent } from &#x27;./pages/thankyou-page/thankyou-page.component&#x27;;
 
 const routes: Routes &#x3D; [
   { path: &#x27;&#x27;, component: HomeComponent },
@@ -109,10 +111,12 @@ const routes: Routes &#x3D; [
   { path: &#x27;edit-posts&#x27;, component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
   { path: &#x27;menu-edit&#x27;, component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
   { path: &#x27;get-involved&#x27;, component: GetInvolvedComponent, },
-  { path: &#x27;articles&#x27;, component: NewsArticlesComponent, },
+  { path: &#x27;media&#x27;, component: NewsArticlesComponent, },
   { path: &#x27;privacy-policy&#x27;, component: PrivacyPolicyComponent, },
   { path: &#x27;about-us&#x27;, component: AboutUsComponent, },
-  { path: &#x27;about-our-partner&#x27;, component: AboutOurPartnerComponent, },
+  { path: &#x27;resources&#x27;, component: ResourcesComponent, canActivate: [AuthGuard, ROGuard] },
+  { path: &#x27;newsletter-signup&#x27;, component: NewsletterSignupComponent, },
+  { path: &#x27;thank-you&#x27;, component: ThankyouPageComponent, },
   /*
   { path: &#x27;verification&#x27;, component: EmptyComponent, children: [
     {

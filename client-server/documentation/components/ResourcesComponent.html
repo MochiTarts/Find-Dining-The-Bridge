@@ -35,7 +35,7 @@
 
 <ol class="breadcrumb">
   <li>Components</li>
-  <li>PageErrorComponent</li>
+  <li>ResourcesComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -61,7 +61,7 @@
     <h3>File</h3>
 </p>
 <p class="comment">
-    <code>src/app/components/page-error/page-error.component.ts</code>
+    <code>src/app/pages/resources/resources.component.ts</code>
 </p>
 
 
@@ -91,19 +91,19 @@
 
             <tr>
                 <td class="col-md-3">selector</td>
-                <td class="col-md-9"><code>app-page-error</code></td>
+                <td class="col-md-9"><code>app-resources</code></td>
             </tr>
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
-                <td class="col-md-9"><code>./page-error.component.scss</code></td>
+                <td class="col-md-9"><code>./resources.component.scss</code></td>
             </tr>
 
 
 
             <tr>
                 <td class="col-md-3">templateUrl</td>
-                <td class="col-md-9"><code>./page-error.component.html</code></td>
+                <td class="col-md-9"><code>./resources.component.html</code></td>
             </tr>
 
 
@@ -121,6 +121,20 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#pdfsFromAssets">pdfsFromAssets</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -151,15 +165,45 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor()</code>
+<code>constructor(titleService: <a href="https://angular.io/api/platform-browser/Title" target="_blank">Title</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="8" class="link-to-prism">src/app/components/page-error/page-error.component.ts:8</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/app/pages/resources/resources.component.ts:9</a></div>
                             </td>
                         </tr>
 
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>titleService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/platform-browser/Title" target="_blank" >Title</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
 </section>
@@ -195,8 +239,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="12"
-                            class="link-to-prism">src/app/components/page-error/page-error.component.ts:12</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">src/app/pages/resources/resources.component.ts:20</a></div>
                 </td>
             </tr>
 
@@ -213,23 +257,72 @@
         </tbody>
     </table>
 </section>
+    <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="pdfsFromAssets"></a>
+                        <span class="name">
+                            <b>
+                            pdfsFromAssets</b>
+                            <a href="#pdfsFromAssets"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>    <code>[]</code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>[
+    &#x27;COVID-19_Tax_Information_Session_for_Restaurant_Ownersv2.pdf&#x27;,
+  ]</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/pages/resources/resources.component.ts:16</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
 
 </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit } from &#x27;@angular/core&#x27;;
+import { Title } from &#x27;@angular/platform-browser&#x27;;
 
 @Component({
-  selector: &#x27;app-page-error&#x27;,
-  templateUrl: &#x27;./page-error.component.html&#x27;,
-  styleUrls: [&#x27;./page-error.component.scss&#x27;]
+  selector: &#x27;app-resources&#x27;,
+  templateUrl: &#x27;./resources.component.html&#x27;,
+  styleUrls: [&#x27;./resources.component.scss&#x27;]
 })
-export class PageErrorComponent implements OnInit {
+export class ResourcesComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private titleService: Title,
+  ) { }
+
+  // File names of .pdf files stored in the folder /assets/pdf/
+  pdfsFromAssets &#x3D; [
+    &#x27;COVID-19_Tax_Information_Session_for_Restaurant_Ownersv2.pdf&#x27;,
+  ];
 
   ngOnInit(): void {
+    this.titleService.setTitle(&quot;Resources | Find Dining Scarborough&quot;);
   }
 
 }
@@ -237,32 +330,47 @@ export class PageErrorComponent implements OnInit {
     </div>
 
     <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;center&quot;&gt;
-  &lt;h2&gt;Looks like this page doesn&#x27;t exist!&lt;/h2&gt;
-  &lt;img
-    src&#x3D;&quot;assets/images/undraw_page_not_found_su7k.png&quot;
-    alt&#x3D;&quot;404&quot;
-    class&#x3D;&quot;image&quot;
-  /&gt;
-  &lt;p&gt;Please check if you have the right URL or head back.&lt;/p&gt;
-&lt;/div&gt;</code></pre>
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;page-box&quot;&gt;
+  &lt;h2 id&#x3D;&quot;resources-label&quot; tabindex&#x3D;&quot;0&quot;&gt;Resources&lt;/h2&gt;
+  &lt;div class&#x3D;&quot;form-box&quot; role&#x3D;&quot;main&quot; aria-labelledby&#x3D;&quot;resources-label&quot;&gt;
+    &lt;div *ngFor&#x3D;&quot;let file of pdfsFromAssets&quot;&gt;
+      &lt;a  href&#x3D;&quot;{{&#x27;/assets/pdf/&#x27; + file}}&quot;&gt;{{file}}&lt;/a&gt;&lt;br&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+</code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-styleData">
                 <p class="comment">
-                    <code>./page-error.component.scss</code>
+                    <code>./resources.component.scss</code>
                 </p>
                 <pre class="line-numbers"><code class="language-scss">@import &quot;src/styles&quot;;
 
-.center {
-  margin-top: 40px;
-  padding: 30px;
+.page-box {
+  margin: auto;
   text-align: center;
+  padding: 20px;
 }
 
-.image {
-  width: 50%;
-  height: auto;
+.form-box {
+  width: 60%;
+  margin: auto;
+  padding: 40px 50px 40px 50px;
+  border-color: #dddddd;
+  border-style: solid;
+  border-radius: 20px;
+  background-color: white;
+  text-align: left;
+
+  @media screen and (max-width: 1100px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 400px) {
+    padding: 40px 25px 40px 25px;
+  }
 }
 </code></pre>
     </div>
@@ -292,10 +400,10 @@ export class PageErrorComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="center">  <h2>Looks like this page doesn\'t exist!</h2>  <img    src="assets/images/undraw_page_not_found_su7k.png"    alt="404"    class="image"  />  <p>Please check if you have the right URL or head back.</p></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="page-box">  <h2 id="resources-label" tabindex="0">Resources</h2>  <div class="form-box" role="main" aria-labelledby="resources-label">    <div *ngFor="let file of pdfsFromAssets">      <a  href="{{\'/assets/pdf/\' + file}}">{{file}}</a><br>    </div>  </div></div></div>'
     var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'NewsletterSignupComponent', 'selector': 'app-newletter-signup'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'ResourcesComponent', 'selector': 'app-resources'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'ThankyouPageComponent', 'selector': 'app-thankyou-page'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
-    var ACTUAL_COMPONENT = {'name': 'PageErrorComponent'};
+    var ACTUAL_COMPONENT = {'name': 'ResourcesComponent'};
 </script>
 <script src="../js/tree.js"></script>
 
@@ -330,7 +438,7 @@ export class PageErrorComponent implements OnInit {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
-            var COMPODOC_CURRENT_PAGE_URL = 'PageErrorComponent.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'ResourcesComponent.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

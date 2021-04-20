@@ -1,30 +1,36 @@
 <div class="header-img">
-  <div class="title absolute-center" tabindex="0">
-    Support <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants
-  </div>
-  <div class="header-content description absolute-center" tabindex="0">
-    Celebrating Scarborough's rich cultural diversity through food,
-    we aim to highlight local, independent restaurants from the
-    longstanding neighbourhood favourites, to the new and hidden
-    gems. We will help residents and east end visitors Find Dining
-    and discover the amazing food of Scarborough!
-  </div>
-
-  <div class="input-group absolute-center">
-    <div class="input-group-prepend">
-      <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
+  <div class="header-container">
+    <div class="header-text" fxLayout="column" fxLayoutAlign="center center">
+      <div class="title" tabindex="0">
+        Support <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants
+      </div>
+      <div class="header-content description" tabindex="0">
+        Celebrating Scarborough's rich cultural diversity through food,
+        we aim to highlight local, independent restaurants from the
+        longstanding neighbourhood favourites, to the new and hidden
+        gems. We will help residents and east end visitors Find Dining
+        and discover the amazing food of Scarborough!
+      </div>
     </div>
-    <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Find</span>
-    </div>
-    <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">
-    <div class="input-group-append">
-      <button class="btn-primary" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
+  
+    <div class="search-bar-container" fxLayout="column" fxLayoutAlign="center center">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
+        </div>
+        <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Find</span>
+        </div>
+        <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">
+        <div class="input-group-append">
+          <button class="btn-primary" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
+        </div>
+      </div>
+  
+      <button class="btn-primary search-btn" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
     </div>
   </div>
-
-  <button class="btn-primary search-btn absolute-center" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
 </div>
 
 <div class="local-restaurants" *ngIf="restaurants.length > 0">

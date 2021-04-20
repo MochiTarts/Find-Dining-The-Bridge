@@ -149,10 +149,10 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * Redirects to articles page
+   * Redirects to media page
    */
-  article() {
-    this.router.navigate(['/articles']);
+  media() {
+    this.router.navigate(['/media']);
   }
 
   /**
