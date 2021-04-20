@@ -24,6 +24,7 @@ import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ResourcesComponent } from './pages/resources/resources.component';
 import { NewsletterSignupComponent } from './pages/newsletter-signup/newsletter-signup.component';
 import { ThankyouPageComponent } from './pages/thankyou-page/thankyou-page.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -45,6 +46,7 @@ const routes: Routes = [
   { path: 'resources', component: ResourcesComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'newsletter-signup', component: NewsletterSignupComponent, },
   { path: 'thank-you', component: ThankyouPageComponent, },
+  { path: 'contact-us', component: ContactUsComponent, },
   /*
   { path: 'verification', component: EmptyComponent, children: [
     {

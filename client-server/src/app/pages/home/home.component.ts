@@ -13,8 +13,7 @@ import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Title } from '@angular/platform-browser';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmailService } from 'src/app/_services/email.service';
+import { dollarPricepointsObj } from '../../_constants/pricepoints';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +40,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('userInfo') userInfo: SubscriberProfileFormComponent;
 
   restaurants: any[] = [];
-  pricepoints: any[] = [];
+  pricepoints: any[] = dollarPricepointsObj;
 
   spotlight: any;
   spotlightStory: string = "";
@@ -50,27 +49,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   location: string = '';
   find: string = '';
 
-  messageForm: FormGroup;
-
   constructor(
     private authService: AuthService,
     private tokenStorageService: TokenStorageService,
     private restaurantService: RestaurantService,
     private router: Router,
     private titleService: Title,
-    private formBuilder: FormBuilder,
-    private emailService: EmailService,
   ) { }
 
   ngOnInit(): void {
     this.titleService.setTitle("Home | Find Dining Scarborough");
-
-    this.pricepoints = [
-      { key: "$", value: "LOW" },
-      { key: "$$", value: "MID" },
-      { key: "$$$", value: "HIGH" },
-      { key: "$$$$", value: "EXHIGH" }
-    ]
 
     this.publicContent = "public content";
     if (this.authService.isLoggedIn) {
@@ -82,12 +70,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.userId = user.user_id;
       this.profileId = user.profile_id;
     }
-
-    this.messageForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.email, Validators.required]],
-      message: ['', Validators.required],
-    });
 
     this.getRestaurants();
   }
@@ -188,25 +170,4 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return list;
   }
 
-  /**
-   * Performs action to send email to info@finddining.ca
-   */
-  onSubmit(): void {
-    let name = this.messageForm.get('name').value;
-    let message = this.messageForm.get('message').value;
-    let content = "<p>Email from:" + this.messageForm.get('email').value + "</p><p>Name: " + name + "</p><p>Message: " + message + "</p>";
-
-    var emailInfo = {
-      subject: 'Message From Landing Page',
-      content
-    }
-
-    this.emailService.sendEmail(emailInfo).subscribe((data) => {
-      alert("Your message is submitted!");
-      window.location.reload();
-    },
-      err => {
-        alert(err.error.message);
-      });
-  }
 }
