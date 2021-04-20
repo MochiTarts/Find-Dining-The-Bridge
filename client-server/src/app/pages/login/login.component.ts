@@ -158,6 +158,7 @@ export class LoginComponent implements OnInit {
                 this.isLoggedIn = true;
                 this.setTimeRemaining(0);
                 this.modalService.dismissAll();
+                this.role = this.tokenStorage.getUser().role;
                 this.loginRedirect();
               }, err => {
                 //console.log(err);
@@ -190,6 +191,7 @@ export class LoginComponent implements OnInit {
                 this.isLoggedIn = true;
                 this.setTimeRemaining(0);
                 this.modalService.dismissAll();
+                this.role = this.tokenStorage.getUser().role;
                 this.loginRedirect();
               }, err => {
                 this.authService.updateLoginStatus(false);
@@ -463,6 +465,9 @@ export class LoginComponent implements OnInit {
    */
   loginRedirect(): void {
     let profileId = this.tokenStorage.getUser().profile_id;
+    alert("Now Here")
+    alert(profileId)
+    alert(this.role)
 
     if (this.role == 'RO') {
       if (profileId == null)
@@ -493,7 +498,6 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
       //this.modalService.dismissAll();
-      this.loginRedirect();
     }).catch(error => {
       console.log(error);
     });
@@ -509,7 +513,6 @@ export class LoginComponent implements OnInit {
     this.role = role;
     this.socialAuth.signIn(FacebookLoginProvider.PROVIDER_ID).then(() => {
       //this.modalService.dismissAll();
-      this.loginRedirect();
     }).catch(error => {
       console.log(error);
     });

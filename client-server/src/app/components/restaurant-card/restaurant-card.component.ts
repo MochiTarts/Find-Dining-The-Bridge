@@ -15,6 +15,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
   favourited: boolean = false;
   userId: string = '';
   role: string = '';
+  profileId: string = '';
   cuisineList: string = '';
   pricepoints: any = [];
   pricepoint: string = '';
@@ -29,8 +30,9 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-      this.userId = user.user_id
-      this.role = user.role
+      this.userId = user.user_id;
+      this.role = user.role;
+      this.profileId = user.profile_id;
       this.pagePath = this.router.url;
 
       this.pricepoints = [
@@ -82,6 +84,16 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
    * @param restaurnt_id - the restaurant id
    */
   addFavourite(restaurnt_id) {
+    if (!this.profileId) {
+      if (this.role == 'BU') {
+        this.router.navigate(['/']);
+        return;
+      } else {
+        this.router.navigate(['/restaurant-setup']);
+        return;
+      }
+    }
+
     var data = {
       restaurant: restaurnt_id
     }

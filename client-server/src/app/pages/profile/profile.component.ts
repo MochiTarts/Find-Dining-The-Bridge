@@ -24,6 +24,13 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle("Profile | Find Dining Scarborough");
     this.currentUser = this.token.getUser();
+
+    if (this.currentUser.user_id && this.currentUser.role == 'BU' && !this.currentUser.profile_id) {
+        // Will open profile modal on home page
+        this.router.navigate(['/']);
+        return;
+    }
+
     this.userService.getSubscriberProfile().subscribe((data) => {
       this.currentUser.first_name = data.first_name;
       this.currentUser.last_name = data.last_name;
