@@ -24,11 +24,25 @@
         </div>
         <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">
         <div class="input-group-append">
-          <button class="btn-primary" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
+          <button
+            class="btn-primary"
+            type="button"
+            [routerLink]="['/all-listings']"
+            [queryParams]="{location: location, find: find}"
+          >
+            <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go Find Dining</span>
+          </button>
         </div>
       </div>
 
-      <button class="btn-primary search-btn" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
+      <button
+        class="btn-primary search-btn"
+        type="button"
+        [routerLink]="['/all-listings']"
+        [queryParams]="{location: location, find: find}"
+      >
+        <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go Find Dining</span>
+      </button>
     </div>
   </div>
 </div>
