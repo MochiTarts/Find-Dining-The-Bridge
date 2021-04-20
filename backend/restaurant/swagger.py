@@ -161,14 +161,6 @@ dish_pending_dish_id_put_response = {
 }
 
 
-class PendingFoodDelete(serializers.Serializer):
-    name = serializers.CharField()
-    category = serializers.CharField()
-
-    class Meta:
-        ref_name = None
-
-
 dish_pending_dish_id_delete_response = {
     "200": openapi.Response(
         description="custom 200 description",

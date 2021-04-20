@@ -15,14 +15,6 @@ from sduser.utils import send_email_verification
 
 User = get_user_model()
 
-# an instance is used for the second param of send_verification_email function
-
-
-class SDUserCreateForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password', 'role',)
-
 
 class AdminForm(ModelForm):
     # note that modification to this field will show up in the history (right now I am explicitly filtering it out in history_view)

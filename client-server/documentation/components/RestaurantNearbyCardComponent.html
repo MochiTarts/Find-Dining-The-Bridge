@@ -131,6 +131,9 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#gotoRestaurant">gotoRestaurant</a>
+                            </li>
+                            <li>
                                 <a href="#ngOnInit">ngOnInit</a>
                             </li>
                         </ul>
@@ -165,15 +168,45 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor()</code>
+<code>constructor(router: <a href="https://angular.io/api/router/Router" target="_blank">Router</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/components/restaurant-nearby-card/restaurant-nearby-card.component.ts:10</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/components/restaurant-nearby-card/restaurant-nearby-card.component.ts:11</a></div>
                             </td>
                         </tr>
 
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/router/Router" target="_blank" >Router</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
 </section>
@@ -196,7 +229,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/components/restaurant-nearby-card/restaurant-nearby-card.component.ts:10</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="11" class="link-to-prism">src/app/components/restaurant-nearby-card/restaurant-nearby-card.component.ts:11</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -210,6 +243,45 @@
     <h3 id="methods">
         Methods
     </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="gotoRestaurant"></a>
+                    <span class="name">
+                        <b>
+                            gotoRestaurant
+                        </b>
+                        <a href="#gotoRestaurant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>gotoRestaurant()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="20"
+                            class="link-to-prism">src/app/components/restaurant-nearby-card/restaurant-nearby-card.component.ts:20</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -232,8 +304,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="14"
-                            class="link-to-prism">src/app/components/restaurant-nearby-card/restaurant-nearby-card.component.ts:14</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="17"
+                            class="link-to-prism">src/app/components/restaurant-nearby-card/restaurant-nearby-card.component.ts:17</a></div>
                 </td>
             </tr>
 
@@ -256,6 +328,7 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, Input, OnInit } from &#x27;@angular/core&#x27;;
+import { Router } from &#x27;@angular/router&#x27;;
 
 @Component({
   selector: &#x27;app-restaurant-nearby-card&#x27;,
@@ -266,9 +339,16 @@ export class RestaurantNearbyCardComponent implements OnInit {
 
   @Input() restaurant: any;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  gotoRestaurant() {
+    const url &#x3D; this.router.createUrlTree([&#x27;/restaurant&#x27;], { queryParams: { restaurantId: this.restaurant._id } });
+    window.open(url.toString(), &#x27;_blank&#x27;);
   }
 
 }
@@ -277,11 +357,12 @@ export class RestaurantNearbyCardComponent implements OnInit {
 
     <div class="tab-pane fade " id="c-templateData">
         <pre class="line-numbers"><code class="language-html">&lt;a
-  class&#x3D;&quot;card cardBox&quot; 
+  class&#x3D;&quot;card cardBox&quot;
   [routerLink]&#x3D;&quot;[&#x27;/restaurant&#x27;]&quot;
   [queryParams]&#x3D;&quot;{restaurantId: restaurant._id}&quot;
+  (touchend)&#x3D;&quot;gotoRestaurant()&quot;
   target&#x3D;&quot;_blank&quot;
-  placement&#x3D;&quot;bottom&quot; 
+  placement&#x3D;&quot;bottom&quot;
   ngbTooltip&#x3D;&quot;Visit Restaurant Page&quot;
 &gt;
   &lt;div class&#x3D;&quot;img-container&quot;&gt;
@@ -293,7 +374,7 @@ export class RestaurantNearbyCardComponent implements OnInit {
       &lt;div class&#x3D;&quot;overlay&quot;&gt;
         &lt;div class&#x3D;&quot;text&quot;&gt;
           {{ restaurant.name }}
-          &lt;br&gt;&lt;br&gt; 
+          &lt;br&gt;&lt;br&gt;
           {{ restaurant.cuisinePrice }}
         &lt;/div&gt;
       &lt;/div&gt;
@@ -395,8 +476,8 @@ img.card-img-top {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><a  class="card cardBox"   [routerLink]="[\'/restaurant\']"  [queryParams]="{restaurantId: restaurant._id}"  target="_blank"  placement="bottom"   ngbTooltip="Visit Restaurant Page">  <div class="img-container">    <img        src="{{ restaurant.imgUrl }}"        class="card-img-top"        alt="restaurant logo"      />      <div class="overlay">        <div class="text">          {{ restaurant.name }}          <br><br>           {{ restaurant.cuisinePrice }}        </div>      </div>  </div></a></div>'
-    var COMPONENTS = [{'name': 'AboutOurPartnerComponent', 'selector': 'app-about-our-partner'},{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'OwnerCardComponent', 'selector': 'app-owner-card'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantFavsCardComponent', 'selector': 'app-restaurant-favs-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
+        var COMPONENT_TEMPLATE = '<div><a  class="card cardBox"  [routerLink]="[\'/restaurant\']"  [queryParams]="{restaurantId: restaurant._id}"  (touchend)="gotoRestaurant()"  target="_blank"  placement="bottom"  ngbTooltip="Visit Restaurant Page">  <div class="img-container">    <img        src="{{ restaurant.imgUrl }}"        class="card-img-top"        alt="restaurant logo"      />      <div class="overlay">        <div class="text">          {{ restaurant.name }}          <br><br>          {{ restaurant.cuisinePrice }}        </div>      </div>  </div></a></div>'
+    var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'ContactUsComponent', 'selector': 'app-contact-us'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'NewsletterSignupComponent', 'selector': 'app-newletter-signup'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'ResourcesComponent', 'selector': 'app-resources'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'ThankyouPageComponent', 'selector': 'app-thankyou-page'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'RestaurantNearbyCardComponent'};
 </script>

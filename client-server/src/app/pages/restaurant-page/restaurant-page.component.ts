@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
 import { formValidation } from '../../_validation/forms';
 import { UserService } from '../../_services/user.service';
 import { draftValidator } from '../../_validation/draftValidator';
+import { dollarPricepointsObj } from '../../_constants/pricepoints';
 
 @Component({
   selector: 'app-restaurant-page',
@@ -44,7 +45,7 @@ export class RestaurantPageComponent implements OnInit {
   specialDish: any[] = [];
   popularDish: any[] = [];
 
-  pricepoints: any = [];
+  pricepoints: any = dollarPricepointsObj;
   pricepoint: string = '';
   displayed_phone: string = '';
   cuisineList: string = '';
@@ -107,19 +108,18 @@ export class RestaurantPageComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle("Restaurant Page | Find Dining Scarborough");
 
-    this.pricepoints = [
-      { key: "$", value: "LOW" },
-      { key: "$$", value: "MID" },
-      { key: "$$$", value: "HIGH" },
-      { key: "$$$$", value: "EXHIGH" }
-    ]
-
     if (this.authService.isLoggedIn) {
       const user = this.tokenStorage.getUser();
       this.role = user.role;
       this.email = user.email;
       this.userId = user.user_id;
       this.profileId = user.profile_id;
+
+      if (this.userId != null && this.role == 'RO'
+        && !this.profileId && !this.route.snapshot.queryParams.restaurantId) {
+        this.router.navigate(['/restaurant-setup']);
+        return;
+      }
 
       if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
         this.getNearbyRestaurants();

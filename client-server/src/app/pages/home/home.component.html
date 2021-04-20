@@ -1,30 +1,50 @@
 <div class="header-img">
-  <div class="title absolute-center" tabindex="0">
-    Support <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants
-  </div>
-  <div class="header-content description absolute-center" tabindex="0">
-    Celebrating Scarborough's rich cultural diversity through food,
-    we aim to highlight local, independent restaurants from the
-    longstanding neighbourhood favourites, to the new and hidden
-    gems. We will help residents and east end visitors Find Dining
-    and discover the amazing food of Scarborough!
-  </div>
+  <div class="header-container">
+    <div class="header-text" fxLayout="column" fxLayoutAlign="center center">
+      <div class="title" tabindex="0">
+        Support <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants
+      </div>
+      <div class="header-content description" tabindex="0">
+        Celebrating Scarborough's rich cultural diversity through food,
+        we aim to highlight local, independent restaurants from the
+        longstanding neighbourhood favourites, to the new and hidden
+        gems. We will help residents and east end visitors Find Dining
+        and discover the amazing food of Scarborough!
+      </div>
+    </div>
 
-  <div class="input-group absolute-center">
-    <div class="input-group-prepend">
-      <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
-    </div>
-    <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Find</span>
-    </div>
-    <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">
-    <div class="input-group-append">
-      <button class="btn-primary" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
+    <div class="search-bar-container" fxLayout="column" fxLayoutAlign="center center">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
+        </div>
+        <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Find</span>
+        </div>
+        <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">
+        <div class="input-group-append">
+          <button
+            class="btn-primary"
+            type="button"
+            [routerLink]="['/all-listings']"
+            [queryParams]="{location: location, find: find}"
+          >
+            <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go Find Dining</span>
+          </button>
+        </div>
+      </div>
+
+      <button
+        class="btn-primary search-btn"
+        type="button"
+        [routerLink]="['/all-listings']"
+        [queryParams]="{location: location, find: find}"
+      >
+        <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go Find Dining</span>
+      </button>
     </div>
   </div>
-
-  <button class="btn-primary search-btn absolute-center" type="button" [routerLink]="['/all-listings']" [queryParams]="{location: location, find: find}">Go Find Dining</button>
 </div>
 
 <div class="local-restaurants" *ngIf="restaurants.length > 0">
@@ -129,38 +149,6 @@
       [description]="'Share your profile with a community of your peers'" tabindex="0"></app-info-card>
   </div>
   <button type="button" class="register-btn" (click)="gotoRegister()">Register Now</button>
-</div>
-
-<!-- part 6 -->
-<div class="box-4" id="contact_us">
-  <div class="form">
-    <p class="title-4" tabindex="0" id="contact_us_label">We would love to hear from you!</p>
-    <form [formGroup]="messageForm" role="form" aria-labelledby="contact_us_label">
-      <div class="form-group">
-        <label for="name">Name <app-required-star></app-required-star></label>
-        <input type="text" class="form-control" id="name" formControlName="name" aria-required="true" />
-      </div>
-      <div class="form-group">
-        <label for="email">Email <app-required-star></app-required-star></label>
-        <input type="text" class="form-control" id="email" formControlName="email" aria-required="true" />
-      </div>
-      <div class="form-group">
-        <label for="message">Message <app-required-star></app-required-star></label>
-        <textarea type="text" class="form-control" id="message" name="message" rows="3"
-          formControlName="message" aria-required="true"></textarea>
-      </div>
-      <div style="text-align: center;">
-        <button
-          type="button"
-          class="register-btn"
-          (click)="onSubmit()"
-          [disabled]="messageForm.invalid"
-        >
-          Submit
-        </button>
-      </div>
-    </form>
-  </div>
 </div>
 
 <div class="bg2" style="padding: 10px;"></div>

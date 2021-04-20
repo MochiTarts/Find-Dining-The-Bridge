@@ -85,9 +85,8 @@ class NameFilter(InputFilter):
                 Q(name__icontains=name)
             )
 
+
 # title filter (not exact match but 'contains' for wider usability)
-
-
 class TitleFilter(InputFilter):
     parameter_name = 'title'
     title = _('title')
@@ -100,9 +99,8 @@ class TitleFilter(InputFilter):
                 Q(title__icontains=title)
             )
 
+
 # user id filter (exact match)
-
-
 class UserIDFilter(InputFilter):
     parameter_name = 'user_id'
     title = _('user_id')
@@ -114,9 +112,8 @@ class UserIDFilter(InputFilter):
                 Q(user_id=user_id)
             )
 
+
 # restaurant id filter (exact match)
-
-
 class RestaurantIDFilter(InputFilter):
     parameter_name = 'restaurant_id'
     title = _('restaurant_id')
@@ -128,10 +125,37 @@ class RestaurantIDFilter(InputFilter):
                 Q(restaurant_id=restaurant_id)
             )
 
+
+# ip filter (not exact match but 'contains' for wider usability)
+class IPFilter(InputFilter):
+    parameter_name = 'ip'
+    title = _('ip')
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            ip = self.value()
+
+            return queryset.filter(
+                Q(ip__icontains=ip)
+            )
+
+
+# ip_address filter (not exact match but 'contains' for wider usability)
+class IPADDRFilter(InputFilter):
+    parameter_name = 'ip_address'
+    title = _('ip_address')
+
+    def queryset(self, request, queryset):
+        if self.value() is not None:
+            ip_address = self.value()
+
+            return queryset.filter(
+                Q(ip_address__icontains=ip_address)
+            )
+
+
 # filter won't work until we change the db schema (change price field from string to number)
 # price max filter (upper bound)
-
-
 class PriceMaxFilter(InputFilter):
     parameter_name = 'price'
     title = _('price (maximum)')
@@ -144,9 +168,8 @@ class PriceMaxFilter(InputFilter):
                     Q(price__lt=float(price))
                 )
 
+
 # price min filter (lower bound)
-
-
 class PriceMinFilter(InputFilter):
     parameter_name = 'price'
     title = _('price (minimum)')

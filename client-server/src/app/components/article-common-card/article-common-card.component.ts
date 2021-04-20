@@ -9,6 +9,7 @@ import { UserService } from '../../_services/user.service';
 })
 export class ArticleCommonCardComponent implements OnInit {
   @Input() article: any;
+  thumbnail: any;
 
   @Output() articleOutput: EventEmitter<any> = new EventEmitter<any>();
 
@@ -20,9 +21,15 @@ export class ArticleCommonCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.thumbnail = this.article.thumbnail;
+
     var temp = document.createElement("span");
     temp.innerHTML = this.article.content;
     this.articleTextPreview = temp.textContent || temp.innerText || "";
+  }
+
+  defaultImg() {
+    this.thumbnail = "../../../assets/images/food/indian.jpg"
   }
 
   /**

@@ -164,8 +164,8 @@
             </div>
             <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url == 'https://storage.googleapis.com/default-assets/cover.jpg'">
               <img
-                src="/assets/images/undraw_chef.png"
-                width="100%"
+                src="/assets/images/find_dining_logo.png"
+                width="70%"
                 alt="Story photo"
               />
             </div>
@@ -192,6 +192,10 @@
       <ngb-alert *ngIf="restaurantMenu.length == 0" [dismissible]="false">
         Menu currently empty! Please check again at a later time.
       </ngb-alert>
+
+      <div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
+        <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
+      </div>
 
       <div class="col">
         <div class="tab-info-menu">
@@ -231,9 +235,9 @@
         </button>
       </div>
 
-      <div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
+      <!--<div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
         <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
-      </div>
+      </div>-->
       <div style="text-align: center; padding-bottom: 50px;">
         <button
           *ngIf="role == 'RO' && !isQueryRestaurant"

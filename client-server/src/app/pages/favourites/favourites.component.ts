@@ -17,6 +17,7 @@ import { TokenStorageService } from '../../_services/token-storage.service';
 export class FavouritesComponent implements OnInit {
   userId: string = '';
   role: string = '';
+  profileId: string = '';
   restaurants: any[];
   emptyFavourites: boolean = true;
 
@@ -48,6 +49,19 @@ export class FavouritesComponent implements OnInit {
     var user = this.tokenStorage.getUser();
     this.userId = user.user_id;
     this.role = user.role;
+    this.profileId = user.profile_id;
+
+    if (!this.profileId) {
+      if (this.role == 'BU') {
+        // Will open profile modal on home page
+        this.router.navigate(['/']);
+        return;
+      } else {
+        this.router.navigate(['/restaurant-setup']);
+        return;
+      }
+    }
+
     this.allCuisines = cuisinesStr;
     this.allServices = servicesStr;
     this.loadRestaurant(this.userId);

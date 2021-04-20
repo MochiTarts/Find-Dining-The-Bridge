@@ -32,7 +32,7 @@
               User Info
             </button>
             <div ngbDropdownMenu aria-labelledby="dropdownProfile" data-toggle="collapse" data-target=".navbar-collapse.show">
-              <button ngbDropdownItem (click)="profile()" tabindex="0" *ngIf="!tokenStorageService.RO" class="nav-link">
+              <button ngbDropdownItem (click)="profile()" tabindex="0" *ngIf="!tokenStorageService.RO">
                 Profile
               </button>
               <button ngbDropdownItem (click)="favourites()" tabindex="0">
@@ -56,13 +56,13 @@
 
         <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"  (keyup.enter)="browse()">
           <a routerLink="/all-listings" routerLinkActive="active" class="nav-link" (click)="browse()">
-            Go Find Dining
+            Browse
           </a>
         </li>
 
-        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0" (keyup.enter)="article()">
-          <a routerLink="/articles" routerLinkActive="active" (click)="article()" class="nav-link">
-            Articles
+        <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0" (keyup.enter)="media()">
+          <a routerLink="/media" routerLinkActive="active" (click)="media()" class="nav-link">
+            Media
           </a>
         </li>
 

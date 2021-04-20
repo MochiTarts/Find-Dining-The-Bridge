@@ -48,16 +48,16 @@
 
           <div id="empty"></div>
           <div class="btn-container">
-            <div *ngIf="role && pagePath=='/all-listings'">
+            <div *ngIf="role && pagePath=='/all-listings'" class="buttons">
               <button
               class="btn" (click)="addFavourite(restaurant._id)"
               placement="top" ngbTooltip="Add Restaurant as Favourite"
-              [disabled]="favourited" style="width: 100%;"
+              [disabled]="favourited"
               >
                 Add Favourite
               </button>
             </div>
-            <div *ngIf="role && pagePath=='/favourites'">
+            <div *ngIf="role && pagePath=='/favourites'" class="buttons">
               <button
               class="btn" (click)="remove(restaurant._id)"
               placement="top" ngbTooltip="Remove Restaurant as Favourite"

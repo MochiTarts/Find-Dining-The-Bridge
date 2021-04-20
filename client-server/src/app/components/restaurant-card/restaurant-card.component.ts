@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { Router } from '@angular/router';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { UserService } from '../../_services/user.service';
+import { dollarPricepointsObj } from '../../_constants/pricepoints';
 
 @Component({
   selector: 'app-restaurant-card',
@@ -15,8 +16,9 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
   favourited: boolean = false;
   userId: string = '';
   role: string = '';
+  profileId: string = '';
   cuisineList: string = '';
-  pricepoints: any = [];
+  pricepoints: any = dollarPricepointsObj;
   pricepoint: string = '';
   serviceList: string = '';
   pagePath: string = '';
@@ -25,43 +27,37 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
     private userService: UserService,
     private tokenStorage: TokenStorageService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     var user = this.tokenStorage.getUser();
-      this.userId = user.user_id
-      this.role = user.role
-      this.pagePath = this.router.url;
+    this.userId = user.user_id;
+    this.role = user.role;
+    this.profileId = user.profile_id;
+    this.pagePath = this.router.url;
 
-      this.pricepoints = [
-        {key: "$", value: "LOW"},
-        {key: "$$", value: "MID"},
-        {key: "$$$", value: "HIGH"},
-        {key: "$$$$", value: "EXHIGH"}
-      ]
-
-      for (let cuisine of this.restaurant.cuisines) {
-        if (this.cuisineList == '') {
-          this.cuisineList = String(cuisine);
-        } else {
-          this.cuisineList = this.cuisineList + ", " + String(cuisine);
-        }
+    for (let cuisine of this.restaurant.cuisines) {
+      if (this.cuisineList == '') {
+        this.cuisineList = String(cuisine);
+      } else {
+        this.cuisineList = this.cuisineList + ", " + String(cuisine);
       }
+    }
 
-      let price = String(this.restaurant.pricepoint);
-      for (let p of this.pricepoints) {
-        if (p["value"] == price) {
-          this.pricepoint = p["key"];
-        }
+    let price = String(this.restaurant.pricepoint);
+    for (let p of this.pricepoints) {
+      if (p["value"] == price) {
+        this.pricepoint = p["key"];
       }
+    }
 
-      for (let service of this.restaurant.offer_options) {
-        if (this.serviceList == '') {
-          this.serviceList = String(service);
-        } else {
-          this.serviceList = this.serviceList + " | " + String(service);
-        }
+    for (let service of this.restaurant.offer_options) {
+      if (this.serviceList == '') {
+        this.serviceList = String(service);
+      } else {
+        this.serviceList = this.serviceList + " | " + String(service);
       }
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -82,13 +78,23 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
    * @param restaurnt_id - the restaurant id
    */
   addFavourite(restaurnt_id) {
+    if (!this.profileId) {
+      if (this.role == 'BU') {
+        this.router.navigate(['/']);
+        return;
+      } else {
+        this.router.navigate(['/restaurant-setup']);
+        return;
+      }
+    }
+
     var data = {
       restaurant: restaurnt_id
     }
     this.userService.addFavouriteRestaurant(data).subscribe(() => {
       this.favourited = true
       this.favList.push(this.restaurant);
-    },(error) => {
+    }, (error) => {
       alert(error.error.message)
     })
   }
@@ -97,10 +103,10 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
    * Performs action to let a user remove a restaurant from their list of favourites
    * @param restaurnt_id - the restaurant id
    */
-   remove(restaurnt_id) {
+  remove(restaurnt_id) {
     this.userService.removeFavRestaurant(restaurnt_id).subscribe(() => {
       this.reload()
-    },(error) => {
+    }, (error) => {
       alert(error.error.message)
     })
   }
