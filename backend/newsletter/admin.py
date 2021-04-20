@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import PermissionDenied
 
 from newsletter.models import NLUser, NLAudit
-from utils.filters import EmailFilter
+from utils.filters import EmailFilter, IPFilter
 from utils.model_util import model_to_json
 
 from collections import OrderedDict
@@ -68,12 +68,12 @@ class NLUserAdmin(admin.ModelAdmin):
         return super(NLUserAdmin, self).changelist_view(request, extra_context)
 
 
-class NewsletterAuditAdmin(admin.ModelAdmin):
+class NLAuditAdmin(admin.ModelAdmin):
     """ Admin Model for Signup Audit """
     list_display = ('ip', 'count_daily', 'count',
                     'last_signup_time', 'temp_blocked', 'perm_blocked', )
 
-    list_filter = ['temp_blocked', 'perm_blocked',
+    list_filter = [ IPFilter,'temp_blocked', 'perm_blocked',
                    ('last_signup_time', DateFieldListFilter)]
 
     actions = ('delete_all',)
@@ -88,7 +88,7 @@ class NewsletterAuditAdmin(admin.ModelAdmin):
         self.model = model
         self.opts = model._meta
         self.admin_site = admin_site
-        super(NewsletterAuditAdmin, self).__init__(model, admin_site)
+        super(NLAuditAdmin, self).__init__(model, admin_site)
 
     # modified from delete_selected (from django.contrib.admin.actions import delete_selected)
     def delete_all(self, request, queryset):
@@ -98,6 +98,9 @@ class NewsletterAuditAdmin(admin.ModelAdmin):
         kwargs = {}
         # get all filters that is being applied on the view
         for filter, arg in request.GET.items():
+            # need to make sure custom filter keywords have appropriate suffices
+            if filter == 'ip':
+                filter = 'ip__icontains'
             kwargs.update({filter: arg})
         # apply filters to the query set
         queryset = all_queryset.filter(**kwargs)
@@ -156,6 +159,28 @@ class NewsletterAuditAdmin(admin.ModelAdmin):
     delete_all.allowed_permissions = ('delete',)
     delete_all.short_description = "Delete all filtered Newsletter Logs (if no filter is applied, this will delete every single log)"
 
+    # override changelist_view to allow certain action (e.g. delete_all) to run without selecting any object
+
+    def changelist_view(self, request, extra_context=None):
+        actions = self.get_actions(request)
+        if (actions and request.method == 'POST' and 'index' in request.POST and
+                request.POST['action'] == 'delete_all'):
+
+            data = request.POST.copy()
+            # randomly take the first user so Django won't complain about not selecting an object when performing an action
+            # there will always be at least one log because otherwise actions will not be shown
+            data.update({ACTION_CHECKBOX_NAME: str(
+                NLAudit.objects.first().pk)})
+            # this would select all the users
+            #data['select_across'] = '1'
+            request.POST = data
+            response = self.response_action(
+                request, queryset=self.get_queryset(request))
+            if response:
+                return response
+
+        return super(NLAuditAdmin, self).changelist_view(request, extra_context)
+
 
 admin.site.register(NLUser, NLUserAdmin)
-admin.site.register(NLAudit, NewsletterAuditAdmin)
+admin.site.register(NLAudit, NLAuditAdmin)
