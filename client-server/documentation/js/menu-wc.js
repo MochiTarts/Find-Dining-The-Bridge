@@ -55,13 +55,13 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="modules/AppModule.html" data-type="entity-link">AppModule</a>
                                     <li class="chapter inner">
                                         <div class="simple menu-toggler" data-toggle="collapse" ${ isNormalMode ?
-                                            'data-target="#components-links-module-AppModule-1688e2e44096fe0e8d1cd6ece1986d34"' : 'data-target="#xs-components-links-module-AppModule-1688e2e44096fe0e8d1cd6ece1986d34"' }>
+                                            'data-target="#components-links-module-AppModule-8d1a20e97787840cc6ce0868b264b213"' : 'data-target="#xs-components-links-module-AppModule-8d1a20e97787840cc6ce0868b264b213"' }>
                                             <span class="icon ion-md-cog"></span>
                                             <span>Components</span>
                                             <span class="icon ion-ios-arrow-down"></span>
                                         </div>
-                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-AppModule-1688e2e44096fe0e8d1cd6ece1986d34"' :
-                                            'id="xs-components-links-module-AppModule-1688e2e44096fe0e8d1cd6ece1986d34"' }>
+                                        <ul class="links collapse" ${ isNormalMode ? 'id="components-links-module-AppModule-8d1a20e97787840cc6ce0868b264b213"' :
+                                            'id="xs-components-links-module-AppModule-8d1a20e97787840cc6ce0868b264b213"' }>
                                             <li class="link">
                                                 <a href="components/AboutUsComponent.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">AboutUsComponent</a>
@@ -89,6 +89,10 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                             <li class="link">
                                                 <a href="components/CarouselWithThumbnailComponent.html"
                                                     data-type="entity-link" data-context="sub-entity" data-context-id="modules">CarouselWithThumbnailComponent</a>
+                                            </li>
+                                            <li class="link">
+                                                <a href="components/ContactUsComponent.html"
+                                                    data-type="entity-link" data-context="sub-entity" data-context-id="modules">ContactUsComponent</a>
                                             </li>
                                             <li class="link">
                                                 <a href="components/DishCardComponent.html"

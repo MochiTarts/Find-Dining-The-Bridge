@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
 import { dollarPricepointsObj } from '../../_constants/pricepoints';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   location: string = '';
   find: string = '';
+  faSearch = faSearch;
 
   constructor(
     private authService: AuthService,

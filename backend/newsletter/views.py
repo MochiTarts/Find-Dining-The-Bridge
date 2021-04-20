@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from newsletter.models import NLUser, NLAudit
 from newsletter.serializer import NLUserInsertSerializer
+from newsletter import swagger
 from utils.model_util import model_to_json
 from login_audit.models import get_client_ip_address
 
@@ -55,7 +56,8 @@ class NLUserSignupView(APIView):
     """ Newsletter User View """
     permission_classes = (AllowAny,)
 
-    @swagger_auto_schema(operation_id="POST /newsletter/signup")
+    @swagger_auto_schema(request_body=swagger.NLUserInsert,
+        responses=swagger.nluser_signup_post_response, operation_id="POST /newsletter/signup")
     def post(self, request):
         """ insert a newsletter user into the db provided all the user fields """
         validate(instance=request.data,
@@ -78,7 +80,8 @@ class NLUserSignupView(APIView):
 class NLUserDataView(APIView):
     """ Newsletter User Data View """
 
-    @swagger_auto_schema(operation_id="GET /newsletter/user")
+    @swagger_auto_schema(responses=swagger.nluser_profile_get_response,
+        operation_id="GET /newsletter/user")
     def get(self, request):
         """ get user data associated with the user email """
         req_email = request.data.get('email')

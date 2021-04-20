@@ -96,6 +96,7 @@ import { AboutUsComponent } from &#x27;./pages/about-us/about-us.component&#x27;
 import { ResourcesComponent } from &#x27;./pages/resources/resources.component&#x27;;
 import { NewsletterSignupComponent } from &#x27;./pages/newsletter-signup/newsletter-signup.component&#x27;;
 import { ThankyouPageComponent } from &#x27;./pages/thankyou-page/thankyou-page.component&#x27;;
+import { ContactUsComponent } from &#x27;./pages/contact-us/contact-us.component&#x27;;
 
 const routes: Routes &#x3D; [
   { path: &#x27;&#x27;, component: HomeComponent },
@@ -117,6 +118,7 @@ const routes: Routes &#x3D; [
   { path: &#x27;resources&#x27;, component: ResourcesComponent, canActivate: [AuthGuard, ROGuard] },
   { path: &#x27;newsletter-signup&#x27;, component: NewsletterSignupComponent, },
   { path: &#x27;thank-you&#x27;, component: ThankyouPageComponent, },
+  { path: &#x27;contact-us&#x27;, component: ContactUsComponent, },
   /*
   { path: &#x27;verification&#x27;, component: EmptyComponent, children: [
     {
