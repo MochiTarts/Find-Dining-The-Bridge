@@ -46,9 +46,12 @@ class imageAdmin(admin.ModelAdmin):
         if search_term != '':
             labels = search_term.split(',')
             qs = Q(labels__icontains=labels[0].strip())
+
             for label in labels[1:]:
-                qs |= Q(labels__icontains=label.strip())
-            queryset |= self.model.objects.filter(qs)
+                cur_label = label.strip()
+                if cur_label != '':
+                    qs |= Q(labels__icontains=cur_label)
+            queryset = self.model.objects.filter(qs)
 
         return queryset, use_distinct
 

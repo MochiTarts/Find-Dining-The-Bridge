@@ -1,6 +1,7 @@
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.contrib import admin, messages
+from django.contrib.admin import DateFieldListFilter
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.contrib.admin.utils import model_ngettext
 from django.template.response import TemplateResponse
@@ -71,6 +72,9 @@ class NewsletterAuditAdmin(admin.ModelAdmin):
     """ Admin Model for Signup Audit """
     list_display = ('ip', 'count_daily', 'count',
                     'last_signup_time', 'temp_blocked', 'perm_blocked', )
+
+    list_filter = ['temp_blocked', 'perm_blocked',
+                   ('last_signup_time', DateFieldListFilter)]
 
     actions = ('delete_all',)
     # list_per_page=200
