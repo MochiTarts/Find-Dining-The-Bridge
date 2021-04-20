@@ -340,8 +340,7 @@ class PendingDishModifyDeleteView(APIView):
         dish = PendingFood.edit_dish(dish_id, body, rest_id)
         return JsonResponse(model_to_json(dish))
 
-    @swagger_auto_schema(request_body=swagger.PendingFoodDelete,
-                         responses=swagger.dish_pending_dish_id_delete_response,
+    @swagger_auto_schema(responses=swagger.dish_pending_dish_id_delete_response,
                          operation_id="DELETE /dish/pending/{dish_id}/")
     def delete(self, request, dish_id):
         """ Deletes dish from database """
