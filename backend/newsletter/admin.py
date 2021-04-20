@@ -1,8 +1,11 @@
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.contrib import admin, messages
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
-from django.contrib import messages
-from django.contrib import admin
+from django.contrib.admin.utils import model_ngettext
+from django.template.response import TemplateResponse
+from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import PermissionDenied
 
 from newsletter.models import NLUser, NLAudit
 from utils.filters import EmailFilter
@@ -10,6 +13,10 @@ from utils.model_util import model_to_json
 
 from collections import OrderedDict
 import datetime
+
+
+
+
 
 
 class NLUserAdmin(admin.ModelAdmin):
@@ -80,7 +87,6 @@ class NewsletterAuditAdmin(admin.ModelAdmin):
         super(NewsletterAuditAdmin, self).__init__(model, admin_site)
 
     # modified from delete_selected (from django.contrib.admin.actions import delete_selected)
-
     def delete_all(self, request, queryset):
         # get all logs (since this action is not dependent on the selected logs)
         all_queryset = self.get_queryset(request)
