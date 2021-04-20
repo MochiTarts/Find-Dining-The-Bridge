@@ -7,6 +7,8 @@ from newsletter.models import NLUser
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
+from datetime import date
+
 import os
 
 
@@ -18,11 +20,13 @@ credentials = service_account.Credentials.from_service_account_info({
     scopes=['https://www.googleapis.com/auth/spreadsheets'],
     subject="info@finddining.ca")
 
-spreadsheet_id = "1xkY8ORsca41mJsIbxBhbsZUJ-3hDRetlbpns3ATFU1k"
+spreadsheet_id = os.environ.get('SPREADSHEET_ID')
+
+User = get_user_model()
 
 
-def create_user_emails_sheets():
-    """ Create a google spreadsheets of all users that are signed up to receive newsletters
+def create_user_emails_sheets_subscribers():
+    """ Create a google spreadsheets of all subscribers that are signed up to receive newsletters
 
     Returns:
         Void, creates google sheets under info@finddining.ca
@@ -36,20 +40,29 @@ def create_user_emails_sheets():
     sheetsService.spreadsheets().values().clear(
         spreadsheetId=spreadsheet_id, range=input_range).execute()
 
-    # Get all users' first name, last name, consent status, expired at, and email
-    #basic_users = list(SubscriberProfile.objects.all().values('firstname', 'lastname', 'email', 'consent_status', 'expired_at'))
-    #ro_users = list(RestaurantOwner.objects.all().values('firstname', 'lastname', 'email', 'consent_status', 'expired_at'))
-    #newsletter_users = list(NLUser.objects.all().values('first_name', 'last_name', 'email', 'consent_status', 'subscribed_at', 'expired_at'))
+    # Get all basic users' email
+    users = list(User.objects.filter(is_active=True,
+                                     role="BU").values('email', 'profile_id'))
+
+    # Check their consent status and update accordingly
+    subscribers = []
+    for user in users:
+        if user['profile_id'] != None:
+            profile = SubscriberProfile.objects.get(id=user['profile_id'])
+            status = profile.consent_status
+            if status == "IMPLIED" and profile.expired_at < date.today():
+                profile.consent_status = "EXPIRED"
+                profile.save()
+            if status == "EXPRESSED" or status == "IMPLIED":
+                user.pop('profile_id')
+                user.update({"first_name": profile.first_name,
+                             "last_name": profile.last_name, "consent_status": profile.consent_status})
+                subscribers.append(user)
 
     # Append user info into values (only users that has email verified)
-    values = [['First name', 'Last name', 'Email', 'Consent Status']]
-    # for sduser in SDUsers:
-    #     if sduser.get('consent_status') == "EXPRESSED" or sduser.get("expired_at") != None and sduser.get("consent_status") == "IMPLIED" and sduser.get("expired_at") > date.today():
-    #         sduser.pop('expired_at')
-    #         if sduser.get('email').lower() in verified:
-    #             values.append(list(sduser.values()))
-    #     elif sduser.get("expired_at") != None and sduser.get("consent_status") == "IMPLIED" and sduser.get("expired_at") <= date.today():
-    #         SDUser.objects.filter(email=sduser.get('email')).update(consent_status="EXPIRED")
+    values = [['Email', 'First name', 'Last name', 'Consent Status']]
+    for subscriber in subscribers:
+        values.append(list(subscriber.values()))
 
     body = {
         'values': values
@@ -108,4 +121,182 @@ def create_user_emails_sheets():
         raise error
 
 
-create_user_emails_sheets()
+def create_user_emails_sheets_restaurant_owners():
+    """ Create a google spreadsheets of all restaurant owners that are signed up to receive newsletters
+
+    Returns:
+        Void, creates google sheets under info@finddining.ca
+    """
+    input_range = "Sheet1"
+
+    sheetsService = build(
+        'sheets', 'v4', credentials=credentials, cache_discovery=False)
+
+    # Empty sheet
+    sheetsService.spreadsheets().values().clear(
+        spreadsheetId=spreadsheet_id, range=input_range).execute()
+
+    # Get all basic users' email
+    restaurant_owners = list(User.objects.filter(
+        is_active=True, role="RO").values('email', 'username'))
+
+    # Append user info into values (only users that has email verified)
+    values = [['Email', 'Username']]
+    for restaurant_owner in restaurant_owners:
+        values.append(list(restaurant_owner.values()))
+
+    body = {
+        'values': values
+    }
+
+    try:
+        sheetsService.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=input_range,
+                                                     valueInputOption="USER_ENTERED", body=body).execute()
+    except HttpError as error:
+        print('An error occurred: %s' % error)
+        raise error
+        # return None
+
+    # Automatically format the sheets
+    requests = [
+        {
+            "autoResizeDimensions": {
+                "dimensions": {
+                    "sheetId": 0,
+                    "dimension": "COLUMNS",
+                    "startIndex": 0,
+                    "endIndex": 2
+                }
+            }
+        },
+        {
+            "repeatCell": {
+                "range": {
+                    "sheetId": 0,
+                    "startRowIndex": 0,
+                    "endRowIndex": 1,
+                    "startColumnIndex": 0,
+                    "endColumnIndex": 2
+                },
+                "cell": {
+                    "userEnteredFormat": {
+                        "textFormat": {
+                            "bold": True
+                        }
+                    }
+                },
+                "fields": "userEnteredFormat(textFormat)"
+            }
+        }
+    ]
+
+    body = {
+        'requests': requests
+    }
+
+    try:
+        sheetsService.spreadsheets().batchUpdate(
+            spreadsheetId=spreadsheet_id, body=body).execute()
+    except HttpError as error:
+        print('An error occurred: %s' % error)
+        raise error
+
+
+def create_user_emails_sheets_all():
+    """ Create a google spreadsheets of all users that are signed up to receive newsletters
+
+    Returns:
+        Void, creates google sheets under info@finddining.ca
+    """
+    input_range = "Sheet1"
+
+    sheetsService = build(
+        'sheets', 'v4', credentials=credentials, cache_discovery=False)
+
+    # Empty sheet
+    sheetsService.spreadsheets().values().clear(
+        spreadsheetId=spreadsheet_id, range=input_range).execute()
+
+    # Get all basic users' email
+    users = list(User.objects.filter(is_active=True,
+                                     role="BU").values('email', 'username', 'role', 'profile_id'))
+
+    # Check their consent status and update accordingly
+    subscribers = []
+    for user in users:
+        if user['profile_id'] != None:
+            profile = SubscriberProfile.objects.get(id=user['profile_id'])
+            status = profile.consent_status
+            if status == "IMPLIED" and profile.expired_at < date.today():
+                profile.consent_status = "EXPIRED"
+                profile.save()
+            if status == "EXPRESSED" or status == "IMPLIED":
+                user.pop('profile_id')
+                subscribers.append(user)
+
+    # Get all basic users' email
+    restaurant_owners = list(
+        User.objects.filter(is_active=True, role="RO").values('email', 'username', 'role'))
+
+    # Append user info into values (only users that has email verified)
+    values = [['Email', 'Username', 'Role']]
+    for subscriber in subscribers:
+        values.append(list(subscriber.values()))
+    for restaurant_owner in restaurant_owners:
+        values.append(list(restaurant_owner.values()))
+
+    body = {
+        'values': values
+    }
+
+    try:
+        sheetsService.spreadsheets().values().update(spreadsheetId=spreadsheet_id, range=input_range,
+                                                     valueInputOption="USER_ENTERED", body=body).execute()
+    except HttpError as error:
+        print('An error occurred: %s' % error)
+        raise error
+        # return None
+
+    # Automatically format the sheets
+    requests = [
+        {
+            "autoResizeDimensions": {
+                "dimensions": {
+                    "sheetId": 0,
+                    "dimension": "COLUMNS",
+                    "startIndex": 0,
+                    "endIndex": 3
+                }
+            }
+        },
+        {
+            "repeatCell": {
+                "range": {
+                    "sheetId": 0,
+                    "startRowIndex": 0,
+                    "endRowIndex": 1,
+                    "startColumnIndex": 0,
+                    "endColumnIndex": 3
+                },
+                "cell": {
+                    "userEnteredFormat": {
+                        "textFormat": {
+                            "bold": True
+                        }
+                    }
+                },
+                "fields": "userEnteredFormat(textFormat)"
+            }
+        }
+    ]
+
+    body = {
+        'requests': requests
+    }
+
+    try:
+        sheetsService.spreadsheets().batchUpdate(
+            spreadsheetId=spreadsheet_id, body=body).execute()
+    except HttpError as error:
+        print('An error occurred: %s' % error)
+        raise error
