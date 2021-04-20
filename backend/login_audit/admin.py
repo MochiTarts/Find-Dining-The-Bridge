@@ -7,14 +7,14 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import PermissionDenied
 
 from login_audit.models import AuditEntry
-from utils.filters import UsernameFilter
+from utils.filters import UsernameFilter, IPADDRFilter
 
 
 class AuditEntryAdmin(admin.ModelAdmin):
 
     list_display = ('username', 'user_agent',
                     'ip_address', 'attempt_time', 'action')
-    list_filter = ['action', UsernameFilter,
+    list_filter = [UsernameFilter, IPADDRFilter, 'action',
                    ('attempt_time', DateFieldListFilter)]
     actions = ('delete_all',)
     # list_per_page=200
@@ -40,10 +40,16 @@ class AuditEntryAdmin(admin.ModelAdmin):
     def delete_all(self, request, queryset):
         # get all logs (since this action is not dependent on the selected logs)
         all_queryset = self.get_queryset(request)
+
         # for storing the filter arguments
         kwargs = {}
         # get all filters that is being applied on the view
         for filter, arg in request.GET.items():
+            # need to make sure custom filter keywords have appropriate suffices
+            if filter == 'username':
+                filter = 'username__icontains'
+            elif filter == 'ip_address':
+                filter = 'ip_address__icontains'
             kwargs.update({filter: arg})
         # apply filters to the query set
         queryset = all_queryset.filter(**kwargs)
