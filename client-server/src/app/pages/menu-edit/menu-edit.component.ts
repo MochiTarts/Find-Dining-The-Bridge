@@ -114,6 +114,7 @@ export class MenuEditComponent implements OnInit {
   }
 
   openDeleteModal(content, dish, index) {
+    this.dishId = dish._id;
     this.dishName = dish.name;
     this.dishIndex = index;
     this.menuCategory = dish.category;
@@ -155,7 +156,7 @@ export class MenuEditComponent implements OnInit {
           }
         },
         (error) => {
-          this.alertMessage = error.error.message;
+          this.alertMessage = error.error.detail;
           this.showAlert = true;
         });
       } else {
@@ -168,7 +169,7 @@ export class MenuEditComponent implements OnInit {
           }
         },
         (error) => {
-          this.alertMessage = error.error.message;
+          this.alertMessage = error.error.detail;
           this.showAlert = true;
         });
       }
@@ -179,12 +180,12 @@ export class MenuEditComponent implements OnInit {
   }
 
   deleteDish() {
-    var dishInfo = {
+    /*var dishInfo = {
       name: this.dishName,
       category: this.menuCategory,
-    };
+    };*/
 
-    this.restaurantsService.deleteDish(dishInfo);
+    this.restaurantsService.deleteDish(this.dishId);
 
     if (this.dishIndex > -1) {
       this.dishes.splice(this.dishIndex, 1);
