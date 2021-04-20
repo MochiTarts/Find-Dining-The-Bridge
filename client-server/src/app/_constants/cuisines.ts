@@ -30,7 +30,7 @@ export const cuisinesObj = [
   { item_id: 29, item_text: "Thai" },
   { item_id: 30, item_text: "Turkish" },
   { item_id: 31, item_text: "Vegetarian" },
-  { item_id: 32, item_text: "Vietnames" },
+  { item_id: 32, item_text: "Vietnamese" },
   { item_id: 33, item_text: "West Indian" },
   { item_id: 34, item_text: "Other" },
 ]
@@ -67,7 +67,7 @@ export const cuisinesStr = [
   "Thai",
   "Turkish",
   "Vegetarian",
-  "Vietnames",
+  "Vietnamese",
   "West Indian",
   "Other",
 ]
