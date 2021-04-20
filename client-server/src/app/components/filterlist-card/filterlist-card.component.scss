@@ -57,6 +57,10 @@
   color: black;
 }
 
+.dropdown-toggle-btn:focus {
+  box-shadow: none !important;
+}
+
 .number {
   background-color: #00a4e5;
   color: white;

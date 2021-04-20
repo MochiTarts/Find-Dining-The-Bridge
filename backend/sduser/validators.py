@@ -36,7 +36,8 @@ def validate_name(name):
 def validate_username(name):
     try:
         regexValidator = RegexValidator(
-            '^[^±!£$%^&*§¡€#¢§¶•ªº«\\/<>?:;|=,]{1,100}$')
+            #'^[^±!£$%^&*§¡€#¢§¶•ªº«\\/<>?:;|=,]{1,150}$')
+            '^[^±£$§¡€¢§¶•ªº«]{1,150}$')
         regexValidator(name)
         return True
     except ValidationError:

@@ -282,22 +282,22 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>deleteDish(dishInfo)</code>
+<code>deleteDish(dish_id)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="210"
-                            class="link-to-prism">src/app/_services/restaurant.service.ts:210</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="208"
+                            class="link-to-prism">src/app/_services/restaurant.service.ts:208</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Deletes the pending dish and approved dish from the database, given the dish name and the dish category</p>
+                    <div class="io-description"><p>Deletes the pending dish and approved dish from the database, given the dish&#39;s id</p>
 </div>
 
                     <div class="io-description">
@@ -312,7 +312,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>dishInfo</td>
+                                    <td>dish_id</td>
 
                                     <td>
                                         No
@@ -321,9 +321,7 @@
 
                                     <td>
                                         <ul>
-<li>JSON object containing:
-   name (string),
-   category (string)</li>
+<li>id of the dish to be deleted</li>
 </ul>
 
                                     </td>
@@ -1432,20 +1430,18 @@ export class RestaurantService {
   }
 
   /**
-   * Deletes the pending dish and approved dish from the database, given the dish name and the dish category
-   * @param dishInfo - JSON object containing:
-   *                     name (string),
-   *                     category (string)
+   * Deletes the pending dish and approved dish from the database, given the dish&#x27;s id
+   * @param dish_id - id of the dish to be deleted
    */
-  deleteDish(dishInfo): void {
-    const endpoint &#x3D; DISH_ENDPOINT + &#x27;/pending/&#x27;;
-    const options &#x3D; {
+  deleteDish(dish_id): void {
+    const endpoint &#x3D; DISH_ENDPOINT + &#x60;/pending/${dish_id}/&#x60;;
+    /*const options &#x3D; {
       headers: new HttpHeaders({
         &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
       }),
       body: dishInfo,
-    };
-    this.http.delete&lt;any&gt;(endpoint, options).subscribe((data) &#x3D;&gt; { });
+    };*/
+    this.http.delete&lt;any&gt;(endpoint).subscribe((data) &#x3D;&gt; { });
   }
 
 }

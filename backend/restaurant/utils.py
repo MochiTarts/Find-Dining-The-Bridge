@@ -95,16 +95,17 @@ def send_reject_email(names, receiver, profile_title, profile_type):
         names = ["Restaurant Owner"]
     content = '<p>Hello ' + ', '.join(names) + ',</p>'
     if profile_type == 'restaurant':
-        content += '<p>Your restaurant profile for <i>' + profile_title + \
-            '</i> has been rejected and the changes will not be applied to the live site.</p>'
+        content += '<p>Your restaurant profile for <i>' + profile_title
+
     else:
-        content += '<p>Your food profile for <i>' + profile_title + \
-            '</i> has been rejected and the changes will not be applied to the live site.</p>'
-    content += '<p>Please review the comments from administrator and make appropriate changes.</p>'
+        content += '<p>Your food profile for <i>' + profile_title
+
+    content += '</i> has been rejected and the changes will not be applied to the live site.</p>' + \
+        '<p>Please review the comments from administrator and make appropriate changes.</p>'
     if profile_type == 'restaurant':
-        content += '<p>Once you feel confident about your restaurant profile, feel free to submit it again for us to reivew!</p>'
+        content += '<p>Once you feel confident about your restaurant profile, feel free to submit it again for us to review!</p>'
     else:
-        content += '<p>Once you feel confident about your food profile, feel free to submit it again for us to reivew!</p>'
+        content += '<p>Once you feel confident about your food profile, feel free to submit it again for us to review!</p>'
     content += '<p>Thanks,</p>'
     content += '<p>Your Find Dining team</p>'
 
@@ -120,7 +121,7 @@ def send_reject_email(names, receiver, profile_title, profile_type):
 
 def send_unpublish_email(names, receiver, profile_title, profile_type):
     """ Sends an email to the restaurant owner, informing them
-    that their restaurant or dish is has been unpublished from
+    that their restaurant or dish has been unpublished from
     the live site by an admin
 
     :param names: restaurant owner name(s)
@@ -138,11 +139,10 @@ def send_unpublish_email(names, receiver, profile_title, profile_type):
         names = ["Restaurant Owner"]
     content = '<p>Hello ' + ', '.join(names) + ',</p>'
     if profile_type == 'restaurant':
-        content += '<p>Your restaurant profile for <i>' + profile_title + \
-            '</i> has been unpublished from the live site.</p>'
+        content += '<p>Your restaurant profile for <i>' + profile_titl
     else:
-        content += '<p>Your food profile for <i>' + profile_title + \
-            '</i> has been unpublished from the live site.</p>'
+        content += '<p>Your food profile for <i>' + profile_title
+    content += '</i> has been unpublished from the live site.</p>'
     content += '<p>Please check the comments from administrator for the detail reason.</p>'
     content += '<p>Note: this does not apply to the newest submission that has not been reviewed yet. If you have submitted a newer profile please wait for it to be reviewed.</p>'
     content += '<p>Thanks,</p>'

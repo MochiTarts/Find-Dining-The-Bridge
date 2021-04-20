@@ -202,20 +202,18 @@ export class RestaurantService {
   }
 
   /**
-   * Deletes the pending dish and approved dish from the database, given the dish name and the dish category
-   * @param dishInfo - JSON object containing:
-   *                     name (string),
-   *                     category (string)
+   * Deletes the pending dish and approved dish from the database, given the dish's id
+   * @param dish_id - id of the dish to be deleted
    */
-  deleteDish(dishInfo): void {
-    const endpoint = DISH_ENDPOINT + '/pending/';
-    const options = {
+  deleteDish(dish_id): void {
+    const endpoint = DISH_ENDPOINT + `/pending/${dish_id}/`;
+    /*const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
       body: dishInfo,
-    };
-    this.http.delete<any>(endpoint, options).subscribe((data) => { });
+    };*/
+    this.http.delete<any>(endpoint).subscribe((data) => { });
   }
 
 }
