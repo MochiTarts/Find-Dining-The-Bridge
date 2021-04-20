@@ -193,6 +193,10 @@
         Menu currently empty! Please check again at a later time.
       </ngb-alert>
 
+      <div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
+        <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
+      </div>
+
       <div class="col">
         <div class="tab-info-menu">
           <h1 class="section-title" *ngIf="specialDish.length != 0" style="text-align: center;">Specials</h1>
@@ -231,9 +235,9 @@
         </button>
       </div>
 
-      <div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
+      <!--<div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
         <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
-      </div>
+      </div>-->
       <div style="text-align: center; padding-bottom: 50px;">
         <button
           *ngIf="role == 'RO' && !isQueryRestaurant"

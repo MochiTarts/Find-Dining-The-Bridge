@@ -63,15 +63,6 @@ food_edit_schema = {
     "additionalProperties": False
 }
 
-food_delete_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "category": {"type": "string"}
-    },
-    "required": ["name", "category"],
-    "additionalProperties": False
-}
-
 restaurant_insert_for_approval_schema = {
     "properties": {
         "name": {"type": "string"},
@@ -352,7 +343,7 @@ class PendingDishModifyDeleteView(APIView):
     @swagger_auto_schema(request_body=swagger.PendingFoodDelete,
                          responses=swagger.dish_pending_dish_id_delete_response,
                          operation_id="DELETE /dish/pending/{dish_id}/")
-    def delete(self, request):
+    def delete(self, request, dish_id):
         """ Deletes dish from database """
         user = request.user
         if not user:
@@ -361,8 +352,6 @@ class PendingDishModifyDeleteView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=food_delete_schema)
-        body = request.data
         restaurant = PendingRestaurant.objects.filter(
             owner_user_id=user_id).first()
         if not restaurant:
@@ -370,7 +359,7 @@ class PendingDishModifyDeleteView(APIView):
                 "The restaurant with owner_user_id: " +
                 str(user_id) +
                 " does not exist")
-        deleted_dish = PendingFood.remove_dish(body, restaurant._id)
+        deleted_dish = PendingFood.remove_dish(dish_id, restaurant._id)
         return JsonResponse(model_to_json(deleted_dish))
 
 
