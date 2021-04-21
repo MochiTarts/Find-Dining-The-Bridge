@@ -281,6 +281,10 @@ export class RestaurantPageComponent implements OnInit {
     this.router.navigate(['/menu-edit']);
   }
 
+  openExternalMenu() {
+    window.open(this.restaurantDetails.full_menu_url, '_blank')
+  }
+
   reload() {
     this.authService.refreshToken().subscribe((token) => {
       this.tokenStorage.updateTokenAndUser(token.access);

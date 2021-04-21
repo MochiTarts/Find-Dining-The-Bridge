@@ -193,8 +193,11 @@
         Menu currently empty! Please check again at a later time.
       </ngb-alert>
 
-      <div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
-        <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
+      <div fxLayout="row" fxLayoutAlign="center center" *ngIf="restaurantDetails.full_menu_url">
+        <button class="tab-info-menu btn" (click)="openExternalMenu()">
+          Click Here for Full Menu
+          <!--<a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>-->
+        </button>
       </div>
 
       <div class="col">
