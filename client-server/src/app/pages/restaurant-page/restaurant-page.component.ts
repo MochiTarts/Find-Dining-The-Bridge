@@ -131,7 +131,7 @@ export class RestaurantPageComponent implements OnInit {
       }
 
       if (this.userId != null && (this.role == 'BU' || this.role == 'RO') && this.route.snapshot.queryParams.restaurantId) {
-        this.getNearbyRestaurants();
+        //this.getNearbyRestaurants();
       }
     }
 
@@ -183,7 +183,8 @@ export class RestaurantPageComponent implements OnInit {
       }
 
       // payment list
-      this.paymentList = this.restaurantDetails.payment_methods.toString().split(',').join(', ') + " Accepted";
+      //this.paymentList = this.restaurantDetails.payment_methods.toString().split(',').join(', ') + " Accepted";
+      this.paymentList = this.restaurantDetails.payment_methods.toString().split(',').join(', ');
 
       this.uploadStoryImgForm = this.formBuilder.group({
         file: [''],

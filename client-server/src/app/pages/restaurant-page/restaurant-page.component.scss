@@ -18,10 +18,13 @@ mat-tab-group {
 
 .header {
   width: 100%;
-  height: 400px;
+  height: 450px;
   min-height: 100%;
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   background-image: url("/assets/images/cover.png");
   background-repeat: no-repeat;
   background-size: cover;
@@ -65,8 +68,14 @@ mat-tab-group {
 }
 
 .tab-info-right {
-  margin: 75px 5% 75px 0px;
+  //margin: 75px 5% 75px 0px;
+  margin: 75px auto;
   // margin-top: 75px;
+}
+
+.tab-info-right img {
+  display: block;
+  margin: auto;
 }
 
 .tab-detail-right {
@@ -102,11 +111,11 @@ ngb-alert {
   width: 90%;
   height: fit-content;
   padding: 35px;
-  position: absolute;
+  /*position: absolute;
   margin: auto;
   top: 65px;
   left: 0px;
-  right: 0px;
+  right: 0px;*/
 
   @media screen and (max-width: 850px) {
     width: 90%;
@@ -114,13 +123,14 @@ ngb-alert {
   }
 
   @media screen and (max-width: 767px) {
-    top: 50px;
+    //top: 50px;
   }
 }
 
 .logo {
   text-align: center;
   border-right: 1px solid black;
+  min-width: 300px;
 
   @media screen and (max-width: 767px) {
     border-right: 0px;
@@ -138,14 +148,20 @@ ngb-alert {
   }
 
   @media screen and (max-width: 767px) {
-    width: 150px;
-    height: 100px;
+    /*width: 150px;
+    height: 100px;*/
     margin-bottom: 50px;
   }
 }
 
 .restaurant-name {
   font-size: 40px;
+}
+
+.details1 {
+  @media screen and (max-width: 767px) {
+    text-align: left;
+  }
 }
 
 .info-item-child {
