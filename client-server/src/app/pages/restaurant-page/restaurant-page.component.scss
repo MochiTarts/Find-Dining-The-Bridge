@@ -5,10 +5,10 @@ fa-icon {
 }
 
 mat-tab-group {
-  margin: 75px 20%;
+  margin: 0 20%;
 
   @media screen and (max-width: 1500px) {
-    margin: 75px;
+    margin: 0 75px;
   }
 
   @media screen and (max-width: 700px) {
@@ -44,6 +44,15 @@ mat-tab-group {
   text-align: center;
   margin: auto;
   padding: 50px 0px;
+}
+
+.tab-info-menu {
+  padding-top: 10px;
+}
+
+.food-carousel {
+  margin: auto;
+  padding: 0 5px;
 }
 
 .tab-info {
@@ -168,6 +177,18 @@ ngb-alert {
   }
 }
 
+.btn {
+  height: 50px;
+}
+
+.btn fa-icon {
+  color: white;
+}
+
+.btn:hover fa-icon {
+  color: #007faa;
+}
+
 .bio-card {
   width: 70%;
   height: auto;
@@ -233,8 +254,11 @@ ngb-alert {
 }
 
 .editRestaurantWrap {
-  text-align: center;
-  margin-top: 25px;
+  margin-bottom: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 .editRestaurant {
@@ -283,8 +307,11 @@ ngb-alert {
 }
 
 .section-title {
+  margin: 0;
   font-weight: 500;
   color: $navigation-color;
+  padding-left: 3rem;
+  padding-bottom: 0.1rem;
 }
 
 .section_p {
