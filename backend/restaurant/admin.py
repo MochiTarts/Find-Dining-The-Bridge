@@ -580,8 +580,8 @@ class RestrAdmin(admin.ModelAdmin):
         'logoUrl')
     actions = (unpublish_restr,)
     readonly_fields = ('status', 'GEO_location',)
-    change_list_template = 'restaurant/change_list_graph.html'
-    change_form_template = 'restaurant/change_form_graph.html'
+    change_list_template = 'restaurant/change_list.html'
+    change_form_template = 'restaurant/change_form.html'
 
     def save_model(self, request, obj, form, change):
         """
