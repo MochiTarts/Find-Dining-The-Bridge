@@ -33,6 +33,8 @@ export class MenuEditComponent implements OnInit {
   dishModalRef: any;
   dishEdit: boolean = false;
   dishes: any[];
+  specialDish: any[] = [];
+  popularDish: any[] = [];
   dishIndex: number;
 
   dishId: string = '';
@@ -80,6 +82,13 @@ export class MenuEditComponent implements OnInit {
   loadAllDishes() {
     this.restaurantsService.getPendingRestaurantFood().subscribe((data) => {
       this.dishes = data.Dishes;
+      for (let dish of data.Dishes) {
+        if (dish.category == "Special") {
+          this.specialDish.push(dish);
+        } else if (dish.category == "Popular Dish") {
+          this.popularDish.push(dish);
+        }
+      }
     })
   }
 

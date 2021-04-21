@@ -131,7 +131,7 @@ export class RestaurantPageComponent implements OnInit {
       }
 
       if (this.userId != null && (this.role == 'BU' || this.role == 'RO') && this.route.snapshot.queryParams.restaurantId) {
-        //this.getNearbyRestaurants();
+        this.getNearbyRestaurants();
       }
     }
 

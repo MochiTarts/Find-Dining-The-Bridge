@@ -31,7 +31,9 @@ mat-tab-group {
   background-position: center;
   @media screen and (max-width: 767px) {
     background-image: url("/assets/images/cover_mobile.png");
-    min-height: 750px;
+    min-height: 0;
+    height: 100%;
+    padding: 25px 0;
     text-align: center;
   }
   @media screen and (max-width: 280px) {
@@ -134,6 +136,7 @@ ngb-alert {
 
   @media screen and (max-width: 767px) {
     border-right: 0px;
+    min-width: 0;
   }
 }
 
@@ -150,7 +153,7 @@ ngb-alert {
   @media screen and (max-width: 767px) {
     /*width: 150px;
     height: 100px;*/
-    margin-bottom: 50px;
+    margin-bottom: 25px;
   }
 }
 
@@ -161,6 +164,7 @@ ngb-alert {
 .details1 {
   @media screen and (max-width: 767px) {
     text-align: left;
+    padding: 0;
   }
 }
 
