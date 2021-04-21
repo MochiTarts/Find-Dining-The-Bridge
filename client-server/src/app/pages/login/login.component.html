@@ -96,9 +96,10 @@
               <div fxLayout="column" fxLayoutAlign="center">
                 <mat-form-field>
                   <mat-label>Username (can be used for login)</mat-label>
-                  <input matInput type="text" name="username" [(ngModel)]="signupForm.username" maxlength="150" #username="ngModel" autocomplete="Username" >
+                  <input matInput type="text" name="username" [(ngModel)]="signupForm.username" maxlength="150" #username="ngModel" autocomplete="Username" pattern="^[\S^±£$§¡€¢§¶•ªº«]$" >
                   <mat-icon matSuffix>person</mat-icon>
                   <mat-error *ngIf="username.errors && username.errors.maxlength">Username must be at most 150 characters</mat-error>
+                  <mat-error *ngIf="username.errors && username.errors.pattern">Username should not contain spaces or special characters </mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
