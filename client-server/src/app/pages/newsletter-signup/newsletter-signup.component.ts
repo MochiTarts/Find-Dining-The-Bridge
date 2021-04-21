@@ -69,7 +69,7 @@ export class NewsletterSignupComponent implements OnInit {
           );
           this.errorMessage = "Please make sure all the information is valid!"
         } else {
-          this.errorMessage = error.error.message;
+          this.errorMessage = error.error.detail;
         }
         this.displayError = true;
         this.gotoTop();

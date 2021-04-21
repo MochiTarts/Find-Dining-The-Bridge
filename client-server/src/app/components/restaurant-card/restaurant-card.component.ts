@@ -95,7 +95,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
       this.favourited = true
       this.favList.push(this.restaurant);
     }, (error) => {
-      alert(error.error.message)
+      alert(error.error.detail)
     })
   }
 
@@ -107,7 +107,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
     this.userService.removeFavRestaurant(restaurnt_id).subscribe(() => {
       this.reload()
     }, (error) => {
-      alert(error.error.message)
+      alert(error.error.detail)
     })
   }
 
