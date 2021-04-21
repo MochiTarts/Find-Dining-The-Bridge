@@ -83,6 +83,7 @@ export class LoginComponent implements OnInit {
   isThirdParty: boolean = false;
   timerOn: boolean = false;
   initialTab: string = 'login';
+  radioClicked: boolean = false;
 
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
@@ -551,6 +552,18 @@ export class LoginComponent implements OnInit {
 
   onStrengthChanged(strength: number) {
     this.strength = strength;
+  }
+
+  onRoleChange(event) {
+    //console.log(event.value);
+    if (!this.radioClicked){
+      // show the password field with the strength info when the one of the radio buttons is selected
+      // (ngIf doesn't work as both elements need to be rendered first)
+      document.getElementById('passwordField').style.display = 'block';
+      document.getElementById('passwordInfo').style.display = 'block';
+    }
+
+    this.radioClicked = true;
   }
 
   // just in case
