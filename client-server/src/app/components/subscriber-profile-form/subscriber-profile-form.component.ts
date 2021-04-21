@@ -56,7 +56,7 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.userId = user.user_id;
       this.profileId = user.profile_id;
 
-      if (this.profileId) {
+      if (this.role == 'BU' && this.profileId) {
         this.userService.getSubscriberProfile().subscribe((data) => {
           this.firstName = data.first_name;
           this.lastName = data.last_name;
