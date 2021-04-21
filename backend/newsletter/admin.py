@@ -1,5 +1,6 @@
-from django.urls import reverse
+from django.urls import reverse, path
 from django.urls.exceptions import NoReverseMatch
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import admin, messages
 from django.contrib.admin import DateFieldListFilter
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
@@ -31,13 +32,22 @@ class NLUserAdmin(admin.ModelAdmin):
     # note that the order of actions will be reversed (in get_actions)
     actions = ('generate_google_spreadsheet',)
 
+    change_list_template = "admin/change_list_nluser.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        action_urls = [
+            path('generate_google_spreadsheet/', self.generate_google_spreadsheet),
+        ]
+        return action_urls + urls
+
     def get_actions(self, request):
         actions = super().get_actions(request)
         # reverse the action list so delete comes latest
         actions = OrderedDict(reversed(list(actions.items())))
         return actions
 
-    def generate_google_spreadsheet(self, request, queryset):
+    def generate_google_spreadsheet(self, request, queryset=None):
         try:
             # TODO create_user_emails_sheets_NLUser
             messages.success(
@@ -45,8 +55,9 @@ class NLUserAdmin(admin.ModelAdmin):
         except Exception as e:
             messages.error(
                 request, 'Google spreadsheet generation failed, please try again or contact Find Dining team for support.')
+        return HttpResponseRedirect("../")
 
-        generate_google_spreadsheet.short_description = 'generate google spreadsheet (of newsletter users)'
+    generate_google_spreadsheet.short_description = 'generate google spreadsheet (of newsletter users)'
 
     # override changelist_view to allow certain action (e.g. generate google sheet) to run without selecting any object
 
