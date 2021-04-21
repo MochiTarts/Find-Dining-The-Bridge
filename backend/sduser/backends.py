@@ -87,6 +87,16 @@ class SDUserSignupView(APIView):
         if (len(invalid) == 0):
             try:
                 if UserModel.objects.filter(username__iexact=username).exists():
+                    # this means it is set automatically by us but someone has registered a usrename with this person's email...
+                    if username == email:
+                        username = email.split('@')[0]
+                        # this means the local part is also used... best to ask the user to provide a unique one
+                        if UserModel.objects.filter(username__iexact=username).exists():
+                            return JsonResponse({'message': 'Fail to auto-generate your username, this likely means someone else has used your email as the username. Please provide a unique username in the form.'}, status=400)
+                        else:
+                            # update the username for user object generation purpose
+                            user['username'] = username
+                            return create_disable_user_and_send_verification_email(user, password, request)
                     return JsonResponse({'message': 'username already exists'}, status=400)
                 elif UserModel.objects.filter(email__iexact=email).exists():
                     return JsonResponse({'message': 'email already exists'}, status=400)
