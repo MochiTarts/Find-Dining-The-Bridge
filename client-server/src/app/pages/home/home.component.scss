@@ -6,14 +6,14 @@
   width: 100%;
   height: 600px;
   background-size: 2100px auto;
-  background-position: center -10px;
+  background-position: center -175px;
   background-repeat: no-repeat;
 
   @media screen and (max-width: 500px) {
     background-image: url("/assets/images/home/cover_mobile.png");
     min-height: 600px;
     background-size: 600px auto;
-    background-position: center 0px;
+    background-position: center -210px;
   }
 }
 
@@ -25,16 +25,16 @@
 }
 
 .header-container {
-  background-color: rgba($color: #000, $alpha: 0.25);
+  background-color: rgba($color: #555, $alpha: 0.15);
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 50px;
+  gap: 30px;
   @media screen and (max-width: 500px) {
     justify-content: center;
-    gap: 50px;
+    gap: 15px;
   }
 }
 
@@ -54,15 +54,15 @@
   color: white;
   font-family: Arial, Helvetica, sans-serif;
   @media screen and (max-width: 1200px) {
-    line-height: 50px;
+    //line-height: 50px;
     font-size: 45px;
   }
   @media screen and (max-width: 1100px) {
-    line-height: 45px;
+    //line-height: 45px;
     font-size: 40px;
   }
   @media screen and (max-width: 990px) {
-    line-height: 35px;
+    //line-height: 35px;
     font-size: 35px;
   }
   @media screen and (max-width: 870px) {
@@ -106,9 +106,16 @@
   }
 }
 
+.desc-overlay {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 25px 0;
+}
+
 .description {
   //top: 250px;
-  color: white;
+  margin: auto;
+  color: rgb(77, 77, 77);
   width: 70%;
 
   @media screen and (max-width: 990px) {
