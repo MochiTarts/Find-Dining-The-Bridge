@@ -3,6 +3,7 @@
   [routerLink]="['/restaurant']"
   [queryParams]="{restaurantId: restaurant._id}"
   (touchend)="gotoRestaurant()"
+  (click)="gotoRestaurant()"
   placement="bottom"
   ngbTooltip="Visit Restaurant Page"
 >

@@ -19,7 +19,7 @@ export class RestaurantNearbyCardComponent implements OnInit {
 
   gotoRestaurant() {
     const url = this.router.createUrlTree(['/restaurant'], { queryParams: { restaurantId: this.restaurant._id } });
-    window.open(url.toString(), '_blank');
+    window.open(url.toString(), '_self');
   }
 
 }
