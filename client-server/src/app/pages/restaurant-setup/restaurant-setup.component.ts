@@ -270,7 +270,7 @@ export class RestaurantSetupComponent implements OnInit {
   /**
    * Performs the action to create the new restaurant either as a draft or
    * as a submission for admin approval
-   * 
+   *
    * @param option - determines which service to call for http request
    * @param restaurantInfo - the restaurant setup form
    * @returns the Observable from the service
@@ -293,7 +293,7 @@ export class RestaurantSetupComponent implements OnInit {
   /**
    * Validates the restaurant setup form against the criteria for either
    * draft or submit
-   * 
+   *
    * @param option - determines which validator to run the form against
    * @returns the results of the validator
    */
@@ -356,12 +356,24 @@ export class RestaurantSetupComponent implements OnInit {
     if (restaurantInfo.payment_methods.length == 0) {
       restaurantInfo.payment_methods.push('');
     }
+    if (restaurantInfo.facebook && !(restaurantInfo.facebook.startsWith('https://') || restaurantInfo.facebook.startsWith('http://'))) {
+      restaurantInfo.facebook = 'https://' + restaurantInfo.facebook;
+    }
+    if (restaurantInfo.twitter && !(restaurantInfo.twitter.startsWith('https://') || restaurantInfo.twitter.startsWith('http://'))) {
+      restaurantInfo.twitter = 'https://' + restaurantInfo.twitter;
+    }
+    if (restaurantInfo.instagram && !(restaurantInfo.instagram.startsWith('https://') || restaurantInfo.instagram.startsWith('http://'))) {
+      restaurantInfo.instagram = 'https://' + restaurantInfo.instagram;
+    }
+    if (restaurantInfo.web_url && !(restaurantInfo.web_url.startsWith('https://') || restaurantInfo.web_url.startsWith('http://'))) {
+      restaurantInfo.web_url = 'https://' + restaurantInfo.web_url;
+    }
     return restaurantInfo;
   }
 
   /**
    * Performs action to create new restaurant and new restaurant owner records
-   * 
+   *
    * @param option - determines if restaurant is setup as draft or pending for admin approval
    * @returns None
    */
@@ -392,7 +404,7 @@ export class RestaurantSetupComponent implements OnInit {
 
       // Select which api to call depending on option
       this.chooseAPI(option, restaurantInfo).subscribe((data) => {
-        if (data && formValidation.isInvalidResponse(data)){
+        if (data && formValidation.isInvalidResponse(data)) {
           formValidation.HandleInvalid(data, (key) => this.validator.setError(key))
         } else {
 
