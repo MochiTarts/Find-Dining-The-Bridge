@@ -255,9 +255,13 @@ class PendingFood(models.Model):
         if not food.first():
             raise ObjectDoesNotExist("The food to be deleted does not exist")
         deleted_food = food.first()
+        delete(deleted_food.picture)
         food.delete()
 
-        Food.objects.filter(_id=dish_id).delete()
+        approved_food = Food.objects.filter(_id=dish_id)
+        if approved_food.first():
+            delete(approved_food.first().picture)
+        approved_food.delete()
 
         restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
         restaurant_categories = cls.get_all_categories(rest_id)

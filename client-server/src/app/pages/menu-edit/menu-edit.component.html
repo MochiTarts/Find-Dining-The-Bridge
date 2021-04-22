@@ -19,7 +19,7 @@
     <div style="width: 100%;" *ngIf="specialDish">
       <h2 class="category-title">Specials</h2>
       <div class="row" style="margin: auto;">
-        <div class="col-md-3 dish-card" *ngFor="let dish of specialDish; let i = index">
+        <div class="col-md-2 dish-card" *ngFor="let dish of specialDish; let i = index">
           <div class="card-body" style="width: fit-content; margin-bottom: 25px;">
             <app-dish-card [dish]="dish" style="margin: auto;"></app-dish-card>
             <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="5px" style="margin-top: 5px;">
@@ -42,7 +42,7 @@
     <div style="width: 100%;" *ngIf="popularDish">
       <h2 class="category-title">Popular Dishes</h2>
       <div class="row" style="margin: auto;">
-        <div class="col-md-3 dish-card" *ngFor="let dish of popularDish; let i = index">
+        <div class="col-md-2 dish-card" *ngFor="let dish of popularDish; let i = index">
           <div class="card-body" style="width: fit-content; margin-bottom: 25px;">
             <app-dish-card [dish]="dish" style="margin: auto;"></app-dish-card>
             <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="5px" style="margin-top: 5px;">
