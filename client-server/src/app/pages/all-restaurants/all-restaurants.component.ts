@@ -384,23 +384,27 @@ export class AllRestaurantsComponent implements OnInit {
       this.searchedRestaurants = this.allRestaurants;
     } else {
       this.searchedRestaurants = [];
+      let keywords = this.inputRestaurant.toLowerCase().replace(/\,/gi, ' ').split(' ');
+
       for (var i = 0; i < this.allRestaurants.length; i++) {
         var query = this.allRestaurants[i];
-        if (
-          query.name
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) ||
-          query.cuisines.toString()
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) ||
-          query.offer_options.toString()
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) ||
-          query.pricepoint
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase())
-        ) {
-          this.searchedRestaurants.push(query);
+        for (let keyword of keywords) {
+          if (
+            query.name
+              .toLowerCase()
+              .includes(keyword) ||
+            query.cuisines.toString()
+              .toLowerCase()
+              .includes(keyword) ||
+            query.offer_options.toString()
+              .toLowerCase()
+              .includes(keyword) ||
+            query.pricepoint
+              .toLowerCase()
+              .includes(keyword)
+          ) {
+            this.searchedRestaurants.push(query);
+          }
         }
       }
     }
@@ -409,7 +413,7 @@ export class AllRestaurantsComponent implements OnInit {
 
   filterToggle() {
     var filters = document.getElementById('filters-mobile');
-    
+
     if (filters.style.marginRight === "-400px") {
       filters.style.marginRight = "0px";
     } else {
