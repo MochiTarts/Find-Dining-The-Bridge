@@ -98,12 +98,12 @@ export class formValidation {
     return formValidation.nonEmpty(num) && !isNaN(Number(num));
   }
 
-  static isNumerNonNegative(num: string) {
+  static isNumberNonNegative(num: string) {
     return this.isNumberValid(num) && Number(num) >= 0;
   }
 
-  static isOptionalNumerNonNegative(num: string) {
-    return num ? this.isNumerNonNegative(num) : true;
+  static isOptionalNumberNonNegative(num: string) {
+    return num ? this.isNumberNonNegative(num) : true;
   }
 
   static isPostalValid(postal: string) {

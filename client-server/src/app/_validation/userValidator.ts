@@ -39,7 +39,7 @@ export class userValidator extends formValidator {
     'last_name': '',
     'postalCode': (postalCode) => formValidation.isPostalCodeValid(postalCode),
     'phone': (phone) => formValidation.isPhoneValid(phone),
-    'phone_ext': (phone_ext) => formValidation.isOptionalNumerNonNegative(phone_ext),
+    'phone_ext': (phone_ext) => formValidation.isOptionalNumberNonNegative(phone_ext),
 
     // for profanity filter
     'first_name_p': (first_name_p) => formValidation.isNotProfane(first_name_p),

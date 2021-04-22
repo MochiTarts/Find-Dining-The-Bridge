@@ -50,6 +50,7 @@
                 <fa-icon class="contact-icon" [icon]="faPhone"></fa-icon>
                 <a>
                   {{ displayed_phone }}
+                  <span *ngIf="restaurantDetails.phone_ext"> Ext.{{ restaurantDetails.phone_ext }}</span>
                 </a>
               </p>
 
@@ -138,7 +139,7 @@
         <ngb-alert *ngIf="restaurantMenu.length == 0" [dismissible]="false">
           Menu currently empty! Please check again at a later time.
         </ngb-alert>
-  
+
         <div fxLayout="row" fxLayoutAlign="center center" *ngIf="restaurantDetails.full_menu_url">
           <button class="btn" (click)="openExternalMenu()" placement="top" ngbTooltip="View Full Menu">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
@@ -147,7 +148,7 @@
             </div>
           </button>
         </div>
-  
+
         <div class="col">
           <div class="tab-info-menu" *ngIf="specialDish.length != 0">
             <h1 class="section-title">Specials</h1>
@@ -164,7 +165,7 @@
             </div>
           </div>
         </div>
-  
+
         <div class="col">
           <div class="tab-info-menu" *ngIf="popularDish.length != 0">
             <h1 class="section-title">Popular</h1>
@@ -196,7 +197,7 @@
               <b>EDIT MENU</b>
             </button>
           </div>
-  
+
           <div style="text-align: center;">
             <button
               *ngIf="role == 'RO' && !isQueryRestaurant"
@@ -306,7 +307,7 @@
         <ngb-alert *ngIf="restaurantDetails.restaurant_image_url[0] == '/' && restaurantDetails.restaurant_video_url == '/'" [dismissible]="false">
           Restaurant media currently empty! Please check again at a later time.
         </ngb-alert>
-  
+
         <div class="tab-info" *ngIf="restaurantDetails.restaurant_image_url[0] != '/'">
           <app-carousel-with-thumbnail
             [autoPlayDuration]="5000"
@@ -337,7 +338,7 @@
                   'height': '100%'
                 }"></div>
           </ng-template>
-  
+
         </div>
         <!--<div style="text-align: center;">
           <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(imageModal)" placement="bottom" ngbTooltip="Update Your Restaurant Image">
@@ -345,29 +346,29 @@
             <b>EDIT RESTAURANT IMAGES</b>
           </button>
         </div>-->
-  
+
         <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_url != '/' && videoId == undefined">
           <video width="100%" controls>
             <source src="{{ restaurantDetails.restaurant_video_url }}" type="video/mp4">
             Your browser does not support the video.
           </video>
         </div>
-  
+
         <div #youtubeContainer class="tab-info" *ngIf="videoId != undefined">
           <youtube-player videoId="{{ videoId }}" [width]="youtubeContainer.offsetWidth"></youtube-player>
         </div>
-  
+
         <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_desc">
           <p class="section_p"><b>Video Description: </b>{{ restaurantDetails.restaurant_video_desc }}</p>
         </div>
-  
+
         <!--<div style="text-align: center; padding-bottom: 50px;">
           <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
             <fa-icon [icon]="faEdit"></fa-icon>
             <b>EDIT RESTAURANT VIDEO</b>
           </button>
         </div>-->
-  
+
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px" style="padding-bottom: 50px;" *ngIf="role == 'RO' && !isQueryRestaurant">
           <div style="text-align: center;">
             <button class="btn editBtn" (click)="openEditModal(imageModal)" placement="bottom" ngbTooltip="Update Your Restaurant Image">
@@ -375,7 +376,7 @@
               <b>EDIT RESTAURANT IMAGES</b>
             </button>
           </div>
-  
+
           <div style="text-align: center;">
             <button class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
               <fa-icon [icon]="faEdit"></fa-icon>
