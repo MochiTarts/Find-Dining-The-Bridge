@@ -61,7 +61,8 @@ def send_approval_email(names, receiver, profile_title, profile_type):
         content += '<p>Your restaurant profile for <i>'
     else:
         content += '<p>Your food profile for <i>'
-    content += profile_title + '</i> has been approved and is published to the live site.</p>'
+    content += profile_title + \
+        '</i> has been approved and is published to the live site.</p>'
     content += '<p>Thanks,</p>'
     content += '<p>Your Find Dining team</p>'
 

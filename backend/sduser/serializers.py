@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SDUser
+from sduser.models import SDUser
 
 
 class SDUserSerializer(serializers.ModelSerializer):

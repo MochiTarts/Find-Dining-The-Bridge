@@ -1,10 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from collections import Iterable
 from django.core.validators import URLValidator, RegexValidator
-from better_profanity import profanity
 #from django.core import validators
-
+from better_profanity import profanity
+from collections import Iterable
 
 def check_script_injections(value):
     if isinstance(value, Iterable) and type(value) != str:

@@ -1,10 +1,11 @@
-from .models import SubscriberProfile
-from rest_framework import serializers
-from .enum import ConsentStatus
+from subscriber_profile.models import SubscriberProfile
+from subscriber_profile.enum import ConsentStatus
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
 from rest_framework.response import Response
+from rest_framework import serializers
 
 
 class SubscriberProfileInsert(serializers.Serializer):

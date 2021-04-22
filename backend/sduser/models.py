@@ -69,5 +69,6 @@ class SDUser(AbstractUser):
 
 @receiver(pre_delete, sender=SDUser)
 def delete_user(sender, instance, **kwargs):
+    # prevent admin user from getting deleted
     if instance.is_superuser or instance.email == settings.ADMIN_EMAIL:
         raise PermissionDenied

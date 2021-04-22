@@ -1,10 +1,11 @@
 
 from django import forms
 from django.forms import ModelForm, ValidationError
-from restaurant.models import Restaurant, PendingRestaurant, RestaurantPost
-from restaurant.enum import MediaType, RestaurantSaveLocations, FoodSaveLocations
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
+
+from restaurant.models import Restaurant, PendingRestaurant, RestaurantPost
+from restaurant.enum import MediaType, RestaurantSaveLocations, FoodSaveLocations
 from utils.validators import validate_profane_content
 
 # for ordering and hiding info
