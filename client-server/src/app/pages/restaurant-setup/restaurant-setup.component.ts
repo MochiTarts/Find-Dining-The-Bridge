@@ -42,7 +42,6 @@ export class RestaurantSetupComponent implements OnInit {
   newImage: boolean = false;
 
   faEdit = faEdit;
-  errorInvalidList = [];
 
   constructor(
     private tokenStorage: TokenStorageService,
@@ -449,10 +448,10 @@ export class RestaurantSetupComponent implements OnInit {
           }
 
         }
-      }, error => {
-        console.log(error.error.detail)
-        console.log(error.error.detail.Invalid)
-        this.errorInvalidList = error.error.detail.Invalid;
+      }, (error) => {
+        if (formValidation.isInvalidResponse(error.error.detail)) {
+          formValidation.HandleInvalid(error.error.detail, (key) => this.validator.setError(key));
+        }
       });
 
 
