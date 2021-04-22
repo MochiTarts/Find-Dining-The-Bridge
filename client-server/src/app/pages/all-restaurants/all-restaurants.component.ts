@@ -404,6 +404,7 @@ export class AllRestaurantsComponent implements OnInit {
               .includes(keyword)
           ) {
             this.searchedRestaurants.push(query);
+            break;
           }
         }
       }
