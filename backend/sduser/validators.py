@@ -2,7 +2,7 @@ from django.core.validators import validate_email, RegexValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 
-from utils.validators import check_script_injections
+from utils.validators import check_script_injection
 
 def validate_signup_user(user):
     invalid = []

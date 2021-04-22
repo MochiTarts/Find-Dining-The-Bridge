@@ -98,6 +98,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'utils.context_processors.environment_var'
             ],
         },
     },
@@ -185,8 +186,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/hour',
-        'user': '100/hour'
+        'anon': '1000/hour',
+        'user': '1000/hour'
     },
     'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
 }

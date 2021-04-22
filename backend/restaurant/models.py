@@ -620,7 +620,7 @@ class PendingRestaurant(models.Model):
         if cls.objects.filter(email=restaurant_data['email']).exists():
             raise IntegrityError(
                 'Cannot insert pending restaurant object, an object with this email already exists')
-        if restaurant_data['years'] == 0:
+        if 'years' in restaurant_data and restaurant_data['years'] == 0:
             restaurant_data['years'] = 1
         restaurant = cls(
             **restaurant_data
