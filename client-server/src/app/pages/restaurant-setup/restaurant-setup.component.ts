@@ -216,6 +216,7 @@ export class RestaurantSetupComponent implements OnInit {
       postalCode: (<HTMLInputElement>document.getElementById('PostalCode')).value,
 
       phone: <any>(<HTMLInputElement>document.getElementById('phone-number')).value,
+      phone_ext: <any>(<HTMLInputElement>document.getElementById('phone-ext')).value,
       email: (<HTMLInputElement>document.getElementById('restaurant-email')).value,
       pricepoint: pricepoint,
       cuisines: this.uploadForm.get('cuisines').value,
@@ -350,6 +351,7 @@ export class RestaurantSetupComponent implements OnInit {
     // Convert type of fields to match with backend
     restaurantInfo.years = Number(restaurantInfo.years);
     restaurantInfo.phone = Number(restaurantInfo.phone);
+    restaurantInfo.phone_ext = Number(restaurantInfo.phone_ext);
     if (restaurantInfo.offer_options.length == 0) {
       restaurantInfo.offer_options.push('');
     }

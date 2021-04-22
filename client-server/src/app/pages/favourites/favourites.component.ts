@@ -97,10 +97,9 @@ export class FavouritesComponent implements OnInit {
     for (var i = 0; i < this.priceFilterRestaurants.length; i++) {
       var current = this.priceFilterRestaurants[i];
       if (this.deliveryFilterRestaurants.includes(current)
-          && this.cuisineFilterRestaurants.includes(current)
-          && this.serviceFilterRestaurants.includes(current)
-          && this.searchedRestaurants.includes(current))
-      {
+        && this.cuisineFilterRestaurants.includes(current)
+        && this.serviceFilterRestaurants.includes(current)
+        && this.searchedRestaurants.includes(current)) {
         this.restaurants.push(current);
       }
     }
@@ -115,23 +114,28 @@ export class FavouritesComponent implements OnInit {
       this.searchedRestaurants = this.allRestaurants;
     } else {
       this.searchedRestaurants = [];
+      let keywords = this.inputRestaurant.toLowerCase().replace(/\,/gi, ' ').split(' ');
+
       for (var i = 0; i < this.allRestaurants.length; i++) {
         var query = this.allRestaurants[i];
-        if (
-          query.name
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) ||
-          query.cuisines.toString()
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) ||
-          query.offer_options.toString()
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase()) ||
-          query.pricepoint
-            .toLowerCase()
-            .includes(this.inputRestaurant.toLowerCase())
-        ) {
-          this.searchedRestaurants.push(query);
+        for (let keyword of keywords) {
+          if (
+            query.name
+              .toLowerCase()
+              .includes(keyword) ||
+            query.cuisines.toString()
+              .toLowerCase()
+              .includes(keyword) ||
+            query.offer_options.toString()
+              .toLowerCase()
+              .includes(keyword) ||
+            query.pricepoint
+              .toLowerCase()
+              .includes(keyword)
+          ) {
+            this.searchedRestaurants.push(query);
+            break;
+          }
         }
       }
     }
@@ -142,14 +146,14 @@ export class FavouritesComponent implements OnInit {
    * Clicks the checkbox on enter key
    * @param event - the event that triggers this function
    */
-  filterEnter(event){
+  filterEnter(event) {
     event.srcElement.click();
   }
 
   /**
    * Updates the cuisineFilterRestaurants list based on the selected cuisines. Then updates
    * the list of favourited restaurants to display
-   * 
+   *
    * @param list - the list of bools representing which cuisines were selected on the filter card
    */
   filterCuisine(list) {
@@ -175,7 +179,7 @@ export class FavouritesComponent implements OnInit {
   /**
    * Updates the serviceFilterRestaurants list based on the selected services. Then updates
    * the list of favourited restaurants to display
-   * 
+   *
    * @param list - the list of bools representing which services were selected on the filter card
    */
   filterService(list) {
@@ -200,7 +204,7 @@ export class FavouritesComponent implements OnInit {
   /**
    * Updates the priceFilterRestaurants list based on the selected pricepoints. Then updates
    * the list of favourited restaurants to display
-   * 
+   *
    * @param list - the list of bools representing which pricepoints were selected on the filter card
    */
   filterPricepoint(list) {
@@ -224,7 +228,7 @@ export class FavouritesComponent implements OnInit {
           this.priceFilterRestaurants.push(query);
         }
 
-        if (list[3] == true && query.pricepoint == 'EXHIGH' ){
+        if (list[3] == true && query.pricepoint == 'EXHIGH') {
           this.priceFilterRestaurants.push(query);
         }
       }
@@ -234,7 +238,7 @@ export class FavouritesComponent implements OnInit {
 
   filterToggle() {
     var filters = document.getElementById('filters-mobile');
-    
+
     if (filters.style.marginRight === "-400px") {
       filters.style.marginRight = "0px";
     } else {
