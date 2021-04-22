@@ -3,13 +3,15 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.mail import BadHeaderError
 from django.utils.html import format_html
-from django.urls import reverse
+from django.urls import reverse, path
+from django.http import HttpResponseRedirect
 from django import forms
 
 from sduser.forms import AdminForm
 from sduser.utils import send_email_verification, send_email_activate_notify, send_email_deactivate_notify, send_email_promote_notify
 from utils.filters import InputFilter, EmailFilter, UsernameFilter
 from utils.model_util import model_to_json
+from google.sheetsController import create_user_emails_sheets_subscribers, create_user_emails_sheets_restaurant_owners, create_user_emails_sheets_all
 
 from smtplib import SMTPException
 from collections import OrderedDict
@@ -29,6 +31,8 @@ class UserAdmin(admin.ModelAdmin):
                'email_verification', 'unblock_user', 'block_user', 'promote_user',)
     # list_per_page=200
 
+    change_list_template = "sduser/change_list.html"
+
     readonly_fields = (
         "last_login",
         "pwd_update_time",
@@ -37,6 +41,18 @@ class UserAdmin(admin.ModelAdmin):
     class Meta:
         # for some reason setting this is not enough, need to override get_form as well
         form = AdminForm
+
+    def get_urls(self):
+        urls = super().get_urls()
+        action_urls = [
+            path('generate_google_spreadsheet_subscribers/',
+                 self.generate_google_spreadsheet_subscribers),
+            path('generate_google_spreadsheet_restaurant_owners/',
+                 self.generate_google_spreadsheet_restaurant_owners),
+            path('generate_google_spreadsheet_all/',
+                 self.generate_google_spreadsheet_all),
+        ]
+        return action_urls + urls
 
     def get_form(self, request, obj=None, **kwargs):
         """
@@ -72,6 +88,43 @@ class UserAdmin(admin.ModelAdmin):
         # reverse the action list so delete comes latest
         actions = OrderedDict(reversed(list(actions.items())))
         return actions
+
+    def generate_google_spreadsheet_subscribers(self, request, queryset=None):
+        try:
+            create_user_emails_sheets_subscribers()
+            messages.success(
+                request, 'Google spreadsheet has been generated with all Subscribers in the drive of info@finddining.ca')
+        except Exception as e:
+            raise e
+            messages.error(
+                request, 'Google spreadsheet generation failed, please try again or contact Find Dining team for support.')
+        return HttpResponseRedirect("../")
+
+    generate_google_spreadsheet_subscribers.short_description = 'generate google spreadsheet (of Subscribers)'
+
+    def generate_google_spreadsheet_restaurant_owners(self, request, queryset=None):
+        try:
+            create_user_emails_sheets_restaurant_owners()
+            messages.success(
+                request, 'Google spreadsheet has been generated with all Restaurant Owners in the drive of info@finddining.ca')
+        except Exception as e:
+            messages.error(
+                request, 'Google spreadsheet generation failed, please try again or contact Find Dining team for support.')
+        return HttpResponseRedirect("../")
+
+    generate_google_spreadsheet_restaurant_owners.short_description = 'generate google spreadsheet (of Restaurant Owners)'
+
+    def generate_google_spreadsheet_all(self, request, queryset=None):
+        try:
+            create_user_emails_sheets_all()
+            messages.success(
+                request, 'Google spreadsheet has been generated with all Users in the drive of info@finddining.ca')
+        except Exception as e:
+            messages.error(
+                request, 'Google spreadsheet generation failed, please try again or contact Find Dining team for support.')
+        return HttpResponseRedirect("../")
+
+    generate_google_spreadsheet_all.short_description = 'generate google spreadsheet (of all Users)'
 
     def promote_user(self, request, queryset):
         try:

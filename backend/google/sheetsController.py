@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 from subscriber_profile.models import SubscriberProfile
 from restaurant_owner.models import RestaurantOwner
@@ -53,12 +54,26 @@ def create_user_emails_sheets_subscribers():
             if status == "IMPLIED" and profile.expired_at < date.today():
                 profile.consent_status = "EXPIRED"
                 profile.save()
-            if status == "EXPRESSED" or status == "IMPLIED":
+            elif status == "EXPRESSED" or status == "IMPLIED":
                 user.pop('profile_id')
                 user.update({"first_name": profile.first_name,
                              "last_name": profile.last_name, "consent_status": profile.consent_status})
                 subscribers.append(user)
 
+    # Get newsletter only users' email
+    nlusers = list(NLUser.objects.all())
+
+    # Check their consent status and update accordingly
+    for nluser in nlusers:
+        status = nluser.consent_status
+        if status == "IMPLIED" and nluser.expired_at < date.today():
+            nluser.consent_status = "EXPIRED"
+            nluser.save()
+        elif status == "EXPRESSED" or status == "IMPLIED":
+            subscribers.append({"email": nluser.email, "first_name": nluser.first_name,
+                                "last_name": nluser.last_name, "consent_status": nluser.consent_status})
+
+    print(subscribers)
     # Append user info into values (only users that has email verified)
     values = [['Email', 'First name', 'Last name', 'Consent Status']]
     for subscriber in subscribers:
@@ -230,9 +245,21 @@ def create_user_emails_sheets_all():
             if status == "IMPLIED" and profile.expired_at < date.today():
                 profile.consent_status = "EXPIRED"
                 profile.save()
-            if status == "EXPRESSED" or status == "IMPLIED":
+            elif status == "EXPRESSED" or status == "IMPLIED":
                 user.pop('profile_id')
                 subscribers.append(user)
+    # Get newsletter only users' email
+    nlusers = list(NLUser.objects.all())
+
+    # Check their consent status and update accordingly
+    for nluser in nlusers:
+        status = nluser.consent_status
+        if status == "IMPLIED" and nluser.expired_at < date.today():
+            nluser.consent_status = "EXPIRED"
+            nluser.save()
+        elif status == "EXPRESSED" or status == "IMPLIED":
+            subscribers.append({"email": nluser.email, "username": nluser.first_name,
+                                "role": "NL"})
 
     # Get all basic users' email
     restaurant_owners = list(
