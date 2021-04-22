@@ -3,8 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 const API_URL = '/api/'
-const SDUSER_ENDPOINT = '/api/user/';
-const SUBSCRIBER_ENDPOINT = '/api/subscriber/';
+const SDUSER_ENDPOINT = API_URL + 'user/';
+const SUBSCRIBER_ENDPOINT = API_URL + 'subscriber/';
+const NLUSER_ENDPOINT = API_URL + 'newsletter/';
+
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -18,6 +20,7 @@ export class UserService {
   private static readonly AUTH_ENDPOINT = '/user';
   private static readonly UPLOAD_ENDPOINT = '/cloud_storage/upload/';
   private static readonly FAV_ENDPOINT = '/restaurant';
+  private static readonly NLUSER_ENDPOINT = '/newsletter';
 
 
 
@@ -151,6 +154,16 @@ export class UserService {
   getNearbyRestaurants(): Observable<any> {
     const endpoint = SDUSER_ENDPOINT + `nearby/`
     return this.http.get(endpoint);
+  }
+
+ /**
+  * Insert a newsletter user into the db
+  * @param userData - JSON user object
+  * @returns Observable containing a user object or error
+  */
+  newsletterSignup(userData): Observable<any> {
+    const endpoint = NLUSER_ENDPOINT + `signup/`;
+    return this.http.post<any>(endpoint, userData);
   }
 
 }

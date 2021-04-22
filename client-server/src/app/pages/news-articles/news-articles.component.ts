@@ -215,7 +215,8 @@ export class NewsArticlesComponent implements OnInit {
         if (monthList.every(isFalse)) {
           this.filterMonthArticles = this.allArticles;
         } else {
-          var date = new Date(article.modified_at);
+          // Compare with the article's modified_at date or created_at date
+          var date = (article.modified_at) ? (new Date(article.modified_at)) : (new Date(article.created_at));
           var monthNumber = date.getMonth();
           for (var i = 0; i < this.months.length; i++) {
             if (monthList[i] && i == monthNumber) {
@@ -227,7 +228,7 @@ export class NewsArticlesComponent implements OnInit {
         if (yearList.every(isFalse)) {
           this.filterYearArticles = this.allArticles;
         } else {
-          var date = new Date(article.modified_at);
+          var date = (article.modified_at) ? (new Date(article.modified_at)) : (new Date(article.created_at));
           var year = date.getFullYear();
           for (var i = 0; i < this.years.length; i++) {
             if (yearList[i] && this.years[i] == year) {

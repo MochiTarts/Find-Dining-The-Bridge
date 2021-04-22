@@ -538,13 +538,14 @@
 
       <div class="form-group" *ngIf="!profileId">
         <div class="input-group">
-          <input
-            id="terms-of-service"
-            type="checkbox"
-            formControlName="terms"
-            aria-required="true"
-          />
-          <label for="terms-of-service" style="padding-left: 5px;">I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
+          <label for="terms-of-service">
+            <input
+              id="terms-of-service"
+              type="checkbox"
+              formControlName="terms"
+              aria-required="true"
+            />
+            I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
         </div>
       </div>
 

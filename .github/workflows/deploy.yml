@@ -41,6 +41,7 @@ jobs:
       GOOGLE_ANALYTICS_PRIVATE_KEY: ${{ secrets.GOOGLE_ANALYTICS_PRIVATE_KEY }}
       GOOGLE_ANALYTICS_CLIENT_EMAIL: ${{ secrets.GOOGLE_ANALYTICS_CLIENT_EMAIL }}
       ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+      SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
