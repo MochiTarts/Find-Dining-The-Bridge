@@ -9,7 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
 <script>
     var endpoint = "/api/restaurant/" + window.location.href.split("/")[7] + "/traffic/";
-    
+
     var randomColorGenerator = function () {
         var r = Math.floor(Math.random() * 255);
         var g = Math.floor(Math.random() * 255);
@@ -124,23 +124,27 @@
     }
 
     function downloadAll() {
+        var restaurant_name = document.getElementById("restaurant-name").innerHTML;
         var barDaily = document.getElementById("daily-chart");
         var barHourly = document.getElementById("hourly-chart");
         var canvas = document.createElement("canvas");
         var ctx = canvas.getContext("2d");
 
         ctx.canvas.width = 1000;
-        ctx.canvas.height = 1000;
-        ctx.drawImage(barDaily, 0, 0);
-        ctx.drawImage(barHourly, 0, 500);
+        ctx.canvas.height = 1100;
+        ctx.font = "bold 32px Arial";
+        ctx.fillText(restaurant_name, 40, 45);
+        ctx.drawImage(barDaily, 0, 50);
+        ctx.drawImage(barHourly, 0, 550);
 
         var pdf = new jsPDF({
             orientation: "portrait",
             unit: "pt",
-            format: [750, 750]
+            format: [750, 790]
         });
         pdf.addImage(canvas, 'PNG', 0, 0);
-        pdf.save('{{original.email}}' + '.pdf');
+        let date = new Date();
+        pdf.save('Find Dining Report - ' + restaurant_name + ' - ' + date.toLocaleDateString('en-US') + '.pdf');
     }
 </script>
 {% endblock %}
@@ -148,7 +152,7 @@
 <button class="button" type="button" onclick="toggleGraphs()" style="margin-bottom: 10px;">Toggle Graphs</button>
 <div id="graphs" style="display: none; padding-top: 15px; padding-bottom: 75px;">
     <hr>
-    <h1 style="font-weight: bold; font-size: 32px;">{{ original }}</h1>
+    <h1 id="restaurant-name" style="font-weight: bold; font-size: 32px;">{{ original.name }}</h1>
     <button class="button" type="button" onclick="downloadAll()" style="float: right;">Export Graphs</button>
     <div style="margin:auto; width:1000px;">
         <canvas id="daily-chart"></canvas>
