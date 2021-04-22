@@ -103,7 +103,8 @@ restaurant_insert_for_approval_schema = {
         "payment_methods": {"type": "array"},
 
         "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"}
+        "restaurant_video_desc": {"type": "string"},
+        "phone_ext": {"type": "number"}
     },
     "required": ["name", "years", "address", "postalCode", "phone", "email", "pricepoint", "offer_options",
                  "bio", "owner_first_name", "owner_last_name", "open_hours", "payment_methods"],
@@ -152,7 +153,8 @@ restaurant_insert_draft_schema = {
         "payment_methods": {"type": "array"},
 
         "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"}
+        "restaurant_video_desc": {"type": "string"},
+        "phone_ext": {"type": "number"}
     },
     "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
     "additionalProperties": False
@@ -200,7 +202,8 @@ restaurant_edit_draft_schema = {
         "payment_methods": {"type": "array"},
 
         "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"}
+        "restaurant_video_desc": {"type": "string"},
+        "phone_ext": {"type": "number"}
     },
     "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
     "additionalProperties": False

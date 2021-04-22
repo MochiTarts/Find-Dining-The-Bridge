@@ -90,7 +90,9 @@ class DraftRestaurantTestCases(TestCase):
             "postalCode": "M1C 3A4",
             "email": "bob@mail.com",
             "owner_first_name": ["Bob"],
-            "owner_last_name": ["Smith"]
+            "owner_last_name": ["Smith"],
+            "phone": 4166688966,
+            "phone_ext": 1200
         }
         response = self.client.post('/api/restaurant/draft/', restaurant_draft, format='json')
         self.assertTrue(PendingRestaurant.objects.filter(
@@ -100,6 +102,8 @@ class DraftRestaurantTestCases(TestCase):
             email="bob@mail.com",
             owner_first_name=["Bob"],
             owner_last_name=["Smith"],
+            phone=4166688966,
+            phone_ext=1200,
             status="In_Progress").exists())
 
     def test_edit_restaurant_draft(self):
@@ -110,13 +114,16 @@ class DraftRestaurantTestCases(TestCase):
             "postalCode": "M1C 1A4",
             "email": "draft@mail.com",
             "owner_first_name": ["Jenny"],
-            "owner_last_name": ["Yu"]
+            "owner_last_name": ["Yu"],
+            "phone": 4166688966,
+            "phone_ext": 1200
         }
         response = self.client.put('/api/restaurant/draft/', edit_draft, format='json')
         restaurant = PendingRestaurant.objects.filter(owner_user_id=self.ro.id).first()
         self.assertTrue(
             restaurant.name == "test draft 2" and restaurant.address == "1265 Military Trail" and restaurant.postalCode == "M1C 1A4"
-            and restaurant.owner_first_name == ["Jenny"] and restaurant.owner_last_name == ["Yu"])
+            and restaurant.owner_first_name == ["Jenny"] and restaurant.owner_last_name == ["Yu"]
+            and restaurant.phone == 4166688966 and restaurant.phone_ext == 1200)
 
 
 class RestaurantApprovalTestCases(TestCase):
@@ -147,7 +154,8 @@ class RestaurantApprovalTestCases(TestCase):
             "owner_first_name": ["Bob"],
             "owner_last_name": ["Smith"],
             "open_hours": "9-5",
-            "payment_methods": [Payment.Credit.name, Payment.Debit.name]
+            "payment_methods": [Payment.Credit.name, Payment.Debit.name],
+            "phone_ext": 1200
         }
         response = self.client.put('/api/restaurant/submit/', restaurant_submission, format='json')
         self.assertTrue(PendingRestaurant.objects.filter(
@@ -164,6 +172,7 @@ class RestaurantApprovalTestCases(TestCase):
             owner_last_name=["Smitih"],
             open_hours="9-5",
             payment_methods=[Payment.Credit.name, Payment.Debit.name],
+            phone_ext=1200,
             status=Status.Pending.name).exists)
 
     def test_edit_restaurant_submission(self):
@@ -181,7 +190,8 @@ class RestaurantApprovalTestCases(TestCase):
             "owner_first_name": ["Bob"],
             "owner_last_name": ["Smith"],
             "open_hours": "9-5",
-            "payment_methods": [Payment.Credit.name, Payment.Debit.name]
+            "payment_methods": [Payment.Credit.name, Payment.Debit.name],
+            "phone_ext": 1200
         }
         response = self.client.put('/api/restaurant/submit/', edit_submission, format='json')
         self.assertTrue(PendingRestaurant.objects.filter(
@@ -198,6 +208,7 @@ class RestaurantApprovalTestCases(TestCase):
             owner_last_name=["Smitih"],
             open_hours="9-5",
             payment_methods=[Payment.Credit.name, Payment.Debit.name],
+            phone_ext=1200,
             status=Status.Pending.name).exists)
 
 
