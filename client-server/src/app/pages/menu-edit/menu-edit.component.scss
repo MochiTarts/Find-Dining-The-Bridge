@@ -35,7 +35,12 @@ app-dish-card {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  //gap: 25px;
+}
+
+.category-container {
+  width: 100%;
+  margin-bottom: 25px;
 }
 
 .category-title {

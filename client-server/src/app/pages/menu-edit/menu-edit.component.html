@@ -16,7 +16,7 @@
     {{ alertMessage }}
   </ngb-alert>
   <div class="dish-container">
-    <div style="width: 100%;" *ngIf="specialDish">
+    <div class="category-container" *ngIf="specialDish">
       <h2 class="category-title">Specials</h2>
       <div class="row" style="margin: auto;">
         <div class="col-md-2 dish-card" *ngFor="let dish of specialDish; let i = index">
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div style="width: 100%;" *ngIf="popularDish">
+    <div class="category-container" *ngIf="popularDish">
       <h2 class="category-title">Popular Dishes</h2>
       <div class="row" style="margin: auto;">
         <div class="col-md-2 dish-card" *ngFor="let dish of popularDish; let i = index">
