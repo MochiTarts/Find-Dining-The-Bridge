@@ -9,10 +9,15 @@
   background-position: center -175px;
   background-repeat: no-repeat;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 767px) {
     background-image: url("/assets/images/home/cover_mobile.png");
-    min-height: 600px;
-    background-size: 600px auto;
+    min-height: 775px;
+    background-size: 775px auto;
+  }
+
+  @media screen and (max-width: 500px) {
+    min-height: 850px;
+    background-size: 850px auto;
     background-position: center -210px;
   }
 }
@@ -94,10 +99,19 @@
   }
 }
 
+.header-logo {
+  width: 200px;
+  height: auto;
+
+  @media screen and (max-width: 767px) {
+    width: 100px;
+  }
+}
+
 .header-content {
   font-size: 18px;
   line-height: 22px;
-  text-align: center;
+  // text-align: center;
   font-family: Arial, Helvetica, sans-serif;
 
   @media screen and (max-width: 500px) {
@@ -108,21 +122,26 @@
 
 .desc-overlay {
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 25px 0;
+
+  text-align: center;
+  margin: auto;
 }
 
 .description {
   //top: 250px;
   margin: auto;
   color: rgb(77, 77, 77);
-  width: 70%;
+  // width: 60%;
+  padding-right: 10%;
 
   @media screen and (max-width: 990px) {
     width: 75%;
   }
 
   @media screen and (max-width: 770px) {
+    padding: 0px;
     width: 80%;
   }
 
