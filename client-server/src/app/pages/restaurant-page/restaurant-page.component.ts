@@ -5,7 +5,8 @@ import {
   faPhone,
   faEdit,
   faShippingFast,
-  faShareAlt
+  faShareAlt,
+  faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faTwitter, faInstagram, faFacebookF } from '@fortawesome/free-brands-svg-icons';
@@ -89,8 +90,12 @@ export class RestaurantPageComponent implements OnInit {
   faShareAlt = faShareAlt;
   faEdit = faEdit;
   faShippingFast = faShippingFast;
+  faExternalLinkAlt = faExternalLinkAlt;
 
   slides = [];
+  dark = "dark";
+
+  queryParam: boolean = true;
 
   constructor(
     private titleService: Title,
@@ -115,13 +120,17 @@ export class RestaurantPageComponent implements OnInit {
       this.userId = user.user_id;
       this.profileId = user.profile_id;
 
+      if (!this.route.snapshot.queryParams.restaurantId) {
+        this.queryParam = false;
+      }
+
       if (this.userId != null && this.role == 'RO'
         && !this.profileId && !this.route.snapshot.queryParams.restaurantId) {
         this.router.navigate(['/restaurant-setup']);
         return;
       }
 
-      if (this.userId != null && (this.role == 'BU' || this.role == 'RO')) {
+      if (this.userId != null && (this.role == 'BU' || this.role == 'RO') && this.route.snapshot.queryParams.restaurantId) {
         this.getNearbyRestaurants();
       }
     }
@@ -174,7 +183,8 @@ export class RestaurantPageComponent implements OnInit {
       }
 
       // payment list
-      this.paymentList = this.restaurantDetails.payment_methods.toString().split(',').join(', ') + " Accepted";
+      //this.paymentList = this.restaurantDetails.payment_methods.toString().split(',').join(', ') + " Accepted";
+      this.paymentList = this.restaurantDetails.payment_methods.toString().split(',').join(', ');
 
       this.uploadStoryImgForm = this.formBuilder.group({
         file: [''],
@@ -202,6 +212,7 @@ export class RestaurantPageComponent implements OnInit {
     this.getPendingOrApprovedDishes(this.restaurantId).subscribe((data) => {
       this.restaurantMenu = data.Dishes;
       for (let dish of data.Dishes) {
+        dish.type = 'dish';
         if (dish.category == "Popular Dish") {
           this.popularDish.push(dish)
         } else if (dish.category == "Special") {
@@ -279,6 +290,10 @@ export class RestaurantPageComponent implements OnInit {
    */
   editMenu() {
     this.router.navigate(['/menu-edit']);
+  }
+
+  openExternalMenu() {
+    window.open(this.restaurantDetails.full_menu_url, '_blank')
   }
 
   reload() {

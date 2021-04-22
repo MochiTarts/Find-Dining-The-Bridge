@@ -14,16 +14,17 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 
 from utils.math import get_nearby_restaurants
+from sduser import swagger
 from sduser.utils import send_email_password_reset, send_email_deactivate, send_email_verification
 from sduser.forms import SDPasswordChangeForm
 from sduser.backends import construct_token_response_for_user
-from smtplib import SMTPException
-import json
-import ast
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from sduser import swagger
+
+from smtplib import SMTPException
+import json
+import ast
 
 User = get_user_model()
 

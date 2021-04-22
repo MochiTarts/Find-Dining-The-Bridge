@@ -1,13 +1,14 @@
 from django.core.validators import URLValidator, validate_email
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models, IntegrityError
-from rest_framework.exceptions import NotFound
 
 from restaurant_owner.enum import ConsentStatus
 from restaurant.models import PendingRestaurant
 #from subscriber_profile.enum import ConsentStatus
 from utils.validators import check_script_injections, validate_name, validate_url
 from utils.model_util import save_and_clean, edit_model
+
+from rest_framework.exceptions import NotFound
 
 from bson import ObjectId
 import datetime

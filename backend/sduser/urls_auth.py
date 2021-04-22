@@ -1,8 +1,10 @@
 from django.urls import path
+
 from sduser.backends import SDUserSignupView, SDUserCookieTokenObtainPairView, SDUserCookieTokenRefreshView
 from sduser.views import SDUserPasswordResetView, SDUserPasswordResetConfirmView, SDUserPasswordResetCompleteView, SDUserResentVerificationEmailView
-from rest_framework_simplejwt.views import TokenVerifyView
 from oauth2 import views as external_auth_view
+
+from rest_framework_simplejwt.views import TokenVerifyView
 
 urlpatterns = [
     path('signin/', SDUserCookieTokenObtainPairView.as_view(),

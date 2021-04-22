@@ -1,22 +1,22 @@
 from django.test import TestCase
-from rest_framework.test import APIClient, force_authenticate
 from django.contrib.auth import get_user_model
 
-from .models import (
+from utils.model_util import model_to_json, models_to_json
+from restaurant.enum import Status, Prices, Categories, Payment
+from restaurant.models import (
     Restaurant,
     PendingRestaurant,
     RestaurantPost
 )
-from .views import (
+from restaurant.views import (
     AllRestaurantList,
     RestaurantView,
     PendingRestaurant,
     RestaurantDraftView,
     RestaurantForApprovalView
 )
-from .enum import Status, Prices, Categories, Payment
 
-from utils.model_util import model_to_json, models_to_json
+from rest_framework.test import APIClient, force_authenticate
 
 import json
 

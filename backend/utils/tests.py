@@ -1,5 +1,5 @@
 from django.test import TestCase
-from . import geo_controller
+from utils import geo_controller
 
 
 class GeoControllerTest(TestCase):

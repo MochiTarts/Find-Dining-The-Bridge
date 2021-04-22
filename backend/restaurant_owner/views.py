@@ -1,27 +1,26 @@
 from django.utils import timezone
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
+from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
+from utils.permissions import ROPermission
+from restaurant_owner import swagger
+from restaurant_owner.models import RestaurantOwner
+from restaurant.models import PendingRestaurant
 
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
 
-from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
-from utils.permissions import ROPermission
-
-from .models import RestaurantOwner
-from restaurant.models import PendingRestaurant
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 from bson import ObjectId
 import json
-
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from restaurant_owner import swagger
 
 # jsonschema validation schemas for request bodies
 restaurant_owner_signup_schema = {

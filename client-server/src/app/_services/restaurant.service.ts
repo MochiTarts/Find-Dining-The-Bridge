@@ -205,7 +205,7 @@ export class RestaurantService {
    * Deletes the pending dish and approved dish from the database, given the dish's id
    * @param dish_id - id of the dish to be deleted
    */
-  deleteDish(dish_id): void {
+  deleteDish(dish_id): Observable<any> {
     const endpoint = DISH_ENDPOINT + `/pending/${dish_id}/`;
     /*const options = {
       headers: new HttpHeaders({
@@ -213,7 +213,7 @@ export class RestaurantService {
       }),
       body: dishInfo,
     };*/
-    this.http.delete<any>(endpoint).subscribe((data) => { });
+    return this.http.delete<any>(endpoint);
   }
 
 }

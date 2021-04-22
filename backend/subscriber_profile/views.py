@@ -4,19 +4,17 @@ from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
+from subscriber_profile import swagger
+from subscriber_profile.models import SubscriberProfile
+from utils.model_util import model_to_json
+
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
 
-from subscriber_profile.models import SubscriberProfile
-
-from utils.model_util import model_to_json
-
-import json
-
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from subscriber_profile import swagger
 
+import json
 
 class Signup(APIView):
     """ SubscriberProfile signup view """

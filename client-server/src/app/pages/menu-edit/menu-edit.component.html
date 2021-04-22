@@ -3,9 +3,11 @@
   <p>
     Please provide menu items.
   </p>
-  <br />
   <button class="btn saveBtn" (click)="openDishModal(dishModal)">
     ADD NEW DISH
+  </button>
+  <button class="btn saveBtn" (click)="back()">
+    SAVE
   </button>
 </div>
 
@@ -13,7 +15,54 @@
   <ngb-alert *ngIf="showAlert" [dismissible]="false" [type]="'danger'">
     {{ alertMessage }}
   </ngb-alert>
-  <div class="row equal">
+  <div class="dish-container">
+    <div style="width: 100%;" *ngIf="specialDish">
+      <h2 class="category-title">Specials</h2>
+      <div class="row" style="margin: auto;">
+        <div class="col-md-2 dish-card" *ngFor="let dish of specialDish; let i = index">
+          <div class="card-body" style="width: fit-content; margin-bottom: 25px;">
+            <app-dish-card [dish]="dish" style="margin: auto;"></app-dish-card>
+            <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="5px" style="margin-top: 5px;">
+              <button class="icon btn" (click)="openDishModal(dishModal, dish, i)" aria-label="Edit dish" >
+                <fa-icon [icon]="faEdit"></fa-icon>
+              </button>
+              <button
+                class="icon btn"
+                (click)="openDeleteModal(deleteModal, dish, i)"
+                aria-label="Delete dish"
+              >
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="width: 100%;" *ngIf="popularDish">
+      <h2 class="category-title">Popular Dishes</h2>
+      <div class="row" style="margin: auto;">
+        <div class="col-md-2 dish-card" *ngFor="let dish of popularDish; let i = index">
+          <div class="card-body" style="width: fit-content; margin-bottom: 25px;">
+            <app-dish-card [dish]="dish" style="margin: auto;"></app-dish-card>
+            <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="5px" style="margin-top: 5px;">
+              <button class="icon btn" (click)="openDishModal(dishModal, dish, i)" aria-label="Edit dish" >
+                <fa-icon [icon]="faEdit"></fa-icon>
+              </button>
+              <button
+                class="icon btn"
+                (click)="openDeleteModal(deleteModal, dish, i)"
+                aria-label="Delete dish"
+              >
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--<div class="row equal">
     <div *ngFor="let dish of dishes; let i = index" class="col-sm-4 d-flex">
       <div class="col">
         <div class="row">
@@ -40,7 +89,7 @@
     <button class="btn saveBtn" (click)="back()">
       SAVE
     </button>
-  </div>
+  </div>-->
 </div>
 
 <ng-template #dishModal let-modal role="form">
