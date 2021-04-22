@@ -1,6 +1,6 @@
-from django.urls import reverse, path
+from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib import admin, messages
 from django.contrib.admin import DateFieldListFilter
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
@@ -17,10 +17,6 @@ from collections import OrderedDict
 import datetime
 
 
-
-
-
-
 class NLUserAdmin(admin.ModelAdmin):
     """ Admin Model for Newsletter Signup """
     list_filter = ('consent_status', EmailFilter,)
@@ -29,35 +25,11 @@ class NLUserAdmin(admin.ModelAdmin):
     list_display_links = ('first_name', 'last_name', 'email',)
     readonly_fields = ('email',)
 
-    # note that the order of actions will be reversed (in get_actions)
-    actions = ('generate_google_spreadsheet',)
-
-    change_list_template = "admin/change_list_nluser.html"
-
-    def get_urls(self):
-        urls = super().get_urls()
-        action_urls = [
-            path('generate_google_spreadsheet/', self.generate_google_spreadsheet),
-        ]
-        return action_urls + urls
-
     def get_actions(self, request):
         actions = super().get_actions(request)
         # reverse the action list so delete comes latest
         actions = OrderedDict(reversed(list(actions.items())))
         return actions
-
-    def generate_google_spreadsheet(self, request, queryset=None):
-        try:
-            # TODO create_user_emails_sheets_NLUser
-            messages.success(
-                request, 'Google spreadsheet of newsletter user has been generated in the drive of info@finddining.ca')
-        except Exception as e:
-            messages.error(
-                request, 'Google spreadsheet generation failed, please try again or contact Find Dining team for support.')
-        return HttpResponseRedirect("../")
-
-    generate_google_spreadsheet.short_description = 'generate google spreadsheet (of newsletter users)'
 
     # override changelist_view to allow certain action (e.g. generate google sheet) to run without selecting any object
 
@@ -84,7 +56,7 @@ class NLAuditAdmin(admin.ModelAdmin):
     list_display = ('ip', 'count_daily', 'count',
                     'last_signup_time', 'temp_blocked', 'perm_blocked', )
 
-    list_filter = [ IPFilter,'temp_blocked', 'perm_blocked',
+    list_filter = [IPFilter, 'temp_blocked', 'perm_blocked',
                    ('last_signup_time', DateFieldListFilter)]
 
     actions = ('delete_all',)
