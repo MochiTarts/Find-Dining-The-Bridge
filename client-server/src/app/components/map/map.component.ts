@@ -27,6 +27,9 @@ export class MapComponent implements OnInit, OnChanges {
 
   location: string = '';
 
+  GEO_location = { lat: null, lng: null };
+  isQueryLocation: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -41,17 +44,17 @@ export class MapComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    let GEO_location = { lat: null, lng: null };
     if (this.route.snapshot.queryParams.GEO_location) {
-      GEO_location = JSON.parse(this.route.snapshot.queryParams.GEO_location.replace(/\'/g, '"'));
+      this.GEO_location = JSON.parse(this.route.snapshot.queryParams.GEO_location.replace(/\'/g, '"'));
+      this.isQueryLocation = true;
     }
 
     if (this.route.snapshot.queryParams.location) {
       this.location = this.route.snapshot.queryParams.location;
     }
 
-    let centered_lat = GEO_location.lat || this.sc_lat;
-    let centered_lng = GEO_location.lng || this.sc_lng;
+    let centered_lat = this.GEO_location.lat || this.sc_lat;
+    let centered_lng = this.GEO_location.lng || this.sc_lng;
 
     var options = {
       enableHighAccuracy: true,
@@ -81,7 +84,8 @@ export class MapComponent implements OnInit, OnChanges {
     var marker = new mapboxgl.Marker({ color: '#0000FF' })
       .setLngLat([this.sc_lng, this.sc_lat])
       .setPopup(popup)
-      .addTo(this.map);
+      .addTo(this.map)
+      .togglePopup();
 
     popup.on('close', () => {
       marker.getElement().focus();
@@ -170,6 +174,10 @@ export class MapComponent implements OnInit, OnChanges {
           .setLngLat([GEOJson.lng, GEOJson.lat])
           .setPopup(popup)
           .addTo(this.map);
+
+        if (this.isQueryLocation && this.GEO_location.lat == GEOJson.lat && this.GEO_location.lng == GEOJson.lng) {
+          marker.togglePopup();
+        }
 
         this.currentMarkers.push(marker);
 

@@ -1,6 +1,5 @@
-from bson import ObjectId
 from sduser.backends import jwt_decode
-
+from bson import ObjectId
 
 def isObjectId(oid):
     return ObjectId.is_valid(oid)

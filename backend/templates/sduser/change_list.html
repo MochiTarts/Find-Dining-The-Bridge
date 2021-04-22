@@ -1,0 +1,22 @@
+{% extends "admin/change_list.html" %}
+{% load staticfiles %}
+{% block extrahead %}
+{% endblock %}
+{% block content %}
+<form method="POST" action="generate_google_spreadsheet_subscribers/">{% csrf_token %}
+  <div style="float:left;">
+    <input type="submit" value="Generate Google Spreadsheet for Subscribers">
+  </div>
+</form>
+<form method="POST" action="generate_google_spreadsheet_restaurant_owners/">{% csrf_token %}
+  <div style="float:left; padding-left: 5px">
+    <input type="submit" value="Generate Google Spreadsheet for Restaurant Owners">
+  </div>
+</form>
+<form method="POST" action="generate_google_spreadsheet_all/">{% csrf_token %}
+  <div style="float:left; padding-left: 5px">
+    <input type="submit" value="Generate Google Spreadsheet for all Users">
+  </div>
+</form>
+{{ block.super }}
+{% endblock %}

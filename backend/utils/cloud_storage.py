@@ -1,10 +1,12 @@
+from django.conf import settings
 # Module to upload files to the cloud
 from google.oauth2 import service_account
 from google.cloud import storage
+
 import datetime
 import string
 import random
-from django.conf import settings
+
 
 credentials = service_account.Credentials.from_service_account_info({
     "private_key": settings.GOOGLE_ANALYTICS_PRIVATE_KEY,

@@ -120,6 +120,15 @@
 .btn-container {
   flex-direction: column;
   align-items: flex-end;
+  gap: 0;
+}
+
+.buttons {
+  width: 100%;
+}
+
+.btn {
+  width: 100%;
 }
 
 }
@@ -138,12 +147,7 @@
   font-size: 4vw;
 }
 
-.buttons {
-  width: fit-content;
-}
-
 .btn {
-  width: fit-content;
   font-size: 4vw;
 }
 

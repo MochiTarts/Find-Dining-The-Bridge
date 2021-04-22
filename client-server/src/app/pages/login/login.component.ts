@@ -83,7 +83,8 @@ export class LoginComponent implements OnInit {
   isThirdParty: boolean = false;
   timerOn: boolean = false;
   initialTab: string = 'login';
-  
+  radioClicked: boolean = false;
+
   //pattern = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
@@ -112,7 +113,7 @@ export class LoginComponent implements OnInit {
   ngAfterViewInit(): void {
     var tabIndex: number;
     // set the active tab depending on the query param
-    switch (this.initialTab){
+    switch (this.initialTab) {
       case 'signup':
         tabIndex = 1;
         break;
@@ -158,6 +159,7 @@ export class LoginComponent implements OnInit {
                 this.isLoggedIn = true;
                 this.setTimeRemaining(0);
                 this.modalService.dismissAll();
+                this.role = this.tokenStorage.getUser().role;
                 this.loginRedirect();
               }, err => {
                 //console.log(err);
@@ -190,6 +192,7 @@ export class LoginComponent implements OnInit {
                 this.isLoggedIn = true;
                 this.setTimeRemaining(0);
                 this.modalService.dismissAll();
+                this.role = this.tokenStorage.getUser().role;
                 this.loginRedirect();
               }, err => {
                 this.authService.updateLoginStatus(false);
@@ -271,7 +274,21 @@ export class LoginComponent implements OnInit {
         break;
       }
       case 'signup': {
-        const { username, email, password1, password2, role } = this.signupForm;
+        var { username, email, password1, password2, role } = this.signupForm;
+        // set username to be email or the local part of email if not given
+        if (username === null || username.trim() == '') {
+          // max length for username in Django is 150 characters
+          if (email.length > 150) {
+            // local part should be less than 64 characters
+            username = email.split('@')[0];
+            // just in case
+            if (username.length > 150) {
+              username = username.substr(0, 149)
+            }
+          } else {
+            username = email;
+          }
+        }
 
         if (password1 == password2) {
           this.authService.register(username, email, password1, role).subscribe(
@@ -294,9 +311,10 @@ export class LoginComponent implements OnInit {
             },
             // signup failed
             err => {
-              // console.log(err)
+              //console.log(err)
               this.isSignUpFailed = true;
               this.signupErrorMessage = err.error.message;
+
               // manually trigger change detection to have error messages render
               this.ref.detectChanges();
             }
@@ -475,7 +493,7 @@ export class LoginComponent implements OnInit {
           window.location.reload();
         });
       } else {
-        this.router.navigate(['/articles']).then(() => {
+        this.router.navigate(['/media']).then(() => {
           window.location.reload();
         });
       }
@@ -534,6 +552,18 @@ export class LoginComponent implements OnInit {
 
   onStrengthChanged(strength: number) {
     this.strength = strength;
+  }
+
+  onRoleChange(event) {
+    //console.log(event.value);
+    if (!this.radioClicked){
+      // show the password field with the strength info when the one of the radio buttons is selected
+      // (ngIf doesn't work as both elements need to be rendered first)
+      document.getElementById('passwordField').style.display = 'block';
+      document.getElementById('passwordInfo').style.display = 'block';
+    }
+
+    this.radioClicked = true;
   }
 
   // just in case

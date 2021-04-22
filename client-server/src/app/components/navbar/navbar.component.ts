@@ -116,7 +116,11 @@ export class NavbarComponent implements OnInit {
    * Redirects to restaurant page
    */
   restaurant() {
-    this.router.navigate(['/restaurant'])
+    this.router.navigate(['/restaurant']).then(() => {
+      setTimeout(function () {
+        window.location.reload();
+      }, 100)
+    })
   }
 
   /**
@@ -149,10 +153,10 @@ export class NavbarComponent implements OnInit {
   }
 
   /**
-   * Redirects to articles page
+   * Redirects to media page
    */
-  article() {
-    this.router.navigate(['/articles']);
+  media() {
+    this.router.navigate(['/media']);
   }
 
   /**

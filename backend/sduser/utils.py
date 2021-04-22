@@ -91,7 +91,7 @@ def send_email_deactivate_notify(user, request=None, site=None):
 
 def send_email_activate_notify(user, request=None, site=None):
     domain, protocal = get_domain_and_protocal(request, site)
-    subject = 'Account activation for Find Dining'
+    subject = 'Account Activation for Find Dining'
     email_template_name = 'verify_email/activation_notify.html'
     message = render_to_string(email_template_name, {
         'user': user,
@@ -104,7 +104,7 @@ def send_email_activate_notify(user, request=None, site=None):
 
 def send_email_promote_notify(user, request=None, site=None):
     domain, protocal = get_domain_and_protocal(request, site)
-    subject = 'Account promotion for Find Dining'
+    subject = 'Account Promotion for Find Dining'
     email_template_name = 'verify_email/promotion_notify.html'
     message = render_to_string(email_template_name, {
         'user': user,

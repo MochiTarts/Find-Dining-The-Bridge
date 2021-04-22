@@ -3,10 +3,12 @@ from djongo import models
 from django.utils import timezone
 from django.core.validators import URLValidator, validate_email
 from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
-from rest_framework.exceptions import NotFound
 from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 
+from sduser.models import SDUser
+from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json, edit_model
+from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 from utils.validators import (
     check_script_injections,
     validate_url,
@@ -14,9 +16,8 @@ from utils.validators import (
     validate_postal_code,
     validate_profane_content
 )
-from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json, edit_model
-from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 from restaurant.cuisine_dict import load_dict
+from restaurant.utils import send_posts_notify_email
 from restaurant.fields import StringListField, CustomListField
 from restaurant.enum import (
     Prices,
@@ -28,8 +29,8 @@ from restaurant.enum import (
     RestaurantSaveLocations,
     FoodSaveLocations
 )
-from .utils import send_posts_notify_email
-from sduser.models import SDUser
+
+from rest_framework.exceptions import NotFound
 
 import json
 from bson import ObjectId
@@ -161,21 +162,16 @@ class PendingFood(models.Model):
         if not PendingRestaurant.objects.filter(_id=rest_id).exists():
             raise ObjectDoesNotExist("The restaurant does not exist")
 
+        if cls.objects.filter(restaurant_id=rest_id).count() == 12:
+            raise IntegrityError(
+                "Have exceeded the maximum limit of 12 dishes")
+
         if cls.objects.filter(
                 name=food_data['name'],
                 restaurant_id=rest_id,
                 category=food_data['category']).exists():
             raise IntegrityError(
                 "Cannot insert dish, this already exists for this restaurant")
-
-        if PendingFood.objects.filter(
-                restaurant_id=rest_id,
-                category='Popular Dish').count() == 6 and food_data['category'] == 'Popular Dish':
-            raise IntegrityError(
-                "You can only have up to a maximum of 6 popular dishes.")
-        if PendingFood.objects.filter(restaurant_id=rest_id, category='Signature Dish').count(
-        ) == 1 and food_data['category'] == 'Signature Dish':
-            raise IntegrityError("You can only have 1 signature dish.")
 
         dish = cls(
             name=food_data['name'],
@@ -204,40 +200,31 @@ class PendingFood(models.Model):
         :param rest_id: the id of the restaurant the dish belongs to
         :type rest_id: ObjectId str
         :raises: ObjectDoesNotExist when the PendingFood to be edited does not exist
-        :raises: IntegrityError when there are business logic violations
         :return: updated PendingFood object
         :rtype: :class: `PendingFood`
         """
-        dish = PendingFood.objects.filter(_id=dish_id).first()
+        dish = cls.objects.filter(_id=dish_id).first()
         if not dish:
             raise ObjectDoesNotExist(
                 "The dish with this _id: " + dish_id + " does not exist")
         restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
+        if not restaurant:
+            raise ObjectDoesNotExist(
+                "The restaurant with _id: " + rest_id + " does not exist")
         if cls.should_add_category(food_data, dish.category, restaurant):
-            cls.add_cateogory(dish.category, restaurant)
+            cls.add_category(dish.category, restaurant)
+
+        check_dish = cls.objects.filter(
+            name=food_data['name'], category=food_data['category'], restaurant_id=rest_id)
+        if check_dish.exists() and dish_id != str(check_dish.first()._id):
+            raise IntegrityError(
+                "You already have a dish named "+food_data['name']+" in the "+food_data['category']+" category")
 
         restaurant_editable = ["status"]
         restaurant_editable_values = {'status': Status.In_Progress.value}
 
-        if 'category' in food_data and PendingFood.objects.filter(
+        if 'category' in food_data and cls.objects.filter(
                 restaurant_id=rest_id, category=food_data['category']).exists():
-            if (food_data['category'] == 'Popular Dish' and PendingFood.objects.filter(
-                    restaurant_id=rest_id, category='Popular Dish').count() == 6):
-                if ObjectId(dish_id) not in list(
-                    PendingFood.objects.filter(
-                        restaurant_id=rest_id,
-                        category='Popular Dish').values_list(
-                        '_id',
-                        flat=True)):
-                    raise IntegrityError(
-                        "You can only have up to a maximum of 6 popular dishes.")
-            if (food_data['category'] == 'Signature Dish' and PendingFood.objects.filter(
-                    restaurant_id=rest_id, category='Signature Dish').count() == 1):
-                if dish_id != str(
-                    PendingFood.objects.filter(
-                        restaurant_id=rest_id,
-                        category='Signature Dish').first()._id):
-                    raise IntegrityError("You can only have 1 signature dish.")
             restaurant_editable.append("categories")
 
         food_data["status"] = Status.Pending.value
@@ -246,42 +233,38 @@ class PendingFood(models.Model):
         dish = save_and_clean(dish, dish_editable)
 
         if 'categories' in restaurant_editable:
-            restaurant_editable_values['categories'] = PendingFood.get_all_categories(
+            restaurant_editable_values['categories'] = cls.get_all_categories(
                 restaurant._id)
         edit_model(restaurant, restaurant_editable_values, restaurant_editable)
         save_and_clean(restaurant)
         return dish
 
     @classmethod
-    def remove_dish(cls, food_data, rest_id):
+    def remove_dish(cls, dish_id, rest_id):
         """ Deletes a dish and its approved version (if it exists) from
         the database, given data about it. Updates the categories of its associated
         restaurant given the rest_id if necessary
 
-        :param food_data: the name and category of the dish
-        :type food_data: dict
         :param rest_id: the id of the associated restaurant
         :type rest_id: ObjectId str
         :raises ObjectDoesNotExist: when the PendingFood does not exist
         :return: the deleted dish record
         :rtype: :class: `PendingFood`
         """
-        food = PendingFood.objects.filter(
-            name=food_data["name"],
-            category=food_data['category'],
-            restaurant_id=rest_id)
+        food = cls.objects.filter(_id=dish_id)
         if not food.first():
             raise ObjectDoesNotExist("The food to be deleted does not exist")
         deleted_food = food.first()
+        delete(deleted_food.picture)
         food.delete()
 
-        Food.objects.filter(
-            name=food_data['name'],
-            category=food_data['category'],
-            restaurant_id=rest_id).delete()
+        approved_food = Food.objects.filter(_id=dish_id)
+        if approved_food.first():
+            delete(approved_food.first().picture)
+        approved_food.delete()
 
         restaurant = PendingRestaurant.objects.filter(_id=rest_id).first()
-        restaurant_categories = PendingFood.get_all_categories(rest_id)
+        restaurant_categories = cls.get_all_categories(rest_id)
         restaurant_editable = ['categories']
         edit_model(restaurant,
                    {'categories': restaurant_categories},
@@ -361,7 +344,7 @@ class PendingFood(models.Model):
         return cls.new_category(category, restaurant)
 
     @classmethod
-    def add_cateogory(cls, category, restaurant):
+    def add_category(cls, category, restaurant):
         """
         add new category to restaurant
         :param category:
@@ -637,6 +620,8 @@ class PendingRestaurant(models.Model):
         if cls.objects.filter(email=restaurant_data['email']).exists():
             raise IntegrityError(
                 'Cannot insert pending restaurant object, an object with this email already exists')
+        if restaurant_data['years'] == 0:
+            restaurant_data['years'] = 1
         restaurant = cls(
             **restaurant_data
         )
@@ -689,6 +674,8 @@ class PendingRestaurant(models.Model):
             raise ObjectDoesNotExist(
                 'restaurant with owner user id ' + str(user_id) + ' does not exist')
 
+        if 'years' in body and body['years'] == 0:
+            body['years'] = 1
         body["status"] = Status.In_Progress.value
         body["modified_time"] = timezone.now()
         edit_model(restaurant, body, restaurant_editable)
@@ -719,6 +706,8 @@ class PendingRestaurant(models.Model):
             raise ObjectDoesNotExist(
                 'restaurant with owner user id ' + str(user_id) + ' does not exist')
 
+        if 'years' in body and body['years'] == 0:
+            body['years'] = 1
         body["status"] = Status.Pending.value
         body["modified_time"] = timezone.now()
         edit_model(restaurant, body, restaurant_editable)

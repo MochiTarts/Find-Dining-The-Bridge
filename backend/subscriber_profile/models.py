@@ -2,11 +2,11 @@ from django.db import models
 from django.forms import model_to_dict
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
+
 from utils.common import save_and_clean
 from utils.validators import check_script_injections, validate_postal_code, validate_name
 from utils.geo_controller import geocode
-
-from .enum import ConsentStatus
+from subscriber_profile.enum import ConsentStatus
 
 import datetime
 

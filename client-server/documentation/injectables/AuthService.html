@@ -111,6 +111,9 @@
                                 <a href="#register">register</a>
                             </li>
                             <li>
+                                <a href="#resendVerificationEmail">resendVerificationEmail</a>
+                            </li>
+                            <li>
                                 <a href="#resetPasswordEmail">resetPasswordEmail</a>
                             </li>
                             <li>
@@ -219,8 +222,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="155"
-                            class="link-to-prism">src/app/_services/auth.service.ts:155</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="170"
+                            class="link-to-prism">src/app/_services/auth.service.ts:170</a></div>
                 </td>
             </tr>
 
@@ -228,7 +231,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Handles authentication with facebook oauth2 on the Django backend
-PLEASE UPDATE DOCSTRING</p>
+(exchange tokens from facebook for tokens for our site)</p>
 </div>
 
                     <div class="io-description">
@@ -256,7 +259,7 @@ PLEASE UPDATE DOCSTRING</p>
 
                                     <td>
                                         <ul>
-<li>?</li>
+<li>facebook&#39;s user id</li>
 </ul>
 
                                     </td>
@@ -274,7 +277,7 @@ PLEASE UPDATE DOCSTRING</p>
 
                                     <td>
                                         <ul>
-<li>? </li>
+<li>facebook&#39;s access token</li>
 </ul>
 
                                     </td>
@@ -336,8 +339,8 @@ PLEASE UPDATE DOCSTRING</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="142"
-                            class="link-to-prism">src/app/_services/auth.service.ts:142</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="157"
+                            class="link-to-prism">src/app/_services/auth.service.ts:157</a></div>
                 </td>
             </tr>
 
@@ -345,7 +348,7 @@ PLEASE UPDATE DOCSTRING</p>
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Handles authentication with google oauth2 on the Django backend
-PLEASE UPDATE DOCSTRING</p>
+(exchange tokens from google for tokens for our site)</p>
 </div>
 
                     <div class="io-description">
@@ -373,7 +376,7 @@ PLEASE UPDATE DOCSTRING</p>
 
                                     <td>
                                         <ul>
-<li>?</li>
+<li>google&#39;s oauth2_token</li>
 </ul>
 
                                     </td>
@@ -391,7 +394,7 @@ PLEASE UPDATE DOCSTRING</p>
 
                                     <td>
                                         <ul>
-<li>?</li>
+<li>google&#39;s access Token</li>
 </ul>
 
                                     </td>
@@ -508,7 +511,7 @@ PLEASE UPDATE DOCSTRING</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Performs action to log a user in</p>
+                    <div class="io-description"><p>Performs action to log a user in while tracking the user&#39;s ip for rate limit/abuse prevention</p>
 </div>
 
                     <div class="io-description">
@@ -598,15 +601,16 @@ PLEASE UPDATE DOCSTRING</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="123"
-                            class="link-to-prism">src/app/_services/auth.service.ts:123</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="138"
+                            class="link-to-prism">src/app/_services/auth.service.ts:138</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Retrieves a new token from Django backend</p>
+                    <div class="io-description"><p>Retrieves a new access token from Django backend
+(the refresh token in the cookie is also updated)</p>
 </div>
 
                     <div>
@@ -761,6 +765,86 @@ PLEASE UPDATE DOCSTRING</p>
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="resendVerificationEmail"></a>
+                    <span class="name">
+                        <b>
+                            resendVerificationEmail
+                        </b>
+                        <a href="#resendVerificationEmail"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resendVerificationEmail(email: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="113"
+                            class="link-to-prism">src/app/_services/auth.service.ts:113</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Performs action for resending verification email</p>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Description</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>email</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                    <td>
+                                        <ul>
+<li>user&#39;s email</li>
+</ul>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        <p>the Observable from resend verification email request</p>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="resetPasswordEmail"></a>
                     <span class="name">
                         <b>
@@ -826,7 +910,7 @@ PLEASE UPDATE DOCSTRING</p>
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -938,15 +1022,16 @@ PLEASE UPDATE DOCSTRING</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="113"
-                            class="link-to-prism">src/app/_services/auth.service.ts:113</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="126"
+                            class="link-to-prism">src/app/_services/auth.service.ts:126</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>Verifies the user&#39;s access token</p>
+                    <div class="io-description"><p>Verifies the user&#39;s access token
+Note: only suppose to be used (for user) to verify token, not validate</p>
 </div>
 
                     <div class="io-description">
@@ -1113,7 +1198,7 @@ export class AuthService {
   }
 
   /**
-   * Performs action to log a user in
+   * Performs action to log a user in while tracking the user&#x27;s ip for rate limit/abuse prevention
    * 
    * @param username - user&#x27;s username or email
    * @param password - user&#x27;s password
@@ -1167,14 +1252,27 @@ export class AuthService {
    * @param email - user&#x27;s email
    * @returns the Observable from password reset request
    */
-  resetPasswordEmail(email: string){
+  resetPasswordEmail(email: string): Observable&lt;any&gt;{
     return this.http.post(AUTH_API + &#x27;password_reset/&#x27;, JSON.stringify({
       email
     }), httpOptions);
   }
 
   /**
+   * Performs action for resending verification email
+   * 
+   * @param email - user&#x27;s email
+   * @returns the Observable from resend verification email request
+   */
+  resendVerificationEmail(email: string): Observable&lt;any&gt;{
+    return this.http.post(AUTH_API + &#x27;resend_verification_email/&#x27;, JSON.stringify({
+      email
+    }), httpOptions);
+  }
+
+  /**
    * Verifies the user&#x27;s access token
+   * Note: only suppose to be used (for user) to verify token, not validate
    * 
    * @param token - the user&#x27;s access token
    * @returns the Observable from verifying a user&#x27;s token
@@ -1186,7 +1284,9 @@ export class AuthService {
   }
 
   /**
-   * Retrieves a new token from Django backend
+   * Retrieves a new access token from Django backend
+   * (the refresh token in the cookie is also updated)
+   * 
    * @returns the Observable from the refresh token request
    */
   refreshToken(): Observable&lt;any&gt; {
@@ -1201,10 +1301,10 @@ export class AuthService {
 
   /**
    * Handles authentication with google oauth2 on the Django backend
-   * PLEASE UPDATE DOCSTRING
+   * (exchange tokens from google for tokens for our site)
    * 
-   * @param idToken - ?
-   * @param authToken - ?
+   * @param idToken - google&#x27;s oauth2_token
+   * @param authToken - google&#x27;s access Token
    * @param role - the user&#x27;s role
    * @returns the Observable from the google authentication request
    */
@@ -1214,10 +1314,10 @@ export class AuthService {
 
   /**
    * Handles authentication with facebook oauth2 on the Django backend
-   * PLEASE UPDATE DOCSTRING
+   * (exchange tokens from facebook for tokens for our site)
    * 
-   * @param id - ?
-   * @param authToken - ? 
+   * @param id - facebook&#x27;s user id
+   * @param authToken - facebook&#x27;s access token
    * @param role - the user&#x27;s role
    * @returns the Observable from the facebook authentication request
    */

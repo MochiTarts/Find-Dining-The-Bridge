@@ -171,4 +171,8 @@ br {
   @media screen and (max-width: 1186px) {
     margin: 7px 0;
   }
+
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 }

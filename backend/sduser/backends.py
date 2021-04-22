@@ -13,7 +13,6 @@ from django.db.models import Q
 from django import forms
 
 from sduser.validators import validate_signup_user
-from sduser.forms import SDUserCreateForm
 
 from smtplib import SMTPException
 
@@ -88,6 +87,16 @@ class SDUserSignupView(APIView):
         if (len(invalid) == 0):
             try:
                 if UserModel.objects.filter(username__iexact=username).exists():
+                    # this means it is set automatically by us but someone has registered a usrename with this person's email...
+                    if username == email:
+                        username = email.split('@')[0]
+                        # this means the local part is also used... best to ask the user to provide a unique one
+                        if UserModel.objects.filter(username__iexact=username).exists():
+                            return JsonResponse({'message': 'Fail to auto-generate your username, this likely means someone else has used your email as the username. Please provide a unique username in the form.'}, status=400)
+                        else:
+                            # update the username for user object generation purpose
+                            user['username'] = username
+                            return create_disable_user_and_send_verification_email(user, password, request)
                     return JsonResponse({'message': 'username already exists'}, status=400)
                 elif UserModel.objects.filter(email__iexact=email).exists():
                     return JsonResponse({'message': 'email already exists'}, status=400)
@@ -97,7 +106,7 @@ class SDUserSignupView(APIView):
                 print(str(e))
                 return JsonResponse({'message': 'unable to create user'}, status=400)
 
-        return JsonResponse({'invalid': invalid, 'message': 'Please make sure all fields are valid!'}, status=400)
+        return JsonResponse({'invalid': invalid, 'message': 'Please correct the following field: ' + ', '.join(invalid)}, status=400)
 
 
 def create_disable_user_and_send_verification_email(user, password, request):
@@ -106,31 +115,24 @@ def create_disable_user_and_send_verification_email(user, password, request):
 
     returns a response indicating whether the operation is successful
     """
-    form = SDUserCreateForm(data=user)
 
-    if form.is_valid():
+    # create Admin user if the email belongs to the Admin
+    if user['email'] == settings.ADMIN_EMAIL:
+        UserModel.objects.create_superuser(
+            username=user['username'], email=user['email'], password=user['password'], role=user['role'], )
+        return JsonResponse({'message': "An admin account has been created. You can now log in with the registered credentials."})
+    user = UserModel.objects.create_user(
+        username=user['username'], email=user['email'], password=user['password'], role=user['role'])
+    user.is_active = False
+    user.save()
 
-        # create Admin user if the email belongs to the Admin
-        if user['email'] == settings.ADMIN_EMAIL:
-            UserModel.objects.create_superuser(
-                username=user['username'], email=user['email'], password=user['password'], role=user['role'], )
-            return JsonResponse({'message': "An admin account has been created. You can now log in with the registered credentials."})
-        user = UserModel.objects.create_user(
-            username=user['username'], email=user['email'], password=user['password'], role=user['role'])
-        user.is_active = False
-        user.save()
-
-        try:
-            send_email_verification(user, request)
-            # send a signal to frontend to ask them to verify email before log in
-            return JsonResponse({'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
-        except (BadHeaderError, SMTPException):
-            user.delete()
-            return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact Find Dining support.'}, status=503)
-
-    # this should never happen
-    else:
-        return JsonResponse({'message': 'invalid form'}, status=400)
+    try:
+        send_email_verification(user, request)
+        # send a signal to frontend to ask them to verify email before log in
+        return JsonResponse({'message': "verification email has been sent. Please activate your account before sign in. If you don't receive an email, please check your spam folder or contact us from your email address and we can verify it for you."})
+    except (BadHeaderError, SMTPException):
+        user.delete()
+        return JsonResponse({'message': 'there is some problem in the process of sending verification email. Please retry later or contact Find Dining support.'}, status=503)
 
 
 def check_user_status(user):

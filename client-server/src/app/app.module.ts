@@ -24,6 +24,7 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
@@ -58,6 +59,7 @@ import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ResourcesComponent } from './pages/resources/resources.component';
 import { NewsletterSignupComponent } from './pages/newsletter-signup/newsletter-signup.component';
 import { ThankyouPageComponent } from './pages/thankyou-page/thankyou-page.component';
+import { ContactUsComponent } from './pages/contact-us/contact-us.component';
 
 import { IvyCarouselComponent } from './components/carousel/carousel.component';
 import { CarouselWithThumbnailComponent } from './components/carousel-with-thumbnail/carousel-with-thumbnail.component';
@@ -128,6 +130,7 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     ResourcesComponent,
     NewsletterSignupComponent,
     ThankyouPageComponent,
+    ContactUsComponent,
   ],
   imports: [
     BrowserModule,
@@ -145,6 +148,7 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     MatTabsModule,
     MatInputModule,
     MatSelectModule,
+    MatRadioModule,
     MatFormFieldModule,
     MatProgressBarModule,
     MatDividerModule,

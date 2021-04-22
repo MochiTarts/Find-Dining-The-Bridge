@@ -1,11 +1,11 @@
+from django.db import IntegrityError
+from django.http import JsonResponse
+from django.core.exceptions import MultipleObjectsReturned, ValidationError, ObjectDoesNotExist
+
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import ErrorDetail
-from django.http import JsonResponse
-
-from django.core.exceptions import MultipleObjectsReturned, ValidationError, ObjectDoesNotExist
 from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied, MethodNotAllowed, ParseError
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
-from django.db import IntegrityError
 
 import jsonschema
 import json

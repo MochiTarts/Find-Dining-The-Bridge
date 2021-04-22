@@ -2,15 +2,14 @@ from django.utils import timezone
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, QueryDict
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import IntegrityError
+
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
 from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from jsonschema import validate
-
+from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, FoodMediaForm
 from restaurant.enum import Status, MediaType, RestaurantSaveLocations, FoodSaveLocations
 from restaurant.models import (
     Food,
@@ -20,13 +19,11 @@ from restaurant.models import (
     UserFavRestrs,
     RestaurantPost
 )
-from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, FoodMediaForm
-
 from google.analytics import get_access_token, get_analytics_data
-
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
 
+from jsonschema import validate
 from bson import ObjectId
 import ast
 import json
@@ -60,15 +57,6 @@ food_edit_schema = {
         "specials": {"type": "string"},
         "category": {"type": "string"}
     },
-    "additionalProperties": False
-}
-
-food_delete_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "category": {"type": "string"}
-    },
-    "required": ["name", "category"],
     "additionalProperties": False
 }
 
@@ -349,10 +337,9 @@ class PendingDishModifyDeleteView(APIView):
         dish = PendingFood.edit_dish(dish_id, body, rest_id)
         return JsonResponse(model_to_json(dish))
 
-    @swagger_auto_schema(request_body=swagger.PendingFoodDelete,
-                         responses=swagger.dish_pending_dish_id_delete_response,
+    @swagger_auto_schema(responses=swagger.dish_pending_dish_id_delete_response,
                          operation_id="DELETE /dish/pending/{dish_id}/")
-    def delete(self, request):
+    def delete(self, request, dish_id):
         """ Deletes dish from database """
         user = request.user
         if not user:
@@ -361,8 +348,6 @@ class PendingDishModifyDeleteView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=food_delete_schema)
-        body = request.data
         restaurant = PendingRestaurant.objects.filter(
             owner_user_id=user_id).first()
         if not restaurant:
@@ -370,7 +355,7 @@ class PendingDishModifyDeleteView(APIView):
                 "The restaurant with owner_user_id: " +
                 str(user_id) +
                 " does not exist")
-        deleted_dish = PendingFood.remove_dish(body, restaurant._id)
+        deleted_dish = PendingFood.remove_dish(dish_id, restaurant._id)
         return JsonResponse(model_to_json(deleted_dish))
 
 

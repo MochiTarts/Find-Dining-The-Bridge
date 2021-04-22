@@ -69,7 +69,7 @@ export class NewsArticlesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle("Articles | Find Dining Scarborough");
+    this.titleService.setTitle("Media | Find Dining Scarborough");
     AOS.init({
       delay: 300,
       duration: 1500,

@@ -14,6 +14,7 @@ import { Title } from '@angular/platform-browser';
 export class NewsletterComponent implements OnInit {
   userId: string = '';
   role: string = '';
+  profileId: string = '';
   subscribed: boolean = false;
 
   constructor(
@@ -30,6 +31,18 @@ export class NewsletterComponent implements OnInit {
     const user = this.tokenStorageService.getUser();
     this.userId = user.user_id;
     this.role = user.role;
+    this.profileId = user.profile_id;
+
+    if (!this.profileId) {
+      if (this.role == 'BU') {
+        // Will open profile modal on home page
+        this.router.navigate(['/']);
+        return;
+      } else {
+        this.router.navigate(['/restaurant-setup']);
+        return;
+      }
+    }
 
     this.subscribed = false;
 

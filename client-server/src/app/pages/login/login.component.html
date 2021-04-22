@@ -93,24 +93,33 @@
                   {{ signupErrorMessage }}
                 </div>
               </div>
-              <div fxLayout="column" fxLayoutAlign="center">
-                <mat-form-field>
-                  <mat-label>Username</mat-label>
-                  <input matInput required type="text" name="username" [(ngModel)]="signupForm.username" minlength="3" maxlength="20" #username="ngModel" autocomplete="Username" >
-                  <mat-icon matSuffix>person</mat-icon>
-                  <mat-error *ngIf="username.errors && f.submitted">Username is required</mat-error>
-                  <mat-error *ngIf="username.errors && username.errors.maxlength">Username must be at most 20 characters</mat-error>
-                </mat-form-field>
 
-                <mat-form-field>
+              <div fxLayout="column" fxLayoutAlign="center">
+
+                <mat-radio-group aria-label="Select an account type" name="role" [(ngModel)]="signupForm.role" required #role="ngModel" (change)="onRoleChange($event)">
+                  <mat-radio-button value="BU" style="margin-right: 40px; margin-top: 25px; margin-bottom: 20px;">User Sign Up</mat-radio-button>
+                  <mat-radio-button value="RO">Restaurant Owner Sign Up</mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="role.errors && role.errors.required && f.submitted">Account type is required</mat-error>
+
+                <mat-form-field *ngIf="role.value">
+                  <mat-label>Username (can be used for login)</mat-label>
+                  <input matInput type="text" name="username" [(ngModel)]="signupForm.username" maxlength="150" #username="ngModel" autocomplete="Username" pattern="^[\S^±£$§¡€¢§¶•ªº«]+$" >
+                  <mat-icon matSuffix>person</mat-icon>
+                  <mat-error *ngIf="username.errors && username.errors.maxlength">Username must be at most 150 characters</mat-error>
+                  <mat-error *ngIf="username.errors && username.errors.pattern">Username should not contain spaces or special characters </mat-error>
+                </mat-form-field>
+                
+                <mat-form-field *ngIf="role.value">
                   <mat-label>Email</mat-label>
-                  <input matInput name="email" [(ngModel)]="signupForm.email" required email #email="ngModel" autocomplete="email" />
+                  <input matInput name="email" [(ngModel)]="signupForm.email" required email #email="ngModel" maxlength="254" autocomplete="email" />
                   <mat-icon matSuffix>email</mat-icon>
                   <mat-error *ngIf="email.errors && f.submitted">Email is required</mat-error>
                   <mat-error *ngIf="email.errors && email.errors.email">Email must be a valid email address</mat-error>
+                  <mat-error *ngIf="email.errors && email.errors.maxlength">Email must be at most 254 characters</mat-error>
                 </mat-form-field>
 
-                <mat-form-field>
+                <mat-form-field style="display: none;" id="passwordField">
                   <mat-label>Password</mat-label>
                   <input matInput required #password [type]="hide ? 'password' : 'text'" name="password1" [(ngModel)]="signupForm.password1" minlength="8" #password1="ngModel"
                   autocomplete="Password">
@@ -126,28 +135,20 @@
                   {{password1.value.length}} / {{passwordComponent.max}}
                 </mat-hint-->
                 <!--@angular-material-extensions/password-strength's main component-->
+                <div style="display: none;" id="passwordInfo">
                 <mat-password-strength #passwordComponent (onStrengthChanged)="onStrengthChanged($event)"
-                  [password]="password1.value">
+                  [password]="password1.value" >
                 </mat-password-strength>
                 <!--Password's strength info-->
                 <mat-password-strength-info *ngIf="showDetails && strength < 100" [passwordComponent]="passwordComponent">
                 </mat-password-strength-info>
+                </div>
 
-                <mat-form-field>
+                <mat-form-field *ngIf="role.value">
                   <mat-label>Confirm Password</mat-label>
                   <input matInput type="password" name="password-confirm" [(ngModel)]="signupForm.password2" required minlength="8" #password2="ngModel" autocomplete="Confirm Password" />
                   <mat-error *ngIf="password2.errors && password2.errors.required && f.submitted">Password confirmation is required</mat-error>
                   <mat-error *ngIf="password2.errors && password2.errors.minlength && f.submitted">Password must be at least 8 characters</mat-error>
-                </mat-form-field>
-
-                <mat-form-field>
-                  <mat-label>Type of Account</mat-label>
-                  <mat-select name="role" [(ngModel)]="signupForm.role" required #role="ngModel">
-                    <mat-option value="role" selected disabled>Role</mat-option>
-                    <mat-option value="BU">I want to Find Dining</mat-option>
-                    <mat-option value="RO">I am a Restaurant Owner</mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="role.errors && role.errors.required && f.submitted">Role is required</mat-error>
                 </mat-form-field>
 
                 <button
@@ -155,7 +156,7 @@
                 style="margin-bottom: 10px;"
                 color="seconary"
                 type="button"
-                *ngIf="recaptchaForm.invalid"
+                *ngIf="role.value && recaptchaForm.invalid"
                 mat-button>
                 <mat-icon matSuffix>check_box_outline_blank</mat-icon>
                 <span style="margin-left: 7px; position: relative; top: 1px;">I am a human</span>
@@ -163,6 +164,7 @@
                 </button>
 
                 <button
+                    *ngIf="role.value"
                     style="margin-top: 10px;"
                     color="primary"
                     [disabled]="recaptchaForm.invalid"
