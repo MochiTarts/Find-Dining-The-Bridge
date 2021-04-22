@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
-from .enum import Roles
+from sduser.enum import Roles
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
 from rest_framework.response import Response
+from rest_framework import serializers
 
 User = get_user_model()
 

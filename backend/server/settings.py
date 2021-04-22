@@ -18,6 +18,7 @@ from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Used for automatically setting user registered with this email an admin on signup
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL')
 
 # Quick-start development settings - unsuitable for production
@@ -293,11 +294,6 @@ if len(sys.argv) > 2 and sys.argv[1] == 'runserver':
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-# Try uncommenting STATICFILES_DIRS and commenting out STATIC_ROOT to read static files in DEV
-# STATICFILES_DIRS = [
-#   os.path.join(BASE_DIR, "static/"),
-# ]
-
 
 #SESSION_COOKIE_DOMAIN = '.localhost'
 
@@ -310,7 +306,7 @@ CACHES = {
     }
 }
 '''
-# cache in db
+# cache in db (doesn't work with current version of djongo and sqlparser mainly because it is not compatible with aggregate functions)
 '''
 CACHES = {
     'default': {
@@ -319,7 +315,7 @@ CACHES = {
     }
 }
 '''
-
+# resort to use file cache as it doesn't require translation of aggregate functions from SQL to NoSQL
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',

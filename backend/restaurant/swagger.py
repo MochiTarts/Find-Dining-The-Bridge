@@ -1,9 +1,10 @@
-from .models import PendingRestaurant, Restaurant, UserFavRestrs, PendingFood
-from rest_framework import serializers
-from .enum import Prices, Payment
+from restaurant.models import PendingRestaurant, Restaurant, UserFavRestrs, PendingFood
+from restaurant.enum import Prices, Payment
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+from rest_framework import serializers
 from rest_framework.response import Response
 
 # Dish APIs sample requests and responses

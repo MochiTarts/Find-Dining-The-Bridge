@@ -1,8 +1,9 @@
-from .encoder import BSONEncoder
 from django.forms import model_to_dict
-import json
+
+from utils.encoder import BSONEncoder
 from utils.geo_controller import geocode
 
+import json
 
 def save_and_clean(model, updated_fields=None):
     """

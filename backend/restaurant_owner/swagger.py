@@ -1,11 +1,11 @@
-from .models import RestaurantOwner
-from rest_framework import serializers
-from .enum import ConsentStatus
+from restaurant_owner.models import RestaurantOwner
+from restaurant_owner.enum import ConsentStatus
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.response import Response
 
+from rest_framework.response import Response
+from rest_framework import serializers
 
 class RestaurantOwnerInsert(serializers.Serializer):
     restaurant_id = serializers.CharField(max_length=24)

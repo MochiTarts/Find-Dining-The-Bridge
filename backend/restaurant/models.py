@@ -3,10 +3,12 @@ from djongo import models
 from django.utils import timezone
 from django.core.validators import URLValidator, validate_email
 from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
-from rest_framework.exceptions import NotFound
 from django.db import IntegrityError
 from django.contrib.auth import get_user_model
 
+from sduser.models import SDUser
+from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json, edit_model
+from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 from utils.validators import (
     check_script_injections,
     validate_url,
@@ -14,9 +16,8 @@ from utils.validators import (
     validate_postal_code,
     validate_profane_content
 )
-from utils.model_util import save_and_clean, update_model_geo, model_refresh, model_to_json, edit_model
-from utils.cloud_storage import upload, delete, IMAGE, VIDEO, DEV_BUCKET
 from restaurant.cuisine_dict import load_dict
+from restaurant.utils import send_posts_notify_email
 from restaurant.fields import StringListField, CustomListField
 from restaurant.enum import (
     Prices,
@@ -28,8 +29,8 @@ from restaurant.enum import (
     RestaurantSaveLocations,
     FoodSaveLocations
 )
-from .utils import send_posts_notify_email
-from sduser.models import SDUser
+
+from rest_framework.exceptions import NotFound
 
 import json
 from bson import ObjectId

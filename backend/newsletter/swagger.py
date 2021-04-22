@@ -1,10 +1,12 @@
-from .models import NLUser
-from rest_framework import serializers
+from newsletter.models import NLUser
 from subscriber_profile.enum import ConsentStatus
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+from rest_framework import serializers
 from rest_framework.response import Response
+
 
 class NLUserInsert(serializers.Serializer):
     first_name = serializers.CharField()
@@ -14,6 +16,7 @@ class NLUserInsert(serializers.Serializer):
 
     class Meta:
         ref_name = None
+
 
 nluser_signup_post_response = {
     "200": openapi.Response(

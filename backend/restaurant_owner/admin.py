@@ -6,7 +6,6 @@ from django.utils.html import format_html
 from restaurant_owner.models import RestaurantOwner
 from restaurant.models import PendingRestaurant
 from sduser.models import SDUser
-
 from utils.common import isObjectId
 from utils.filters import UserIDFilter, RestaurantIDFilter
 
