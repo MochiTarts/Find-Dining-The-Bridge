@@ -7,19 +7,13 @@
     <div class="card infoCard">
       <div class="row" id="info-row">
         <div class="logo col-12 col-md-4" id="info-col1">
-          <img
-            src="{{ restaurantDetails.logo_url }}"
-            alt="logo"
-            class="logo-img"
-          />
+          <img src="{{ restaurantDetails.logo_url }}" alt="logo" class="logo-img" />
         </div>
 
-        <div class="col-12 col-md-8" id="info-col2">
-          <h2 class="restaurant-name">
-            {{ restaurantDetails.name | titlecase }}
-          </h2>
-          <div class="row">
-            <div class="col-md-6">
+        <div class="col">
+          <h2 class="restaurant-name">{{ restaurantDetails.name | titlecase }}</h2>
+          <div class="row flex-nowrap">
+            <div class="col-md-6 details1">
               <p>
                 <span *ngIf="cuisineList">{{ cuisineList | titlecase }}</span><span *ngIf="pricepoint"> - {{ pricepoint | titlecase }}</span>
               </p>
@@ -36,105 +30,56 @@
                 {{ restaurantDetails.years }} year(s) in business
               </p>
             </div>
-            <div class="col-md-6">
-              <div class="row info-item-child">
+
+            <div class="col-md-6 details1">
+              <p fxLayout="row" fxLayoutAlign="none center">
                 <fa-icon class="contact-icon" [icon]="faMapMarker"></fa-icon>
-                <p>
-                  <a
-                    [routerLink]="['/all-listings']"
-                    [queryParams]="{GEO_location: restaurantDetails.GEO_location}"
-                    target="_blank"
-                    placement="bottom"
-                    ngbTooltip="Visit Restaurant Page"
-                    style="color: black;"
-                  >
-                    {{ restaurantDetails.address }} <br> Scarborough, ON {{ restaurantDetails.postalCode }}
-                  </a>
-                </p>
+                <a
+                  [routerLink]="['/all-listings']"
+                  [queryParams]="{GEO_location: restaurantDetails.GEO_location}"
+                  target="_blank"
+                  placement="bottom"
+                  ngbTooltip="Visit Restaurant Page"
+                  style="color: black;"
+                >
+                  {{ restaurantDetails.address }} <br> Scarborough, ON {{ restaurantDetails.postalCode }}
+                </a>
+              </p>
 
-              </div>
-              <div class="row info-item-child">
+              <p fxLayout="row" fxLayoutAlign="none center">
                 <fa-icon class="contact-icon" [icon]="faPhone"></fa-icon>
-                <div>
-                  <p>
-                    {{ displayed_phone }}
-                  </p>
-                </div>
-              </div>
-              <div class="row info-item-child" style="margin-top: 10px;">
-                <fa-icon class="contact-icon" [icon]="faMail"></fa-icon>
-                <div>
-                  <p>
-                    {{ restaurantDetails.email }}
-                  </p>
-                </div>
-              </div>
+                <a>
+                  {{ displayed_phone }}
+                </a>
+              </p>
 
-              <div class="row info-item-child" style="margin-top: 10px;">
-                <a
-                  *ngIf="restaurantDetails.web_url != ''"
-                  href="{{ restaurantDetails.web_url }}"
-                  target="_blank"
-                  aria-label="View Restaurant Website"
-                >
-                  <fa-icon class="contact-icon" [icon]="faShareAlt" placement="bottom" ngbTooltip="View our Website"></fa-icon>
+              <p fxLayout="row" fxLayoutAlign="none center">
+                <fa-icon class="contact-icon" [icon]="faMail"></fa-icon>
+                <a>
+                  {{ restaurantDetails.email }}
                 </a>
-                <a
-                  *ngIf="restaurantDetails.facebook != ''"
-                  href="{{ restaurantDetails.facebook }}"
-                  target="_blank"
-                  aria-label="View Restaurant Facebook"
-                >
-                  <fa-icon class="contact-icon" [icon]="faFacebookF" placement="bottom" ngbTooltip="View our Facebook"></fa-icon>
-                </a>
-                <a
-                  *ngIf="restaurantDetails.twitter != ''"
-                  href="{{ restaurantDetails.twitter }}"
-                  target="_blank"
-                  aria-label="View Restaurant Twitter"
-                >
-                  <fa-icon class="contact-icon" [icon]="faTwitter" placement="bottom" ngbTooltip="View our Twitter"></fa-icon>
-                </a>
-                <a
-                  *ngIf="restaurantDetails.instagram != ''"
-                  href="{{ restaurantDetails.instagram }}"
-                  target="_blank"
-                  aria-label="View Restaurant Instagram"
-                >
-                  <fa-icon class="contact-icon" [icon]="faInstagram" placement="bottom" ngbTooltip="View our Instagram"></fa-icon>
-                </a>
-              </div>
+              </p>
             </div>
           </div>
         </div>
       </div>
-
-      <!--
-          <div class="media-icons">
-            <fa-icon class="media-icon" [icon]="faHeartLine"></fa-icon>
-          </div>
-      -->
     </div>
 
-    <!-- <button class="updatesBtn" (click)="viewTimeline()" placement="top" ngbTooltip="View our Timeline">
-      <b>VIEW UPDATES</b>
-    </button> -->
+    <div class="editRestaurantWrap">
+      <button
+        *ngIf="role == 'RO' && !isQueryRestaurant"
+        class="btn editRestaurant"
+        (click)="editRestaurant()"
+        placement="top" ngbTooltip="Update Restaurant Info"
+        aria-label="Edit Restaurant Profile"
+      >
+        <fa-icon [icon]="faEdit"></fa-icon>
+        <b>EDIT RESTAURANT PROFILE</b>
+      </button>
+    </div>
   </div>
 
-  <div class="editRestaurantWrap">
-    <button
-      *ngIf="role == 'RO' && !isQueryRestaurant"
-      class="btn editRestaurant"
-      (click)="editRestaurant()"
-      placement="top" ngbTooltip="Update Restaurant Info"
-      aria-label="Edit Restaurant Profile"
-    >
-      <fa-icon [icon]="faEdit"></fa-icon>
-      <b>EDIT RESTAURANT PROFILE</b>
-    </button>
-  </div>
-
-  <mat-tab-group mat-align-tabs="center">
+  <mat-tab-group mat-align-tabs="center" class="mat-tab-group">
     <mat-tab label="Our Story">
       <div class="col-md-12">
         <div class="row">
@@ -189,66 +134,82 @@
     </mat-tab>
 
     <mat-tab label="Menu">
-      <ngb-alert *ngIf="restaurantMenu.length == 0" [dismissible]="false">
-        Menu currently empty! Please check again at a later time.
-      </ngb-alert>
-
-      <div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
-        <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
-      </div>
-
-      <div class="col">
-        <div class="tab-info-menu">
-          <h1 class="section-title" *ngIf="specialDish.length != 0" style="text-align: center;">Specials</h1>
-          <div class="row justify-content-center">
-            <div *ngFor="let dish of specialDish">
-              <div class="col-sm-4 d-flex">
-                <app-dish-card [dish]="dish"></app-dish-card>
-              </div>
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px" style="margin-top: 25px;">
+        <ngb-alert *ngIf="restaurantMenu.length == 0" [dismissible]="false">
+          Menu currently empty! Please check again at a later time.
+        </ngb-alert>
+  
+        <div fxLayout="row" fxLayoutAlign="center center" *ngIf="restaurantDetails.full_menu_url">
+          <button class="btn" (click)="openExternalMenu()" placement="top" ngbTooltip="View Full Menu">
+            <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+              <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+              <div>Click Here for Full Menu</div>
+            </div>
+          </button>
+        </div>
+  
+        <div class="col">
+          <div class="tab-info-menu" *ngIf="specialDish.length != 0">
+            <h1 class="section-title">Specials</h1>
+            <div class="food-carousel">
+              <ivy-carousel
+                style="max-width: fit-content; margin: auto;"
+                [images]="specialDish"
+                [margin]="5"
+                [arrowsTheme]="dark"
+                [borderRadius]="20"
+                [cellWidth]="312"
+                [height]="312"
+              ></ivy-carousel>
+            </div>
+          </div>
+        </div>
+  
+        <div class="col">
+          <div class="tab-info-menu" *ngIf="popularDish.length != 0">
+            <h1 class="section-title">Popular</h1>
+            <div class="food-carousel">
+              <ivy-carousel
+                style="max-width: fit-content; margin: auto;"
+                [images]="popularDish"
+                [margin]="5"
+                [arrowsTheme]="dark"
+                [borderRadius]="20"
+                [cellWidth]="312"
+                [height]="312"
+              ></ivy-carousel>
             </div>
           </div>
         </div>
 
-        <div class="tab-info-menu">
-          <h1 class="section-title" *ngIf="popularDish.length != 0" style="text-align: center;">Popular Dishes</h1>
-          <div class="row justify-content-center">
-            <div *ngFor="let dish of popularDish">
-              <div class="col-sm-4 d-flex">
-                <app-dish-card [dish]="dish"></app-dish-card>
-              </div>
-            </div>
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px" style="padding-bottom: 50px;">
+          <div style="text-align: center;">
+            <button
+              *ngIf="role == 'RO' && !isQueryRestaurant"
+              class="btn editBtn"
+              (click)="editMenu()"
+              placement="bottom"
+              ngbTooltip="Update Your Menu"
+              aria-label="Update Your Menu"
+            >
+              <fa-icon [icon]="faEdit"></fa-icon>
+              <b>EDIT MENU</b>
+            </button>
+          </div>
+  
+          <div style="text-align: center;">
+            <button
+              *ngIf="role == 'RO' && !isQueryRestaurant"
+              class="btn editBtn"
+              (click)="openEditModal(fullMenuModal)"
+              placement="bottom"
+              ngbTooltip="Add/Update URL of Your Full Menu"
+            >
+              <fa-icon [icon]="faEdit"></fa-icon>
+              <b>EDIT FULL MENU URL</b>
+            </button>
           </div>
         </div>
-      </div>
-
-      <div style="text-align: center; padding-bottom: 30px;">
-        <button
-          *ngIf="role == 'RO' && !isQueryRestaurant"
-          class="btn editBtn"
-          (click)="editMenu()"
-          placement="bottom"
-          ngbTooltip="Update Your Menu"
-          aria-label="Update Your Menu"
-        >
-          <fa-icon [icon]="faEdit"></fa-icon>
-          <b>EDIT MENU</b>
-        </button>
-      </div>
-
-      <!--<div class="tab-info-menu" style="text-align: center;" *ngIf="restaurantDetails.full_menu_url">
-        <a href="{{ restaurantDetails.full_menu_url }}" class="full_menu_text" target="_blank">Click Here for Full Menu</a>
-      </div>-->
-      <div style="text-align: center; padding-bottom: 50px;">
-        <button
-          *ngIf="role == 'RO' && !isQueryRestaurant"
-          class="btn editBtn"
-          (click)="openEditModal(fullMenuModal)"
-          placement="bottom"
-          ngbTooltip="Add/Update URL of Your Full Menu"
-        >
-          <fa-icon [icon]="faEdit"></fa-icon>
-          <b>EDIT FULL MENU URL</b>
-        </button>
       </div>
     </mat-tab>
 
@@ -262,7 +223,7 @@
                 <p class="section_p">{{ restaurantDetails.open_hours }}</p>
               </div>
               <div>
-                <p class="section_p">{{ paymentList }}</p>
+                <p class="section_p" *ngIf="paymentList">Accepted {{ paymentList }}</p>
               </div>
               <div *ngIf="restaurantDetails.web_url">
                 <a class="section_p web_url" href="{{ restaurantDetails.web_url }}" target="_blank">{{ restaurantDetails.web_url }}</a>
@@ -341,71 +302,92 @@
     </mat-tab>
 
     <mat-tab label="Photo & Videos">
-      <div class="tab-info">
-        <app-carousel-with-thumbnail
-          *ngIf="restaurantDetails.restaurant_image_url[0] != '/'"
-          [autoPlayDuration]="5000"
-          animation="slide"
-          [isNavigationVisible]="true"
-          [isThumbnailsVisible]="true"
-          [slides]="slides"
-          [slideTemplateRef]="slide"
-          [thumbnailTemplateRef]="thumbnail"
-        ></app-carousel-with-thumbnail>
-        <ng-template #slide let-slide>
-          <div [ngStyle]="{
-              'background-size': 'cover',
-              'background-image': 'url(' + slide.url + ')',
-              'background-repeat': 'no-repeat',
-              'width': '100%',
-              'height': '100%'
-            }">
-          </div>
-        </ng-template>
-        <ng-template #thumbnail let-slide>
+      <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="5px">
+        <ngb-alert *ngIf="restaurantDetails.restaurant_image_url[0] == '/' && restaurantDetails.restaurant_video_url == '/'" [dismissible]="false">
+          Restaurant media currently empty! Please check again at a later time.
+        </ngb-alert>
+  
+        <div class="tab-info" *ngIf="restaurantDetails.restaurant_image_url[0] != '/'">
+          <app-carousel-with-thumbnail
+            [autoPlayDuration]="5000"
+            animation="slide"
+            [isNavigationVisible]="true"
+            [isThumbnailsVisible]="true"
+            [slides]="slides"
+            [slideTemplateRef]="slide"
+            [thumbnailTemplateRef]="thumbnail"
+          ></app-carousel-with-thumbnail>
+          <ng-template #slide let-slide>
             <div [ngStyle]="{
                 'background-size': 'cover',
                 'background-image': 'url(' + slide.url + ')',
                 'background-repeat': 'no-repeat',
-                'background-position': 'center center',
                 'width': '100%',
                 'height': '100%'
-              }"></div>
-        </ng-template>
-
-      </div>
-      <div style="text-align: center;">
-        <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(imageModal)" placement="bottom" ngbTooltip="Update Your Restaurant Image">
-          <fa-icon [icon]="faEdit"></fa-icon>
-          <b>EDIT RESTAURANT IMAGES</b>
-        </button>
-      </div>
-
-      <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_url != '/' && videoId == undefined">
-        <video width="100%" controls>
-          <source src="{{ restaurantDetails.restaurant_video_url }}" type="video/mp4">
-          Your browser does not support the video.
-        </video>
-      </div>
-
-      <div #youtubeContainer class="tab-info" *ngIf="videoId != undefined">
-        <youtube-player videoId="{{ videoId }}" [width]="youtubeContainer.offsetWidth"></youtube-player>
-      </div>
-
-      <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_desc">
-        <p class="section_p"><b>Video Description: </b>{{ restaurantDetails.restaurant_video_desc }}</p>
-      </div>
-
-      <div style="text-align: center; padding-bottom: 50px;">
-        <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
-          <fa-icon [icon]="faEdit"></fa-icon>
-          <b>EDIT RESTAURANT VIDEO</b>
-        </button>
+              }">
+            </div>
+          </ng-template>
+          <ng-template #thumbnail let-slide>
+              <div [ngStyle]="{
+                  'background-size': 'cover',
+                  'background-image': 'url(' + slide.url + ')',
+                  'background-repeat': 'no-repeat',
+                  'background-position': 'center center',
+                  'width': '100%',
+                  'height': '100%'
+                }"></div>
+          </ng-template>
+  
+        </div>
+        <!--<div style="text-align: center;">
+          <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(imageModal)" placement="bottom" ngbTooltip="Update Your Restaurant Image">
+            <fa-icon [icon]="faEdit"></fa-icon>
+            <b>EDIT RESTAURANT IMAGES</b>
+          </button>
+        </div>-->
+  
+        <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_url != '/' && videoId == undefined">
+          <video width="100%" controls>
+            <source src="{{ restaurantDetails.restaurant_video_url }}" type="video/mp4">
+            Your browser does not support the video.
+          </video>
+        </div>
+  
+        <div #youtubeContainer class="tab-info" *ngIf="videoId != undefined">
+          <youtube-player videoId="{{ videoId }}" [width]="youtubeContainer.offsetWidth"></youtube-player>
+        </div>
+  
+        <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_desc">
+          <p class="section_p"><b>Video Description: </b>{{ restaurantDetails.restaurant_video_desc }}</p>
+        </div>
+  
+        <!--<div style="text-align: center; padding-bottom: 50px;">
+          <button *ngIf="role == 'RO' && !isQueryRestaurant" class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
+            <fa-icon [icon]="faEdit"></fa-icon>
+            <b>EDIT RESTAURANT VIDEO</b>
+          </button>
+        </div>-->
+  
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px" style="padding-bottom: 50px;" *ngIf="role == 'RO' && !isQueryRestaurant">
+          <div style="text-align: center;">
+            <button class="btn editBtn" (click)="openEditModal(imageModal)" placement="bottom" ngbTooltip="Update Your Restaurant Image">
+              <fa-icon [icon]="faEdit"></fa-icon>
+              <b>EDIT RESTAURANT IMAGES</b>
+            </button>
+          </div>
+  
+          <div style="text-align: center;">
+            <button class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
+              <fa-icon [icon]="faEdit"></fa-icon>
+              <b>EDIT RESTAURANT VIDEO</b>
+            </button>
+          </div>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>
 
-  <div class="nearby" *ngIf="role == 'BU' || role == 'RO'">
+  <div class="nearby" *ngIf="role == 'BU' || role == 'RO' && queryParam">
     <p class="nearby_text">Nearby Restaurants</p>
     <div class="row  justify-content-center">
       <app-restaurant-nearby-card
