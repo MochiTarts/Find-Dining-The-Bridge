@@ -73,7 +73,6 @@ def create_user_emails_sheets_subscribers():
             subscribers.append({"email": nluser.email, "first_name": nluser.first_name,
                                 "last_name": nluser.last_name, "consent_status": nluser.consent_status})
 
-    print(subscribers)
     # Append user info into values (only users that has email verified)
     values = [['Email', 'First name', 'Last name', 'Consent Status']]
     for subscriber in subscribers:
