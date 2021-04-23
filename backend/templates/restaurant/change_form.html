@@ -144,7 +144,9 @@
         });
         pdf.addImage(canvas, 'PNG', 0, 0);
         let date = new Date();
-        pdf.save('Find Dining Report - ' + restaurant_name + ' - ' + date.toLocaleDateString('en-US') + '.pdf');
+        let month = ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString());
+        let day = (date.getDay() < 10 ? "0" + date.getDay().toString() : date.getDay().toString());
+        pdf.save('Find Dining Report - ' + restaurant_name + ' - ' + date.getFullYear().toString() + month + day + '.pdf');
     }
 </script>
 {% endblock %}
