@@ -242,6 +242,10 @@ ngb-alert {
   fa-icon {
     color: white;
   }
+
+  @media screen and (max-width: 610px) {
+    height: fit-content;
+  }
 }
 
 .editBtn:hover {
@@ -337,7 +341,7 @@ ngb-alert {
   margin: 0;
   font-weight: 500;
   color: $navigation-color;
-  padding-left: 3rem;
+  padding-left: 1rem;
   padding-bottom: 0.1rem;
 }
 
