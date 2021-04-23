@@ -135,6 +135,9 @@ export class FavouritesComponent implements OnInit {
               .includes(keyword) ||
             query.pricepoint
               .toLowerCase()
+              .includes(keyword) ||
+            query.bio
+              .toLowerCase()
               .includes(keyword)
           ) {
             this.searchedRestaurants.push(query);
