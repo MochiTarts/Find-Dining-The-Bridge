@@ -25,7 +25,7 @@ export class userValidator extends formValidator {
   errorStrings = {
     'first_name': 'Invalid First Name - name should not contain numbers or symbols',
     'last_name': 'Invalid Last Name - name should not contain numbers or symbols',
-    'postalCode': 'Invalid Postal Code - ensure A#A #A# format',
+    'postalCode': 'Invalid Postal Code - ensure this postal code does exist and A#A #A# format',
     'phone': 'Invalid phone number - ensure exactly 10 digits',
     'phone_ext': 'Invalid phone extension',
 
