@@ -24,13 +24,16 @@ def send_posts_notify_email(post, restaurant_name, request):
     admins = list(User.objects.filter(
         is_superuser=True).values_list('email', flat=True))
 
+    '''
     link = get_current_site(request).domain
     if link == "localhost:8000":
-        link = "http://" + link + "/api/admin/restaurant/restaurantpost/" + \
+        link = "http://" + link + "/api/fd-admin/restaurant/restaurantpost/" + \
             str(post._id) + "/change/"
     else:
-        link = "https://" + link + "/api/admin/restaurant/restaurantpost/" + \
+        link = "https://" + link + "/api/fd-admin/restaurant/restaurantpost/" + \
             str(post._id) + "/change/"
+    '''
+    link = reverse("admin:restaurant_restaurantpost_change", args=[post._id])
 
     content = "<p>New restaurant post posted by: {}</p>".format(restaurant_name) + \
               "<a href={}>Link to post</a>".format(link)

@@ -22,3 +22,5 @@ docutils
 drf-yasg
 python-dateutil==2.8.1
 pytest-django
+django-admin-honeypot==1.1.0
+#django-honeypot==0.9.0

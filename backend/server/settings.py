@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'drf_yasg',
     'newsletter',
+    'admin_honeypot',
 
     # 'user.apps.SDUserConfig',
 ]
@@ -263,7 +264,11 @@ CORS_ALLOW_CREDENTIALS = True
 #CSRF_COOKIE_DOMAIN = ".localhost"
 SESSION_COOKIE_SAMESITE = None
 
+
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
+# for testing purpose, comemnt out the above and
+# uncomment the below, this will output the email in the console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 GMAIL_API_CLIENT_ID = os.environ.get('GMAIL_API_CLIENT_ID')
 GMAIL_API_CLIENT_SECRET = os.environ.get('GMAIL_API_CLIENT_SECRET')
@@ -367,3 +372,7 @@ GOOGLE_ANALYTICS_CLIENT_EMAIL = os.environ.get('GOOGLE_ANALYTICS_CLIENT_EMAIL')
 # note that the replace is required after reading
 GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get(
     'GOOGLE_ANALYTICS_PRIVATE_KEY').replace('\\n', '\n')
+
+# Used to determine whether or not to email site admins on login attempts
+# (on the fake login screen)
+ADMIN_HONEYPOT_EMAIL_ADMINS = True

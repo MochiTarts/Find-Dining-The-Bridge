@@ -29,7 +29,7 @@
 {% block content %}
 
 <button class='iframe-collapsible button' type='button' onclick='toggleIframe()'>Show Image Collection</button>
-<iframe style="display: none;" id="image_search_iframe" height="500px" width="100%" src="/api/admin/image/image">
+<iframe style="display: none;" id="image_search_iframe" height="500px" width="100%" src="{% url 'admin:index' %}image/image">
 </iframe>
 <br>
 <br>
