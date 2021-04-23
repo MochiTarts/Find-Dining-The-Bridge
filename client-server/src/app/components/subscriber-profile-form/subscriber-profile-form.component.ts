@@ -174,9 +174,7 @@ export class SubscriberProfileFormComponent implements OnInit {
             this.authService.refreshToken().subscribe((token) => {
               this.tokenStorageService.updateTokenAndUser(token.access);
               this.modalRef.close();
-              setTimeout(() => {
-                this.reload();
-              }, 100);
+              this.reload();
             })
           })
         },
