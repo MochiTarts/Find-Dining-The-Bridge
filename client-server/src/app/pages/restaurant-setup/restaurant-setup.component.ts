@@ -448,6 +448,10 @@ export class RestaurantSetupComponent implements OnInit {
           }
 
         }
+      }, (error) => {
+        if (formValidation.isInvalidResponse(error.error.detail)) {
+          formValidation.HandleInvalid(error.error.detail, (key) => this.validator.setError(key));
+        }
       });
 
 
