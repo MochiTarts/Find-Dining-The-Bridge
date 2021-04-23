@@ -289,7 +289,8 @@ def checkUserRefreshToken(user_id, refresh_token):
     # validate the token against the one stored in the db (user object)
     if not refresh_token or refresh_token != user.refresh_token:
         raise InvalidToken(
-            'Token mismatch: the token stored in cookie does not match the token in database')
+            'Token mismatch: the token stored in cookie does not match the token in database',
+            code='token_mismatch')
 
 
 class SDUserCookieTokenRefreshView(TokenRefreshView):

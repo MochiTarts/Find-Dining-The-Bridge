@@ -31,12 +31,12 @@ mat-tab-group {
   background-position: center;
   @media screen and (max-width: 767px) {
     background-image: url("/assets/images/cover_mobile.png");
-    min-height: 0;
-    height: 100%;
+    min-height: 700px;
     padding: 25px 0;
     text-align: center;
   }
   @media screen and (max-width: 280px) {
+    height: 100%;
     min-height: 925px;
   }
   @media screen and (max-height: 700px) and (orientation: landscape) {
@@ -242,6 +242,10 @@ ngb-alert {
   fa-icon {
     color: white;
   }
+
+  @media screen and (max-width: 610px) {
+    height: fit-content;
+  }
 }
 
 .editBtn:hover {
@@ -279,6 +283,13 @@ ngb-alert {
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 0);
+}
+
+.editRestaurantWrap .btn {
+  @media screen and (max-width: 554px) {
+    width: 300px;
+    height: fit-content;
+  }
 }
 
 .editRestaurant {
@@ -330,7 +341,7 @@ ngb-alert {
   margin: 0;
   font-weight: 500;
   color: $navigation-color;
-  padding-left: 3rem;
+  padding-left: 1rem;
   padding-bottom: 0.1rem;
 }
 
