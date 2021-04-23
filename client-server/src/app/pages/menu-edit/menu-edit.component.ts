@@ -32,15 +32,15 @@ export class MenuEditComponent implements OnInit {
   deleteModalRef: any;
   dishModalRef: any;
   dishEdit: boolean = false;
-  //dishes: any[];
-  specialDish: any[] = [];
-  popularDish: any[] = [];
+  dishes: any[];
+  // specialDish: any[] = [];
+  // popularDish: any[] = [];
   dishIndex: number;
 
   dishId: string = '';
   dishName: string = '';
   price: string = '';
-  menuCategory: string = '';
+  // menuCategory: string = '';
   description: string = '';
 
   showAlert: boolean = false;
@@ -81,14 +81,14 @@ export class MenuEditComponent implements OnInit {
 
   loadAllDishes() {
     this.restaurantsService.getPendingRestaurantFood().subscribe((data) => {
-      //this.dishes = data.Dishes;
-      for (let dish of data.Dishes) {
-        if (dish.category == "Special") {
-          this.specialDish.push(dish);
-        } else if (dish.category == "Popular Dish") {
-          this.popularDish.push(dish);
-        }
-      }
+      this.dishes = data.Dishes;
+      // for (let dish of data.Dishes) {
+      //   if (dish.category == "Special") {
+      //     this.specialDish.push(dish);
+      //   } else if (dish.category == "Popular Dish") {
+      //     this.popularDish.push(dish);
+      //   }
+      // }
     })
   }
 
@@ -96,7 +96,7 @@ export class MenuEditComponent implements OnInit {
     this.dishId = '';
     this.dishName = '';
     this.price = '';
-    this.menuCategory = '';
+    // this.menuCategory = '';
     this.description = '';
   }
 
@@ -106,7 +106,7 @@ export class MenuEditComponent implements OnInit {
       this.dishId = dish._id;
       this.dishName = dish.name;
       this.price = dish.price;
-      this.menuCategory = dish.category;
+      // this.menuCategory = dish.category;
       this.description = dish.description;
 
       this.dishEdit = true;
@@ -126,7 +126,7 @@ export class MenuEditComponent implements OnInit {
     this.dishId = dish._id;
     this.dishName = dish.name;
     this.dishIndex = index;
-    this.menuCategory = dish.category;
+    // this.menuCategory = dish.category;
     this.deleteModalRef = this.deleteModalService.open(content, { size: 's' });
   }
 
@@ -135,7 +135,7 @@ export class MenuEditComponent implements OnInit {
     var validationInfo = {
       name: this.dishName,
       price: this.price,
-      menuCategory: this.menuCategory,
+      // menuCategory: this.menuCategory,
       description: this.description,
     };
 
@@ -151,7 +151,7 @@ export class MenuEditComponent implements OnInit {
         description: this.description,
         price: price.toFixed(2),
         specials: '',
-        category: this.menuCategory,
+        category: 'Specials',
       };
       var index = this.dishIndex;
 
@@ -160,36 +160,38 @@ export class MenuEditComponent implements OnInit {
           if (this.newImage) {
             this.onSubmit(data._id, dishInfo.category, index);
           } else {
-            if (dishInfo.category == 'Special') {
-              this.specialDish[index] = data;
-            } else {
-              this.popularDish[index] = data;
-            }
+            this.dishes[index] = data;
+            // if (dishInfo.category == 'Special') {
+            //   this.specialDish[index] = data;
+            // } else {
+            //   this.popularDish[index] = data;
+            // }
             this.dishIndex = 0;
             this.dishEdit = false;
           }
         },
-        (error) => {
-          this.alertMessage = error.error.detail;
-          this.showAlert = true;
-        });
+          (error) => {
+            this.alertMessage = error.error.detail;
+            this.showAlert = true;
+          });
       } else {
         dishInfo['picture'] = '';
         this.restaurantsService.createPendingDish(dishInfo).subscribe((data) => {
           if (this.newImage) {
             this.onSubmit(data._id, dishInfo.category, index);
           } else {
-            if (dishInfo.category == 'Special') {
-              this.specialDish.push(data);
-            } else {
-              this.popularDish.push(data);
-            }
+            this.dishes.push(data);
+            // if (dishInfo.category == 'Special') {
+            //   this.specialDish.push(data);
+            // } else {
+            //   this.popularDish.push(data);
+            // }
           }
         },
-        (error) => {
-          this.alertMessage = error.error.detail;
-          this.showAlert = true;
-        });
+          (error) => {
+            this.alertMessage = error.error.detail;
+            this.showAlert = true;
+          });
       }
 
       this.clearInput();
@@ -202,20 +204,23 @@ export class MenuEditComponent implements OnInit {
       name: this.dishName,
       category: this.menuCategory,
     };*/
-    var category = this.menuCategory;
+    // var category = this.menuCategory;
     var index = this.dishIndex;
 
     this.restaurantsService.deleteDish(this.dishId).subscribe(() => {
-      if (category == "Special") {
-        if (index > -1) {
-          this.specialDish.splice(index, 1);
-          console.log(this.specialDish)
-        }
-      } else {
-        if (index > -1) {
-          this.popularDish.splice(this.dishIndex, 1);
-        }
+      if (index > -1) {
+        this.dishes.splice(index, 1);
       }
+      // if (category == "Special") {
+      //   if (index > -1) {
+      //     this.specialDish.splice(index, 1);
+      //     console.log(this.specialDish)
+      //   }
+      // } else {
+      //   if (index > -1) {
+      //     this.popularDish.splice(this.dishIndex, 1);
+      //   }
+      // }
     });
 
     /*if (this.dishIndex > -1) {
@@ -244,20 +249,20 @@ export class MenuEditComponent implements OnInit {
     formData.append('media_file', this.uploadForm.get('file').value);
     this.mediaService.uploadDishMedia(formData, id).subscribe((data) => {
       if (this.dishEdit) {
-        //this.dishes[this.dishIndex] = data;
-        if (category == 'Special') {
-          this.specialDish[index] = data;
-        } else {
-          this.popularDish[index] = data;
-        }
+        this.dishes[this.dishIndex] = data;
+        // if (category == 'Special') {
+        //   this.specialDish[index] = data;
+        // } else {
+        //   this.popularDish[index] = data;
+        // }
         this.dishIndex = 0;
       } else {
-        //this.dishes.push(data);
-        if (category == 'Special') {
-          this.specialDish.push(data);
-        } else {
-          this.popularDish.push(data);
-        }
+        this.dishes.push(data);
+        // if (category == 'Special') {
+        //   this.specialDish.push(data);
+        // } else {
+        //   this.popularDish.push(data);
+        // }
       }
       this.dishEdit = false;
     });

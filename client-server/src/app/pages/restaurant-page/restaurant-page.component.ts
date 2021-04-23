@@ -213,13 +213,8 @@ export class RestaurantPageComponent implements OnInit {
 
     this.getPendingOrApprovedDishes(this.restaurantId).subscribe((data) => {
       this.restaurantMenu = data.Dishes;
-      for (let dish of data.Dishes) {
+      for (let dish of this.restaurantMenu) {
         dish.type = 'dish';
-        if (dish.category == "Popular Dish") {
-          this.popularDish.push(dish)
-        } else if (dish.category == "Special") {
-          this.specialDish.push(dish);
-        }
       }
     }, (error) => {
       this.error = true;

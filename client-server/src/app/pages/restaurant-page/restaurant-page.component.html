@@ -156,29 +156,12 @@
         </div>
 
         <div class="col">
-          <div class="tab-info-menu" *ngIf="specialDish.length != 0">
+          <div class="tab-info-menu" *ngIf="restaurantMenu.length != 0">
             <h1 class="section-title">Specials</h1>
             <div class="food-carousel">
               <ivy-carousel
                 style="max-width: fit-content; margin: auto;"
-                [images]="specialDish"
-                [margin]="5"
-                [arrowsTheme]="dark"
-                [borderRadius]="20"
-                [cellWidth]="312"
-                [height]="312"
-              ></ivy-carousel>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="tab-info-menu" *ngIf="popularDish.length != 0">
-            <h1 class="section-title">Popular</h1>
-            <div class="food-carousel">
-              <ivy-carousel
-                style="max-width: fit-content; margin: auto;"
-                [images]="popularDish"
+                [images]="restaurantMenu"
                 [margin]="5"
                 [arrowsTheme]="dark"
                 [borderRadius]="20"
