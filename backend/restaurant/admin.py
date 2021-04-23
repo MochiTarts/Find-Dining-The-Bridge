@@ -4,6 +4,8 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.http import HttpResponse, HttpResponseRedirect
+from django.forms import TextInput, Textarea
+from django.db import models
 
 from utils.cloud_storage import delete
 from utils.geo_controller import geocode
@@ -11,7 +13,7 @@ from utils.model_util import save_and_clean, model_to_json, edit_model
 from utils.admin import InputFilter, OwnerNameFilter, NameFilter, PriceMaxFilter, PriceMinFilter
 
 from restaurant.enum import Status
-from restaurant.forms import RestaurantAdminForm
+from restaurant.forms import RestaurantAdminForm, DishAdminForm
 from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs, RestaurantPost
 from restaurant.utils import send_approval_email, send_reject_email, send_unpublish_email
 
@@ -468,6 +470,7 @@ class PendingFoodAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('restaurant_id', 'status')
     actions = (approve_food, reject_food,)
+    form = DishAdminForm
 
     def save_model(self, request, obj, form, change):
         """
@@ -654,6 +657,7 @@ class FoodAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('restaurant_id', 'status')
     actions = (unpublish_food,)
+    form = DishAdminForm
 
     def response_change(self, request, obj):
         if "_unpublish" in request.POST:
