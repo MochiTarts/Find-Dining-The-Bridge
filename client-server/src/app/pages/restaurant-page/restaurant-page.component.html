@@ -394,6 +394,13 @@
     </mat-tab>
   </mat-tab-group>
 
+  <div *ngIf="isQueryRestaurant" fxLayoutAlign="center center">
+    <button class="btn editBtn" (click)="goBack()">
+      <fa-icon [icon]="faArrowCircleLeft"></fa-icon>
+      <b>Go Back</b>
+    </button>
+  </div>
+
   <div class="nearby" *ngIf="role == 'BU' || role == 'RO' && queryParam">
     <p class="nearby_text">Nearby Restaurants</p>
     <div class="row  justify-content-center">
