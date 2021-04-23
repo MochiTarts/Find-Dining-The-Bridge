@@ -85,11 +85,15 @@ class SubscriberProfile(models.Model):
             if len(str(fields['phone'])) != 10 and str(fields['phone']).isnumeric():
                 invalid['Invalid'].append('phone')
 
-        if 'postalCode' in fields and fields['postalCode'] is not None:
-            try:
-                validate_postal_code(fields['postalCode'])
-            except ValidationError as e:
+        if 'postalCode' in fields:
+            if not fields['postalCode']:
                 invalid['Invalid'].append('postalCode')
+            else:
+                try:
+                    validate_postal_code(fields['postalCode'])
+                    geocode(fields['postalCode'])
+                except ValidationError:
+                    invalid['Invalid'].append('postalCode')
 
         if invalid['Invalid']:
             raise ValidationError(message=invalid, code="invalid_input")

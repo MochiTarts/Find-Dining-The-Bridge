@@ -42,20 +42,13 @@ export class AuthInterceptor implements HttpInterceptor {
         var err = error.error;
         console.log(error.error)
         console.log(error.error.detail)
-        if (err && err.detail == "Token is invalid or expired") {
+        if (err && (err.detail == "Token is invalid or expired" || ['token_mismatch'].includes(err.code))) {
           this.logout();
           window.location.reload();
           //return throwError(error);
         } else if (!user || (user && !user.role)) {
           // propogate error for error catching and displays
           return throwError(error);
-        } else if (err && err.detail == "Token mismatch: the token stored in cookie does not match the token in database") {
-          // Occurs when more than one browser is active with same account logged in
-          alert("There appears to be another person logged in with your account. Please confirm that this is you by logging in")
-          this.logout();
-          this.router.navigate(['/login']).then(() => {
-            window.location.reload();
-          });
         }
         // otherwise refresh the access token using refresh token
         return this.handleTokenError(req, next);
