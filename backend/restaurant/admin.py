@@ -377,6 +377,7 @@ class PendingRestrAdmin(admin.ModelAdmin):
         'modified_time')
     actions = (approve_restr, reject_restr)
     readonly_fields = ('status', 'GEO_location',)
+    form = RestaurantAdminForm
 
     def save_model(self, request, obj, form, change):
         """
@@ -581,6 +582,7 @@ class RestrAdmin(admin.ModelAdmin):
         'logoUrl')
     actions = (unpublish_restr,)
     readonly_fields = ('status', 'GEO_location',)
+    form = RestaurantAdminForm
     change_list_template = 'restaurant/change_list.html'
     change_form_template = 'restaurant/change_form.html'
 
@@ -606,9 +608,6 @@ class RestrAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
-
-    class Meta:
-        form = RestaurantAdminForm
 
     def get_form(self, request, obj=None, **kwargs):
 
