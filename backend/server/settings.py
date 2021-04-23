@@ -206,9 +206,32 @@ JWT_AUTH = {
     'JWT_PAYLOAD_HANDLER': 'sduser.backends.jwt_payload_handler',
 }
 '''
-
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+if not DEBUG:
+    # Once you confirm that all assets are served securely on your site (i.e. HSTS didn’t break anything),
+    # it’s a good idea to increase this value so that infrequent visitors will be protected
+    # (31536000 seconds, i.e. 1 year, is common).
+    SECURE_HSTS_SECONDS = 3600
+    # set this to false to allow subdomain with invalid SSL for testing
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# the browser will only load the resource in a frame
+# if the request originated from the same site
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# To prevent the browser from guessing the content type
+# and force it to always use the type provided in the Content-Type header
+# Need to also set this in the front-end Web server if it is the one serving
+# user uploaded files
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# To enable the XSS filter in the browser
+# and force it to always block suspected XSS attacks
+SECURE_BROWSER_XSS_FILTER = True
+
 SECURE_SSL_REDIRECT = os.environ.get('SSL_REDIRECT') == 'True'
 
 CORS_ALLOW_METHODS = (
