@@ -27,7 +27,7 @@
                 {{ paymentList }}
               </p>
               <p>
-                {{ restaurantDetails.years }} year(s) in business
+                {{ restaurantDetails.years }} year<span *ngIf="restaurantDetails.years > 1">s</span> in business
               </p>
             </div>
 
