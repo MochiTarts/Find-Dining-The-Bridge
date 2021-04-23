@@ -16,6 +16,7 @@ from utils.validators import (
     validate_postal_code,
     validate_profane_content
 )
+from utils.geo_controller import geocode
 from restaurant.cuisine_dict import load_dict
 from restaurant.utils import send_posts_notify_email
 from restaurant.fields import StringListField, CustomListField
@@ -753,16 +754,24 @@ class PendingRestaurant(models.Model):
         if 'name' in fields and not fields['name']:
             invalid['Invalid'].append('name')
 
-        if 'address' in fields and not fields['address']:
-            invalid['Invalid'].append('address')
+        if 'address' in fields:
+            if not fields['address']:
+                invalid['Invalid'].append('address')
+            else:
+                try:
+                    geocode(fields['address'])
+                except ValidationError:
+                    invalid['Invalid'].append('address')
 
         if 'postalCode' in fields:
-            try:
-                validate_postal_code(fields['postalCode'])
-                if not fields['postalCode']:
-                    invalid['Invalid'].append('postalCode')
-            except ValidationError:
+            if not fields['postalCode']:
                 invalid['Invalid'].append('postalCode')
+            else:
+                try:
+                    validate_postal_code(fields['postalCode'])
+                    geocode(fields['postalCode'])
+                except ValidationError:
+                    invalid['Invalid'].append('postalCode')
 
         if 'email' in fields:
             try:
@@ -824,16 +833,24 @@ class PendingRestaurant(models.Model):
             else:
                 invalid['Invalid'].append('years')
 
-        if 'address' in fields and not fields['address']:
-            invalid['Invalid'].append('address')
+        if 'address' in fields:
+            if not fields['address']:
+                invalid['Invalid'].append('address')
+            else:
+                try:
+                    geocode(fields['address'])
+                except ValidationError:
+                    invalid['Invalid'].append('address')
 
         if 'postalCode' in fields:
-            try:
-                validate_postal_code(fields['postalCode'])
-                if not fields['postalCode']:
-                    invalid['Invalid'].append('postalCode')
-            except ValidationError:
+            if not fields['postalCode']:
                 invalid['Invalid'].append('postalCode')
+            else:
+                try:
+                    validate_postal_code(fields['postalCode'])
+                    geocode(fields['postalCode'])
+                except ValidationError:
+                    invalid['Invalid'].append('postalCode')
 
         if 'phone' in fields:
             if fields['phone'] is not None:
