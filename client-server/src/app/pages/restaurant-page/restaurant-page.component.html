@@ -13,7 +13,7 @@
         <div class="col">
           <h2 class="restaurant-name">{{ restaurantDetails.name | titlecase }}</h2>
           <div class="row flex-nowrap">
-            <div class="col-md-6 details1">
+            <div class="col details1">
               <p>
                 <span *ngIf="cuisineList">{{ cuisineList | titlecase }}</span><span *ngIf="pricepoint"> - {{ pricepoint | titlecase }}</span>
               </p>
@@ -31,7 +31,7 @@
               </p>
             </div>
 
-            <div class="col-md-6 details1">
+            <div class="col details1">
               <p fxLayout="row" fxLayoutAlign="none center">
                 <fa-icon class="contact-icon" [icon]="faMapMarker"></fa-icon>
                 <a
@@ -40,7 +40,7 @@
                   target="_blank"
                   placement="bottom"
                   ngbTooltip="Visit Restaurant Page"
-                  style="color: black;"
+                  style="color: black; word-break: break-all;"
                 >
                   {{ restaurantDetails.address }} <br> Scarborough, ON {{ restaurantDetails.postalCode }}
                 </a>
@@ -56,7 +56,7 @@
 
               <p fxLayout="row" fxLayoutAlign="none center">
                 <fa-icon class="contact-icon" [icon]="faMail"></fa-icon>
-                <a>
+                <a style="word-break: break-all;">
                   {{ restaurantDetails.email }}
                 </a>
               </p>
@@ -142,7 +142,7 @@
 
     <mat-tab label="Menu">
       <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px" style="margin-top: 25px;">
-        <ngb-alert *ngIf="restaurantMenu.length == 0" [dismissible]="false">
+        <ngb-alert *ngIf="restaurantMenu.length == 0 && !restaurantDetails.full_menu_url" [dismissible]="false">
           Menu currently empty! Please check again at a later time.
         </ngb-alert>
 
@@ -329,6 +329,7 @@
                 'background-size': 'cover',
                 'background-image': 'url(' + slide.url + ')',
                 'background-repeat': 'no-repeat',
+                'background-position': 'center center',
                 'width': '100%',
                 'height': '100%'
               }">
