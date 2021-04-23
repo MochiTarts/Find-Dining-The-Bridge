@@ -384,7 +384,10 @@ export class AllRestaurantsComponent implements OnInit {
       this.searchedRestaurants = this.allRestaurants;
     } else {
       this.searchedRestaurants = [];
-      let keywords = this.inputRestaurant.toLowerCase().replace(/\,/gi, ' ').split(' ');
+      let keywords = this.inputRestaurant.toLowerCase().replace(',', ' ').split(' ');
+      keywords = keywords.filter((value) => {
+        return value != '';
+      });
 
       for (var i = 0; i < this.allRestaurants.length; i++) {
         var query = this.allRestaurants[i];

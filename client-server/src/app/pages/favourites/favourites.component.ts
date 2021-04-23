@@ -115,6 +115,9 @@ export class FavouritesComponent implements OnInit {
     } else {
       this.searchedRestaurants = [];
       let keywords = this.inputRestaurant.toLowerCase().replace(/\,/gi, ' ').split(' ');
+      keywords = keywords.filter((value) => {
+        return value != '';
+      });
 
       for (var i = 0; i < this.allRestaurants.length; i++) {
         var query = this.allRestaurants[i];

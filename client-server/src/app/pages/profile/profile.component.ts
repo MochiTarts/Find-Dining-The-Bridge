@@ -26,9 +26,9 @@ export class ProfileComponent implements OnInit {
     this.currentUser = this.token.getUser();
 
     if (this.currentUser.user_id && this.currentUser.role == 'BU' && !this.currentUser.profile_id) {
-        // Will open profile modal on home page
-        this.router.navigate(['/']);
-        return;
+      // Will open profile modal on home page
+      this.router.navigate(['/']);
+      return;
     }
 
     this.userService.getSubscriberProfile().subscribe((data) => {
@@ -37,6 +37,7 @@ export class ProfileComponent implements OnInit {
       this.currentUser.postalCode = data.postalCode;
       var phone: string = String(data.phone);
       this.currentUser.phone = phone != 'null' ? "(" + phone.slice(0, 3) + ") " + phone.slice(3, 6) + " " + phone.slice(6, 10) : '';
+      this.currentUser.phone_ext = data.phone_ext;
     },
       err => {
         if (err.error && err.error.code == 'no_profile_found') {

@@ -18,6 +18,7 @@ class SubscriberProfile(models.Model):
     first_name = models.CharField(max_length=30, default="", blank=True)
     last_name = models.CharField(max_length=150, default="", blank=True)
     phone = models.BigIntegerField(null=True, default=None, blank=True)
+    phone_ext = models.BigIntegerField(blank=True, null=True)
     postalCode = models.CharField(max_length=7, default='', blank=True)
     GEO_location = models.CharField(
         max_length=50, default='')

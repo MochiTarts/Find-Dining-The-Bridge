@@ -10,6 +10,7 @@ export class userValidator extends formValidator {
       'last_name': '',
       'postalCode': '',
       'phone': '',
+      'phone_ext': '',
 
       // for profanity filter
       'first_name_p': '',
@@ -26,6 +27,7 @@ export class userValidator extends formValidator {
     'last_name': 'Invalid Last Name - name should not contain numbers or symbols',
     'postalCode': 'Invalid Postal Code - ensure A#A #A# format',
     'phone': 'Invalid phone number - ensure exactly 10 digits',
+    'phone_ext': 'Invalid phone extension',
 
     // for profanity filter
     'first_name_p': this.profaneError,
@@ -37,6 +39,7 @@ export class userValidator extends formValidator {
     'last_name': '',
     'postalCode': (postalCode) => formValidation.isPostalCodeValid(postalCode),
     'phone': (phone) => formValidation.isPhoneValid(phone),
+    'phone_ext': (phone_ext) => formValidation.isOptionalNumberNonNegative(phone_ext),
 
     // for profanity filter
     'first_name_p': (first_name_p) => formValidation.isNotProfane(first_name_p),

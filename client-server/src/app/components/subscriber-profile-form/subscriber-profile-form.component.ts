@@ -30,6 +30,7 @@ export class SubscriberProfileFormComponent implements OnInit {
   lastName: string = '';
   postalCode: string = '';
   phone: string = '';
+  phone_ext: string = '';
   siteKey: string;
   closeButton: boolean = false;
 
@@ -62,6 +63,7 @@ export class SubscriberProfileFormComponent implements OnInit {
           this.lastName = data.last_name;
           this.postalCode = data.postalCode;
           this.phone = data.phone;
+          this.phone_ext = data.phone_ext ? data.phone_ext : '';
         },
           err => {
             if (err.error && err.error.code == 'no_profile_found') {
@@ -87,6 +89,7 @@ export class SubscriberProfileFormComponent implements OnInit {
           lastname: [''],
           postalcode: [''],
           phone: [''],
+          phone_ext: [''],
           terms: ['', Validators.requiredTrue],
         });
       } else {
@@ -96,6 +99,7 @@ export class SubscriberProfileFormComponent implements OnInit {
           lastname: [''],
           postalcode: [''],
           phone: [''],
+          phone_ext: [''],
         });
       }
 
@@ -103,6 +107,8 @@ export class SubscriberProfileFormComponent implements OnInit {
       this.aFormGroup.get('lastname').setValue(String(this.lastName));
       this.aFormGroup.get('postalcode').setValue(String(this.postalCode));
       this.aFormGroup.get('phone').setValue(String(this.phone));
+      if (this.phone_ext)
+        this.aFormGroup.get('phone_ext').setValue(String(this.phone_ext));
 
       this.closeButton = closeButton;
       this.modalRef = this.modalService.open(this.buContent, { backdrop: 'static', keyboard: false });
@@ -125,6 +131,7 @@ export class SubscriberProfileFormComponent implements OnInit {
       last_name: (<HTMLInputElement>document.getElementById('lastname')).value,
       postalCode: (<HTMLInputElement>document.getElementById('postalcode')).value,
       phone: <any>(<HTMLInputElement>document.getElementById('phone')).value,
+      phone_ext: <any>(<HTMLInputElement>document.getElementById('phone-ext')).value,
     };
 
     let profileForProfanityCheck = this.addFieldsForProfanityCheck(subscriberInfo);
@@ -140,6 +147,7 @@ export class SubscriberProfileFormComponent implements OnInit {
     //if any validation failed, do not POST
     if (!failFlagOneTwo) {
       subscriberInfo.phone = Number(subscriberInfo.phone);
+      subscriberInfo.phone_ext = Number(subscriberInfo.phone_ext);
       /*
       Make new subscriber profile form with postalCode, phone, and consent_status if profile_id empty
       Otherwise, update existing subscriber profile if profile_id has value in it
