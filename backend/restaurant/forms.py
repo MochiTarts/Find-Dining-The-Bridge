@@ -19,11 +19,14 @@ class RestaurantAdminForm(ModelForm):
     class Meta:
         model = Restaurant
         fields = ('name', 'years', 'owner_first_name', 'owner_last_name', 'owner_preferred_name',
-                  'categories', 'sysAdminComments', 'address',
+                  'categories', 'address',
                   'streetAddress2', 'streetAddress3', 'postalCode',
                   'phone', 'email', 'pricepoint', 'cuisines', 'offer_options', 'dineinPickupDetails', 'deliveryDetails', 'locationNotes', 'web_url',
                   'facebook', 'twitter', 'instagram', 'bio', 'GEO_location', 'cover_photo_url', 'logo_url',
-                  'restaurant_image_url', 'open_hours', 'payment_methods', 'full_menu_url', )
+                  'restaurant_image_url', 'open_hours', 'sysAdminComments', 'payment_methods', 'full_menu_url', )
+        widgets = {
+            'sysAdminComments': forms.Textarea(attrs={'rows': 8, 'cols': 99})
+        }
 
 
 class DishAdminForm(ModelForm):
@@ -33,9 +36,9 @@ class DishAdminForm(ModelForm):
 
     class Meta:
         model = Food
-        fields = "__all__"
+        fields = '__all__'
         widgets = {
-            'description': forms.Textarea(attrs={'rows':4, 'cols':41})
+            'description': forms.Textarea(attrs={'rows': 4, 'cols': 41})
         }
 
 
