@@ -309,7 +309,7 @@ def approve_food(model_admin, request, queryset):
         food = Food(**model_to_json(f))
         old_food = Food.objects.filter(_id=f._id).first()
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
-        if restaurant.exists() and f.status == Status.Pending:
+        if restaurant.exists() and f.status == Status.Pending.value:
             count += 1
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name

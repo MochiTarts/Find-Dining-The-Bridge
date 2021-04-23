@@ -40,20 +40,31 @@ export class AuthInterceptor implements HttpInterceptor {
 
         var user = this.tokenStorage.getUser();
         var err = error.error;
+        console.log(error.error)
+        console.log(error.error.detail)
         if (err && err.detail == "Token is invalid or expired") {
           this.logout();
-          return throwError(error);
+          window.location.reload();
+          //return throwError(error);
         } else if (!user || (user && !user.role)) {
           // propogate error for error catching and displays
           return throwError(error);
+        } else if (err && err.detail == "Token mismatch: the token stored in cookie does not match the token in database") {
+          // Occurs when more than one browser is active with same account logged in
+          alert("There appears to be another person logged in with your account. Please confirm that this is you by logging in")
+          this.logout();
+          this.router.navigate(['/login']).then(() => {
+            window.location.reload();
+          });
         }
         // otherwise refresh the access token using refresh token
         return this.handleTokenError(req, next);
         // log user out if 400 and error code indicates a need to reject the request
       } else if (error instanceof HttpErrorResponse && error.status === 400) {
-        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
+        if (error.error && ['invalid_token', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
           this.logout();
-          return throwError(error);
+          window.location.reload();
+          //return throwError(error);
           // 400 example: duplicate username/email on signup
         } else {
           return throwError(error);
