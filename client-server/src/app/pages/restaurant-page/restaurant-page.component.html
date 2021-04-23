@@ -27,7 +27,7 @@
                 {{ paymentList }}
               </p>
               <p>
-                {{ restaurantDetails.years }} year(s) in business
+                {{ restaurantDetails.years }} year<span *ngIf="restaurantDetails.years > 1">s</span> in business
               </p>
             </div>
 
@@ -78,6 +78,12 @@
         <b>EDIT RESTAURANT PROFILE</b>
       </button>
     </div>
+  </div>
+
+  <div *ngIf="restaurantDetails.sysAdminComments && !isQueryRestaurant" fxLayoutAlign="center center">
+    <ngb-alert [dismissible]="false">
+      <b>System Admin Comments: </b>{{ restaurantDetails.sysAdminComments }}
+    </ngb-alert>
   </div>
 
   <mat-tab-group mat-align-tabs="center" class="mat-tab-group">
@@ -150,29 +156,12 @@
         </div>
 
         <div class="col">
-          <div class="tab-info-menu" *ngIf="specialDish.length != 0">
+          <div class="tab-info-menu" *ngIf="restaurantMenu.length != 0">
             <h1 class="section-title">Specials</h1>
             <div class="food-carousel">
               <ivy-carousel
                 style="max-width: fit-content; margin: auto;"
-                [images]="specialDish"
-                [margin]="5"
-                [arrowsTheme]="dark"
-                [borderRadius]="20"
-                [cellWidth]="312"
-                [height]="312"
-              ></ivy-carousel>
-            </div>
-          </div>
-        </div>
-
-        <div class="col">
-          <div class="tab-info-menu" *ngIf="popularDish.length != 0">
-            <h1 class="section-title">Popular</h1>
-            <div class="food-carousel">
-              <ivy-carousel
-                style="max-width: fit-content; margin: auto;"
-                [images]="popularDish"
+                [images]="restaurantMenu"
                 [margin]="5"
                 [arrowsTheme]="dark"
                 [borderRadius]="20"
@@ -388,6 +377,13 @@
       </div>
     </mat-tab>
   </mat-tab-group>
+
+  <div *ngIf="isQueryRestaurant" fxLayoutAlign="center center">
+    <button class="btn editBtn" (click)="goBack()">
+      <fa-icon [icon]="faArrowCircleLeft"></fa-icon>
+      <b>Go Back</b>
+    </button>
+  </div>
 
   <div class="nearby" *ngIf="role == 'BU' || role == 'RO' && queryParam">
     <p class="nearby_text">Nearby Restaurants</p>

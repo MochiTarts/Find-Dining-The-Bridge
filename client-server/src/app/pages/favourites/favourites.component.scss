@@ -83,51 +83,65 @@
   overflow: hidden;
 }
 
-@media screen and (max-width: 767px) {
-
-.restaurant-container {
+.backBtn {
+  height: 50px;
+  padding: 0 15px 0 5px;
   position: relative;
+
+  fa-icon {
+    color: white;
+  }
 }
 
-.restaruant-listings-box {
-  min-height: 200px;
+.backBtn:hover {
+  fa-icon {
+    color: $secondary-color;
+  }
 }
 
-.row {
-  overflow: hidden;
-}
+@media screen and (max-width: 767px) {
+  .restaurant-container {
+    position: relative;
+  }
 
-.filter-button {
-  display: block;
-}
+  .restaruant-listings-box {
+    min-height: 200px;
+  }
 
-.filters {
-  display: none;
-}
+  .row {
+    overflow: hidden;
+  }
 
-.filters-mobile {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  max-width: 200px;
-  width: 60%;
-  min-width: 150px;
-  z-index: 1;
-  background-color: white;
-  transition: 1s;
-  overflow-y: scroll;
-}
+  .filter-button {
+    display: block;
+  }
 
-.restaurant-card-container {
-  width: fit-content;
-  margin: auto;
-}
+  .filters {
+    display: none;
+  }
 
-.show-btn {
-  margin: 20px auto;
-  width: 100%;
-}
+  .filters-mobile {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    max-width: 200px;
+    width: 60%;
+    min-width: 150px;
+    z-index: 1;
+    background-color: white;
+    transition: 1s;
+    overflow-y: scroll;
+  }
 
+  .restaurant-card-container {
+    width: fit-content;
+    margin: auto;
+  }
+
+  .show-btn {
+    margin: 20px auto;
+    width: 100%;
+  }
 }

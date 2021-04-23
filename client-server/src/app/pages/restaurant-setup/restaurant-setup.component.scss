@@ -24,6 +24,12 @@
   }
 }
 
+.btn-container {
+  @media screen and (max-width: 767px) {
+    text-align: center;
+  }
+}
+
 .btn {
   margin-left: 0px;
   height: 40px;

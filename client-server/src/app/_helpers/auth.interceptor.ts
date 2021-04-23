@@ -40,9 +40,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
         var user = this.tokenStorage.getUser();
         var err = error.error;
-        if (err && err.detail == "Token is invalid or expired") {
+        console.log(error.error)
+        console.log(error.error.detail)
+        if (err && (err.detail == "Token is invalid or expired" || ['token_mismatch'].includes(err.code))) {
           this.logout();
-          return throwError(error);
+          window.location.reload();
+          //return throwError(error);
         } else if (!user || (user && !user.role)) {
           // propogate error for error catching and displays
           return throwError(error);
@@ -51,9 +54,10 @@ export class AuthInterceptor implements HttpInterceptor {
         return this.handleTokenError(req, next);
         // log user out if 400 and error code indicates a need to reject the request
       } else if (error instanceof HttpErrorResponse && error.status === 400) {
-        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
+        if (error.error && ['invalid_token', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
           this.logout();
-          return throwError(error);
+          window.location.reload();
+          //return throwError(error);
           // 400 example: duplicate username/email on signup
         } else {
           return throwError(error);

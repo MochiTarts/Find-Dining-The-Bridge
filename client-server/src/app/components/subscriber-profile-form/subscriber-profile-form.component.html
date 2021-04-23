@@ -66,7 +66,8 @@
         ></app-dynamic-label>
       </div>
       <div class="form-group">
-        <label for="postalcode">Postal Code (A#A #A#) <app-required-star></app-required-star></label>
+        <label for="postalcode" id="postalCode_label">Postal Code (A#A #A#) <app-required-star></app-required-star></label>
+        <p id="postalCode_note" class="note">Postal code is used for identifying the restaurants closest to your location.</p>
         <div class="input-group">
           <input
             id="postalcode"
@@ -74,6 +75,7 @@
             placeholder="Ex: A1A 1A1"
             formControlName="postalcode"
             aria-required="true"
+            aria-labelledby="postalCode_label postalCode_note"
           />
         </div>
         <app-dynamic-label

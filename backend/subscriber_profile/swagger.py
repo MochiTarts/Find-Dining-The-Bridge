@@ -13,6 +13,7 @@ class SubscriberProfileInsert(serializers.Serializer):
     last_name = serializers.CharField(max_length=150)
     postalCode = serializers.CharField(max_length=7)
     phone = serializers.IntegerField()
+    phone_ext = serializers.IntegerField(required=False)
     consent_status = serializers.ChoiceField(
         required=False, choices=ConsentStatus.choices())
 
@@ -33,6 +34,7 @@ subscriber_profile_signup_post_response = {
                 "id": 10,
                 "last_updated": "2021-03-25T00:00:00.000+00:00",
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "M1C 1A4",
                 "subscribed_at": None,
                 "unsubscribed_at": None,
@@ -56,6 +58,7 @@ subscriber_profile_profile_get_response = {
                 "id": 10,
                 "last_updated": "2021-03-25T00:00:00.000+00:00",
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "M1C 1A4",
                 "subscribed_at": None,
                 "unsubscribed_at": None,
@@ -72,6 +75,7 @@ class SubscriberProfileUpdate(serializers.Serializer):
     last_name = serializers.CharField(max_length=150, required=False)
     postalCode = serializers.CharField(max_length=7, required=False)
     phone = serializers.IntegerField()
+    phone_ext = serializers.IntegerField(required=False)
     consent_status = serializers.ChoiceField(
         required=False, choices=ConsentStatus.choices())
 
@@ -92,6 +96,7 @@ subscriber_profile_profile_put_response = {
                 "id": 10,
                 "last_updated": "2021-03-25T00:00:00.000+00:00",
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "M1C 1A4",
                 "subscribed_at": None,
                 "unsubscribed_at": None,

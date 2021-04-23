@@ -6,7 +6,8 @@ import {
   faEdit,
   faShippingFast,
   faShareAlt,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faArrowCircleLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faTwitter, faInstagram, faFacebookF } from '@fortawesome/free-brands-svg-icons';
@@ -91,6 +92,7 @@ export class RestaurantPageComponent implements OnInit {
   faEdit = faEdit;
   faShippingFast = faShippingFast;
   faExternalLinkAlt = faExternalLinkAlt;
+  faArrowCircleLeft = faArrowCircleLeft;
 
   slides = [];
   dark = "dark";
@@ -211,13 +213,8 @@ export class RestaurantPageComponent implements OnInit {
 
     this.getPendingOrApprovedDishes(this.restaurantId).subscribe((data) => {
       this.restaurantMenu = data.Dishes;
-      for (let dish of data.Dishes) {
+      for (let dish of this.restaurantMenu) {
         dish.type = 'dish';
-        if (dish.category == "Popular Dish") {
-          this.popularDish.push(dish)
-        } else if (dish.category == "Special") {
-          this.specialDish.push(dish);
-        }
       }
     }, (error) => {
       this.error = true;
@@ -290,6 +287,13 @@ export class RestaurantPageComponent implements OnInit {
    */
   editMenu() {
     this.router.navigate(['/menu-edit']);
+  }
+
+  /**
+   * Redirects to the all-listings page
+   */
+  goBack() {
+    this.router.navigate(['/all-listings']);
   }
 
   openExternalMenu() {
