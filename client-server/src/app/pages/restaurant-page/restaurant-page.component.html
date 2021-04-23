@@ -80,6 +80,12 @@
     </div>
   </div>
 
+  <div *ngIf="restaurantDetails.sysAdminComments && !isQueryRestaurant" fxLayoutAlign="center center">
+    <ngb-alert [dismissible]="false">
+      <b>System Admin Comments: </b>{{ restaurantDetails.sysAdminComments }}
+    </ngb-alert>
+  </div>
+
   <mat-tab-group mat-align-tabs="center" class="mat-tab-group">
     <mat-tab label="Our Story">
       <div class="col-md-12">
