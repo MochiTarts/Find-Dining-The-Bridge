@@ -320,7 +320,7 @@ user_favourite_get_response = {
                     "sysAdminComments": "",
                     "twitter": "",
                     "web_url": "",
-                    "years": 0
+                    "years": 1
                 }
             ]
         }
@@ -472,7 +472,7 @@ restaurant_pending_get_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -538,7 +538,7 @@ restaurant_all_get_response = {
                         "sysAdminComments": "",
                         "twitter": "",
                         "web_url": "",
-                        "years": 0
+                        "years": 1
                     },
                     {
                         "GEO_location": "{'lat': 43.7825084, 'lng': -79.1853174}",
@@ -746,7 +746,7 @@ restaurant_draft_post_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -794,7 +794,7 @@ restaurant_draft_put_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "https://website.com",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -880,7 +880,7 @@ restaurant_submit_put_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -1016,7 +1016,7 @@ restaurant_media_put_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -1083,7 +1083,7 @@ restaurant_media_delete_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )

@@ -110,6 +110,7 @@ class NearbyRestaurantsView(APIView):
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
 
+        print(json.dumps(nearest, indent=4))
         return JsonResponse(nearest, safe=False)
 
 
