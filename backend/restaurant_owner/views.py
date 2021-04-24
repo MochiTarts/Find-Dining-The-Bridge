@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from restaurant_owner import schemas
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
 from restaurant_owner import swagger
@@ -21,23 +22,6 @@ from drf_yasg.utils import swagger_auto_schema
 
 from bson import ObjectId
 import json
-
-# jsonschema validation schemas for request bodies
-restaurant_owner_signup_schema = {
-    "properties": {
-        "restaurant_id": {"type": "string"},
-        "consent_status": {"type": "string"},
-    },
-    "required": ["restaurant_id"],
-    "additionalProperties": False
-}
-
-restaurant_owner_edit_schema = {
-    "properties": {
-        "consent_status": {"type": "string"},
-    },
-    "additionalProperties": False
-}
 
 
 class SignUp(APIView):
@@ -58,7 +42,7 @@ class SignUp(APIView):
                 message="Failed to obtain user", code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=restaurant_owner_signup_schema)
+        validate(instance=request.data, schema=schemas.restaurant_owner_signup_schema)
         body = request.data
         RestaurantOwner.field_validate(body)
 
@@ -96,7 +80,7 @@ class RestaurantOwnerView(APIView):
                 message="Failed to obtain user", code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=restaurant_owner_edit_schema)
+        validate(instance=request.data, schema=schemas.restaurant_owner_edit_schema)
         body = request.data
         RestaurantOwner.field_validate(body)
         profile = RestaurantOwner.edit_profile(user_id, body)

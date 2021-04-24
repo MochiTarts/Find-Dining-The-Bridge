@@ -443,7 +443,7 @@ export class RestaurantSetupComponent implements OnInit {
             }
             this.router.navigate(['/restaurant']).then(() => {
               this.chooseAlert(option);
-              this.reloadWithoutRefreshToken();
+              this.reload();
             });
           }
 
@@ -469,13 +469,6 @@ export class RestaurantSetupComponent implements OnInit {
       this.router.onSameUrlNavigation = 'reload';
       this.router.navigate([currentUrl]);
     });
-  }
-
-  reloadWithoutRefreshToken() {
-    let currentUrl = this.router.url;
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
-    this.router.navigate([currentUrl]);
   }
 
   /**

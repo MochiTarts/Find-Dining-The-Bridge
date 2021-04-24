@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { Location } from '@angular/common'
 import {
   faMapMarkerAlt,
   faPhone,
@@ -110,6 +111,7 @@ export class RestaurantPageComponent implements OnInit {
     private route: ActivatedRoute,
     private mediaService: MediaService,
     private userService: UserService,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -290,10 +292,12 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   /**
-   * Redirects to the all-listings page
+   * Redirects to the previous page
    */
   goBack() {
-    this.router.navigate(['/all-listings']);
+    this.location.back();
+    this.reload();
+    //this.router.navigate(['/all-listings']);
   }
 
   openExternalMenu() {
@@ -542,20 +546,19 @@ export class RestaurantPageComponent implements OnInit {
     // }
   }
 
+
   /**
    * Performs action to retrieve the 5 or less nearest restaurants
    */
   getNearbyRestaurants() {
     this.userService.getNearbyRestaurants().subscribe((restaurants) => {
-      for (let restaurant of restaurants) {
-        this.restaurantService.getApprovedRestaurant(restaurant.restaurant).subscribe((data) => {
-          let price = this.getPricepoint(String(data.pricepoint));
-          this.nearbyRestaurants.push({
-            name: data.name,
-            cuisinePrice: data.cuisines[0] + " - " + price,
-            imgUrl: data.logo_url,
-            _id: restaurant.restaurant
-          });
+      for (let entry of restaurants) {
+        let restaurant = entry.restaurant
+        this.nearbyRestaurants.push({
+          name: restaurant.name,
+          cuisinePrice: restaurant.cuisines[0] + " - " + restaurant.pricepoint,
+          imgUrl: restaurant.logo_url,
+          _id: restaurant._id
         })
       }
     });
