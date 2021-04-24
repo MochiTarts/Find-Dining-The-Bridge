@@ -188,3 +188,4 @@ class SDUserResentVerificationEmailView(APIView):
 
         except User.DoesNotExist:
             return JsonResponse({'message': "No user found with this email address. Please make sure you have entered the correct email address and try again."}, status=400)
+

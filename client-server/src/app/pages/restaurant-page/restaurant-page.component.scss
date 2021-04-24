@@ -143,7 +143,7 @@ ngb-alert {
 .logo-img {
   width: 263px;
   height: 175px;
-  object-fit: cover;
+  object-fit: contain;
 
   @media screen and (max-width: 990px) {
     width: 200px;
