@@ -1689,37 +1689,21 @@ export class NewsArticlesComponent implements OnInit {
                 &lt;/span&gt;
             &lt;/nav&gt;
         &lt;/div&gt;
-    
+
         &lt;div class&#x3D;&quot;carousel-row&quot;&gt;
             &lt;div class&#x3D;&quot;carousel&quot;&gt;
-                &lt;ivy-carousel
-                style&#x3D;&quot;max-width: fit-content; margin: auto;&quot;
-                *ngIf&#x3D;&quot;latestArticles.length&quot;
-                [images]&#x3D;&quot;latestArticles&quot;
-                [margin]&#x3D;&quot;30&quot;
-                [arrowsOutside]&#x3D;&quot;true&quot;
-                [cellWidth]&#x3D;&quot;300&quot;
-                [height]&#x3D;&quot;400&quot;
-                [arrowsTheme]&#x3D;&quot;dark&quot;
-                (selectedArticle)&#x3D;&quot;openArticle($event)&quot;
-                &gt;
+                &lt;ivy-carousel style&#x3D;&quot;max-width: fit-content; margin: auto;&quot; *ngIf&#x3D;&quot;latestArticles.length&quot;
+                    [images]&#x3D;&quot;latestArticles&quot; [margin]&#x3D;&quot;30&quot; [arrowsOutside]&#x3D;&quot;true&quot; [cellWidth]&#x3D;&quot;300&quot; [height]&#x3D;&quot;400&quot;
+                    [arrowsTheme]&#x3D;&quot;dark&quot; (selectedArticle)&#x3D;&quot;openArticle($event)&quot;&gt;
                 &lt;/ivy-carousel&gt;
             &lt;/div&gt;
         &lt;/div&gt;
 
         &lt;div class&#x3D;&quot;carousel-row-mobile&quot;&gt;
             &lt;div class&#x3D;&quot;carousel&quot;&gt;
-                &lt;ivy-carousel
-                style&#x3D;&quot;max-width: fit-content;&quot;
-                *ngIf&#x3D;&quot;latestArticles.length&quot;
-                [images]&#x3D;&quot;latestArticles&quot;
-                [margin]&#x3D;&quot;30&quot;
-                [arrowsOutside]&#x3D;&quot;false&quot;
-                [cellWidth]&#x3D;&quot;300&quot;
-                [height]&#x3D;&quot;400&quot;
-                [arrowsTheme]&#x3D;&quot;dark&quot;
-                (selectedArticle)&#x3D;&quot;openArticleMobile($event)&quot;
-                &gt;
+                &lt;ivy-carousel style&#x3D;&quot;max-width: fit-content;&quot; *ngIf&#x3D;&quot;latestArticles.length&quot; [images]&#x3D;&quot;latestArticles&quot;
+                    [margin]&#x3D;&quot;30&quot; [arrowsOutside]&#x3D;&quot;false&quot; [cellWidth]&#x3D;&quot;300&quot; [height]&#x3D;&quot;400&quot; [arrowsTheme]&#x3D;&quot;dark&quot;
+                    (selectedArticle)&#x3D;&quot;openArticleMobile($event)&quot;&gt;
                 &lt;/ivy-carousel&gt;
             &lt;/div&gt;
         &lt;/div&gt;
@@ -1732,43 +1716,53 @@ export class NewsArticlesComponent implements OnInit {
                     &lt;div class&#x3D;&quot;tab-content&quot; id&#x3D;&quot;pills-tabContent&quot;&gt;
                         &lt;div class&#x3D;&quot;tab-pane fade show active&quot; id&#x3D;&quot;tab1&quot; role&#x3D;&quot;tabpanel&quot;&gt;
                             &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice(0, 10)&quot;&gt;
-                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticle($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticle($event)&quot;&gt;
+                                &lt;/app-article-headline-card&gt;
                             &lt;/div&gt;
                         &lt;/div&gt;
 
-                        &lt;div class&#x3D;&quot;tab-pane fade&quot; id&#x3D;&quot;tab{{i+2}}&quot; role&#x3D;&quot;tabpanel&quot; *ngFor&#x3D;&quot;let tab of totalTabs.slice(1); let i &#x3D; index&quot;&gt;
-                            &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)&quot;&gt;
-                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticle($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                        &lt;div class&#x3D;&quot;tab-pane fade&quot; id&#x3D;&quot;tab{{i+2}}&quot; role&#x3D;&quot;tabpanel&quot;
+                            *ngFor&#x3D;&quot;let tab of totalTabs.slice(1); let i &#x3D; index&quot;&gt;
+                            &lt;div class&#x3D;&quot;headline-card&quot;
+                                *ngFor&#x3D;&quot;let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)&quot;&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticle($event)&quot;&gt;
+                                &lt;/app-article-headline-card&gt;
                             &lt;/div&gt;
                         &lt;/div&gt;
                     &lt;/div&gt;
 
                     &lt;ul class&#x3D;&quot;nav nav-pills mb-3&quot; id&#x3D;&quot;pills-tab&quot; role&#x3D;&quot;tablist&quot; *ngIf&#x3D;&quot;filteredArticles.length&quot;&gt;
-                        &lt;li class&#x3D;&quot;nav-item&quot; *ngFor&#x3D;&quot;let tab of totalTabs; let i &#x3D; index&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Go To Page&quot;&gt;
-                            &lt;a class&#x3D;&quot;nav-link active&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i &#x3D;&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+                        &lt;li class&#x3D;&quot;nav-item&quot; *ngFor&#x3D;&quot;let tab of totalTabs; let i &#x3D; index&quot; placement&#x3D;&quot;top&quot;
+                            ngbTooltip&#x3D;&quot;Go To Page&quot;&gt;
+                            &lt;a class&#x3D;&quot;nav-link active&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}&quot; role&#x3D;&quot;tab&quot;
+                                *ngIf&#x3D;&quot;i &#x3D;&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
 
-                            &lt;a class&#x3D;&quot;nav-link&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i !&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+                            &lt;a class&#x3D;&quot;nav-link&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i !&#x3D; 0&quot;&gt;{{ i+1
+                                }}&lt;/a&gt;
                         &lt;/li&gt;
                     &lt;/ul&gt;
                 &lt;/div&gt;
 
                 &lt;div class&#x3D;&quot;article-container&quot; id&#x3D;&quot;article-container&quot;&gt;
-                    &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;closeArticle()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Close Article&quot;&gt;Close Article&lt;/div&gt;
-
-                    &lt;h1 class&#x3D;&quot;article-title&quot;&gt;{{ selectedArticle.title }}&lt;/h1&gt;
-                    &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;!selectedArticle.modified_at&quot;&gt;
-                        Last Updated {{ (selectedArticle.created_at) | date:&#x27;mediumDate&#x27; }}
-                    &lt;/h3&gt;
-                    &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;selectedArticle.modified_at&quot;&gt;
-                        Last Updated {{ (selectedArticle.modified_at) | date:&#x27;mediumDate&#x27; }}
-                    &lt;/h3&gt;
-                    &lt;div class&#x3D;&quot;article-content&quot; [innerHTML]&#x3D;&quot;selectedArticle.content&quot;&gt;&lt;/div&gt;
+                    &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;closeArticle()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Close Article&quot;&gt;Close Article
+                    &lt;/div&gt;
+                    &lt;div *ngIf&#x3D;&quot;selectedArticle&quot;&gt;
+                        &lt;h1 class&#x3D;&quot;article-title&quot;&gt;{{ selectedArticle.title }}&lt;/h1&gt;
+                        &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;!selectedArticle.modified_at&quot;&gt;
+                            Last Updated {{ (selectedArticle.created_at) | date:&#x27;mediumDate&#x27; }}
+                        &lt;/h3&gt;
+                        &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;selectedArticle.modified_at&quot;&gt;
+                            Last Updated {{ (selectedArticle.modified_at) | date:&#x27;mediumDate&#x27; }}
+                        &lt;/h3&gt;
+                        &lt;div class&#x3D;&quot;article-content&quot; [innerHTML]&#x3D;&quot;selectedArticle.content&quot;&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
-    
+
             &lt;div class&#x3D;&quot;col-lg-2 filter&quot;&gt;
-                &lt;app-filterdate-card [months]&#x3D;&quot;months&quot; [years]&#x3D;&quot;years&quot;
-                (keyup.enter)&#x3D;&quot;filterEnter($event)&quot; (events)&#x3D;&quot;filterDate($event)&quot;&gt;
+                &lt;app-filterdate-card [months]&#x3D;&quot;months&quot; [years]&#x3D;&quot;years&quot; (keyup.enter)&#x3D;&quot;filterEnter($event)&quot;
+                    (events)&#x3D;&quot;filterDate($event)&quot;&gt;
                 &lt;/app-filterdate-card&gt;
             &lt;/div&gt;
 
@@ -1778,49 +1772,58 @@ export class NewsArticlesComponent implements OnInit {
                     &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;toggleFilter()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Open Filter Tab&quot;&gt;Filter&lt;/div&gt;
                 &lt;/div&gt;
 
-                &lt;div class&#x3D;&quot;article-list-mobile col-12&quot; id&#x3D;&quot;article-list-mobile&quot; fxLayout&#x3D;&quot;column&quot; fxLayoutAlign&#x3D;&quot;space-between&quot;&gt;
+                &lt;div class&#x3D;&quot;article-list-mobile col-12&quot; id&#x3D;&quot;article-list-mobile&quot; fxLayout&#x3D;&quot;column&quot;
+                    fxLayoutAlign&#x3D;&quot;space-between&quot;&gt;
                     &lt;div class&#x3D;&quot;tab-content&quot; id&#x3D;&quot;pills-tabContent&quot;&gt;
                         &lt;div class&#x3D;&quot;tab-pane fade show active&quot; id&#x3D;&quot;tab1mobile&quot; role&#x3D;&quot;tabpanel&quot;&gt;
                             &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice(0, 10)&quot;&gt;
-                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticleMobile($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot;
+                                    (articleOutput)&#x3D;&quot;openArticleMobile($event)&quot;&gt;&lt;/app-article-headline-card&gt;
                             &lt;/div&gt;
                         &lt;/div&gt;
 
-                        &lt;div class&#x3D;&quot;tab-pane fade&quot; id&#x3D;&quot;tab{{i+2}}mobile&quot; role&#x3D;&quot;tabpanel&quot; *ngFor&#x3D;&quot;let tab of totalTabs.slice(1); let i &#x3D; index&quot;&gt;
-                            &lt;div class&#x3D;&quot;headline-card&quot; *ngFor&#x3D;&quot;let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)&quot;&gt;
-                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot; (articleOutput)&#x3D;&quot;openArticleMobile($event)&quot;&gt;&lt;/app-article-headline-card&gt;
+                        &lt;div class&#x3D;&quot;tab-pane fade&quot; id&#x3D;&quot;tab{{i+2}}mobile&quot; role&#x3D;&quot;tabpanel&quot;
+                            *ngFor&#x3D;&quot;let tab of totalTabs.slice(1); let i &#x3D; index&quot;&gt;
+                            &lt;div class&#x3D;&quot;headline-card&quot;
+                                *ngFor&#x3D;&quot;let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)&quot;&gt;
+                                &lt;app-article-headline-card [article]&#x3D;&quot;article&quot;
+                                    (articleOutput)&#x3D;&quot;openArticleMobile($event)&quot;&gt;&lt;/app-article-headline-card&gt;
                             &lt;/div&gt;
                         &lt;/div&gt;
                     &lt;/div&gt;
 
                     &lt;ul class&#x3D;&quot;nav nav-pills mb-3&quot; id&#x3D;&quot;pills-tab&quot; role&#x3D;&quot;tablist&quot; *ngIf&#x3D;&quot;filteredArticles.length&quot;&gt;
                         &lt;li class&#x3D;&quot;nav-item&quot; *ngFor&#x3D;&quot;let tab of totalTabs; let i &#x3D; index&quot;&gt;
-                            &lt;a class&#x3D;&quot;nav-link active&quot; id&#x3D;&quot;pills-home-tab&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}mobile&quot; role&#x3D;&quot;tab&quot; aria-controls&#x3D;&quot;pills-home&quot; aria-selected&#x3D;&quot;true&quot; *ngIf&#x3D;&quot;i &#x3D;&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+                            &lt;a class&#x3D;&quot;nav-link active&quot; id&#x3D;&quot;pills-home-tab&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}mobile&quot;
+                                role&#x3D;&quot;tab&quot; aria-controls&#x3D;&quot;pills-home&quot; aria-selected&#x3D;&quot;true&quot; *ngIf&#x3D;&quot;i &#x3D;&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
 
-                            &lt;a class&#x3D;&quot;nav-link&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}mobile&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i !&#x3D; 0&quot;&gt;{{ i+1 }}&lt;/a&gt;
+                            &lt;a class&#x3D;&quot;nav-link&quot; data-toggle&#x3D;&quot;pill&quot; href&#x3D;&quot;#tab{{i+1}}mobile&quot; role&#x3D;&quot;tab&quot; *ngIf&#x3D;&quot;i !&#x3D; 0&quot;&gt;{{
+                                i+1 }}&lt;/a&gt;
                         &lt;/li&gt;
                     &lt;/ul&gt;
                 &lt;/div&gt;
 
                 &lt;div class&#x3D;&quot;article-container-mobile&quot; id&#x3D;&quot;article-container-mobile&quot; style&#x3D;&quot;overflow: hidden;&quot;&gt;
-                    &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;closeArticleMobile()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Close Current Article&quot;&gt;Close Article&lt;/div&gt;
-
-                    &lt;h1 class&#x3D;&quot;article-title&quot;&gt;{{ selectedArticle.title }}&lt;/h1&gt;
-                    &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;!selectedArticle.modified_at&quot;&gt;
-                        Last Updated {{ (selectedArticle.created_at) | date:&#x27;mediumDate&#x27; }}
-                    &lt;/h3&gt;
-                    &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;selectedArticle.modified_at&quot;&gt;
-                        Last Updated {{ (selectedArticle.modified_at) | date:&#x27;mediumDate&#x27; }}
-                    &lt;/h3&gt;
-                    &lt;div class&#x3D;&quot;article-content&quot; [innerHTML]&#x3D;&quot;selectedArticle.content&quot;&gt;&lt;/div&gt;
+                    &lt;div class&#x3D;&quot;btn&quot; (click)&#x3D;&quot;closeArticleMobile()&quot; placement&#x3D;&quot;top&quot; ngbTooltip&#x3D;&quot;Close Current Article&quot;&gt;
+                        Close Article&lt;/div&gt;
+                    &lt;div *ngIf&#x3D;&quot;selectedArticle&quot;&gt;
+                        &lt;h1 class&#x3D;&quot;article-title&quot;&gt;{{ selectedArticle.title }}&lt;/h1&gt;
+                        &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;!selectedArticle.modified_at&quot;&gt;
+                            Last Updated {{ (selectedArticle.created_at) | date:&#x27;mediumDate&#x27; }}
+                        &lt;/h3&gt;
+                        &lt;h3 class&#x3D;&quot;article-subtitle&quot; *ngIf&#x3D;&quot;selectedArticle.modified_at&quot;&gt;
+                            Last Updated {{ (selectedArticle.modified_at) | date:&#x27;mediumDate&#x27; }}
+                        &lt;/h3&gt;
+                        &lt;div class&#x3D;&quot;article-content&quot; [innerHTML]&#x3D;&quot;selectedArticle.content&quot;&gt;&lt;/div&gt;
+                    &lt;/div&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
 
         &lt;div class&#x3D;&quot;side-filter mat-elevation-z8&quot; id&#x3D;&quot;mobile-filter&quot; style&#x3D;&quot;margin-right: -400px;&quot;&gt;
             &lt;div&gt;
-                &lt;app-filterdate-card [months]&#x3D;&quot;months&quot; [years]&#x3D;&quot;years&quot;
-                (keyup.enter)&#x3D;&quot;filterEnter($event)&quot; (events)&#x3D;&quot;filterDate($event)&quot;&gt;
+                &lt;app-filterdate-card [months]&#x3D;&quot;months&quot; [years]&#x3D;&quot;years&quot; (keyup.enter)&#x3D;&quot;filterEnter($event)&quot;
+                    (events)&#x3D;&quot;filterDate($event)&quot;&gt;
                 &lt;/app-filterdate-card&gt;
             &lt;/div&gt;
         &lt;/div&gt;
@@ -2169,7 +2172,7 @@ h1, h2, h3, h4, h5, h6 {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><div class="article-body">    <div class="header-container">        <div class="title-row">            <div class="title">                <h1>Find Dining News</h1>                <div class="underline"></div>            </div>            <nav class="nav nav-header justify-content-end">                <span class="nav-item">                    <a class="nav-link" (click)="seeMostRecent()">Most Recent</a>                </span>                <span class="nav-item">                    <a class="nav-link" (click)="seeAll()">See All</a>                </span>            </nav>        </div>            <div class="carousel-row">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content; margin: auto;"                *ngIf="latestArticles.length"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="true"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticle($event)"                >                </ivy-carousel>            </div>        </div>        <div class="carousel-row-mobile">            <div class="carousel">                <ivy-carousel                style="max-width: fit-content;"                *ngIf="latestArticles.length"                [images]="latestArticles"                [margin]="30"                [arrowsOutside]="false"                [cellWidth]="300"                [height]="400"                [arrowsTheme]="dark"                (selectedArticle)="openArticleMobile($event)"                >                </ivy-carousel>            </div>        </div>    </div>    <div class="main-container">        <div class="row no-gutters article-row">            <div class="col-lg-10 article-list-col">                <div class="article-list col-12" id="article-list" fxLayout="column" fxLayoutAlign="space-between">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index" placement="top" ngbTooltip="Go To Page">                            <a class="nav-link active" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container" id="article-container">                    <div class="btn" (click)="closeArticle()" placement="top" ngbTooltip="Close Article">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">                        Last Updated {{ (selectedArticle.created_at) | date:\'mediumDate\' }}                    </h3>                    <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">                        Last Updated {{ (selectedArticle.modified_at) | date:\'mediumDate\' }}                    </h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>            </div>                <div class="col-lg-2 filter">                <app-filterdate-card [months]="months" [years]="years"                (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                </app-filterdate-card>            </div>            <!-- MOBILE LAYOUT BELOW -->            <div class="col-lg-12 article-mobile">                <div fxLayout="row" fxLayoutAlign="start">                    <div class="btn" (click)="toggleFilter()" placement="top" ngbTooltip="Open Filter Tab">Filter</div>                </div>                <div class="article-list-mobile col-12" id="article-list-mobile" fxLayout="column" fxLayoutAlign="space-between">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1mobile" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}mobile" role="tabpanel" *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" *ngIf="i != 0">{{ i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container-mobile" id="article-container-mobile" style="overflow: hidden;">                    <div class="btn" (click)="closeArticleMobile()" placement="top" ngbTooltip="Close Current Article">Close Article</div>                    <h1 class="article-title">{{ selectedArticle.title }}</h1>                    <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">                        Last Updated {{ (selectedArticle.created_at) | date:\'mediumDate\' }}                    </h3>                    <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">                        Last Updated {{ (selectedArticle.modified_at) | date:\'mediumDate\' }}                    </h3>                    <div class="article-content" [innerHTML]="selectedArticle.content"></div>                </div>            </div>        </div>        <div class="side-filter mat-elevation-z8" id="mobile-filter" style="margin-right: -400px;">            <div>                <app-filterdate-card [months]="months" [years]="years"                (keyup.enter)="filterEnter($event)" (events)="filterDate($event)">                </app-filterdate-card>            </div>        </div>    </div></div></div>'
+        var COMPONENT_TEMPLATE = '<div><div class="article-body">    <div class="header-container">        <div class="title-row">            <div class="title">                <h1>Find Dining News</h1>                <div class="underline"></div>            </div>            <nav class="nav nav-header justify-content-end">                <span class="nav-item">                    <a class="nav-link" (click)="seeMostRecent()">Most Recent</a>                </span>                <span class="nav-item">                    <a class="nav-link" (click)="seeAll()">See All</a>                </span>            </nav>        </div>        <div class="carousel-row">            <div class="carousel">                <ivy-carousel style="max-width: fit-content; margin: auto;" *ngIf="latestArticles.length"                    [images]="latestArticles" [margin]="30" [arrowsOutside]="true" [cellWidth]="300" [height]="400"                    [arrowsTheme]="dark" (selectedArticle)="openArticle($event)">                </ivy-carousel>            </div>        </div>        <div class="carousel-row-mobile">            <div class="carousel">                <ivy-carousel style="max-width: fit-content;" *ngIf="latestArticles.length" [images]="latestArticles"                    [margin]="30" [arrowsOutside]="false" [cellWidth]="300" [height]="400" [arrowsTheme]="dark"                    (selectedArticle)="openArticleMobile($event)">                </ivy-carousel>            </div>        </div>    </div>    <div class="main-container">        <div class="row no-gutters article-row">            <div class="col-lg-10 article-list-col">                <div class="article-list col-12" id="article-list" fxLayout="column" fxLayoutAlign="space-between">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)">                                </app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}" role="tabpanel"                            *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card"                                *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article" (articleOutput)="openArticle($event)">                                </app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index" placement="top"                            ngbTooltip="Go To Page">                            <a class="nav-link active" data-toggle="pill" href="#tab{{i+1}}" role="tab"                                *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}" role="tab" *ngIf="i != 0">{{ i+1                                }}</a>                        </li>                    </ul>                </div>                <div class="article-container" id="article-container">                    <div class="btn" (click)="closeArticle()" placement="top" ngbTooltip="Close Article">Close Article                    </div>                    <div *ngIf="selectedArticle">                        <h1 class="article-title">{{ selectedArticle.title }}</h1>                        <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">                            Last Updated {{ (selectedArticle.created_at) | date:\'mediumDate\' }}                        </h3>                        <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">                            Last Updated {{ (selectedArticle.modified_at) | date:\'mediumDate\' }}                        </h3>                        <div class="article-content" [innerHTML]="selectedArticle.content">                        </div>                    </div>                </div>            </div>            <div class="col-lg-2 filter">                <app-filterdate-card [months]="months" [years]="years" (keyup.enter)="filterEnter($event)"                    (events)="filterDate($event)">                </app-filterdate-card>            </div>            <!-- MOBILE LAYOUT BELOW -->            <div class="col-lg-12 article-mobile">                <div fxLayout="row" fxLayoutAlign="start">                    <div class="btn" (click)="toggleFilter()" placement="top" ngbTooltip="Open Filter Tab">Filter</div>                </div>                <div class="article-list-mobile col-12" id="article-list-mobile" fxLayout="column"                    fxLayoutAlign="space-between">                    <div class="tab-content" id="pills-tabContent">                        <div class="tab-pane fade show active" id="tab1mobile" role="tabpanel">                            <div class="headline-card" *ngFor="let article of filteredArticles.slice(0, 10)">                                <app-article-headline-card [article]="article"                                    (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                        <div class="tab-pane fade" id="tab{{i+2}}mobile" role="tabpanel"                            *ngFor="let tab of totalTabs.slice(1); let i = index">                            <div class="headline-card"                                *ngFor="let article of filteredArticles.slice((i+1)*10, (i+1)*10+10)">                                <app-article-headline-card [article]="article"                                    (articleOutput)="openArticleMobile($event)"></app-article-headline-card>                            </div>                        </div>                    </div>                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" *ngIf="filteredArticles.length">                        <li class="nav-item" *ngFor="let tab of totalTabs; let i = index">                            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#tab{{i+1}}mobile"                                role="tab" aria-controls="pills-home" aria-selected="true" *ngIf="i == 0">{{ i+1 }}</a>                            <a class="nav-link" data-toggle="pill" href="#tab{{i+1}}mobile" role="tab" *ngIf="i != 0">{{                                i+1 }}</a>                        </li>                    </ul>                </div>                <div class="article-container-mobile" id="article-container-mobile" style="overflow: hidden;">                    <div class="btn" (click)="closeArticleMobile()" placement="top" ngbTooltip="Close Current Article">                        Close Article</div>                    <div *ngIf="selectedArticle">                        <h1 class="article-title">{{ selectedArticle.title }}</h1>                        <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">                            Last Updated {{ (selectedArticle.created_at) | date:\'mediumDate\' }}                        </h3>                        <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">                            Last Updated {{ (selectedArticle.modified_at) | date:\'mediumDate\' }}                        </h3>                        <div class="article-content" [innerHTML]="selectedArticle.content"></div>                    </div>                </div>            </div>        </div>        <div class="side-filter mat-elevation-z8" id="mobile-filter" style="margin-right: -400px;">            <div>                <app-filterdate-card [months]="months" [years]="years" (keyup.enter)="filterEnter($event)"                    (events)="filterDate($event)">                </app-filterdate-card>            </div>        </div>    </div></div></div>'
     var COMPONENTS = [{'name': 'AboutUsComponent', 'selector': 'app-about-us'},{'name': 'AccountSettingComponent', 'selector': 'app-account-setting'},{'name': 'AllRestaurantsComponent', 'selector': 'app-all-restaurants'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'ArticleCommonCardComponent', 'selector': 'app-article-common-card'},{'name': 'ArticleHeadlineCardComponent', 'selector': 'app-article-headline-card'},{'name': 'CarouselWithThumbnailComponent', 'selector': 'app-carousel-with-thumbnail'},{'name': 'ContactUsComponent', 'selector': 'app-contact-us'},{'name': 'DishCardComponent', 'selector': 'app-dish-card'},{'name': 'DynamicLabelComponent', 'selector': 'app-dynamic-label'},{'name': 'EditPostsComponent', 'selector': 'app-edit-posts'},{'name': 'FavouritesComponent', 'selector': 'app-favourites'},{'name': 'FilterdateCardComponent', 'selector': 'app-filterdate-card'},{'name': 'FilterlistCardComponent', 'selector': 'app-filterlist-card'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'GetInvolvedComponent', 'selector': 'app-get-involved'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InfoCardComponent', 'selector': 'app-info-card'},{'name': 'IvyCarouselComponent', 'selector': 'ivy-carousel, [ivy-carousel]'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MapComponent', 'selector': 'app-map'},{'name': 'MenuEditComponent', 'selector': 'app-menu-edit'},{'name': 'MultiselectCheckboxDropdownComponent', 'selector': 'app-multiselect-checkbox-dropdown'},{'name': 'NavbarComponent', 'selector': 'app-navbar'},{'name': 'NewsArticlesComponent', 'selector': 'app-news-articles'},{'name': 'NewsletterComponent', 'selector': 'app-newsletter'},{'name': 'NewsletterSignupComponent', 'selector': 'app-newletter-signup'},{'name': 'PageErrorComponent', 'selector': 'app-page-error'},{'name': 'PartnerCardComponent', 'selector': 'app-partner-card'},{'name': 'PasswordChangeFormComponent', 'selector': 'app-password-change-form'},{'name': 'PostComponent', 'selector': 'app-post'},{'name': 'PrivacyPolicyComponent', 'selector': 'app-privacy-policy'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'RequiredStarComponent', 'selector': 'app-required-star'},{'name': 'ResourcesComponent', 'selector': 'app-resources'},{'name': 'RestaurantCardComponent', 'selector': 'app-restaurant-card'},{'name': 'RestaurantNearbyCardComponent', 'selector': 'app-restaurant-nearby-card'},{'name': 'RestaurantPageComponent', 'selector': 'app-restaurant-page'},{'name': 'RestaurantSetupComponent', 'selector': 'app-restaurant-setup'},{'name': 'SubscriberProfileFormComponent', 'selector': 'app-subscriber-profile-form'},{'name': 'TermsOfServiceComponent', 'selector': 'app-terms-of-service'},{'name': 'ThankyouPageComponent', 'selector': 'app-thankyou-page'},{'name': 'VirtualScrollingComponent', 'selector': 'app-virtual-scrolling'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'NewsArticlesComponent'};

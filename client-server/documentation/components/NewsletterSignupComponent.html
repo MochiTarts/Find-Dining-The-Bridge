@@ -603,7 +603,7 @@ export class NewsletterSignupComponent implements OnInit {
           );
           this.errorMessage &#x3D; &quot;Please make sure all the information is valid!&quot;
         } else {
-          this.errorMessage &#x3D; error.error.message;
+          this.errorMessage &#x3D; error.error.detail;
         }
         this.displayError &#x3D; true;
         this.gotoTop();

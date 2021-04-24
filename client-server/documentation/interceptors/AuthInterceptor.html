@@ -223,8 +223,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="81"
-                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:81</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="83"
+                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:83</a></div>
                 </td>
             </tr>
 
@@ -323,8 +323,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="95"
-                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:95</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:97</a></div>
                 </td>
             </tr>
 
@@ -523,8 +523,8 @@ while blocking all requests in between and retry after refresh returns</p>
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="70"
-                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:70</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="72"
+                            class="link-to-prism">src/app/_helpers/auth.interceptor.ts:72</a></div>
                 </td>
             </tr>
 
@@ -656,9 +656,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
         var user &#x3D; this.tokenStorage.getUser();
         var err &#x3D; error.error;
-        if (err &amp;&amp; err.detail &#x3D;&#x3D; &quot;Token is invalid or expired&quot;) {
+        if (err &amp;&amp; (err.detail &#x3D;&#x3D; &quot;Token is invalid or expired&quot; || [&#x27;token_mismatch&#x27;].includes(err.code))) {
           this.logout();
-          return throwError(error);
+          window.location.reload();
+          //return throwError(error);
         } else if (!user || (user &amp;&amp; !user.role)) {
           // propogate error for error catching and displays
           return throwError(error);
@@ -667,9 +668,10 @@ export class AuthInterceptor implements HttpInterceptor {
         return this.handleTokenError(req, next);
         // log user out if 400 and error code indicates a need to reject the request
       } else if (error instanceof HttpErrorResponse &amp;&amp; error.status &#x3D;&#x3D;&#x3D; 400) {
-        if (error.error &amp;&amp; [&#x27;no_valid_token_in_db&#x27;, &#x27;no_user_found&#x27;, &#x27;user_disabled&#x27;, &#x27;user_blocked&#x27;].includes(error.error.code)) {
+        if (error.error &amp;&amp; [&#x27;invalid_token&#x27;, &#x27;no_user_found&#x27;, &#x27;user_disabled&#x27;, &#x27;user_blocked&#x27;].includes(error.error.code)) {
           this.logout();
-          return throwError(error);
+          window.location.reload();
+          //return throwError(error);
           // 400 example: duplicate username/email on signup
         } else {
           return throwError(error);

@@ -198,7 +198,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/app/_validation/userValidator.ts:20</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="21" class="link-to-prism">src/app/_validation/userValidator.ts:21</a></div>
                             </td>
                         </tr>
 
@@ -228,8 +228,9 @@
                             <i>Default value : </i><code>{
     &#x27;first_name&#x27;: &#x27;Invalid First Name - name should not contain numbers or symbols&#x27;,
     &#x27;last_name&#x27;: &#x27;Invalid Last Name - name should not contain numbers or symbols&#x27;,
-    &#x27;postalCode&#x27;: &#x27;Invalid Postal Code - ensure A#A #A# format&#x27;,
+    &#x27;postalCode&#x27;: &#x27;Invalid Postal Code - ensure this postal code does exist and A#A #A# format&#x27;,
     &#x27;phone&#x27;: &#x27;Invalid phone number - ensure exactly 10 digits&#x27;,
+    &#x27;phone_ext&#x27;: &#x27;Invalid phone extension&#x27;,
 
     // for profanity filter
     &#x27;first_name_p&#x27;: this.profaneError,
@@ -239,7 +240,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/_validation/userValidator.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/_validation/userValidator.ts:25</a></div>
                             </td>
                         </tr>
 
@@ -271,7 +272,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="22" class="link-to-prism">src/app/_validation/userValidator.ts:22</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/_validation/userValidator.ts:23</a></div>
                             </td>
                         </tr>
 
@@ -297,6 +298,7 @@
     &#x27;last_name&#x27;: &#x27;&#x27;,
     &#x27;postalCode&#x27;: (postalCode) &#x3D;&gt; formValidation.isPostalCodeValid(postalCode),
     &#x27;phone&#x27;: (phone) &#x3D;&gt; formValidation.isPhoneValid(phone),
+    &#x27;phone_ext&#x27;: (phone_ext) &#x3D;&gt; formValidation.isOptionalNumberNonNegative(phone_ext),
 
     // for profanity filter
     &#x27;first_name_p&#x27;: (first_name_p) &#x3D;&gt; formValidation.isNotProfane(first_name_p),
@@ -306,7 +308,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/_validation/userValidator.ts:35</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/_validation/userValidator.ts:37</a></div>
                             </td>
                         </tr>
 
@@ -833,6 +835,7 @@ export class userValidator extends formValidator {
       &#x27;last_name&#x27;: &#x27;&#x27;,
       &#x27;postalCode&#x27;: &#x27;&#x27;,
       &#x27;phone&#x27;: &#x27;&#x27;,
+      &#x27;phone_ext&#x27;: &#x27;&#x27;,
 
       // for profanity filter
       &#x27;first_name_p&#x27;: &#x27;&#x27;,
@@ -847,8 +850,9 @@ export class userValidator extends formValidator {
   errorStrings &#x3D; {
     &#x27;first_name&#x27;: &#x27;Invalid First Name - name should not contain numbers or symbols&#x27;,
     &#x27;last_name&#x27;: &#x27;Invalid Last Name - name should not contain numbers or symbols&#x27;,
-    &#x27;postalCode&#x27;: &#x27;Invalid Postal Code - ensure A#A #A# format&#x27;,
+    &#x27;postalCode&#x27;: &#x27;Invalid Postal Code - ensure this postal code does exist and A#A #A# format&#x27;,
     &#x27;phone&#x27;: &#x27;Invalid phone number - ensure exactly 10 digits&#x27;,
+    &#x27;phone_ext&#x27;: &#x27;Invalid phone extension&#x27;,
 
     // for profanity filter
     &#x27;first_name_p&#x27;: this.profaneError,
@@ -860,6 +864,7 @@ export class userValidator extends formValidator {
     &#x27;last_name&#x27;: &#x27;&#x27;,
     &#x27;postalCode&#x27;: (postalCode) &#x3D;&gt; formValidation.isPostalCodeValid(postalCode),
     &#x27;phone&#x27;: (phone) &#x3D;&gt; formValidation.isPhoneValid(phone),
+    &#x27;phone_ext&#x27;: (phone_ext) &#x3D;&gt; formValidation.isOptionalNumberNonNegative(phone_ext),
 
     // for profanity filter
     &#x27;first_name_p&#x27;: (first_name_p) &#x3D;&gt; formValidation.isNotProfane(first_name_p),

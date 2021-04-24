@@ -372,8 +372,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="125"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:125</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:129</a></div>
                 </td>
             </tr>
 
@@ -495,8 +495,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="176"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:176</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="180"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:180</a></div>
                 </td>
             </tr>
 
@@ -577,8 +577,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="195"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:195</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="199"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:199</a></div>
                 </td>
             </tr>
 
@@ -618,8 +618,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="154"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:154</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="158"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:158</a></div>
                 </td>
             </tr>
 
@@ -659,8 +659,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="136"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:136</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="140"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:140</a></div>
                 </td>
             </tr>
 
@@ -700,8 +700,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="147"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:147</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="151"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:151</a></div>
                 </td>
             </tr>
 
@@ -780,8 +780,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="184"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:184</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="188"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:188</a></div>
                 </td>
             </tr>
 
@@ -821,8 +821,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="169"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:169</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="173"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:173</a></div>
                 </td>
             </tr>
 
@@ -1017,8 +1017,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="161"
-                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:161</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="165"
+                            class="link-to-prism">src/app/components/navbar/navbar.component.ts:165</a></div>
                 </td>
             </tr>
 
@@ -1491,7 +1491,7 @@ export class NavbarComponent implements OnInit {
       this.role &#x3D; user.role;
       this.username &#x3D; user.username;
 
-      if (this.role &#x3D;&#x3D; &#x27;BU&#x27;) {
+      if (user.profile_id &amp;&amp; this.role &#x3D;&#x3D; &#x27;BU&#x27;) {
         this.userService.getSubscriberProfile().subscribe((data) &#x3D;&gt; {
           this.userAddress &#x3D; data.postalCode;
         });
@@ -1563,7 +1563,11 @@ export class NavbarComponent implements OnInit {
    * Redirects to restaurant page
    */
   restaurant() {
-    this.router.navigate([&#x27;/restaurant&#x27;])
+    this.router.navigate([&#x27;/restaurant&#x27;]).then(() &#x3D;&gt; {
+      setTimeout(function () {
+        window.location.reload();
+      }, 100)
+    })
   }
 
   /**

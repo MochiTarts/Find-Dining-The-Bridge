@@ -332,7 +332,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1433,7 +1433,7 @@ export class RestaurantService {
    * Deletes the pending dish and approved dish from the database, given the dish&#x27;s id
    * @param dish_id - id of the dish to be deleted
    */
-  deleteDish(dish_id): void {
+  deleteDish(dish_id): Observable&lt;any&gt; {
     const endpoint &#x3D; DISH_ENDPOINT + &#x60;/pending/${dish_id}/&#x60;;
     /*const options &#x3D; {
       headers: new HttpHeaders({
@@ -1441,7 +1441,7 @@ export class RestaurantService {
       }),
       body: dishInfo,
     };*/
-    this.http.delete&lt;any&gt;(endpoint).subscribe((data) &#x3D;&gt; { });
+    return this.http.delete&lt;any&gt;(endpoint);
   }
 
 }

@@ -201,7 +201,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/_validation/restaurantValidator.ts:45</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/_validation/restaurantValidator.ts:50</a></div>
                             </td>
                         </tr>
 
@@ -229,46 +229,51 @@
                     <tr>
                         <td class="col-md-4">
                             <i>Default value : </i><code>{
-        &#x27;name&#x27;: &#x27;Restaurant Name is required, and must be less than 255 characters.&#x27;,
-        &#x27;years&#x27;: &#x27;Invalid Years in Business, ensure it is a non-negative number.&#x27;,
-        &#x27;address&#x27;: &#x27;Invalid Address - ensure the address is in Scarborough.&#x27;,
-        &#x27;streetAddress2&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
-        &#x27;streetAddress3&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
-        &#x27;phone&#x27;: &#x27;Invalid Phone Number, ensure it contains exactly 10 digits.&#x27;,
-        &#x27;email&#x27;: &#x27;Invalid Email, ensure it follows the name@domain.name format.&#x27;,
-        &#x27;pricepoint&#x27;:&#x27;Invalid Price Point, please select one.&#x27;,
-        &#x27;cuisines&#x27;:&#x27;Invalid Cuisine, please choose at least one cuisine.&#x27;,
-        &#x27;bio&#x27;: &#x27;Restaurant Story is required, and must be less than 2000 characters.&#x27;,
-        &#x27;postalCode&#x27;: &quot;Invalid postal code - ensure A#A #A# format, and is in Scarborough.&quot;,
-        &#x27;offer_options&#x27;: &quot;Invalid general serives.&quot;,
-        &#x27;deliveryDetails&#x27;: &quot;Delivery Details must be less than 2000 characters.&quot;,
-        &#x27;dineinPickupDetails&#x27;: &quot;Dine-in / Pick-up Details must be less than 2000 characters.&quot;,
-        &#x27;locationNotes&#x27;: &quot;Location Notes must be less than 2000 characters.&quot;,
-        &#x27;owner_first_name&#x27;: &quot;Owner First Name cannot be empty and cannot contain numbers or symbols.&quot;,
-        &#x27;owner_last_name&#x27;: &quot;Owner Last Name cannot be empty and cannot contain numbers or symbols.&quot;,
-        &#x27;owner_preferred_name&#x27;: &quot;Owner Preferred Name cannot be empty.&quot;,
-        &#x27;open_hours&#x27;: &#x27;Open Hours is required.&#x27;,
-        &#x27;payment_methods&#x27;: &#x27;Invalid Payment Method, please select at least one method.&#x27;,
+    &#x27;name&#x27;: &#x27;Restaurant Name is required, and must be less than 255 characters.&#x27;,
+    &#x27;years&#x27;: &#x27;Invalid Years in Business, ensure it is a non-negative number.&#x27;,
+    &#x27;address&#x27;: &#x27;Invalid Address - ensure the address is in Scarborough.&#x27;,
+    &#x27;streetAddress2&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
+    &#x27;streetAddress3&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
+    &#x27;phone&#x27;: &#x27;Invalid Phone Number, ensure it contains exactly 10 digits.&#x27;,
+    &#x27;phone_ext&#x27;: &#x27;Invalid Phone Extension&#x27;,
+    &#x27;email&#x27;: &#x27;Invalid Email, ensure it follows the name@domain.name format.&#x27;,
+    &#x27;pricepoint&#x27;: &#x27;Invalid Price Point, please select one.&#x27;,
+    &#x27;cuisines&#x27;: &#x27;Invalid Cuisine, please choose at least one cuisine.&#x27;,
+    &#x27;bio&#x27;: &#x27;Restaurant Story is required, and must be less than 2000 characters.&#x27;,
+    &#x27;postalCode&#x27;: &quot;Invalid postal code - ensure A#A #A# format, and is in Scarborough.&quot;,
+    &#x27;offer_options&#x27;: &quot;Invalid general serives.&quot;,
+    &#x27;deliveryDetails&#x27;: &quot;Delivery Details must be less than 2000 characters.&quot;,
+    &#x27;dineinPickupDetails&#x27;: &quot;Dine-in / Pick-up Details must be less than 2000 characters.&quot;,
+    &#x27;locationNotes&#x27;: &quot;Location Notes must be less than 2000 characters.&quot;,
+    &#x27;owner_first_name&#x27;: &quot;Owner First Name cannot be empty and cannot contain numbers or symbols.&quot;,
+    &#x27;owner_last_name&#x27;: &quot;Owner Last Name cannot be empty and cannot contain numbers or symbols.&quot;,
+    &#x27;owner_preferred_name&#x27;: &quot;Owner Preferred Name cannot be empty.&quot;,
+    &#x27;open_hours&#x27;: &#x27;Open Hours is required.&#x27;,
+    &#x27;payment_methods&#x27;: &#x27;Invalid Payment Method, please select at least one method.&#x27;,
+    &#x27;web_url&#x27;: this.linkerror,
+    &#x27;facebook&#x27;: this.linkerror,
+    &#x27;twitter&#x27;: this.linkerror,
+    &#x27;instagram&#x27;: this.linkerror,
 
-        // for profanity filter
-        &#x27;name_p&#x27;: this.profaneError,
-        &#x27;owner_first_name_p&#x27;: this.profaneError,
-        &#x27;owner_last_name_p&#x27;: this.profaneError,
-        &#x27;owner_preferred_name_p&#x27;: this.profaneError,
-        &#x27;address_p&#x27;: this.profaneError,
-        &#x27;streetAddress2_p&#x27;: this.profaneError,
-        &#x27;streetAddress3_p&#x27;: this.profaneError,
-        &#x27;deliveryDetails_p&#x27;: this.profaneError,
-        &#x27;dineinPickupDetails_p&#x27;: this.profaneError,
-        &#x27;locationNotes_p&#x27;: this.profaneError,
-        &#x27;bio_p&#x27;: this.profaneError,
-        &#x27;open_hours_p&#x27;: this.profaneError,
-    }</code>
+    // for profanity filter
+    &#x27;name_p&#x27;: this.profaneError,
+    &#x27;owner_first_name_p&#x27;: this.profaneError,
+    &#x27;owner_last_name_p&#x27;: this.profaneError,
+    &#x27;owner_preferred_name_p&#x27;: this.profaneError,
+    &#x27;address_p&#x27;: this.profaneError,
+    &#x27;streetAddress2_p&#x27;: this.profaneError,
+    &#x27;streetAddress3_p&#x27;: this.profaneError,
+    &#x27;deliveryDetails_p&#x27;: this.profaneError,
+    &#x27;dineinPickupDetails_p&#x27;: this.profaneError,
+    &#x27;locationNotes_p&#x27;: this.profaneError,
+    &#x27;bio_p&#x27;: this.profaneError,
+    &#x27;open_hours_p&#x27;: this.profaneError,
+  }</code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/_validation/restaurantValidator.ts:50</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="55" class="link-to-prism">src/app/_validation/restaurantValidator.ts:55</a></div>
                             </td>
                         </tr>
 
@@ -295,12 +300,12 @@
                     </tr>
                     <tr>
                         <td class="col-md-4">
-                            <i>Default value : </i><code>&quot;link does not exist.&quot;</code>
+                            <i>Default value : </i><code>&quot;This link is invalid.&quot;</code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/_validation/restaurantValidator.ts:47</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/_validation/restaurantValidator.ts:52</a></div>
                             </td>
                         </tr>
 
@@ -332,7 +337,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/_validation/restaurantValidator.ts:48</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/_validation/restaurantValidator.ts:53</a></div>
                             </td>
                         </tr>
 
@@ -354,44 +359,45 @@
                     <tr>
                         <td class="col-md-4">
                             <i>Default value : </i><code>formValidator.replaceDefaults({
-        &#x27;name&#x27;: (name) &#x3D;&gt; formValidation.isShorterThan(255, name, true),
-        &#x27;years&#x27;: (years) &#x3D;&gt; formValidation.isYearsValid(years),
-        &#x27;address&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, true),
-        &#x27;streetAddress2&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
-        &#x27;streetAddress3&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
-        &#x27;phone&#x27;: (phone) &#x3D;&gt; formValidation.isPhoneValid(phone),
-        &#x27;email&#x27;: (email) &#x3D;&gt; formValidation.isEmailValid(email),
-        &#x27;pricepoint&#x27;: (pricepoint) &#x3D;&gt; formValidation.isPricepointValid(pricepoint),
-        &#x27;cuisines&#x27;: (cuisines) &#x3D;&gt; formValidation.isListNonEmpty(cuisines),
-        &#x27;bio&#x27;: (bio) &#x3D;&gt; formValidation.isShorterThan(2000, bio, true),
-        &#x27;postalCode&#x27;: (postalCode)&#x3D;&gt; formValidation.isPostalValid(postalCode),
-        &#x27;deliveryDetails&#x27;: (deliveryDetails) &#x3D;&gt; formValidation.isShorterThan(2000, deliveryDetails, false),
-        &#x27;dineinPickupDetails&#x27;: (dineinPickupDetails) &#x3D;&gt; formValidation.isShorterThan(2000, dineinPickupDetails, false),
-        &#x27;locationNotes&#x27;: (locationNotes) &#x3D;&gt; formValidation.isShorterThan(2000, locationNotes, false),
-        &#x27;owner_first_name&#x27;: (owner_first_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_first_name),
-        &#x27;owner_last_name&#x27;: (owner_last_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_last_name),
-        &#x27;open_hours&#x27;: &#x27;&#x27;,
-        &#x27;payment_methods&#x27;: (payment_methods) &#x3D;&gt; formValidation.isListNonEmpty(payment_methods),
+    &#x27;name&#x27;: (name) &#x3D;&gt; formValidation.isShorterThan(255, name, true),
+    &#x27;years&#x27;: (years) &#x3D;&gt; formValidation.isYearsValid(years),
+    &#x27;address&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, true),
+    &#x27;streetAddress2&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
+    &#x27;streetAddress3&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
+    &#x27;phone&#x27;: (phone) &#x3D;&gt; formValidation.isPhoneValid(phone),
+    &#x27;phone_ext&#x27;: (phone_ext) &#x3D;&gt; formValidation.isOptionalNumberNonNegative(phone_ext),
+    &#x27;email&#x27;: (email) &#x3D;&gt; formValidation.isEmailValid(email),
+    &#x27;pricepoint&#x27;: (pricepoint) &#x3D;&gt; formValidation.isPricepointValid(pricepoint),
+    &#x27;cuisines&#x27;: (cuisines) &#x3D;&gt; formValidation.isListNonEmpty(cuisines),
+    &#x27;bio&#x27;: (bio) &#x3D;&gt; formValidation.isShorterThan(2000, bio, true),
+    &#x27;postalCode&#x27;: (postalCode) &#x3D;&gt; formValidation.isPostalValid(postalCode),
+    &#x27;deliveryDetails&#x27;: (deliveryDetails) &#x3D;&gt; formValidation.isShorterThan(2000, deliveryDetails, false),
+    &#x27;dineinPickupDetails&#x27;: (dineinPickupDetails) &#x3D;&gt; formValidation.isShorterThan(2000, dineinPickupDetails, false),
+    &#x27;locationNotes&#x27;: (locationNotes) &#x3D;&gt; formValidation.isShorterThan(2000, locationNotes, false),
+    &#x27;owner_first_name&#x27;: (owner_first_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_first_name),
+    &#x27;owner_last_name&#x27;: (owner_last_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_last_name),
+    &#x27;open_hours&#x27;: &#x27;&#x27;,
+    &#x27;payment_methods&#x27;: (payment_methods) &#x3D;&gt; formValidation.isListNonEmpty(payment_methods),
 
-        // for profanity filter
-        &#x27;name_p&#x27;: (name_p) &#x3D;&gt; formValidation.isNotProfane(name_p),
-        &#x27;owner_first_name_p&#x27;: (owner_first_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_first_name_p),
-        &#x27;owner_last_name_p&#x27;: (owner_last_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_last_name_p),
-        &#x27;owner_preferred_name_p&#x27;: (owner_preferred_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_preferred_name_p),
-        &#x27;address_p&#x27;: (address_p) &#x3D;&gt; formValidation.isNotProfane(address_p),
-        &#x27;streetAddress2_p&#x27;: (streetAddress2_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress2_p),
-        &#x27;streetAddress3_p&#x27;: (streetAddress3_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress3_p),
-        &#x27;deliveryDetails_p&#x27;: (deliveryDetails_p) &#x3D;&gt; formValidation.isNotProfane(deliveryDetails_p),
-        &#x27;dineinPickupDetails_p&#x27;: (dineinPickupDetails_p) &#x3D;&gt; formValidation.isNotProfane(dineinPickupDetails_p),
-        &#x27;locationNotes_p&#x27;: (locationNotes_p) &#x3D;&gt; formValidation.isNotProfane(locationNotes_p),
-        &#x27;bio_p&#x27;: (bio_p) &#x3D;&gt; formValidation.isNotProfane(bio_p),
-        &#x27;open_hours_p&#x27;: (open_hours_p) &#x3D;&gt; formValidation.isNotProfane(open_hours_p),
-    })</code>
+    // for profanity filter
+    &#x27;name_p&#x27;: (name_p) &#x3D;&gt; formValidation.isNotProfane(name_p),
+    &#x27;owner_first_name_p&#x27;: (owner_first_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_first_name_p),
+    &#x27;owner_last_name_p&#x27;: (owner_last_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_last_name_p),
+    &#x27;owner_preferred_name_p&#x27;: (owner_preferred_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_preferred_name_p),
+    &#x27;address_p&#x27;: (address_p) &#x3D;&gt; formValidation.isNotProfane(address_p),
+    &#x27;streetAddress2_p&#x27;: (streetAddress2_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress2_p),
+    &#x27;streetAddress3_p&#x27;: (streetAddress3_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress3_p),
+    &#x27;deliveryDetails_p&#x27;: (deliveryDetails_p) &#x3D;&gt; formValidation.isNotProfane(deliveryDetails_p),
+    &#x27;dineinPickupDetails_p&#x27;: (dineinPickupDetails_p) &#x3D;&gt; formValidation.isNotProfane(dineinPickupDetails_p),
+    &#x27;locationNotes_p&#x27;: (locationNotes_p) &#x3D;&gt; formValidation.isNotProfane(locationNotes_p),
+    &#x27;bio_p&#x27;: (bio_p) &#x3D;&gt; formValidation.isNotProfane(bio_p),
+    &#x27;open_hours_p&#x27;: (open_hours_p) &#x3D;&gt; formValidation.isNotProfane(open_hours_p),
+  })</code>
                         </td>
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="87" class="link-to-prism">src/app/_validation/restaurantValidator.ts:87</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/_validation/restaurantValidator.ts:97</a></div>
                             </td>
                         </tr>
 
@@ -909,123 +915,134 @@ returns false if all of the validations pass, true if one or more fail
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { formValidator } from &quot;./formValidator&quot;
 import { formValidation } from &quot;./forms&quot;
 
-export class restaurantValidator extends formValidator{
+export class restaurantValidator extends formValidator {
 
-    constructor(){
-        super();
-        this.errors &#x3D; {
-            &#x27;name&#x27;: &#x27;&#x27;,
-            &#x27;years&#x27;: &#x27;&#x27;,
-            &#x27;address&#x27;: &#x27;&#x27;,
-            &#x27;streetAddress2&#x27;: &#x27;&#x27;,
-            &#x27;streetAddress3&#x27;: &#x27;&#x27;,
-            &#x27;phone&#x27;: &#x27;&#x27;,
-            &#x27;email&#x27;: &#x27;&#x27;,
-            &#x27;pricepoint&#x27;:&#x27;&#x27;,
-            &#x27;cuisines&#x27;:&#x27;&#x27;,
-            &#x27;offer_options&#x27;: &#x27;&#x27;,
-            &#x27;bio&#x27;: &#x27;&#x27;,
-            &#x27;postalCode&#x27;: &#x27;&#x27;,
-            &#x27;deliveryDetails&#x27;: &#x27;&#x27;,
-            &#x27;locationNotes&#x27;: &#x27;&#x27;,
-            &#x27;owner_first_name&#x27;: &#x27;&#x27;,
-            &#x27;owner_last_name&#x27;: &#x27;&#x27;,
-            &#x27;owner_preferred_name&#x27;: &#x27;&#x27;,
-            &#x27;open_hours&#x27;: &#x27;&#x27;,
-            &#x27;payment_methods&#x27;: &#x27;&#x27;,
+  constructor() {
+    super();
+    this.errors &#x3D; {
+      &#x27;name&#x27;: &#x27;&#x27;,
+      &#x27;years&#x27;: &#x27;&#x27;,
+      &#x27;address&#x27;: &#x27;&#x27;,
+      &#x27;streetAddress2&#x27;: &#x27;&#x27;,
+      &#x27;streetAddress3&#x27;: &#x27;&#x27;,
+      &#x27;phone&#x27;: &#x27;&#x27;,
+      &#x27;phone_ext&#x27;: &#x27;&#x27;,
+      &#x27;email&#x27;: &#x27;&#x27;,
+      &#x27;pricepoint&#x27;: &#x27;&#x27;,
+      &#x27;cuisines&#x27;: &#x27;&#x27;,
+      &#x27;offer_options&#x27;: &#x27;&#x27;,
+      &#x27;bio&#x27;: &#x27;&#x27;,
+      &#x27;postalCode&#x27;: &#x27;&#x27;,
+      &#x27;deliveryDetails&#x27;: &#x27;&#x27;,
+      &#x27;locationNotes&#x27;: &#x27;&#x27;,
+      &#x27;owner_first_name&#x27;: &#x27;&#x27;,
+      &#x27;owner_last_name&#x27;: &#x27;&#x27;,
+      &#x27;owner_preferred_name&#x27;: &#x27;&#x27;,
+      &#x27;open_hours&#x27;: &#x27;&#x27;,
+      &#x27;payment_methods&#x27;: &#x27;&#x27;,
+      &#x27;web_url&#x27;: &#x27;&#x27;,
+      &#x27;facebook&#x27;: &#x27;&#x27;,
+      &#x27;twitter&#x27;: &#x27;&#x27;,
+      &#x27;instagram&#x27;: &#x27;&#x27;,
 
-            // for profanity filter
-            &#x27;name_p&#x27;: &#x27;&#x27;,
-            &#x27;owner_first_name_p&#x27;: &#x27;&#x27;,
-            &#x27;owner_last_name_p&#x27;: &#x27;&#x27;,
-            &#x27;owner_preferred_name_p&#x27;: &#x27;&#x27;,
-            &#x27;address_p&#x27;: &#x27;&#x27;,
-            &#x27;streetAddress2_p&#x27;: &#x27;&#x27;,
-            &#x27;streetAddress3_p&#x27;: &#x27;&#x27;,
-            &#x27;deliveryDetails_p&#x27;: &#x27;&#x27;,
-            &#x27;dineinPickupDetails_p&#x27;: &#x27;&#x27;,
-            &#x27;locationNotes_p&#x27;: &#x27;&#x27;,
-            &#x27;bio_p&#x27;: &#x27;&#x27;,
-            &#x27;open_hours_p&#x27;: &#x27;&#x27;,
-        }
+      // for profanity filter
+      &#x27;name_p&#x27;: &#x27;&#x27;,
+      &#x27;owner_first_name_p&#x27;: &#x27;&#x27;,
+      &#x27;owner_last_name_p&#x27;: &#x27;&#x27;,
+      &#x27;owner_preferred_name_p&#x27;: &#x27;&#x27;,
+      &#x27;address_p&#x27;: &#x27;&#x27;,
+      &#x27;streetAddress2_p&#x27;: &#x27;&#x27;,
+      &#x27;streetAddress3_p&#x27;: &#x27;&#x27;,
+      &#x27;deliveryDetails_p&#x27;: &#x27;&#x27;,
+      &#x27;dineinPickupDetails_p&#x27;: &#x27;&#x27;,
+      &#x27;locationNotes_p&#x27;: &#x27;&#x27;,
+      &#x27;bio_p&#x27;: &#x27;&#x27;,
+      &#x27;open_hours_p&#x27;: &#x27;&#x27;,
     }
+  }
 
-    errors &#x3D; {}
+  errors &#x3D; {}
 
-    linkerror: string &#x3D; &quot;link does not exist.&quot;;
-    profaneError: string &#x3D; &quot;This field contains profane content.&quot;;
+  linkerror: string &#x3D; &quot;This link is invalid.&quot;;
+  profaneError: string &#x3D; &quot;This field contains profane content.&quot;;
 
-    errorStrings &#x3D; {
-        &#x27;name&#x27;: &#x27;Restaurant Name is required, and must be less than 255 characters.&#x27;,
-        &#x27;years&#x27;: &#x27;Invalid Years in Business, ensure it is a non-negative number.&#x27;,
-        &#x27;address&#x27;: &#x27;Invalid Address - ensure the address is in Scarborough.&#x27;,
-        &#x27;streetAddress2&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
-        &#x27;streetAddress3&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
-        &#x27;phone&#x27;: &#x27;Invalid Phone Number, ensure it contains exactly 10 digits.&#x27;,
-        &#x27;email&#x27;: &#x27;Invalid Email, ensure it follows the name@domain.name format.&#x27;,
-        &#x27;pricepoint&#x27;:&#x27;Invalid Price Point, please select one.&#x27;,
-        &#x27;cuisines&#x27;:&#x27;Invalid Cuisine, please choose at least one cuisine.&#x27;,
-        &#x27;bio&#x27;: &#x27;Restaurant Story is required, and must be less than 2000 characters.&#x27;,
-        &#x27;postalCode&#x27;: &quot;Invalid postal code - ensure A#A #A# format, and is in Scarborough.&quot;,
-        &#x27;offer_options&#x27;: &quot;Invalid general serives.&quot;,
-        &#x27;deliveryDetails&#x27;: &quot;Delivery Details must be less than 2000 characters.&quot;,
-        &#x27;dineinPickupDetails&#x27;: &quot;Dine-in / Pick-up Details must be less than 2000 characters.&quot;,
-        &#x27;locationNotes&#x27;: &quot;Location Notes must be less than 2000 characters.&quot;,
-        &#x27;owner_first_name&#x27;: &quot;Owner First Name cannot be empty and cannot contain numbers or symbols.&quot;,
-        &#x27;owner_last_name&#x27;: &quot;Owner Last Name cannot be empty and cannot contain numbers or symbols.&quot;,
-        &#x27;owner_preferred_name&#x27;: &quot;Owner Preferred Name cannot be empty.&quot;,
-        &#x27;open_hours&#x27;: &#x27;Open Hours is required.&#x27;,
-        &#x27;payment_methods&#x27;: &#x27;Invalid Payment Method, please select at least one method.&#x27;,
+  errorStrings &#x3D; {
+    &#x27;name&#x27;: &#x27;Restaurant Name is required, and must be less than 255 characters.&#x27;,
+    &#x27;years&#x27;: &#x27;Invalid Years in Business, ensure it is a non-negative number.&#x27;,
+    &#x27;address&#x27;: &#x27;Invalid Address - ensure the address is in Scarborough.&#x27;,
+    &#x27;streetAddress2&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
+    &#x27;streetAddress3&#x27;: &#x27;Invalid Address, must be less than 100 characters.&#x27;,
+    &#x27;phone&#x27;: &#x27;Invalid Phone Number, ensure it contains exactly 10 digits.&#x27;,
+    &#x27;phone_ext&#x27;: &#x27;Invalid Phone Extension&#x27;,
+    &#x27;email&#x27;: &#x27;Invalid Email, ensure it follows the name@domain.name format.&#x27;,
+    &#x27;pricepoint&#x27;: &#x27;Invalid Price Point, please select one.&#x27;,
+    &#x27;cuisines&#x27;: &#x27;Invalid Cuisine, please choose at least one cuisine.&#x27;,
+    &#x27;bio&#x27;: &#x27;Restaurant Story is required, and must be less than 2000 characters.&#x27;,
+    &#x27;postalCode&#x27;: &quot;Invalid postal code - ensure A#A #A# format, and is in Scarborough.&quot;,
+    &#x27;offer_options&#x27;: &quot;Invalid general serives.&quot;,
+    &#x27;deliveryDetails&#x27;: &quot;Delivery Details must be less than 2000 characters.&quot;,
+    &#x27;dineinPickupDetails&#x27;: &quot;Dine-in / Pick-up Details must be less than 2000 characters.&quot;,
+    &#x27;locationNotes&#x27;: &quot;Location Notes must be less than 2000 characters.&quot;,
+    &#x27;owner_first_name&#x27;: &quot;Owner First Name cannot be empty and cannot contain numbers or symbols.&quot;,
+    &#x27;owner_last_name&#x27;: &quot;Owner Last Name cannot be empty and cannot contain numbers or symbols.&quot;,
+    &#x27;owner_preferred_name&#x27;: &quot;Owner Preferred Name cannot be empty.&quot;,
+    &#x27;open_hours&#x27;: &#x27;Open Hours is required.&#x27;,
+    &#x27;payment_methods&#x27;: &#x27;Invalid Payment Method, please select at least one method.&#x27;,
+    &#x27;web_url&#x27;: this.linkerror,
+    &#x27;facebook&#x27;: this.linkerror,
+    &#x27;twitter&#x27;: this.linkerror,
+    &#x27;instagram&#x27;: this.linkerror,
 
-        // for profanity filter
-        &#x27;name_p&#x27;: this.profaneError,
-        &#x27;owner_first_name_p&#x27;: this.profaneError,
-        &#x27;owner_last_name_p&#x27;: this.profaneError,
-        &#x27;owner_preferred_name_p&#x27;: this.profaneError,
-        &#x27;address_p&#x27;: this.profaneError,
-        &#x27;streetAddress2_p&#x27;: this.profaneError,
-        &#x27;streetAddress3_p&#x27;: this.profaneError,
-        &#x27;deliveryDetails_p&#x27;: this.profaneError,
-        &#x27;dineinPickupDetails_p&#x27;: this.profaneError,
-        &#x27;locationNotes_p&#x27;: this.profaneError,
-        &#x27;bio_p&#x27;: this.profaneError,
-        &#x27;open_hours_p&#x27;: this.profaneError,
-    }
+    // for profanity filter
+    &#x27;name_p&#x27;: this.profaneError,
+    &#x27;owner_first_name_p&#x27;: this.profaneError,
+    &#x27;owner_last_name_p&#x27;: this.profaneError,
+    &#x27;owner_preferred_name_p&#x27;: this.profaneError,
+    &#x27;address_p&#x27;: this.profaneError,
+    &#x27;streetAddress2_p&#x27;: this.profaneError,
+    &#x27;streetAddress3_p&#x27;: this.profaneError,
+    &#x27;deliveryDetails_p&#x27;: this.profaneError,
+    &#x27;dineinPickupDetails_p&#x27;: this.profaneError,
+    &#x27;locationNotes_p&#x27;: this.profaneError,
+    &#x27;bio_p&#x27;: this.profaneError,
+    &#x27;open_hours_p&#x27;: this.profaneError,
+  }
 
-    validationFuncs &#x3D; formValidator.replaceDefaults({
-        &#x27;name&#x27;: (name) &#x3D;&gt; formValidation.isShorterThan(255, name, true),
-        &#x27;years&#x27;: (years) &#x3D;&gt; formValidation.isYearsValid(years),
-        &#x27;address&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, true),
-        &#x27;streetAddress2&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
-        &#x27;streetAddress3&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
-        &#x27;phone&#x27;: (phone) &#x3D;&gt; formValidation.isPhoneValid(phone),
-        &#x27;email&#x27;: (email) &#x3D;&gt; formValidation.isEmailValid(email),
-        &#x27;pricepoint&#x27;: (pricepoint) &#x3D;&gt; formValidation.isPricepointValid(pricepoint),
-        &#x27;cuisines&#x27;: (cuisines) &#x3D;&gt; formValidation.isListNonEmpty(cuisines),
-        &#x27;bio&#x27;: (bio) &#x3D;&gt; formValidation.isShorterThan(2000, bio, true),
-        &#x27;postalCode&#x27;: (postalCode)&#x3D;&gt; formValidation.isPostalValid(postalCode),
-        &#x27;deliveryDetails&#x27;: (deliveryDetails) &#x3D;&gt; formValidation.isShorterThan(2000, deliveryDetails, false),
-        &#x27;dineinPickupDetails&#x27;: (dineinPickupDetails) &#x3D;&gt; formValidation.isShorterThan(2000, dineinPickupDetails, false),
-        &#x27;locationNotes&#x27;: (locationNotes) &#x3D;&gt; formValidation.isShorterThan(2000, locationNotes, false),
-        &#x27;owner_first_name&#x27;: (owner_first_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_first_name),
-        &#x27;owner_last_name&#x27;: (owner_last_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_last_name),
-        &#x27;open_hours&#x27;: &#x27;&#x27;,
-        &#x27;payment_methods&#x27;: (payment_methods) &#x3D;&gt; formValidation.isListNonEmpty(payment_methods),
+  validationFuncs &#x3D; formValidator.replaceDefaults({
+    &#x27;name&#x27;: (name) &#x3D;&gt; formValidation.isShorterThan(255, name, true),
+    &#x27;years&#x27;: (years) &#x3D;&gt; formValidation.isYearsValid(years),
+    &#x27;address&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, true),
+    &#x27;streetAddress2&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
+    &#x27;streetAddress3&#x27;: (address) &#x3D;&gt; formValidation.isShorterThan(100, address, false),
+    &#x27;phone&#x27;: (phone) &#x3D;&gt; formValidation.isPhoneValid(phone),
+    &#x27;phone_ext&#x27;: (phone_ext) &#x3D;&gt; formValidation.isOptionalNumberNonNegative(phone_ext),
+    &#x27;email&#x27;: (email) &#x3D;&gt; formValidation.isEmailValid(email),
+    &#x27;pricepoint&#x27;: (pricepoint) &#x3D;&gt; formValidation.isPricepointValid(pricepoint),
+    &#x27;cuisines&#x27;: (cuisines) &#x3D;&gt; formValidation.isListNonEmpty(cuisines),
+    &#x27;bio&#x27;: (bio) &#x3D;&gt; formValidation.isShorterThan(2000, bio, true),
+    &#x27;postalCode&#x27;: (postalCode) &#x3D;&gt; formValidation.isPostalValid(postalCode),
+    &#x27;deliveryDetails&#x27;: (deliveryDetails) &#x3D;&gt; formValidation.isShorterThan(2000, deliveryDetails, false),
+    &#x27;dineinPickupDetails&#x27;: (dineinPickupDetails) &#x3D;&gt; formValidation.isShorterThan(2000, dineinPickupDetails, false),
+    &#x27;locationNotes&#x27;: (locationNotes) &#x3D;&gt; formValidation.isShorterThan(2000, locationNotes, false),
+    &#x27;owner_first_name&#x27;: (owner_first_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_first_name),
+    &#x27;owner_last_name&#x27;: (owner_last_name) &#x3D;&gt; formValidation.isOwnerNamesNonEmpty(owner_last_name),
+    &#x27;open_hours&#x27;: &#x27;&#x27;,
+    &#x27;payment_methods&#x27;: (payment_methods) &#x3D;&gt; formValidation.isListNonEmpty(payment_methods),
 
-        // for profanity filter
-        &#x27;name_p&#x27;: (name_p) &#x3D;&gt; formValidation.isNotProfane(name_p),
-        &#x27;owner_first_name_p&#x27;: (owner_first_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_first_name_p),
-        &#x27;owner_last_name_p&#x27;: (owner_last_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_last_name_p),
-        &#x27;owner_preferred_name_p&#x27;: (owner_preferred_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_preferred_name_p),
-        &#x27;address_p&#x27;: (address_p) &#x3D;&gt; formValidation.isNotProfane(address_p),
-        &#x27;streetAddress2_p&#x27;: (streetAddress2_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress2_p),
-        &#x27;streetAddress3_p&#x27;: (streetAddress3_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress3_p),
-        &#x27;deliveryDetails_p&#x27;: (deliveryDetails_p) &#x3D;&gt; formValidation.isNotProfane(deliveryDetails_p),
-        &#x27;dineinPickupDetails_p&#x27;: (dineinPickupDetails_p) &#x3D;&gt; formValidation.isNotProfane(dineinPickupDetails_p),
-        &#x27;locationNotes_p&#x27;: (locationNotes_p) &#x3D;&gt; formValidation.isNotProfane(locationNotes_p),
-        &#x27;bio_p&#x27;: (bio_p) &#x3D;&gt; formValidation.isNotProfane(bio_p),
-        &#x27;open_hours_p&#x27;: (open_hours_p) &#x3D;&gt; formValidation.isNotProfane(open_hours_p),
-    })
+    // for profanity filter
+    &#x27;name_p&#x27;: (name_p) &#x3D;&gt; formValidation.isNotProfane(name_p),
+    &#x27;owner_first_name_p&#x27;: (owner_first_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_first_name_p),
+    &#x27;owner_last_name_p&#x27;: (owner_last_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_last_name_p),
+    &#x27;owner_preferred_name_p&#x27;: (owner_preferred_name_p) &#x3D;&gt; formValidation.isNotProfane(owner_preferred_name_p),
+    &#x27;address_p&#x27;: (address_p) &#x3D;&gt; formValidation.isNotProfane(address_p),
+    &#x27;streetAddress2_p&#x27;: (streetAddress2_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress2_p),
+    &#x27;streetAddress3_p&#x27;: (streetAddress3_p) &#x3D;&gt; formValidation.isNotProfane(streetAddress3_p),
+    &#x27;deliveryDetails_p&#x27;: (deliveryDetails_p) &#x3D;&gt; formValidation.isNotProfane(deliveryDetails_p),
+    &#x27;dineinPickupDetails_p&#x27;: (dineinPickupDetails_p) &#x3D;&gt; formValidation.isNotProfane(dineinPickupDetails_p),
+    &#x27;locationNotes_p&#x27;: (locationNotes_p) &#x3D;&gt; formValidation.isNotProfane(locationNotes_p),
+    &#x27;bio_p&#x27;: (bio_p) &#x3D;&gt; formValidation.isNotProfane(bio_p),
+    &#x27;open_hours_p&#x27;: (open_hours_p) &#x3D;&gt; formValidation.isNotProfane(open_hours_p),
+  })
 
 }
 </code></pre>

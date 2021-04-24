@@ -1034,7 +1034,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
       this.favourited &#x3D; true
       this.favList.push(this.restaurant);
     }, (error) &#x3D;&gt; {
-      alert(error.error.message)
+      alert(error.error.detail)
     })
   }
 
@@ -1046,7 +1046,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
     this.userService.removeFavRestaurant(restaurnt_id).subscribe(() &#x3D;&gt; {
       this.reload()
     }, (error) &#x3D;&gt; {
-      alert(error.error.message)
+      alert(error.error.detail)
     })
   }
 
@@ -1201,7 +1201,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
 .btn {
   height: fit-content;
   min-height: 40px;
-  margin: 5px 0px;
+  margin: 5px;
   background-color: $secondary-color;
   color: white;
 }
@@ -1225,7 +1225,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
+  //gap: 5px;
 }
 
 @media screen and (max-width: 767px) {
@@ -1274,7 +1274,7 @@ export class RestaurantCardComponent implements OnInit, OnChanges {
 .btn-container {
   flex-direction: column;
   align-items: flex-end;
-  gap: 0;
+  //gap: 0;
 }
 
 .buttons {
