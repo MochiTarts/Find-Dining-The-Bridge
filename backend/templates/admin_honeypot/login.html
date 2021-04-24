@@ -1,0 +1,14 @@
+{% extends 'admin/login.html' %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin_honeypot:index' %}">{{ site_header|default:_('Find Dining Administration') }}</a></h1>
+{% endblock %}
+
+{% block content %}
+    {% if debug %}
+        <p class="errornote alert alert-notice">Django Admin Honeypot is enabled. Please <a href="{% url 'admin:index' %}">click here</a> to log in to the actual admin site.</p>
+    {% endif %}
+    {{block.super}}
+{% endblock %}
+
+{% block nav-global %}{{ block.super }}{% if user.is_active and user.is_staff %}<style>#user-tools{display:none !important}</style>{% endif %}{% endblock %}

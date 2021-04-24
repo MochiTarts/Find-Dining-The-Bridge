@@ -44,7 +44,7 @@ export class NavbarComponent implements OnInit {
       this.role = user.role;
       this.username = user.username;
 
-      if (this.role == 'BU') {
+      if (user.profile_id && this.role == 'BU') {
         this.userService.getSubscriberProfile().subscribe((data) => {
           this.userAddress = data.postalCode;
         });
