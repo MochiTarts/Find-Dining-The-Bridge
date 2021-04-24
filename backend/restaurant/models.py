@@ -112,14 +112,28 @@ class Food(models.Model):
 
     @classmethod
     def get_by_restaurant(cls, rest_id):
-        """ Retrieves Restaurant record by its id,
-        given by rest_id param
+        """ Retrieves all the Food records a
+        Restaurant (given its id by rest_id) is
+        associated with
 
         :param rest_id: id of restaurant
         :type rest_id: ObjectId string
-        :return: restaurant data in json
-        :rtype: json
+        :raises: ObjectDoesNotExist if the Restaurant of rest_id does not exist
+        :raises: MultipleObjectsReturned if there are several records of the given rest_id
+        :return: list of Food objects the Restaurant of rest_id
+                is associated with
+        :rtype: list
         """
+        rest_filter = Restaurant.objects.filter(_id=rest_id)
+        if not rest_filter.exists():
+            raise ObjectDoesNotExist(
+                "The Restaurant with _id: " +
+                rest_id +
+                " does not exist")
+        if rest_filter.count() > 1:
+            raise MultipleObjectsReturned(
+                "There are more than one Restaurant with _id: " + rest_id)
+
         return list(Food.objects.filter(restaurant_id=rest_id))
 
 
@@ -618,13 +632,16 @@ class PendingRestaurant(models.Model):
         :type restaurant_data: json
         :raises: IntegrityError if the pending restaurant
             already exists in the database
-        :return: restaurant object representing sent data
+        :return: newly created restaurant object
         :rtype: :class:`PendingRestaurant` object
         """
         if cls.objects.filter(email=restaurant_data['email']).exists():
             raise IntegrityError(
                 'Cannot insert pending restaurant object, an object with this email already exists')
-        if 'years' in restaurant_data and restaurant_data['years'] == 0:
+        if 'years' in restaurant_data:
+            if restaurant_data['years'] == 0:
+                restaurant_data['years'] = 1
+        else:
             restaurant_data['years'] = 1
         restaurant = cls(
             **restaurant_data
@@ -678,7 +695,10 @@ class PendingRestaurant(models.Model):
             raise ObjectDoesNotExist(
                 'restaurant with owner user id ' + str(user_id) + ' does not exist')
 
-        if 'years' in body and body['years'] == 0:
+        if 'years' in body:
+            if body['years'] == 0:
+                body['years'] = 1
+        else:
             body['years'] = 1
         body["status"] = Status.In_Progress.value
         body["modified_time"] = timezone.now()
@@ -754,16 +774,9 @@ class PendingRestaurant(models.Model):
         if 'name' in fields and not fields['name']:
             invalid['Invalid'].append('name')
 
-        if 'address' in fields:
+        if 'address' in fields and 'postalCode' in fields:
             if not fields['address']:
                 invalid['Invalid'].append('address')
-            else:
-                try:
-                    geocode(fields['address'])
-                except ValidationError:
-                    invalid['Invalid'].append('address')
-
-        if 'postalCode' in fields:
             if not fields['postalCode']:
                 invalid['Invalid'].append('postalCode')
             else:
@@ -772,6 +785,11 @@ class PendingRestaurant(models.Model):
                     geocode(fields['postalCode'])
                 except ValidationError:
                     invalid['Invalid'].append('postalCode')
+                try:
+                    address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                    geocode(address)
+                except ValidationError:
+                    invalid['Invalid'].extend(['address, postalCode'])
 
         if 'email' in fields:
             try:
@@ -800,6 +818,7 @@ class PendingRestaurant(models.Model):
                 invalid['Invalid'].append('owner_last_name')
 
         if invalid['Invalid']:
+            invalid['Invalid'] = list(set(invalid['Invalid']))
             raise ValidationError(message=invalid, code="invalid_input")
 
     @classmethod
@@ -833,16 +852,9 @@ class PendingRestaurant(models.Model):
             else:
                 invalid['Invalid'].append('years')
 
-        if 'address' in fields:
+        if 'address' in fields and 'postalCode' in fields:
             if not fields['address']:
                 invalid['Invalid'].append('address')
-            else:
-                try:
-                    geocode(fields['address'])
-                except ValidationError:
-                    invalid['Invalid'].append('address')
-
-        if 'postalCode' in fields:
             if not fields['postalCode']:
                 invalid['Invalid'].append('postalCode')
             else:
@@ -851,6 +863,11 @@ class PendingRestaurant(models.Model):
                     geocode(fields['postalCode'])
                 except ValidationError:
                     invalid['Invalid'].append('postalCode')
+                try:
+                    address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                    geocode(address)
+                except ValidationError:
+                    invalid['Invalid'].extend(['address, postalCode'])
 
         if 'phone' in fields:
             if fields['phone'] is not None:

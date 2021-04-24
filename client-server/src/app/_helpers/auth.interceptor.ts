@@ -40,8 +40,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
         var user = this.tokenStorage.getUser();
         var err = error.error;
-        console.log(error.error)
-        console.log(error.error.detail)
         if (err && (err.detail == "Token is invalid or expired" || ['token_mismatch'].includes(err.code))) {
           this.logout();
           window.location.reload();

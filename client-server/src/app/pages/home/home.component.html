@@ -21,11 +21,11 @@
         <div class="input-group-prepend">
           <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
         </div>
-        <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location">
+        <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location" (keyup.enter)="onEnter()">
         <div class="input-group-prepend">
           <span class="input-group-text">Find</span>
         </div>
-        <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find">
+        <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find" (keyup.enter)="onEnter()">
         <div class="input-group-append">
           <button
             class="btn-primary"
@@ -40,6 +40,7 @@
 
       <button
         class="btn-primary search-btn"
+        id="search-btn"
         type="button"
         [routerLink]="['/all-listings']"
         [queryParams]="{location: location, find: find}"

@@ -9,6 +9,7 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from restaurant import schemas
 from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, FoodMediaForm
 from restaurant.enum import Status, MediaType, RestaurantSaveLocations, FoodSaveLocations
 from restaurant.models import (
@@ -33,196 +34,6 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from rest_framework.decorators import parser_classes
 from restaurant import swagger
-
-# jsonschema validation schemas for request bodies
-food_insert_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "description": {"type": "string"},
-        "picture": {"type": "string"},
-        "price": {"type": ["string", "number"]},
-        "specials": {"type": "string"},
-        "category": {"type": "string"}
-    },
-    "required": ["name", "description", "price", "specials", "category"],
-    "additionalProperties": False
-}
-
-food_edit_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "description": {"type": "string"},
-        "picture": {"type": "string"},
-        "price": {"type": ["string", "number"]},
-        "specials": {"type": "string"},
-        "category": {"type": "string"}
-    },
-    "additionalProperties": False
-}
-
-restaurant_insert_for_approval_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "years": {"type": "number"},
-        "address": {"type": "string"},
-        "streetAddress2": {"type": "string"},
-        "streetAddress3": {"type": "string"},
-        "postalCode": {"type": "string"},
-
-        "phone": {"type": "number"},
-        "email": {"type": "string"},
-        "cuisines": {"type": "array"},
-        "pricepoint": {"type": "string"},
-
-        "offer_options": {"type": "array"},
-
-        "dineinPickupDetails": {"type": "string"},
-        "deliveryDetails": {"type": "string"},
-        "locationNotes": {"type": "string"},
-
-        "web_url": {"type": "string"},
-        "facebook": {"type": "string"},
-        "twitter": {"type": "string"},
-        "instagram": {"type": "string"},
-        "bio": {"type": "string"},
-        "GEO_location": {"type": "string"},
-        "cover_photo_url": {"type": "string"},
-        "logo_url": {"type": "string"},
-        "restaurant_video_url": {"type": "string"},
-        "restaurant_image_url": {"type": "string"},
-
-        "owner_first_name": {"type": "array"},
-        "owner_last_name": {"type": "array"},
-        "owner_preferred_name": {"type": "array"},
-
-        "sysAdminComments": {"type": "string"},
-        "categories": {"type": "array"},
-        "status": {"type": "string"},
-
-        "open_hours": {"type": "string"},
-        "payment_methods": {"type": "array"},
-
-        "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"},
-        "phone_ext": {"type": "number"}
-    },
-    "required": ["name", "years", "address", "postalCode", "phone", "email", "pricepoint", "offer_options",
-                 "bio", "owner_first_name", "owner_last_name", "open_hours", "payment_methods"],
-    "additionalProperties": False
-}
-
-restaurant_insert_draft_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "years": {"type": "number"},
-        "address": {"type": "string"},
-        "streetAddress2": {"type": "string"},
-        "streetAddress3": {"type": "string"},
-        "postalCode": {"type": "string"},
-
-        "phone": {"type": "number"},
-        "email": {"type": "string"},
-        "cuisines": {"type": "array"},
-        "pricepoint": {"type": "string"},
-
-        "offer_options": {"type": "array"},
-
-        "dineinPickupDetails": {"type": "string"},
-        "deliveryDetails": {"type": "string"},
-        "locationNotes": {"type": "string"},
-
-        "web_url": {"type": "string"},
-        "facebook": {"type": "string"},
-        "twitter": {"type": "string"},
-        "instagram": {"type": "string"},
-        "bio": {"type": "string"},
-        "cover_photo_url": {"type": "string"},
-        "logo_url": {"type": "string"},
-        "restaurant_video_url": {"type": "string"},
-        "restaurant_image_url": {"type": "string"},
-
-        "owner_first_name": {"type": "array"},
-        "owner_last_name": {"type": "array"},
-        "owner_preferred_name": {"type": "array"},
-
-        "sysAdminComments": {"type": "string"},
-        "categories": {"type": "array"},
-        "status": {"type": "string"},
-
-        "open_hours": {"type": "string"},
-        "payment_methods": {"type": "array"},
-
-        "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"},
-        "phone_ext": {"type": "number"}
-    },
-    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
-    "additionalProperties": False
-}
-
-restaurant_edit_draft_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "years": {"type": "number"},
-        "address": {"type": "string"},
-        "streetAddress2": {"type": "string"},
-        "streetAddress3": {"type": "string"},
-        "postalCode": {"type": "string"},
-
-        "phone": {"type": "number"},
-        "email": {"type": "string"},
-        "cuisines": {"type": "array"},
-        "pricepoint": {"type": "string"},
-
-        "offer_options": {"type": "array"},
-
-        "dineinPickupDetails": {"type": "string"},
-        "deliveryDetails": {"type": "string"},
-        "locationNotes": {"type": "string"},
-
-        "web_url": {"type": "string"},
-        "facebook": {"type": "string"},
-        "twitter": {"type": "string"},
-        "instagram": {"type": "string"},
-        "bio": {"type": "string"},
-        "cover_photo_url": {"type": "string"},
-        "logo_url": {"type": "string"},
-        "restaurant_video_url": {"type": "string"},
-        "restaurant_image_url": {"type": "string"},
-
-        "owner_first_name": {"type": "array"},
-        "owner_last_name": {"type": "array"},
-        "owner_preferred_name": {"type": "array"},
-
-        "sysAdminComments": {"type": "string"},
-        "categories": {"type": "array"},
-        "status": {"type": "string"},
-
-        "open_hours": {"type": "string"},
-        "payment_methods": {"type": "array"},
-
-        "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"},
-        "phone_ext": {"type": "number"}
-    },
-    "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
-    "additionalProperties": False
-}
-
-user_fav_schema = {
-    "properties": {
-        "restaurant": {"type": "string"}
-    },
-    "required": ["restaurant"],
-    "additionalProperties": False
-}
-
-post_schema = {
-    'properties': {
-        'restaurant_id': {'type': 'string'},
-        'content': {'type': 'string'}
-    }
-}
 
 
 class DishList(APIView):
@@ -259,7 +70,7 @@ class PendingDishView(APIView):
     @swagger_auto_schema(responses=swagger.dish_pending_get_response,
                          operation_id="GET /dish/pending/")
     def get(self, request):
-        """ Retrieve all dishes from a restaurant """
+        """ Retrieve all dishes from restaurant owned by user """
         user = request.user
         if not user:
             raise PermissionDenied(
@@ -291,7 +102,7 @@ class PendingDishView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=food_insert_schema)
+        validate(instance=request.data, schema=schemas.food_insert_schema)
         body = request.data
         PendingFood.field_validate(body)
 
@@ -310,12 +121,13 @@ class PendingDishView(APIView):
 
 class PendingDishModifyDeleteView(APIView):
     """ PendingDish view for updating or deleting """
+    permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.PendingFoodInsertUpdate,
                          responses=swagger.dish_pending_dish_id_put_response,
                          operation_id="PUT /dish/pending/{dish_id}/")
     def put(self, request, dish_id):
-        """ Update Dish data """
+        """ Updates dish data """
         user = request.user
         if not user:
             raise PermissionDenied(
@@ -324,7 +136,7 @@ class PendingDishModifyDeleteView(APIView):
 
         user_id = user.id
         validate(instance=request.data,
-                 schema=food_edit_schema)
+                 schema=schemas.food_edit_schema)
         body = request.data
         PendingFood.field_validate(body)
 
@@ -336,8 +148,7 @@ class PendingDishModifyDeleteView(APIView):
                 str(user_id) +
                 " does not exist")
 
-        rest_id = restaurant._id
-        dish = PendingFood.edit_dish(dish_id, body, rest_id)
+        dish = PendingFood.edit_dish(dish_id, body, restaurant._id)
         return JsonResponse(model_to_json(dish))
 
     @swagger_auto_schema(responses=swagger.dish_pending_dish_id_delete_response,
@@ -362,28 +173,6 @@ class PendingDishModifyDeleteView(APIView):
         return JsonResponse(model_to_json(deleted_dish))
 
 
-def remove_category(category, restaurant):
-    """
-    remove category from restaurant
-    :param category: food category
-    :param restaurant: restaurant document
-    """
-    restaurant.categories.remove(category)
-    restaurant.save(update_fields=['categories'])
-
-
-def category_exists(restaurant_id, category):
-    """
-    check if restaurant still covers category 'category'
-    :param restaurant:referenced restaurant
-    :param category: category
-    :return:boolean
-    """
-    return PendingFood.objects.filter(
-        restaurant_id=restaurant_id,
-        category=category).exists()
-
-
 # get_user_favs_page
 # add_user_fav_page
 class UserFavView(APIView):
@@ -402,7 +191,7 @@ class UserFavView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=user_fav_schema)
+        validate(instance=request.data, schema=schemas.user_fav_schema)
         body = request.data
         body['user_id'] = user_id
         rest_id = body['restaurant']
@@ -552,7 +341,7 @@ class RestaurantDraftView(APIView):
                 code="fail_obtain_user")
 
         validate(instance=request.data,
-                 schema=restaurant_insert_draft_schema)
+                 schema=schemas.restaurant_insert_draft_schema)
         body = request.data
         PendingRestaurant.field_validate_draft(body)
         restaurant = PendingRestaurant.insert(body)
@@ -571,7 +360,7 @@ class RestaurantDraftView(APIView):
 
         user_id = user.id
         validate(instance=request.data,
-                 schema=restaurant_edit_draft_schema)
+                 schema=schemas.restaurant_edit_draft_schema)
         body = request.data
         PendingRestaurant.field_validate_draft(body)
         restaurant = PendingRestaurant.edit_draft(user_id, body)
@@ -596,7 +385,7 @@ class RestaurantForApprovalView(APIView):
 
         user_id = user.id
         validate(instance=request.data,
-                 schema=restaurant_insert_for_approval_schema)
+                 schema=schemas.restaurant_insert_for_approval_schema)
         body = request.data
         PendingRestaurant.field_validate(body)
 
@@ -607,15 +396,6 @@ class RestaurantForApprovalView(APIView):
         else:
             restaurant = PendingRestaurant.edit_approval(user_id, body)
         return JsonResponse(model_to_json(restaurant))
-
-
-def category_is_changed(body):
-    """
-    check whether category was edited
-    :param body: request body for editing
-    :return: boolean
-    """
-    return 'category' in body
 
 
 class AnalyticsAccessTokenView(APIView):
@@ -673,7 +453,7 @@ class PostView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=post_schema)
+        validate(instance=request.data, schema=schemas.post_schema)
         body = request.data
         body['owner_user_id'] = user_id
         RestaurantPost.field_validate(body)

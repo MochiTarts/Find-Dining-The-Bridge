@@ -82,12 +82,12 @@ class DraftRestaurantTestCases(TestCase):
             email="draft@mail.com"
         )
 
-    def test_insert_restaurant_draft(self):
+    def test_insert_restaurant_draft_valid(self):
         """ Tests to see if restaurant draft is inserted correctly """
         restaurant_draft = {
             "name": "Test Restaurant",
             "address": "300 Borough Str",
-            "postalCode": "M1C 1A4",
+            "postalCode": "M1P 4P5",
             "email": "bob@mail.com",
             "owner_first_name": ["Bob"],
             "owner_last_name": ["Smith"],
@@ -97,8 +97,9 @@ class DraftRestaurantTestCases(TestCase):
         response = self.client.post('/api/restaurant/draft/', restaurant_draft, format='json')
         self.assertTrue(PendingRestaurant.objects.filter(
             name="Test Restaurant",
-            address="300 Borough Dr",
-            postalCode="M1C 1A4",
+            years=1,
+            address="300 Borough Str",
+            postalCode="M1P 4P5",
             email="bob@mail.com",
             owner_first_name=["Bob"],
             owner_last_name=["Smith"],
@@ -110,8 +111,8 @@ class DraftRestaurantTestCases(TestCase):
         """ Tests to see if proper error message is returned from invalid inputs """
         restaurant_draft = {
             "name": "Test Restaurant",
-            "address": "4100 Somewhere Str",
-            "postalCode": "M1C 000",
+            "address": "",
+            "postalCode": "M1M 1M0",
             "email": "bob@mail.com",
             "owner_first_name": ["Bob"],
             "owner_last_name": ["Smith"],
@@ -120,10 +121,12 @@ class DraftRestaurantTestCases(TestCase):
         }
         response = self.client.post('/api/restaurant/draft/', restaurant_draft, format='json')
         expected = {'status': 400, 'code': 'bad_request', 'detail': {'Invalid': ['address', 'postalCode']}}
+        print(json.loads(response.content))
         self.assertFalse(PendingRestaurant.objects.filter(
             name="Test Restaurant",
-            address="4100 Somewhere Str",
-            postalCode="M1C 000",
+            years=1,
+            address="",
+            postalCode="M1M 1M0",
             email="bob@mail.com",
             owner_first_name=["Bob"],
             owner_last_name=["Smith"],
@@ -132,7 +135,7 @@ class DraftRestaurantTestCases(TestCase):
             status="In_Progress").exists())
         self.assertTrue(json.loads(response.content), expected)
 
-    def test_edit_restaurant_draft(self):
+    def test_edit_restaurant_draft_valid(self):
         """ Tests to see if restaurant draft is updated correctly """
         edit_draft = {
             "name": "test draft 2",
@@ -147,9 +150,10 @@ class DraftRestaurantTestCases(TestCase):
         response = self.client.put('/api/restaurant/draft/', edit_draft, format='json')
         restaurant = PendingRestaurant.objects.filter(owner_user_id=self.ro.id).first()
         self.assertTrue(
-            restaurant.name == "test draft 2" and restaurant.address == "1265 Military Trail" and restaurant.postalCode == "M1C 1A4"
-            and restaurant.owner_first_name == ["Jenny"] and restaurant.owner_last_name == ["Yu"]
-            and restaurant.phone == 4166688966 and restaurant.phone_ext == 1200)
+            restaurant.name == "test draft 2" and restaurant.years == 1 and restaurant.address == "1265 Military Trail"
+            and restaurant.postalCode == "M1C 1A4" and restaurant.owner_first_name == ["Jenny"]
+            and restaurant.owner_last_name == ["Yu"] and restaurant.phone == 4166688966
+            and restaurant.phone_ext == 1200)
 
 
 class RestaurantApprovalTestCases(TestCase):
@@ -165,7 +169,7 @@ class RestaurantApprovalTestCases(TestCase):
             owner_user_id=self.ro.id
         )
 
-    def test_insert_restaurant_submission(self):
+    def test_insert_restaurant_submission_valid(self):
         """ Test if restaurant for approval is inserted correctly """
         restaurant_submission = {
             "name": "Test Restaurant",
@@ -220,7 +224,7 @@ class RestaurantApprovalTestCases(TestCase):
             "phone_ext": 1200
         }
         response = self.client.put('/api/restaurant/submit/', restaurant_submission, format='json')
-        expected = {'status': 400, 'code': 'bad_request', 'detail': {'Invalid': ['address', 'postalCode']}}
+        expected = {'status': 400, 'code': 'bad_request', 'detail': {'Invalid': ['postalCode']}}
         self.assertFalse(PendingRestaurant.objects.filter(
             name="Test Restaurant",
             years=1,
@@ -239,11 +243,11 @@ class RestaurantApprovalTestCases(TestCase):
             status=Status.Pending.name).exists())
         self.assertTrue(json.loads(response.content), expected)
 
-    def test_edit_restaurant_submission(self):
+    def test_edit_restaurant_submission_valid(self):
         """ Test if restaurnat for approval is updated correctly """
         edit_submission = {
-            "name": "Restaurant For Approval 2",
-            "years": 1,
+            "name": "Test Restaurant 2",
+            "years": 10,
             "address": "300 Borough Dr",
             "postalCode": "M1C 3A4",
             "phone": 1234567890,
@@ -259,8 +263,8 @@ class RestaurantApprovalTestCases(TestCase):
         }
         response = self.client.put('/api/restaurant/submit/', edit_submission, format='json')
         self.assertTrue(PendingRestaurant.objects.filter(
-            name="Restaurant For Approval 2",
-            years=1,
+            name="Test Restaurant 2",
+            years=10,
             address="300 Borough Dr",
             postalCode="M1C 3A4",
             phone=1234567890,
@@ -273,7 +277,7 @@ class RestaurantApprovalTestCases(TestCase):
             open_hours="9-5",
             payment_methods=[Payment.Credit.name, Payment.Debit.name],
             phone_ext=1200,
-            status=Status.Pending.name).exists())
+            status=Status.Pending.name).exists)
 
 
 class PendingRestaurantTestCases(TestCase):

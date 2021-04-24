@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from subscriber_profile.models import SubscriberProfile
 from restaurant.models import PendingRestaurant, Restaurant
+from .model_util import model_to_json
 
 import math
 from math import sin, cos, sqrt, atan2, radians
@@ -45,7 +46,7 @@ def get_nearby_restaurants(user_id, role):
     :type role: str
     :raises ObjectDoesNotExist: if the Subscriber or PendingRestaurnat associated
         with the given user_id does not exist
-    :return: list of dict objects, each one containing the restaurant's id
+    :return: list of dict objects, each one containing the restaurant object
         and distance from the sduser, in ascending order
     :rtype: list of dict
     """
@@ -70,7 +71,7 @@ def get_nearby_restaurants(user_id, role):
         restaurant_location = ast.literal_eval(restaurant.GEO_location)
         distance = calculate_distance(user_location, restaurant_location)
         nearest.append(
-            {"restaurant": str(restaurant._id), "distance": distance})
+            {"restaurant": model_to_json(restaurant), "distance": distance})
 
     nearest = sorted(nearest, key=itemgetter("distance"))
     if (len(nearest) > 5):
