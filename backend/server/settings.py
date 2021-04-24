@@ -30,6 +30,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
+INTERNAL_IPS = ['localhost', '127.0.0.1']
+
 # Custom URL for Django views to redirect requests to Angular Routing
 VIEW_REDIRECT_URL = os.environ.get('VIEW_REDIRECT_URL')
 
@@ -214,6 +216,8 @@ if not DEBUG:
     # it’s a good idea to increase this value so that infrequent visitors will be protected
     # (31536000 seconds, i.e. 1 year, is common).
     SECURE_HSTS_SECONDS = 3600
+    # adds the preload directive to the HTTP Strict Transport Security header
+    SECURE_HSTS_PRELOAD = True
     # set this to false to allow subdomain with invalid SSL for testing
     # SECURE_HSTS_INCLUDE_SUBDOMAINS = False
     SESSION_COOKIE_SECURE = True
@@ -375,4 +379,16 @@ GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get(
 
 # Used to determine whether or not to email site admins on login attempts
 # (on the fake login screen)
-ADMIN_HONEYPOT_EMAIL_ADMINS = True
+# Set to False for now to avoid getting flooded with notification emails
+ADMIN_HONEYPOT_EMAIL_ADMINS = False
+
+# Custom var for storing the admin email
+INFO_EMAIL = 'info@finddining.ca'
+
+# A list of all the people who get code error notifications
+ADMINS = [('admin', INFO_EMAIL),]
+# Default email address to use for various automated correspondence
+# from the site manager(s)
+DEFAULT_FROM_EMAIL = INFO_EMAIL
+# The email address that error messages come from
+# SERVER_EMAIL = INFO_EMAIL
