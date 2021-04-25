@@ -95,7 +95,7 @@ class PendingDishView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        validate(instance=request.data, schema=schemas.food_insert_schema)
+        validate(instance=request.data, schema=schemas.food_insert_edit_schema)
         body = request.data
         PendingFood.field_validate(body)
 
@@ -123,7 +123,7 @@ class PendingDishModifyDeleteView(APIView):
 
         user_id = user.id
         validate(instance=request.data,
-                 schema=schemas.food_edit_schema)
+                 schema=schemas.food_insert_edit_schema)
         body = request.data
         PendingFood.field_validate(body)
 

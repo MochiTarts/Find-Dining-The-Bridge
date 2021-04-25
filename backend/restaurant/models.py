@@ -803,11 +803,12 @@ class PendingRestaurant(models.Model):
                     geocode(fields['postalCode'])
                 except ValidationError:
                     invalid['Invalid'].append('postalCode')
-                try:
-                    address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
-                    geocode(address)
-                except ValidationError:
-                    invalid['Invalid'].extend(['address, postalCode'])
+                else:
+                    try:
+                        address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                        geocode(address)
+                    except ValidationError:
+                        invalid['Invalid'].extend(['address', 'postalCode'])
 
         if 'email' in fields:
             try:
@@ -836,7 +837,6 @@ class PendingRestaurant(models.Model):
                 invalid['Invalid'].append('owner_last_name')
 
         if invalid['Invalid']:
-            invalid['Invalid'] = list(set(invalid['Invalid']))
             raise ValidationError(message=invalid, code="invalid_input")
 
     @classmethod
@@ -881,11 +881,12 @@ class PendingRestaurant(models.Model):
                     geocode(fields['postalCode'])
                 except ValidationError:
                     invalid['Invalid'].append('postalCode')
-                try:
-                    address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
-                    geocode(address)
-                except ValidationError:
-                    invalid['Invalid'].extend(['address, postalCode'])
+                else:
+                    try:
+                        address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                        geocode(address)
+                    except ValidationError:
+                        invalid['Invalid'].extend(['address', 'postalCode'])
 
         if 'phone' in fields:
             if fields['phone'] is not None:
@@ -1123,7 +1124,7 @@ class UserFavRestrs(models.Model):
         if not restaurant_filter.filter(_id=rest_id).exists():
             raise ObjectDoesNotExist(
                 'The restaurant associated with id ' +
-                restaurant_id +
+                rest_id +
                 ' does not exist')
         if restaurant_filter.count() > 1:
             raise MultipleObjectsReturned(
@@ -1172,8 +1173,6 @@ class UserFavRestrs(models.Model):
                 raise ObjectDoesNotExist(
                     'One of the restaurants in the list of favourites does not appear to exist: ' +
                     record.restaurant)
-            restaurant.offer_options = ast.literal_eval(
-                restaurant.offer_options)
             restaurants.append(model_to_json(restaurant))
 
         return restaurants
