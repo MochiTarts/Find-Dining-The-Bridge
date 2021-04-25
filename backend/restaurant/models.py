@@ -674,6 +674,24 @@ class PendingRestaurant(models.Model):
         return restaurant
 
     @classmethod
+    def get_by_owner(cls, owner_user_id):
+        """ Retrieves restaurant by its owner
+
+        :param owner_user_id: user_id of the owner
+        :type owner_user_id: int
+        :raises ObjectDoesNotExist: if restaurant owned by user
+            does not exist
+        :return: PendingRestaurant record owned by user
+        :rtype: :class: `PendingRestaurant`
+        """
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=owner_user_id).first()
+        if not restaurant:
+            raise ObjectDoesNotExist(
+                'No pending restaurant found with owner user id of this: ' + str(owner_user_id))
+        return restaurant
+
+    @classmethod
     def edit_draft(cls, user_id, body):
         """ Edits the PendingRestaurant owned by the user
         of the given user_id and marks the status as 'In_Progress',

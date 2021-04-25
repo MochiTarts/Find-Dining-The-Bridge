@@ -64,7 +64,6 @@ class DishRestaurantView(APIView):
 
 class PendingDishView(APIView):
     """ pending dish view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(responses=swagger.dish_pending_get_response,
@@ -78,13 +77,7 @@ class PendingDishView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
         rest_id = restaurant._id
         dishes = PendingFood.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
@@ -106,13 +99,7 @@ class PendingDishView(APIView):
         body = request.data
         PendingFood.field_validate(body)
 
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         rest_id = restaurant._id
         food = PendingFood.add_dish(body, rest_id)
@@ -140,13 +127,7 @@ class PendingDishModifyDeleteView(APIView):
         body = request.data
         PendingFood.field_validate(body)
 
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         dish = PendingFood.edit_dish(dish_id, body, restaurant._id)
         return JsonResponse(model_to_json(dish))
@@ -162,13 +143,7 @@ class PendingDishModifyDeleteView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
         deleted_dish = PendingFood.remove_dish(dish_id, restaurant._id)
         return JsonResponse(model_to_json(deleted_dish))
 
@@ -177,7 +152,6 @@ class PendingDishModifyDeleteView(APIView):
 # add_user_fav_page
 class UserFavView(APIView):
     """ user fav view """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(request_body=swagger.UserFavRest,
                          responses=swagger.user_favourite_post_response,
@@ -216,7 +190,6 @@ class UserFavView(APIView):
 
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(
         responses=swagger.restaurant_rest_id_favourited_users_get_response,
@@ -229,7 +202,6 @@ class UserFavRestaurantView(APIView):
 
 class FavRelationView(APIView):
     """ remove fav relation view """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(
         responses=swagger.user_favourited_rest_id_delete_response,
@@ -286,11 +258,7 @@ class PendingRestaurantView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise ObjectDoesNotExist(
-                'No pending restaurant found with owner user id of this: ' + str(user_id))
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         restaurant_image_url = ast.literal_eval(
             restaurant.restaurant_image_url)
@@ -326,7 +294,6 @@ class AllRestaurantList(APIView):
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.PendingRestaurantDraftInsertUpdate,
@@ -369,7 +336,6 @@ class RestaurantDraftView(APIView):
 
 class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.PendingRestaurantSubmit,
@@ -438,7 +404,6 @@ class RestaurantsAnalyticsDataView(APIView):
 
 class PostView(APIView):
     """ Restaurant posts view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.RestaurantPostInsert,
@@ -507,7 +472,6 @@ class PublicPostView(APIView):
 
 class RestaurantMediaView(APIView):
     """ Restaurant media (image/video) view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
     parser_classes = (MultiPartParser,)
 
@@ -523,11 +487,7 @@ class RestaurantMediaView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "Could not find restaurant owned by this user")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         form = RestaurantMediaForm(request.data, request.FILES)
         if not form.is_valid():
@@ -550,11 +510,7 @@ class RestaurantMediaView(APIView):
                 code="fail_obtain_user")
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "Could not find restaurant owned by this user")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         form = RestaurantImageDeleteForm(request.data, request.FILES)
         if not form.is_valid():
@@ -566,7 +522,6 @@ class RestaurantMediaView(APIView):
 
 class DishMediaView(APIView):
     """ Dish media (image) view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
     parser_classes = (MultiPartParser,)
 

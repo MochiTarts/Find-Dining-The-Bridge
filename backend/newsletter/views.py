@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from newsletter.models import NLUser, NLAudit
 from newsletter.serializer import NLUserInsertSerializer
+from newsletter import schemas
 from newsletter import swagger
 from utils.model_util import model_to_json
 from login_audit.models import get_client_ip_address
@@ -24,33 +25,6 @@ from jsonschema import validate
 import datetime
 from datetime import date
 
-# jsonschema validation scheme
-newsletter_signup_schema = {
-    "properties": {
-        "first_name": {
-            "type": "string",
-            "minLength": 1,
-            "error_msg": "First name cannot be empty."
-        },
-        "last_name": {
-            "type": "string",
-            "minLength": 1,
-            "error_msg": "Last name cannot be empty."
-        },
-        "email": {
-            "type": "string",
-            "minLength": 1,
-            "error_msg": "Email cannot be empty."
-        },
-        "consent_status": {
-            "type": "string",
-            "minLength": 1,
-            "error_msg": "Consent status cannot be empty."
-        }
-    },
-    "required": ["first_name", "last_name", "email", "consent_status"]
-}
-
 
 class NLUserSignupView(APIView):
     """ Newsletter User View """
@@ -61,7 +35,7 @@ class NLUserSignupView(APIView):
     def post(self, request):
         """ insert a newsletter user into the db provided all the user fields """
         validate(instance=request.data,
-                    schema=newsletter_signup_schema)
+                    schema=schemas.newsletter_signup_schema)
         body = request.data
 
         ip = get_client_ip_address(request)
