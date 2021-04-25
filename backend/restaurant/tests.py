@@ -6,14 +6,9 @@ from restaurant.enum import Status, Prices, Categories, Payment
 from restaurant.models import (
     Restaurant,
     PendingRestaurant,
-    RestaurantPost
-)
-from restaurant.views import (
-    AllRestaurantList,
-    RestaurantView,
-    PendingRestaurant,
-    RestaurantDraftView,
-    RestaurantForApprovalView
+    RestaurantPost,
+    Food,
+    PendingFood
 )
 
 from rest_framework.test import APIClient, force_authenticate
@@ -21,6 +16,10 @@ from rest_framework.test import APIClient, force_authenticate
 import json
 
 User = get_user_model()
+
+
+class ApprovedDishTestCases(TestCase):
+    """ Tests for dishes from the Food collection """
 
 
 class ApprovedRestaurantTestCases(TestCase):
@@ -203,7 +202,7 @@ class RestaurantApprovalTestCases(TestCase):
             open_hours="9-5",
             payment_methods=[Payment.Credit.name, Payment.Debit.name],
             phone_ext=1200,
-            status=Status.Pending.name).exists)
+            status=Status.Pending.name).exists())
 
     def test_insert_restaurant_submission_invalid(self):
         """ Test if proper error message is returned from invalid inputs """
@@ -277,7 +276,7 @@ class RestaurantApprovalTestCases(TestCase):
             open_hours="9-5",
             payment_methods=[Payment.Credit.name, Payment.Debit.name],
             phone_ext=1200,
-            status=Status.Pending.name).exists)
+            status=Status.Pending.name).exists())
 
 
 class PendingRestaurantTestCases(TestCase):
@@ -303,7 +302,7 @@ class PendingRestaurantTestCases(TestCase):
 
 
 class RestaurantPostTestCases(TestCase):
-    """ Tests for restaurant posts """
+    """ Tests for restaurant post creation and retrieval """
 
     def setUp(self):
         self.maxDiff = None
@@ -341,8 +340,74 @@ class RestaurantPostTestCases(TestCase):
         for post in actual['Posts']:
             post.pop('Timestamp')
         posts = [
-            model_to_json(RestaurantPost.objects.get(content="Test restaurant post 1")),
-            model_to_json(RestaurantPost.objects.get(content="Test restaurant post 2"))
+            model_to_json(RestaurantPost.objects.get(_id=str(self.post_1._id))),
+            model_to_json(RestaurantPost.objects.get(_id=str(self.post_2._id)))
+        ]
+
+        expected = {"Posts": posts}
+        self.assertDictEqual(actual, expected)
+
+
+class RestaurantPostDeleteTestCases(TestCase):
+    """ Tests for restaurant post removal """
+
+    def setUp(self):
+        self.maxDiff = None
+        self.client = APIClient()
+        self.ro = User.objects.create(username="TestOwner", role="RO")
+        self.client.force_authenticate(user=self.ro)
+        self.restaurant = PendingRestaurant.objects.create(owner_user_id=self.ro.id)
+        self.post_1 = RestaurantPost.objects.create(
+            restaurant_id=str(self.restaurant._id),
+            content="Test restaurant post 1",
+            owner_user_id=self.ro.id
+        )
+        self.post_2 = RestaurantPost.objects.create(
+            restaurant_id=str(self.restaurant._id),
+            content="Test restaurant post 2",
+            owner_user_id=self.ro.id
+        )
+
+    def test_delete_post(self):
+        """ Test if restaurant post is deleted correctly """
+        response = self.client.delete('/api/restaurant/post/'+str(self.post_1._id)+'/')
+        self.assertFalse(RestaurantPost.objects.filter(
+            _id=str(self.post_1._id)
+        ).exists())
+        self.assertTrue(RestaurantPost.objects.filter(
+            _id=str(self.post_2._id)
+        ).exists())
+
+
+class RestaurantPostPublicTestCases(TestCase):
+    """ Tests for restaurant public posts retrieval """
+
+    def setUp(self):
+        self.maxDiff = None
+        self.client = APIClient()
+        self.ro = User.objects.create(username="TestOwner", role="RO")
+        self.client.force_authenticate(user=self.ro)
+        self.restaurant = PendingRestaurant.objects.create(owner_user_id=self.ro.id)
+        self.post_1 = RestaurantPost.objects.create(
+            restaurant_id=str(self.restaurant._id),
+            content="Test restaurant post 1",
+            owner_user_id=self.ro.id
+        )
+        self.post_2 = RestaurantPost.objects.create(
+            restaurant_id=str(self.restaurant._id),
+            content="Test restaurant post 2",
+            owner_user_id=self.ro.id
+        )
+
+    def test_get_post_public(self):
+        """ Test if restaurant posts for public view are retrieved correctly """
+        response = self.client.get('/api/restaurant/public/post/'+str(self.restaurant._id)+'/')
+        actual = json.loads(response.content)
+        for post in actual['Posts']:
+            post.pop('Timestamp')
+        posts = [
+            model_to_json(RestaurantPost.objects.get(_id=str(self.post_1._id))),
+            model_to_json(RestaurantPost.objects.get(_id=str(self.post_2._id)))
         ]
 
         expected = {"Posts": posts}
