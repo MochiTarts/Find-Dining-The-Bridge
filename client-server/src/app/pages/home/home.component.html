@@ -1,12 +1,12 @@
 <div class="header-img">
   <div class="header-container">
     <div class="header-text" fxLayout="column" fxLayoutAlign="center center">
-      <div class="title" tabindex="0">
+      <h1 class="title" tabindex="0">
         Supporting <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants
-      </div>
+      </h1>
       <div class="desc-overlay row">
         <div class="col-md-4">
-          <img class="header-logo" src="/assets/images/find_dining_logo.png" />
+          <img class="header-logo" src="/assets/images/find_dining_logo.png" alt="Find Dining logo" />
         </div>
         <div class="col-md-8 header-content description" tabindex="0">
           Find Dining is a Scarborough based program that celebrates our community's rich, cultural diversity through food. We aim to highlight local and independent restaurants from an array of cuisines.<br/><br/>
@@ -21,11 +21,11 @@
         <div class="input-group-prepend">
           <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
         </div>
-        <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location" (keyup.enter)="onEnter()">
+        <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location" (keyup.enter)="onEnter()" aria-label="location input box">
         <div class="input-group-prepend">
           <span class="input-group-text">Find</span>
         </div>
-        <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find" (keyup.enter)="onEnter()">
+        <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find" (keyup.enter)="onEnter()" aria-label="search criteria input box">
         <div class="input-group-append">
           <button
             class="btn-primary"
@@ -77,7 +77,7 @@
         <div class="logo col-12 col-md-4" id="info-col1">
           <img
             src="{{ spotlight.logo_url }}"
-            alt="logo"
+            alt="logo of {{ spotlight.name }}"
             class="logo-img"
           />
         </div>
@@ -85,7 +85,7 @@
           <p><b>{{ spotlight.name }}</b> | {{ spotlightCuisines }} | {{ spotlight.years }} year<span *ngIf="spotlight.years > 1">s</span> in business</p>
           <p class="bio">
             {{ spotlightStory }}
-            <a [routerLink]="['/restaurant']" [queryParams]="{restaurantId: spotlight._id}" target="_blank">
+            <a class="continue-link" [routerLink]="['/restaurant']" [queryParams]="{restaurantId: spotlight._id}" target="_blank">
               Continue reading
             </a>
           </p>

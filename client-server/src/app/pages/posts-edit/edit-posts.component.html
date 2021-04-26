@@ -2,7 +2,8 @@
   <h2 class="title">Edit Posts</h2>
 
   <div *ngIf="posts.length != 0" style="text-align: center;">
-    <button class="btn new-post" (click)="openPostModal(postModal)" placement="top" ngbTooltip="Add a Post">
+    <button class="btn new-post" (click)="openPostModal(postModal)"
+      placement="top" ngbTooltip="Add a Post">
       NEW POST
     </button>
   </div>
@@ -10,35 +11,33 @@
   <div *ngIf="posts.length == 0" style="text-align: center;">
     <h2 class="no-posts">No Posts!</h2>
     <br />
-    <img class="empty-image" src="assets/images/undraw_begin_chat_c6pj.png" />
+    <ngb-alert [dismissible]="false">
+      Currently no posts have been posted!
+    </ngb-alert>
     <br />
     <button
       *ngIf="role == 'RO'"
       class="btn convo-start"
       (click)="openPostModal(postModal)"
-      placement="top" ngbTooltip="Add a Post"
-    >
+      placement="top" ngbTooltip="Add a Post">
       START A CONVERSATION
     </button>
   </div>
 
   <div
-    *ngFor="let post of posts; let i = index"
-    class="d-flex justify-content-center"
-  >
+    *ngFor="let post of posts; let i= index"
+    class="d-flex justify-content-center">
     <app-post
       [post]="post"
       [role]="role"
-      [id]="userId"
-    ></app-post>
+      [id]="userId"></app-post>
 
     <div *ngIf="role == 'RO'" class="text-right">
       <button
         class="btn trashBtn"
         (click)="openDeleteModal(deleteModal, post._id, i)"
         placement="top" ngbTooltip="Delete The Post"
-        aria-label="Delete The Post"
-      >
+        aria-label="Delete The Post">
         <fa-icon [icon]="faTrash"></fa-icon>
       </button>
     </div>
@@ -58,8 +57,7 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -77,20 +75,17 @@
           [(ngModel)]="content"
           placeholder="Enter content here..."
           aria-required="true"
-          required
-        ></textarea>
+          required></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPost'"
           [message]="validator.errors['content']"
-          tabindex="validator.errors['content'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['content'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPost'"
           [message]="validator.errors['is_profane']"
-          tabindex="validator.errors['is_profane'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['is_profane'] ? 0 : -1"></app-dynamic-label>
       </div>
     </div>
   </div>
@@ -113,8 +108,7 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -129,8 +123,7 @@
     <div class="text-right">
       <button
         class="btn postBtn cancel"
-        (click)="modal.dismiss('Cross click')"
-      >
+        (click)="modal.dismiss('Cross click')">
         CANCEL
       </button>
       <button class="btn postBtn" (click)="deleteContent()">

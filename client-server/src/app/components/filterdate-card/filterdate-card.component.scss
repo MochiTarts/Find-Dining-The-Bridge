@@ -41,7 +41,7 @@ hr {
 
 .btn {
   margin: 0;
-  color: #00a4e5;
+  color: $secondary-color;
   height: 100%;
   background-color: white;
   width: 75%;
@@ -53,11 +53,11 @@ hr {
 
 .btn-reset {
   float: right;
-  border: #00a4e5 solid 2px;
+  border: $secondary-color solid 2px;
 }
 
 .btn-reset:hover {
-  background-color: #00a4e5;
+  background-color: $secondary-color;
   color: white;
 }
 
@@ -73,22 +73,20 @@ hr {
 }
 
 .btn-apply {
-  background-color: #00a4e5;
+  background-color: $secondary-color;
   color: white;
 }
 
 .btn-apply:hover {
   background-color: white;
-  color: #00a4e5;
+  color: $secondary-color;
 }
 
 @media screen and (max-width: 767px) {
-  
-.cardBox {
-  border: none;
-  margin-top: 15px;
-  border-radius: 0;
-  padding: 0px 10px;
-}
-
+  .cardBox {
+    border: none;
+    margin-top: 15px;
+    border-radius: 0;
+    padding: 0px 10px;
+  }
 }

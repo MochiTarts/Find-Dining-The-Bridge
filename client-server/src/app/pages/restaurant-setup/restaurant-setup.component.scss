@@ -58,6 +58,27 @@
   text-align: center;
 }
 
+.btn-success {
+  background-color: #218739;
+  border: #218739 1px solid;
+}
+
+.btn-success:hover {
+  background-color: white;
+  color: #218739;
+  transition: all 250ms linear;
+}
+
+.btn-danger {
+  border: #dc3545 1px solid;
+}
+
+.btn-danger:hover {
+  background-color: white;
+  color: #dc3545;
+  transition: all 250ms linear;
+}
+
 .delete-btn {
   padding-top: 2px;
   text-align: center;
