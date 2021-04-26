@@ -265,6 +265,8 @@ export class MenuEditComponent implements OnInit {
         // }
       }
       this.dishEdit = false;
+    }, (error) => {
+      alert(error.error.detail);
     });
 
     this.uploadForm = this.formBuilder.group({

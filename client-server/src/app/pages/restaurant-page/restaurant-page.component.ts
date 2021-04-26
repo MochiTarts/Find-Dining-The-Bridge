@@ -376,6 +376,8 @@ export class RestaurantPageComponent implements OnInit {
 
     this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'cover_photo_url', 'False').subscribe((data) => {
       this.reload();
+    }, (error) => {
+      alert(error.error.detail);
     })
     this.modalRef.close();
   }
@@ -431,6 +433,8 @@ export class RestaurantPageComponent implements OnInit {
             this.modalRef.close();
             alert("Changes to restaurant are now saved as draft");
             this.reload();
+          }, (error) => {
+            alert(error.error.detail);
           });
         });
       } else {
@@ -452,6 +456,8 @@ export class RestaurantPageComponent implements OnInit {
             this.modalRef.close();
             alert("Changes to restaurant are now saved as draft");
             this.reload();
+          }, (error) => {
+            alert(error.error.detail);
           });
         });
       } else {
@@ -471,11 +477,15 @@ export class RestaurantPageComponent implements OnInit {
       }
       this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'restaurant_image_url', 'False').subscribe((data) => {
         this.reload();
+      }, (error) => {
+        alert(error.error.detail);
       });
     } else if (this.addOrRemove == 'Delete from existing images') {
       formData.append('restaurant_images', JSON.stringify(this.imageUrlsToDelete));
       this.mediaService.deleteRestaurantMedia(formData).subscribe(() => {
         this.reload();
+      }, (error) => {
+        alert(error.error.detail);
       });
     }
     this.modalRef.close();
