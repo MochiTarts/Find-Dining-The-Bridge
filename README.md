@@ -118,7 +118,6 @@ Django apps for API CRUD operations.
 ```
 Utility function folders.
 ```
-- auth/
 - google/ (google analytics, google sheets for mass mailing)
 - index/ (send mail for verification)
 - oauth2/ (3rd party login and signup)
