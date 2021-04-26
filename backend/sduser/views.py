@@ -93,7 +93,6 @@ class editView(APIView):
 
 class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(responses=swagger.user_nearby_get_response,
                          operation_id="GET /user/nearby/")
@@ -104,8 +103,6 @@ class NearbyRestaurantsView(APIView):
         user_id = user.id
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
-
-        print(json.dumps(nearest, indent=4))
         return JsonResponse(nearest, safe=False)
 
 
