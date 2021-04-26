@@ -275,7 +275,7 @@ class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
             return super().validate(attrs)
         else:
             raise InvalidToken(
-                'No valid token found in cookie \'refresh_token\'')
+                'No valid token found in cookie \'refresh_token\'', code='refresh_token_missing')
 
 
 def checkUserRefreshToken(user_id, refresh_token):
@@ -283,7 +283,7 @@ def checkUserRefreshToken(user_id, refresh_token):
     check refresh token against the one stored in the db
     """
     if user_id is None:
-        return InvalidToken('No user found who would have possessed this token')
+        return InvalidToken('No user found who would have possessed this token', code='no_user_found')
 
     user = UserModel.objects.get(id=user_id)
     # validate the token against the one stored in the db (user object)
