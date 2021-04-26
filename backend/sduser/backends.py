@@ -207,12 +207,12 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
     def finalize_response(self, request, response, *args, **kwargs):
 
         if hasattr(response, 'data') and response.data.get('refresh'):
-            # 1 day
-            cookie_max_age = 3600 * 24
+
+            cookie_max_age = settings.COOKIE_MAX_AGE
             refresh_token = response.data['refresh']
             # note: setting path='/api/auth/refresh/' won't work
             response.set_cookie('refresh_token', refresh_token,
-                                max_age=cookie_max_age, httponly=True)
+                                max_age=cookie_max_age, httponly=True, samesite='Lax', secure=True)
             del response.data['refresh']
             # decode token to get user info
             payload = jwt_decode(response.data['access'])
@@ -300,13 +300,14 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
     """
     Token Refresh View
     """
+    # need to allow this in order to log user in when they open a new tab (only has refresh token in the cookie)
+    permission_classes = (AllowAny,)
 
     def finalize_response(self, request, response, *args, **kwargs):
 
         if response.data.get('refresh'):
 
-            # 1 day
-            cookie_max_age = 3600 * 24
+            cookie_max_age = settings.COOKIE_MAX_AGE
             new_refresh_token = response.data['refresh']
 
             # try:
@@ -314,8 +315,11 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
 
             # prevent anonymous user or disabled user to obtain new access and refresh token
             if user_id is None:
-                return JsonResponse({'message': 'No user found', 'code': 'no_user_found'}, status=400)
-            user = UserModel.objects.get(id=user_id)
+                user = UserModel.objects.filter(refresh_token=request.COOKIES.get('refresh_token')).first()
+                if not user:
+                    return JsonResponse({'message': 'No user found', 'code': 'no_user_found'}, status=400)
+            else:
+                user = UserModel.objects.get(id=user_id)
 
             access_token = response.data.get('access')
             if access_token:
@@ -337,7 +341,7 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
                 return JsonResponse({'message': 'User has been disabled', 'code': 'user_disabled'}, status=401)
 
             response.set_cookie('refresh_token', new_refresh_token,
-                                max_age=cookie_max_age, httponly=True)
+                                max_age=cookie_max_age, httponly=True, samesite='Lax', secure=True)
             del response.data['refresh']
 
             # store the refresh token inside user object
@@ -366,13 +370,13 @@ def construct_token_response_for_user(user):
     #response['username'] = user.username
     response['access_token'] = str(token.access_token)
     #response['refresh_token'] = str(token)
-    cookie_max_age = 3600 * 24
+    cookie_max_age = settings.COOKIE_MAX_AGE
     # print(dir(token))
     refresh_token = str(token)
     user.refresh_token = refresh_token
     user.save()
     res = Response(response)
     res.set_cookie('refresh_token', refresh_token,
-                   max_age=cookie_max_age, httponly=True)
+                   max_age=cookie_max_age, httponly=True, samesite='Lax', secure=True)
 
     return res

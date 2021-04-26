@@ -37,7 +37,7 @@
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1"
             data-toggle="collapse" data-target=".navbar-collapse.show">
             <button ngbDropdownItem (click)="profile()" tabindex="0"
-              *ngIf="!tokenStorageService.RO">
+              *ngIf="!tokenStorage.RO">
               Profile
             </button>
             <button ngbDropdownItem (click)="favourites()" tabindex="0">
@@ -54,7 +54,7 @@
       </li>
 
       <li class="nav-item" *ngIf="authService.isLoggedIn() &&
-        tokenStorageService.RO" data-toggle="collapse"
+        tokenStorage.RO" data-toggle="collapse"
         data-target=".navbar-collapse.show" tabindex="0">
         <a (click)="restaurant()" routerLink="/restaurant"
           routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
@@ -82,7 +82,7 @@
       </li>
 
       <li class="nav-item" *ngIf="authService.isLoggedIn() &&
-        tokenStorageService.RO" data-toggle="collapse"
+        tokenStorage.RO" data-toggle="collapse"
         data-target=".navbar-collapse.show" tabindex="0"
         (keyup.enter)="resources()">
         <a routerLink="/resources" routerLinkActive="active"
@@ -100,7 +100,7 @@
         </a>
       </li>
 
-      <li *ngIf="!tokenStorageService.RO && authService.isLoggedIn()"
+      <li *ngIf="!tokenStorage.RO && authService.isLoggedIn()"
         class="nav-item">
         <p class="nav-link address nav-link" *ngIf="this.userAddress"
           tabindex="0">
