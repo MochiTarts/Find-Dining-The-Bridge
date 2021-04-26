@@ -15,6 +15,7 @@ from restaurant.models import (
 from rest_framework.test import APIClient, force_authenticate
 
 import json
+import ast
 
 User = get_user_model()
 
@@ -179,8 +180,10 @@ class UserFavRestTestCases(TestCase):
         """ Tests if all favourited restaurants are retrieved correctly """
         response = self.client.get('/api/user/favourite/')
         actual = json.loads(response.content)
+        fav_rest = Restaurant.objects.get(_id=str(self.restaurant_2._id))
+        fav_rest.offer_options = ast.literal_eval(fav_rest.offer_options)
         expected = [
-            model_to_json(Restaurant.objects.get(_id=str(self.restaurant_2._id)))
+            model_to_json(fav_rest)
         ]
         self.assertListEqual(expected, actual)
 
