@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private userService: UserService,
     public authService: AuthService,
-    public tokenStorageService: TokenStorageService,
+    public tokenStorage: TokenStorageService,
     private router: Router,
     private modalService: NgbModal
   ) { }
@@ -40,7 +40,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
-      const user = this.tokenStorageService.getUser();
+      const user = this.tokenStorage.getUser();
       this.role = user.role;
       this.username = user.username;
 
@@ -49,6 +49,26 @@ export class NavbarComponent implements OnInit {
           this.userAddress = data.postalCode;
         });
       }
+    } else {
+      this.authService.refreshToken().subscribe(
+        token => {
+              this.tokenStorage.updateTokenAndUser(token.access);
+              var user = this.tokenStorage.getUser();
+              this.role = user.role;
+              this.username = user.username;
+              this.authService.updateLoginStatus(true);
+
+              if (user.profile_id && this.role == 'BU') {
+                this.userService.getSubscriberProfile().subscribe((data) => {
+                  this.userAddress = data.postalCode;
+                });
+              }
+          },
+          // refresh failed
+          err => {
+            // console.log(err);
+          }
+      );
     }
   }
 
@@ -198,7 +218,7 @@ export class NavbarComponent implements OnInit {
    */
   logout(): void {
     this.authService.updateLoginStatus(false);
-    this.tokenStorageService.signOut();
+    this.tokenStorage.signOut();
     this.router.navigate(['/']).then(() => {
       window.location.reload()
     });
