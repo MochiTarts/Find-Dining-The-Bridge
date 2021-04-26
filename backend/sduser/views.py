@@ -53,11 +53,7 @@ class DeactivateView(APIView):
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
         current_user = request.user
-
-        if not current_user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="deactivation_fail")
-        check_user_status(user)
+        check_user_status(current_user)
         if current_user.id is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
 
