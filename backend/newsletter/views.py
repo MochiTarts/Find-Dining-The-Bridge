@@ -6,7 +6,6 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.core.exceptions import ObjectDoesNotExist
 
 from newsletter.models import NLUser, NLAudit
-from newsletter.serializer import NLUserInsertSerializer
 from newsletter import schemas
 from newsletter import swagger
 from utils.model_util import model_to_json
