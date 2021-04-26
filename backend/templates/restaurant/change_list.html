@@ -3,6 +3,7 @@
 {% block extrahead %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.debug.js"></script>
 <script>
     var randomColorGenerator = function () {
         var r = Math.floor(Math.random() * 255);
@@ -249,13 +250,41 @@
         }
     }
 
+    function downloadAll() {
+        var barDaily = document.getElementById("daily-chart");
+        var barHourly = document.getElementById("hourly-chart");
+        var paretoDaily = document.getElementById("top-10-daily-chart");
+        var canvas = document.createElement("canvas");
+        var ctx = canvas.getContext("2d");
+
+        ctx.canvas.width = 1000;
+        ctx.canvas.height = 1600;
+        ctx.font = "bold 32px Arial";
+        ctx.fillText("All Restaurants", 40, 45);
+        ctx.drawImage(barDaily, 0, 50);
+        ctx.drawImage(barHourly, 0, 550);
+        ctx.drawImage(paretoDaily, -15, 1050);
+
+        var pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "pt",
+            format: [750, 1175]
+        });
+        pdf.addImage(canvas, 'PNG', 0, 0);
+        let date = new Date();
+        let month = ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString());
+        let day = (date.getDate() < 10 ? "0" + date.getDate().toString() : date.getDate().toString());
+        pdf.save('Find Dining Report - All Restaurants - ' + date.getFullYear().toString() + month + day + '.pdf');
+    }
 </script>
 {% endblock %}
 {% block content %}
-<button class="button" type="button" onclick="toggleGraphs()" style="margin-bottom: 10px;">Toggle Graphs</button>
+<button class="button" type="button" onclick="toggleGraphs()" style="margin-bottom: 10px;">Show/Hide Graphs</button>
 <div id="graphs" style="display: none; padding-top: 15px; padding-bottom: 75px;">
     <hr>
-    <h1 style="font-weight: bold; font-size: 32px;">All Restaurants</h1>
+    <h1 style="font-weight: bold; font-size: 32px; display: inline;">All Restaurants</h1>
+    <button class="button" type="button" onclick="downloadAll()" style="float: right; margin-top: 5px;">Export
+        Graphs</button>
     <div style="margin:auto; width:1000px;">
         <canvas id="daily-chart"></canvas>
     </div>
