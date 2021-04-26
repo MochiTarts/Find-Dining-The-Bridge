@@ -12,12 +12,6 @@ credentials = service_account.Credentials.from_service_account_info({
 )
 
 
-def get_access_token():
-    """ Function for retrieving OAuth2 access token """
-
-    return credentials.get_access_token().access_token
-
-
 def get_analytics_data(restaurant_id, format_type):
     """
     Function to retrieve view data given page view
@@ -55,5 +49,3 @@ def get_analytics_data(restaurant_id, format_type):
         prettyPrint=True,
         fields='totalsForAllResults,rows').execute()
     return data
-
-# print(get_analytics_data('605b55d192c9e40e98c1877a'))
