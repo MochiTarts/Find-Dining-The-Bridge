@@ -8,7 +8,7 @@
 
 ### Table of Contents
 [Prerequisites](#prerequisite)  
-[Development Environment](#run-development-site)  
+[Development Environment](#setup-development-environment)  
 [Documentation](#documentation)  
 [Database Notes](#database)  
 [Deployment Notes](#deployment)  
@@ -17,10 +17,25 @@
 <br/>
 
 ### Contact Info
-minqi.zhang@mail.utoronto.ca - Min Qi Zhang (frontend)  
-isaac.mou@mail.utoronto.ca - Isaac Mou (backend)  
-jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)  
+minqi.zhang@mail.utoronto.ca - Min Qi Zhang (frontend)
+ - majority of frontend pages, components, services, and constants
+ - frontend form validation, mobile-friendly css
+ - AODA compliance specialist
+  
+isaac.mou@mail.utoronto.ca - Isaac Mou (backend)
+- frontend httpinterceptor, frontend auth services, frontend guards
+- backend authentication (login, signup, jwt tokens)
+- backend for news articles, sduser, login_audit
+
+jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
+- admin restaurant graphs, github actions, docker containers
+- backend for subscriber_profile
+- backend settings.py for each environment
+
 zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
+- backend for restaurant, restaurant_owner, newsletter
+- frontend news articles, frontend subscriber_profile, assist with mobile-friendly css and frontend components typescript
+- swagger documentation, compodoc documentation
 
 <br/>
 
@@ -37,82 +52,226 @@ zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
 - Recommended to work in a linux (or linux-similar) environment (if on windows, consider installing a WSL)
 - Install python (v3.5, v3.6, v3.7, v3.8, or v3.9)
 - Install node.js (v10.13.x/12.11.x or later minor version), and npm (v6 or higher)
+- Install mongodb (v4.4.x) https://docs.mongodb.com/manual/installation/
 
 ``` 
 Angular project was generated with [Angular CLI version 9.1.9]
 Django project was generated with [Django version 2.2.20]
 ```
 
-## Run Development Site
+## Setup Development Environment
 ### 1. Run Django Backend
-- Install virtualenv somewhere in your Find-Dining-Revamp project local repo and activate it
-    - https://sourabhbajaj.com/mac-setup/Python/virtualenv.html (install & activate virtualenv for mac)
-    - https://www.liquidweb.com/kb/how-to-setup-a-python-virtual-environment-on-windows-10/ (install & activate virtualenv for windows)
-- Go to backend folder
-- run ``` pip3 install -r requirements.txt ``` (if this is your first time setting up or new packages were added)
-- run ``` python manage.py makemigrations ``` and ``` python manage.py migrate ``` (if additions/modifications to the Django models were made; otherwise skip this step)
-- run ``` python manage.py runserver ```
-- Server should be running at ``` http://localhost:8000 ```
+Install virtualenv somewhere in your Find-Dining-Revamp project local repo and activate it
+  - https://sourabhbajaj.com/mac-setup/Python/virtualenv.html (install & activate virtualenv for mac)
+  - https://www.liquidweb.com/kb/how-to-setup-a-python-virtual-environment-on-windows-10/ (install & activate virtualenv for windows)
+
+Activate the virtualenv for this project.
+
+Install project dependencies (if first-time setup or new dependencies were added):
+```
+$ cd backend
+$ pip3 install -r requirements.txt
+```
+Make and apply migrations (if models were modified or new ones were added):
+```
+$ python manage.py makemigrations
+$ python manage.py migrate
+```
+Start the development server:
+```
+$ python manage.py runserver
+```
+Server should be running at ``` http://localhost:8000 ```
+
+Navigate to ``` http://localhost:8000/api/fd-admin ``` to view admin site (get admin credentials from member of previous team)
+
+<br/>
 
 ### 2. Run Angular Frontend
-- Go to client-server folder
-- run ``` npm install ``` (if this is your first time setting up or new packages were added)
-- run ``` ng serve ```
-- Server should be running at ``` https://localhost:4200 ```
+Install project dependencies (if first-time setup or new dependencies were added):
+```
+$ cd client-server
+$ npm install
+```
+Start the development server:
+```
+$ ng serve
+```
+Server should be running at ``` https://localhost:4200 ```
 
-### 3. Visit the Dev Site
-- Navigate to ``` https://localhost:4200 ``` to use and test out the running development site
+Navigate to ``` https://localhost:4200 ``` to use and test out the development site
 
 ```
-Will get 'Your Connection is not Private' warning. Type 'thisisunsafe' on Chrome to bypass this. Press 'Show Details' then 'Visit this website' on Safari to bypass this. Will not occur on test, uat, and production sites due to having verified SSL certificates.
+Will get 'Your Connection is not Private' warning.
+Type 'thisisunsafe' on Chrome to bypass this.
+Press 'Show Details' then 'Visit this website' on Safari to bypass this.
+Will not occur on test, uat, and production sites due to having verified
+SSL certificates.
+```
+![website landing page](https://lh3.googleusercontent.com/pw/ACtC-3dc6g85l9iKaMRfcpTIDbtPFlFfMWALLs78jXDMmpbMcHSkAlveOqChkI0HjyvQ2asglpTw6i_pCFFScpNhnwwOXExgKsrd_lKOfba89Srjn9_6JiSVPMNk4ryCSWsFkPAGmvcV2tXAtCKlL_OZtJvf=w1370-h873-no?authuser=0)
+
+### Backend overview
+Backend settings.
+```
+- server/ (set project settings from environment variables)
+```
+Django apps for API CRUD operations.
+```
+- article/ (news articles get, create)
+- newsletter/ (newsletter signup)
+- restaurant/ (restaurants, food, posts, and favourites operations)
+- restaurant_owner/ (restaurant owner profile get, create, modify)
+- sduser/ (login, signup, token refresh, etc)
+- subscriber_profile/ (subscriber profile get, create, modify)
+```
+Utility function folders.
+```
+- auth/
+- google/ (google analytics, google sheets for mass mailing)
+- index/ (send mail for verification)
+- oauth2/ (3rd party login and signup)
+- utils/ (many helper functions: validators, exception handler, etc)
+```
+Admin site specific folders.
+```
+- admin_honeypot/ (for guarding admin login portal)
+- image/ (for admin site image handling)
+```
+Django served pages folders.
+```
+- static/ (admin and django served pages static files)
+- templates/ (admin and django served pages HTML files)
+```
+
+### Frontend overview
+User displayed pages (what you'd see when visiting the website).
+```
+- src/app/pages/ (displaying pages based on data from backend)
+  - about-us/
+  ...
+  - thankyou-page/
+```
+Child components used on displayed pages.
+```
+- src/app/components/ (ie. restaurant cards on all-listings page)
+  - article-common-card/
+  ...
+  - virtual-scrolling/
+```
+Services for making http requests to backend.
+```
+- src/app/_services/ (makes requests to backend server)
+  - article.service.ts
+  ...
+  - user.service.ts
+```
+Auth guards for page protection and http interceptor.
+```
+- src/app/_guards/
+  - auth.guard.ts (guards against non logged-in users)
+  - auth.interceptor.ts (sends access token in http requests and
+    refreshes token if expired)
+  - ro.guard.ts (guards against non-RO users)
+  - secure.guard.ts
+```
+Form validators.
+```
+- src/app/_validation/ (for validating form input)
+  - dishValidator.ts
+  ...
+  - userValidator.ts
+```
+Angular frontend deployment.
+```
+- src/environments/ (environment.ts files containing environment
+  specific variables)
+- nginx/ (nginx.conf file)
+- ssl/ (server.crt and server.key files *LEAVE EMPTY AND DO NOT DELETE)
+```
+
+### Running Django unit tests
+Activate your virtualenv, then run the following commands to run a single test case.
+```
+$ cd backend
+$ pytest {{ app }}/{{ tests.py }}::{{ test_class }}::{{ test_case_function }}
+```
+To run all tests for all apps.
+```
+$ cd backend
+$ pytest
+```
+Example usage.
+```
+$ cd backend
+$ pytest restaurant/tests.py::DraftRestaurantTestCases::test_insert_restaurant_draft_valid
 ```
 
 ## Documentation
 ### To see the Django documentation:
-1. Make sure you've already set up the Django project following the ['Run Django'](#1.-run-django-backend) steps above
-2. Once the Django development server is running, navigate to ``` http://localhost:8000/api/swagger/ ``` to view swagger docs or ``` http://localhost:8000/api/redoc/ ``` to view redoc docs
+Make sure you've already set up the Django project following the ['Run Django'](#1.-run-django-backend) steps above
 
+Run Django development server.
 ```
+$ cd backend
+$ python manage.py runserver
+```
+View documentation.
+- ``` http://localhost:8000/api/swagger/ ``` to view swagger docs or
+- ``` http://localhost:8000/api/redoc/ ``` to view redoc docs
+![swagger documentation](https://lh3.googleusercontent.com/pw/ACtC-3cMxyA5vjJLqF9oeAyopG6VpMze2kj-37Rv2Z7H29PjX-NaQ3Nju-wcHy4Rj4pJZ_fwwZpFdyg_w_kMTtO33Fg9GdffZhp9U-uVZp4ThITHjmkKZBsx0wIYk24eKrCHSpWXe97CJem1sWCrtxiiFDpW=w1370-h873-no?authuser=0)
+![redoc documentation](https://lh3.googleusercontent.com/pw/ACtC-3e1mes_LlbBhpgtHODdvl3Ys0nM6rS5wagdoYPU7k30z5K6bNkGdUZkVGvfdC1RLdrt1VAHISVjhEe9F8rCID4MxQb91HoV5korsLcrfprNsDhUMMFZnb_XV7fMwrGz1rkyx4OEkhtjMR2IXlqa4OVI=w1370-h873-no?authuser=0)
+
 Drf-yasg was used to generate Django API documentation
-```
+
+<br/>
 
 ### To see the Angular documentation:
-1. Make sure you've already set up the Angular project dependencies by running ``` npm install ``` inside of client-server
-2. Inside of client-server, run ``` ./node_modules/.bin/compdoc -s ```
-3. Once the local server is up, navigate to ``` http://127.0.0.1:8080 ``` to view the Angular docs
+Make sure you've already set up the Angular project dependencies.
+```
+$ cd client-server
+$ npm install
+```
+Start the development server for compodoc.
+```
+$ cd client-server
+$ ./node_modules/.bin/compdoc -s
+```
+View documentation.
+- ``` http://127.0.0.1:8080 ``` to view Angular compodocs
+![compdoc documentation](https://lh3.googleusercontent.com/pw/ACtC-3cSU7rh0Eitipurpet7v0VNRag4gDagt7X7FBRDQ1mD2GkrFS04ekxmkPFjRc9VN78z5iMuhsxAQv4rFr-QevCgdw_YYQouZ8Uewr6LRy-eH1MvjIh4UvA7KwS2-QW0ShNRKTtKPnlYJgSBb3iT_215=w1370-h873-no?authuser=0)
 
-```
 Compodoc was used to generate Angular documentation
-```
 
 ## Database
-There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers: ``` mongodb-test, mongodb-uat, mongodb-prod ```.
+There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers.
+```
+mongodb-test (test.finddining.ca:8443)
+mongodb-uat (uat.finddining.ca:8444)
+mongodb-prod (finddining.ca)
+```
 
-- The .env file will contain the host string, user, and password for the ``` scdining ``` database
-- Install MongoDB v4.4.x (https://docs.mongodb.com/manual/installation/)
-    - Install MongoDB Compass (optional but recommended if you prefer a non-terminal interface)
-- Connect to the dev database using the host string in ``` DB_HOST ``` variable from .env
-    - run ``` mongo "{DB_HOST string}" ``` (if connecting from terminal) OR
-    - Paste DB_HOST string in MongoDB Compass new connection input (if connecting from MongoDB Compass)
+The .env file will contain the host string, user, and password for the ``` scdining ``` dev database
 
-## Deployment
-Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```. The respective workflow file: ``` deploy.yml ``` is located inside of ``` .github/workflows ``` folder on each of the 3 branches.
-  
-### Files required for deploying
-- Django
-  - _settings.py_ in backend/server
-  - _wsgi.py_ in backend/server
-- Angular
-  - _environment.\<environment>.ts_ in client-server/src/environments
-    - ``` <environment> can be 'test', 'uat', or 'prod' ```
-  - _nginx.conf_ in client-server/nginx
-  - _server.crt_ in client-server/ssl
-  - _server.key_ in client-server/ssl
-    - The .crt and .key files are empty but are required to be present for the Github Actions workflow to execute properly
-- Docker
-  - _Dockerfile_ in server
-  - _Dockerfile_ in client-server
-  - _docker-compose.yml_ in Find-Dining-Revamp
+### MongoDB Installation
+Install MongoDB v4.4.x
+- https://docs.mongodb.com/manual/installation/
+
+Install MongoDB Compass *optional but recommended if you prefer a more graphical interface
+- https://www.mongodb.com/products/compass
+
+### MongoDB Connection
+Connect to the dev database using the host string in ``` DB_HOST ``` variable from .env
+
+If connecting from a terminal.
+```
+$ mongo "{{ DB_HOST }}"
+$ use scdining
+```
+If connecting from MongoDB Compass
+```
+Paste DB_HOST string in MongoDB Compass new connection input
+```
+![mongodb compass new connection](https://lh3.googleusercontent.com/pw/ACtC-3dDeBrbiMLiF36REo9DJZe5zpkK4-OcEFlHe_0xaRA0HFNf7BArelVs47_O9G3dDNL79D2eHrFss12CRgIX9Ud_bm2-NwjM9xRsCr5k_5KJSb4ROgHVT183J1eh7-IpwLXspjq3i4fboZOyRx3Irm8r=w1370-h873-no?authuser=0)
 
 ## Permissions and Access
 ### Should be able to SSH into (requires UofT general VPN):
@@ -124,18 +283,62 @@ You can SSH to the servers to examine running docker containers and do necessary
 ```
 
 ### Should be added to:
-- Google Cloud Console: scdining-winter2021
-  - ``` Please ask a member of the Find Dining team (that can login with info@finddining.ca) to add you as an owner of the project ```
-  - GCP services being used:
-    - Google Cloud Storage
-    - Geocoding
-    - Google Analytics
-- Dockerhub Organization: findiningutsc
+Google Cloud Console: scdining-winter2021
+```
+Please ask a member of the Find Dining team (that can login with info@finddining.ca)
+to add you as an owner of the project
+```
+- GCP services being used:
+    - Google Cloud Storage (for storing images and videos)
+    - Geocoding (for getting latitude, longitude coordinates of a location)
+    - Google Analytics (for keeping track of restaurant page traffic)
+
+<br/>
+
+Dockerhub Organization: findiningutsc
+```
+You can view the latest image tags of docker images that were built and pushed by
+either the Github workflow or yourself
+```
   - Repositories
     - _finddiningutsc/test_
     - _finddiningutsc/uat_
     - _finddiningutsc/prod_
 
+## Deployment
+Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```. The respective workflow file: ``` deploy.yml ``` is located inside of ``` .github/workflows ``` folder on each of the 3 branches.
+
+### Pushing a new change
+Push your changes to master branch.
 ```
-You can view the latest image tags of docker images that were built and pushed by either the Github workflow or yourself
+$ git commit -m {{ your_message }}
+$ git push
 ```
+Checkout the environment branch and merge. Fix any conflicts.
+```
+$ git checkout {{ environment }}
+$ git merge master
+```
+Push the changes to the remote branch.
+```
+$ git push
+```
+The actions workflow will take ~10 minutes to complete. Then wait an additional ~5 minutes for watchtower to rebuild the docker containers. You can visit then visit the updated environment site.
+  
+### Files required for deployment
+Django
+- _settings.py_ in backend/server
+- _wsgi.py_ in backend/server
+
+Angular
+- _environment.\{{ environment }}.ts_ in client-server/src/environments
+  - ``` {{ environment }} can be 'test', 'uat', or 'prod' ```
+- _nginx.conf_ in client-server/nginx
+- _server.crt_ in client-server/ssl
+- _server.key_ in client-server/ssl
+  - The .crt and .key files are empty but are required to be present for the Github Actions workflow to execute properly
+
+Docker
+- _Dockerfile_ in server
+- _Dockerfile_ in client-server
+- _docker-compose.yml_ in Find-Dining-Revamp
