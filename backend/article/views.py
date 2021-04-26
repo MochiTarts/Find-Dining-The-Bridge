@@ -14,6 +14,7 @@ from jsonschema import validate
 from article.enum import Visibility
 from article.models import Article
 from article import swagger
+from sduser.backends import check_user_status
 
 from utils.model_util import models_to_json, model_to_json
 import json
@@ -57,6 +58,7 @@ class ArticleView(APIView):
             article = Article.objects.filter(
                 visibility="ALL", published=True, id=id).values()
         else:
+            check_user_status(user)
             article = Article.objects.filter(
                 visibility__in=[user.role, "ALL"], published=True, id=id).values()
         # evaluate it instead of calling exists() because we need the cached result in response
