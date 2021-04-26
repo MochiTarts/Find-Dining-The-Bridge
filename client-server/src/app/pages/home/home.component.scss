@@ -212,8 +212,8 @@
 }
 
 .btn-primary {
-  background-color: $sky-blue;
-  border: solid 2px $sky-blue;
+  background-color: $secondary-color;
+  border: solid 2px $secondary-color;
   padding: 0px 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 600;
@@ -227,11 +227,11 @@
 
 .btn-primary:hover {
   background-color: white;
-  color: $sky-blue;
+  color: $secondary-color;
   transition: all 250ms linear;
 
   .search-icons {
-    color: $sky-blue;
+    color: $secondary-color;
     transition: all 250ms linear;
   }
 }
@@ -360,6 +360,10 @@
   text-overflow: ellipsis;
 }
 
+.continue-link {
+  color: $secondary-color;
+}
+
 // part 4
 .box-2 {
   position: relative;
@@ -478,9 +482,9 @@ hr {
   border-radius: 5px;
   border-width: 1px;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: $sky-blue;
+  background-color: $secondary-color;
   color: white;
-  border: solid 1px $sky-blue;
+  border: solid 1px $secondary-color;
   font-weight: 600;
   @media screen and (max-width: 990px) {
     font-size: 14px;
@@ -489,7 +493,7 @@ hr {
 
 .register-btn:hover {
   background-color: white;
-  color: $sky-blue;
+  color: $secondary-color;
   transition: all 250ms linear;
 }
 

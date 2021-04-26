@@ -6,17 +6,17 @@
           <img
             src="{{ restaurant.logo_url }}"
             class="card-img"
-            alt="{{ restaurant.name }}"
+            alt="logo of {{ restaurant.name }}"
           />
         </div>
         <div *ngIf="!restaurant.logo_url">
           <img
             src="../../../assets/images/find_dining_logo.png"
             class="card-img"
-            alt="{{ restaurant.name }}"
+            alt="default logo"
           />
         </div>
-        
+
         <div class="card-title-mobile-wrapper">
           <h2 class="card-title-mobile">
             {{ restaurant.name | titlecase }}
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col">
       <div class="card-body">
         <h2 class="card-title">{{ restaurant.name | titlecase }}</h2>
