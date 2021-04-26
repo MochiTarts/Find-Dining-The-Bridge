@@ -190,7 +190,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '121/minute',
-        'user': '201/minute'
+        'user': '181/minute',
+        'login_hour': '20/hour',
     },
     'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
 }
@@ -286,8 +287,8 @@ SIMPLE_JWT = {
     # for testing
     # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
     # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=6),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': True,

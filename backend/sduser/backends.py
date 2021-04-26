@@ -12,9 +12,11 @@ from django.conf import settings
 from django.db.models import Q
 from django import forms
 
+from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
+from sduser.utils import send_email_verification
 from sduser.validators import validate_signup_user
-
-from smtplib import SMTPException
+from server.throttling import LoginThrottle
+from sduser import swagger
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -25,15 +27,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 from rest_framework.decorators import api_view, permission_classes
 
-from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
-from sduser.utils import send_email_verification
-
+from smtplib import SMTPException
 import json
 import jwt
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from sduser import swagger
 
 
 UserModel = get_user_model()
@@ -140,6 +139,9 @@ def check_user_status(user):
     check on user is_disabled and is_blocked status and
     raise appropriate error with detail messages for login to display
     """
+    if not user:
+        raise PermissionDenied(
+            message="Failed to obtain user", code="no_user_found")
     if user.is_blocked:
         raise AuthenticationFailed(
             'This user has been blocked. If you think this is a mistake, please contact Find Dining team to resolve it',
@@ -200,6 +202,7 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
     """
     Token Obtain Pair View with refresh token stored in the cookie
     """
+    throttle_classes = [LoginThrottle]
 
     def finalize_response(self, request, response, *args, **kwargs):
 
@@ -275,7 +278,7 @@ class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
             return super().validate(attrs)
         else:
             raise InvalidToken(
-                'No valid token found in cookie \'refresh_token\'')
+                'No valid token found in cookie \'refresh_token\'', code='refresh_token_missing')
 
 
 def checkUserRefreshToken(user_id, refresh_token):
@@ -283,7 +286,7 @@ def checkUserRefreshToken(user_id, refresh_token):
     check refresh token against the one stored in the db
     """
     if user_id is None:
-        return InvalidToken('No user found who would have possessed this token')
+        return InvalidToken('No user found who would have possessed this token', code='no_user_found')
 
     user = UserModel.objects.get(id=user_id)
     # validate the token against the one stored in the db (user object)
