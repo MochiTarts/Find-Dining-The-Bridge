@@ -162,8 +162,8 @@ Auth guards for page protection and http interceptor.
 ```
 - src/app/_guards/
   - auth.guard.ts (guards against non logged-in users)
-  - auth.interceptor.ts (sends access token in http requests and
-    refreshes token if expired)
+  - auth.interceptor.ts (sends access token in http requests and refreshes token if
+    expired)
   - ro.guard.ts (guards against non-RO users)
   - secure.guard.ts
 ```
@@ -176,8 +176,7 @@ Form validators.
 ```
 Angular frontend deployment.
 ```
-- src/environments/ (environment.ts files containing environment
-  specific variables)
+- src/environments/ (environment.ts files)
 - nginx/ (nginx.conf file)
 - ssl/ (server.crt and server.key files *LEAVE EMPTY AND DO NOT DELETE)
 ```
