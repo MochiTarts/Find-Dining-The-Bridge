@@ -139,6 +139,9 @@ def check_user_status(user):
     check on user is_disabled and is_blocked status and
     raise appropriate error with detail messages for login to display
     """
+    if not user:
+        raise PermissionDenied(
+            message="Failed to obtain user", code="no_user_found")
     if user.is_blocked:
         raise AuthenticationFailed(
             'This user has been blocked. If you think this is a mistake, please contact Find Dining team to resolve it',

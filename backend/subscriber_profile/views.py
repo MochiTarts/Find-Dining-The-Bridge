@@ -7,6 +7,7 @@ from django.db import IntegrityError
 from subscriber_profile import swagger
 from subscriber_profile.models import SubscriberProfile
 from utils.model_util import model_to_json
+from sduser.backends import check_user_status
 
 from rest_framework.views import APIView
 from rest_framework.exceptions import PermissionDenied
@@ -26,10 +27,8 @@ class Signup(APIView):
         """ Inserts a new SubscriberProfile record into the database """
         body = request.data
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
+
         body['user_id'] = user.id
         SubscriberProfile.field_validate(body)
         if SubscriberProfile.objects.filter(user_id=body['user_id']).exists():
@@ -47,10 +46,8 @@ class SubscriberProfileView(APIView):
     def get(self, request):
         """ Retrieves a SubscriberProfile record from the database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
+
         profile = SubscriberProfile.objects.get(user_id=user.id)
         if not profile:
             raise ObjectDoesNotExist(
@@ -64,10 +61,8 @@ class SubscriberProfileView(APIView):
         """ Modifies a SubscriberProfile record in the database """
         body = request.data
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
+        
         body['user_id'] = user.id
         SubscriberProfile.field_validate(body)
         profile = SubscriberProfile.edit(body)

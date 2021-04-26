@@ -9,6 +9,7 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from sduser.backends import check_user_status
 from restaurant import schemas
 from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, FoodMediaForm
 from restaurant.enum import Status, MediaType, RestaurantSaveLocations, FoodSaveLocations
@@ -71,10 +72,7 @@ class PendingDishView(APIView):
     def get(self, request):
         """ Retrieve all dishes from restaurant owned by user """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         restaurant = PendingRestaurant.get_by_owner(user_id)
@@ -89,10 +87,7 @@ class PendingDishView(APIView):
     def post(self, request):
         """ Insert dish into database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                detail="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data, schema=schemas.food_insert_edit_schema)
@@ -116,10 +111,7 @@ class PendingDishModifyDeleteView(APIView):
     def put(self, request, dish_id):
         """ Updates dish data """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data,
@@ -137,10 +129,7 @@ class PendingDishModifyDeleteView(APIView):
     def delete(self, request, dish_id):
         """ Deletes dish from database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         restaurant = PendingRestaurant.get_by_owner(user_id)
@@ -159,10 +148,7 @@ class UserFavView(APIView):
     def post(self, request):
         """ Add a new user-restaurant-favourite relation """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data, schema=schemas.user_fav_schema)
@@ -178,10 +164,7 @@ class UserFavView(APIView):
     def get(self, request):
         """ Get all restaurants favourited by a user """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         response = UserFavRestrs.getUserFavourites(user_id)
@@ -209,10 +192,7 @@ class FavRelationView(APIView):
     def delete(self, request, rest_id):
         """ Remove a new user-restaurant-favourite relation """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         body = {'user_id': user_id, 'restaurant_id': rest_id}
@@ -252,10 +232,7 @@ class PendingRestaurantView(APIView):
     def get(self, request):
         """ Retrieve restaurant from pending collection by the owner's user_id """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         restaurant = PendingRestaurant.get_by_owner(user_id)
@@ -302,10 +279,7 @@ class RestaurantDraftView(APIView):
     def post(self, request):
         """ Insert new restaurant as a draft into database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         validate(instance=request.data,
                  schema=schemas.restaurant_insert_draft_schema)
@@ -320,10 +294,7 @@ class RestaurantDraftView(APIView):
     def put(self, request):
         """ Edit a restaurant profile and save it as a draft in the database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data,
@@ -344,10 +315,7 @@ class RestaurantForApprovalView(APIView):
     def put(self, request):
         """ Insert or update a restaurant record for admin approval """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data,
@@ -412,10 +380,7 @@ class PostView(APIView):
     def post(self, request):
         """ Insert a new post for a restaurant """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data, schema=schemas.post_schema)
@@ -431,10 +396,8 @@ class PostView(APIView):
     def get(self, request):
         """ Get all posts for a restaurant (for ROs) """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
+
         user_id = user.id
         posts = RestaurantPost.get_by_user_id(user_id)
         return JsonResponse(posts)
@@ -449,10 +412,8 @@ class PostDeleteView(APIView):
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
+
         post_deleted = RestaurantPost.remove_post(post_id)
         return JsonResponse({"Deleted post": model_to_json(post_deleted)})
 
@@ -481,10 +442,7 @@ class RestaurantMediaView(APIView):
     def put(self, request):
         """ For inserting or updating restaurant media """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         restaurant = PendingRestaurant.get_by_owner(user_id)
@@ -504,10 +462,7 @@ class RestaurantMediaView(APIView):
         """ For removing image(s) from the restaurant_image_url field
         and Google Cloud bucket """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         restaurant = PendingRestaurant.get_by_owner(user_id)
@@ -531,10 +486,7 @@ class DishMediaView(APIView):
     def put(self, request, dish_id):
         """ For inserting or updating restaurant media """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         dish = PendingFood.objects.filter(_id=dish_id).first()
