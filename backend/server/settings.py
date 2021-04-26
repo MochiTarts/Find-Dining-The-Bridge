@@ -206,6 +206,8 @@ JWT_AUTH = {
 '''
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = None
+
 if not DEBUG:
     # Once you confirm that all assets are served securely on your site (i.e. HSTS didn’t break anything),
     # it’s a good idea to increase this value so that infrequent visitors will be protected
@@ -217,6 +219,7 @@ if not DEBUG:
     # SECURE_HSTS_INCLUDE_SUBDOMAINS = False
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = True
 
 # the browser will only load the resource in a frame
 # if the request originated from the same site
@@ -262,7 +265,7 @@ MAIN_SITE_URL = os.environ.get('MAIN_SITE_URL')
 
 CORS_ALLOW_CREDENTIALS = True
 #CSRF_COOKIE_DOMAIN = ".localhost"
-SESSION_COOKIE_SAMESITE = None
+
 
 
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
