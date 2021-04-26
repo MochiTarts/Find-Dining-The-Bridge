@@ -15,9 +15,9 @@
   - [Unit Tests](#running-Django-unit-tests)
 
 [Documentation](#documentation)  
-[Database Notes](#database)  
+[Database](#database)  
 [Permissions and Access](#permissions-and-access)  
-[Deployment Notes](#deployment)  
+[Deploying Changes](#deployment)  
 
 <br/>
 
@@ -325,11 +325,11 @@ Checkout the environment branch and merge. Fix any conflicts.
 $ git checkout {{ environment }}
 $ git merge master
 ```
-Push the changes to the remote branch.
+Commit and push the changes.
 ```
 $ git push
 ```
-The actions workflow will take ~10 minutes to complete. Then wait an additional ~5 minutes for watchtower to rebuild the docker containers. You can visit then visit the updated environment site.
+The actions workflow will take ~10 minutes to complete. Then wait an additional ~5 minutes for watchtower to rebuild the docker containers. You can then visit the updated environment site.
   
 <br/>
 
