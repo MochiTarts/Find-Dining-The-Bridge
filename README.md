@@ -9,10 +9,15 @@
 ### Table of Contents
 [Prerequisites](#prerequisite)  
 [Development Environment](#setup-development-environment)  
+  - [Setup](#setup-development-environment)
+  - [Backend Overview](#backend-overview)  
+  - [Frontend Overview](#frontend-overview)  
+  - [Unit Tests](#running-Django-unit-tests)
+
 [Documentation](#documentation)  
 [Database Notes](#database)  
-[Deployment Notes](#deployment)  
 [Permissions and Access](#permissions-and-access)  
+[Deployment Notes](#deployment)  
 
 <br/>
 
@@ -43,6 +48,8 @@ zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
 Angular project was generated with [Angular CLI version 9.1.9]
 Django project was generated with [Django version 2.2.20]
 ```
+
+<br/>
 
 ## Setup Development Environment
 ### 1. Run Django Backend
@@ -128,6 +135,8 @@ Django served pages folders.
 - templates/ (admin and django served pages HTML files)
 ```
 
+<br/>
+
 ### Frontend overview
 User displayed pages (what you'd see when visiting the website).
 ```
@@ -174,6 +183,8 @@ Angular frontend deployment.
 - ssl/ (server.crt and server.key files *LEAVE EMPTY AND DO NOT DELETE)
 ```
 
+<br/>
+
 ### Running Django unit tests
 Activate your virtualenv, then run the following commands to run a single test case.
 ```
@@ -190,6 +201,8 @@ Example usage.
 $ cd backend
 $ pytest restaurant/tests.py::DraftRestaurantTestCases::test_insert_restaurant_draft_valid
 ```
+
+<br/>
 
 ## Documentation
 ### To see the Django documentation:
@@ -227,6 +240,8 @@ View documentation.
 
 Compodoc was used to generate Angular documentation
 
+<br/>
+
 ## Database
 There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers.
 ```
@@ -243,6 +258,8 @@ Install MongoDB v4.4.x
 
 Install MongoDB Compass *optional but recommended if you prefer a more graphical interface
 - https://www.mongodb.com/products/compass
+
+<br/>
 
 ### MongoDB Connection
 Connect to the dev database using the host string in ``` DB_HOST ``` variable from .env
@@ -268,7 +285,7 @@ You can SSH to the servers to examine running docker containers and do necessary
 ```
 
 ### Should be added to:
-Google Cloud Console: scdining-winter2021
+Google Cloud Console (project name: scdining-winter2021)
 ```
 Please ask a member of the Find Dining team (that can login with info@finddining.ca)
 to add you as an owner of the project
@@ -290,8 +307,12 @@ either the Github workflow or yourself
     - _finddiningutsc/uat_
     - _finddiningutsc/prod_
 
+<br/>
+
 ## Deployment
-Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```. The respective workflow file: ``` deploy.yml ``` is located inside of ``` .github/workflows ``` folder on each of the 3 branches.
+Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```.
+
+The respective workflow file: ``` deploy.yml ``` is located inside of ``` .github/workflows ``` folder on each of the 3 branches.
 
 ### Pushing a new change
 Push your changes to master branch.
@@ -310,6 +331,8 @@ $ git push
 ```
 The actions workflow will take ~10 minutes to complete. Then wait an additional ~5 minutes for watchtower to rebuild the docker containers. You can visit then visit the updated environment site.
   
+<br/>
+
 ### Files required for deployment
 Django
 - _settings.py_ in backend/server
