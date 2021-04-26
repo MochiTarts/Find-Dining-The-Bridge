@@ -212,7 +212,7 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
             refresh_token = response.data['refresh']
             # note: setting path='/api/auth/refresh/' won't work
             response.set_cookie('refresh_token', refresh_token,
-                                max_age=cookie_max_age, httponly=True)
+                                max_age=cookie_max_age, httponly=True, samesite=True, secure=True)
             del response.data['refresh']
             # decode token to get user info
             payload = jwt_decode(response.data['access'])
@@ -337,7 +337,7 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
                 return JsonResponse({'message': 'User has been disabled', 'code': 'user_disabled'}, status=401)
 
             response.set_cookie('refresh_token', new_refresh_token,
-                                max_age=cookie_max_age, httponly=True)
+                                max_age=cookie_max_age, httponly=True, samesite=True, secure=True)
             del response.data['refresh']
 
             # store the refresh token inside user object
@@ -373,6 +373,6 @@ def construct_token_response_for_user(user):
     user.save()
     res = Response(response)
     res.set_cookie('refresh_token', refresh_token,
-                   max_age=cookie_max_age, httponly=True)
+                   max_age=cookie_max_age, httponly=True, samesite=True, secure=True)
 
     return res
