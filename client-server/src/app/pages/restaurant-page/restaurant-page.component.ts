@@ -233,6 +233,12 @@ export class RestaurantPageComponent implements OnInit {
 
   }
 
+  gotoRestaurant() {
+    this.router.navigate(['/all-listings'], { queryParams: {GEO_location: this.restaurantDetails.GEO_location} }).then(() => {
+      this.reload();
+    })
+  }
+
   /**
    * Retrieves the restaurant from the database, either the pending
    * one or the approved one depending on the role
