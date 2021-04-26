@@ -222,6 +222,10 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SAMESITE = True
 
+# custom var for storing cookie max age in seconds
+# currently set to 3 days
+COOKIE_MAX_AGE = 3600 * 24 * 3
+
 # the browser will only load the resource in a frame
 # if the request originated from the same site
 X_FRAME_OPTIONS = 'SAMEORIGIN'
