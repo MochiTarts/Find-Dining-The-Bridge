@@ -4,8 +4,9 @@ from djongo import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import URLValidator, validate_email
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError, MultipleObjectsReturned
 from django.db import IntegrityError
+from rest_framework.exceptions import NotFound
 
 from subscriber_profile.enum import ConsentStatus
 from utils.validators import check_script_injections, validate_name, validate_url, validate_postal_code
@@ -52,15 +53,37 @@ class NLUser(models.Model):
         """
 
         if cls.objects.filter(email=email).exists():
-            raise IntegrityError('This email has already signed up.')
-        user = cls(first_name=first_name, last_name=last_name, email=email, consent_status=consent_status)
-        if consent_status == "EXPRESSED":
+            raise IntegrityError("This email has already been used.")
+        user = cls(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            consent_status=consent_status
+        )
+        if consent_status == ConsentStatus.EXPRESSED.name:
             user.subscribed_at = date.today()
         else:
             user.expired_at = expired_at
-        
         user = save_and_clean(user)
         return user
+
+    @classmethod
+    def get(email):
+        """ Retrieves the newsletter user
+
+        :param email: email of newsletter user
+        :type email: str
+        :raises NotFound: if user is not found
+        :return: the NLUser record of email
+        :rtype: :class: `NLUser`
+        """
+        nluser_filter = NLUser.objects.filter(email=email)
+        if nluser_filter.count() > 1:
+            raise MultipleObjectsReturned(
+                "Received multiple records of NLUser with email: "+email)
+        if not nluser_filter.first():
+            raise NotFound("Cannot find NLUser with email: "+email)
+        return nluser_filter.first()
 
     @classmethod
     def field_validate(self, fields):
@@ -97,10 +120,8 @@ class NLUser(models.Model):
         else:
             invalid['Invalid'].append('email')
 
-        if len(invalid['Invalid']) == 0:
-            return None
-        else:
-            return invalid
+        if invalid['Invalid']:
+            raise ValidationError(message=invalid, code="invalid_input")
 
     def __str__(self):
         return self.email

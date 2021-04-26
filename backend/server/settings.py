@@ -36,7 +36,7 @@ INTERNAL_IPS = ['localhost', '127.0.0.1']
 VIEW_REDIRECT_URL = os.environ.get('VIEW_REDIRECT_URL')
 
 if DEBUG:
-    VIEW_REDIRECT_URL = 'http://localhost:4200'
+    VIEW_REDIRECT_URL = 'https://localhost:4200'
 
 
 ALLOWED_HOSTS = ["*"]
