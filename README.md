@@ -229,7 +229,11 @@ Make sure you've already set up the Angular project dependencies.
 $ cd client-server
 $ npm install
 ```
-Start the development server for compodoc.
+Generate the compodoc documentation.
+```
+$ run npm compdoc
+```
+Start the development server for compodoc documentation.
 ```
 $ cd client-server
 $ ./node_modules/.bin/compdoc -s
