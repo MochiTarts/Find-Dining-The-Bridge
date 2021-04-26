@@ -42,7 +42,7 @@ export class AuthInterceptor implements HttpInterceptor {
         var user = this.tokenStorage.getUser();
         var err = error.error;
         // log user out if error message/error code indicates a need to reject the request
-        if (err && (err.detail == "Token is invalid or expired" || (err.error && LOGOUT_CODES.includes(err.code)))) {
+        if (err && (err.detail == "Token is invalid or expired" || (LOGOUT_CODES.includes(err.code)))) {
           this.logout();
           window.location.reload();
           //return throwError(error);
