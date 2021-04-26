@@ -206,7 +206,9 @@ $ pytest restaurant/tests.py::DraftRestaurantTestCases::test_insert_restaurant_d
 
 ## Documentation
 ### To see the Django documentation:
-Make sure you've already set up the Django project following the ['Run Django'](#1.-run-django-backend) steps above
+Make sure you've already set up the Django project following the ['Run Django Backend'](#setup-development-environment) steps above
+
+Activate your virtualenv.
 
 Run Django development server.
 ```
