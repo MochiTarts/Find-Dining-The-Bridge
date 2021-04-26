@@ -8,4 +8,3 @@ venv/
 **.crt
 **/django_cache
 README.md
-client-server/documentation

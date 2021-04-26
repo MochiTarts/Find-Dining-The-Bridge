@@ -2,13 +2,15 @@
 <div class="page-box">
   <h2 id="newsletter-label">Newsletter Sign-Up</h2>
   <div class="form-box">
-    <ngb-alert [hidden]="!displayError" [dismissible]="false" [type]="'danger'" id="alert" tabindex="0">
+    <ngb-alert [hidden]="!displayError" [dismissible]="false" [type]="'danger'"
+      id="alert" tabindex="0">
       {{ errorMessage }}
     </ngb-alert>
-    <p style="color: gray;" tabindex="0">
-      <i>All required fields are marked with an asterisk (<span style="color: red;">*</span>)</i>
+    <p style="color: #757575;" tabindex="0">
+      <i>All required fields are marked with an asterisk (<app-required-star></app-required-star>)</i>
     </p>
-    <form [formGroup]="uploadForm" role="form" aria-labelledby="newsletter-label">
+    <form [formGroup]="uploadForm" role="form"
+      aria-labelledby="newsletter-label">
 
       <div class="form-group">
         <label for="first_name">
@@ -21,11 +23,11 @@
           id="first_name"
           formControlName="first_name"
           aria-required="true"
-        />
+          />
         <app-dynamic-label class="error-label"
-        [name]="'errorFirstName'"
-        [message]="validator.errors['first_name']"
-        tabindex="validator.errors['first_name'] ? -1 : 0" ></app-dynamic-label>
+          [name]="'errorFirstName'"
+          [message]="validator.errors['first_name']"
+          tabindex="validator.errors['first_name'] ? -1 : 0"></app-dynamic-label>
       </div>
 
       <div class="form-group">
@@ -39,18 +41,21 @@
           id="last_name"
           formControlName="last_name"
           aria-required="true"
-        />
+          />
         <app-dynamic-label class="error-label"
-        [name]="'errorLastName'"
-        [message]="validator.errors['last_name']"
-        tabindex="validator.errors['last_name'] ? -1 : 0" ></app-dynamic-label>
+          [name]="'errorLastName'"
+          [message]="validator.errors['last_name']"
+          tabindex="validator.errors['last_name'] ? -1 : 0"></app-dynamic-label>
       </div>
 
       <div class="form-group">
-        <label for="email" id="email_label">
-          3. Please provide your email address regarding any updates and promotions offered through the Find Dining platform. <app-required-star></app-required-star>
+        <label id="email_label">
+          3. Please provide your email address regarding any updates and
+          promotions offered through the Find Dining platform.
+          <app-required-star></app-required-star>
         </label>
-        <p id="email_note">Receive discounts up to 50% off from your favourite Scarborough restaurants.</p>
+        <p id="email_note">Receive discounts up to 50% off from your favourite
+          Scarborough restaurants.</p>
         <p class="hint">ie. name@mail.com</p>
         <input
           type="text"
@@ -59,11 +64,11 @@
           formControlName="email"
           aria-required="true"
           aria-labelledby="email_label email_note"
-        />
+          />
         <app-dynamic-label class="error-label"
-        [name]="'errorEmail'"
-        [message]="validator.errors['email']"
-        tabindex="validator.errors['email'] ? -1 : 0" ></app-dynamic-label>
+          [name]="'errorEmail'"
+          [message]="validator.errors['email']"
+          tabindex="validator.errors['email'] ? -1 : 0"></app-dynamic-label>
       </div>
 
       <br>
@@ -72,14 +77,16 @@
           <input
             id="receive_updates"
             type="checkbox"
-          />
-          <i> Please add me to your mailing list so I can receive emails regarding updates on the Find Dining!</i>
+            />
+          <i> Please add me to your mailing list so I can receive emails
+            regarding updates on the Find Dining!</i>
         </label>
       </div>
 
       <div class="form-group">
         <div class="text-right">
-          <button class="btn save-next" (click)="onSubmit()" [disabled]="uploadForm.invalid">
+          <button class="btn save-next" (click)="onSubmit()"
+            [disabled]="uploadForm.invalid">
             SUBMIT
           </button>
         </div>

@@ -53,11 +53,7 @@ class DeactivateView(APIView):
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
         current_user = request.user
-
-        if not current_user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="deactivation_fail")
-        check_user_status(user)
+        check_user_status(current_user)
         if current_user.id is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
 
@@ -93,7 +89,6 @@ class editView(APIView):
 
 class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(responses=swagger.user_nearby_get_response,
                          operation_id="GET /user/nearby/")
@@ -104,8 +99,6 @@ class NearbyRestaurantsView(APIView):
         user_id = user.id
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
-
-        print(json.dumps(nearest, indent=4))
         return JsonResponse(nearest, safe=False)
 
 
