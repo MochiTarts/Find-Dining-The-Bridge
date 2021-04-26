@@ -21,7 +21,7 @@ from restaurant.models import (
     UserFavRestrs,
     RestaurantPost
 )
-from google.analytics import get_access_token, get_analytics_data
+from google.analytics import get_analytics_data
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
 
@@ -330,14 +330,6 @@ class RestaurantForApprovalView(APIView):
         else:
             restaurant = PendingRestaurant.edit_approval(user_id, body)
         return JsonResponse(model_to_json(restaurant))
-
-
-class AnalyticsAccessTokenView(APIView):
-    """ analytics access token view """
-
-    def get(self, request):
-        """ Get OAuth2 access token for Google Analytics API to make call """
-        return JsonResponse({'token': get_access_token()})
 
 
 class RestaurantAnalyticsDataView(APIView):
