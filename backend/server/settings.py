@@ -190,7 +190,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '121/minute',
-        'user': '201/minute'
+        'user': '181/minute',
+        'login_hour': '20/hour',
     },
     'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
 }

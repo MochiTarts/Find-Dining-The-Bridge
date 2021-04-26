@@ -12,9 +12,11 @@ from django.conf import settings
 from django.db.models import Q
 from django import forms
 
+from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
+from sduser.utils import send_email_verification
 from sduser.validators import validate_signup_user
-
-from smtplib import SMTPException
+from server.throttling import LoginThrottle
+from sduser import swagger
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -25,15 +27,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 from rest_framework.decorators import api_view, permission_classes
 
-from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
-from sduser.utils import send_email_verification
-
+from smtplib import SMTPException
 import json
 import jwt
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from sduser import swagger
 
 
 UserModel = get_user_model()
@@ -200,6 +199,7 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
     """
     Token Obtain Pair View with refresh token stored in the cookie
     """
+    throttle_classes = [LoginThrottle]
 
     def finalize_response(self, request, response, *args, **kwargs):
 

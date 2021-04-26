@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
   role: string = 'BU';
   user = {};
   mode: number = 0;
+  failLoginAttempts: number = 0;
 
   signupForm: any = {
     username: null,
@@ -245,17 +246,23 @@ export class LoginComponent implements OnInit {
             this.authService.updateLoginStatus(true);
             this.isLoginFailed = false;
             this.isLoggedIn = true;
+            this.failLoginAttempts = 0;
             this.role = this.tokenStorage.getUser().role;
             this.loginRedirect();
           },
           // login failed
           error => {
+            //console.log(error);
             this.authService.updateLoginStatus(false);
+            this.failLoginAttempts += 1;
             var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
             if (error.error) {
               switch (error.error.code) {
                 case 'user_disabled':
                   this.infoMessage = verifyEmailInfoMessage;
+                  break;
+                case 'too_many_request':
+                  this.loginErrorMessage = "Too many login attempts. " + error.error.detail;
                   break;
                 default:
                   if (error.error.detail == "No active account found with the given credentials") {
@@ -311,7 +318,7 @@ export class LoginComponent implements OnInit {
             },
             // signup failed
             err => {
-              //console.log(err)
+              //console.log(err);
               this.isSignUpFailed = true;
               this.signupErrorMessage = err.error.message;
 
@@ -568,6 +575,7 @@ export class LoginComponent implements OnInit {
 
   // just in case
   onError(event: any) {
+    //console.log(event);
     this.signupErrorMessage = "We're sorry, something went wrong with authentication. If this keeps up, please contact info@finddining.ca for more inquiries.";
     this.isSignUpFailed = true;
     // manually trigger change detection to have error messages render
