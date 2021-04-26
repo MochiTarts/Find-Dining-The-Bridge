@@ -1173,6 +1173,8 @@ class UserFavRestrs(models.Model):
                 raise ObjectDoesNotExist(
                     'One of the restaurants in the list of favourites does not appear to exist: ' +
                     record.restaurant)
+            restaurant.offer_options = ast.literal_eval(
+                restaurant.offer_options)
             restaurants.append(model_to_json(restaurant))
 
         return restaurants
