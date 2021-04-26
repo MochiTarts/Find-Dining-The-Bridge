@@ -8,6 +8,7 @@ import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
 
 const TOKEN_HEADER_KEY = 'Authorization';
+const LOGOUT_CODES = ['user_blocked', 'user_disabled', 'no_user_found', 'token_mismatch', 'refresh_token_missing', 'no_user_found'];
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -40,7 +41,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
         var user = this.tokenStorage.getUser();
         var err = error.error;
-        if (err && (err.detail == "Token is invalid or expired" || ['token_mismatch'].includes(err.code))) {
+        // log user out if error message/error code indicates a need to reject the request
+        if (err && (err.detail == "Token is invalid or expired" || (LOGOUT_CODES.includes(err.code)))) {
           this.logout();
           window.location.reload();
           //return throwError(error);
@@ -50,16 +52,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }
         // otherwise refresh the access token using refresh token
         return this.handleTokenError(req, next);
-        // log user out if 400 and error code indicates a need to reject the request
-      } else if (error instanceof HttpErrorResponse && error.status === 400) {
-        if (error.error && ['invalid_token', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
-          this.logout();
-          window.location.reload();
-          //return throwError(error);
-          // 400 example: duplicate username/email on signup
-        } else {
-          return throwError(error);
-        }
+
       } else {
         return throwError(error);
       }

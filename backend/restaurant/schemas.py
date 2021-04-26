@@ -1,5 +1,5 @@
 # jsonschema validation schemas for restaurant and dish request bodies
-food_insert_schema = {
+food_insert_edit_schema = {
     "properties": {
         "name": {"type": "string"},
         "description": {"type": "string"},
@@ -9,18 +9,6 @@ food_insert_schema = {
         "category": {"type": "string"}
     },
     "required": ["name", "description", "price", "specials", "category"],
-    "additionalProperties": False
-}
-
-food_edit_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "description": {"type": "string"},
-        "picture": {"type": "string"},
-        "price": {"type": ["string", "number"]},
-        "specials": {"type": "string"},
-        "category": {"type": "string"}
-    },
     "additionalProperties": False
 }
 

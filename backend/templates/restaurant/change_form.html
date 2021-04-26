@@ -145,17 +145,18 @@
         pdf.addImage(canvas, 'PNG', 0, 0);
         let date = new Date();
         let month = ((date.getMonth() + 1) < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString());
-        let day = (date.getDay() < 10 ? "0" + date.getDay().toString() : date.getDay().toString());
+        let day = (date.getDate() < 10 ? "0" + date.getDate().toString() : date.getDate().toString());
         pdf.save('Find Dining Report - ' + restaurant_name + ' - ' + date.getFullYear().toString() + month + day + '.pdf');
     }
 </script>
 {% endblock %}
 {% block content %}
-<button class="button" type="button" onclick="toggleGraphs()" style="margin-bottom: 10px;">Toggle Graphs</button>
+<button class="button" type="button" onclick="toggleGraphs()" style="margin-bottom: 10px;">Show/Hide Graphs</button>
 <div id="graphs" style="display: none; padding-top: 15px; padding-bottom: 75px;">
     <hr>
-    <h1 id="restaurant-name" style="font-weight: bold; font-size: 32px;">{{ original.name }}</h1>
-    <button class="button" type="button" onclick="downloadAll()" style="float: right;">Export Graphs</button>
+    <h1 id="restaurant-name" style="font-weight: bold; font-size: 32px; display: inline">{{ original.name }}</h1>
+    <button class="button" type="button" onclick="downloadAll()" style="float: right; margin-top: 5px">Export
+        Graphs</button>
     <div style="margin:auto; width:1000px;">
         <canvas id="daily-chart"></canvas>
     </div>

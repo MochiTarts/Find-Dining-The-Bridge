@@ -674,6 +674,24 @@ class PendingRestaurant(models.Model):
         return restaurant
 
     @classmethod
+    def get_by_owner(cls, owner_user_id):
+        """ Retrieves restaurant by its owner
+
+        :param owner_user_id: user_id of the owner
+        :type owner_user_id: int
+        :raises ObjectDoesNotExist: if restaurant owned by user
+            does not exist
+        :return: PendingRestaurant record owned by user
+        :rtype: :class: `PendingRestaurant`
+        """
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=owner_user_id).first()
+        if not restaurant:
+            raise ObjectDoesNotExist(
+                'No pending restaurant found with owner user id of this: ' + str(owner_user_id))
+        return restaurant
+
+    @classmethod
     def edit_draft(cls, user_id, body):
         """ Edits the PendingRestaurant owned by the user
         of the given user_id and marks the status as 'In_Progress',
@@ -785,11 +803,12 @@ class PendingRestaurant(models.Model):
                     geocode(fields['postalCode'])
                 except ValidationError:
                     invalid['Invalid'].append('postalCode')
-                try:
-                    address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
-                    geocode(address)
-                except ValidationError:
-                    invalid['Invalid'].extend(['address, postalCode'])
+                else:
+                    try:
+                        address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                        geocode(address)
+                    except ValidationError:
+                        invalid['Invalid'].extend(['address', 'postalCode'])
 
         if 'email' in fields:
             try:
@@ -818,7 +837,6 @@ class PendingRestaurant(models.Model):
                 invalid['Invalid'].append('owner_last_name')
 
         if invalid['Invalid']:
-            invalid['Invalid'] = list(set(invalid['Invalid']))
             raise ValidationError(message=invalid, code="invalid_input")
 
     @classmethod
@@ -863,11 +881,12 @@ class PendingRestaurant(models.Model):
                     geocode(fields['postalCode'])
                 except ValidationError:
                     invalid['Invalid'].append('postalCode')
-                try:
-                    address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
-                    geocode(address)
-                except ValidationError:
-                    invalid['Invalid'].extend(['address, postalCode'])
+                else:
+                    try:
+                        address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                        geocode(address)
+                    except ValidationError:
+                        invalid['Invalid'].extend(['address', 'postalCode'])
 
         if 'phone' in fields:
             if fields['phone'] is not None:
@@ -1105,7 +1124,7 @@ class UserFavRestrs(models.Model):
         if not restaurant_filter.filter(_id=rest_id).exists():
             raise ObjectDoesNotExist(
                 'The restaurant associated with id ' +
-                restaurant_id +
+                rest_id +
                 ' does not exist')
         if restaurant_filter.count() > 1:
             raise MultipleObjectsReturned(
