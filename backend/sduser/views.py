@@ -72,7 +72,7 @@ class DeactivateView(APIView):
             return JsonResponse({'message': ' There is an error sending the notification email. However, this user account has been successfully deactivated. No further action is required.', 'code': 'fail_to_send_email'}, status=503)
 
 
-class editView(APIView):
+class SDUserEditView(APIView):
     """ Edit user """
 
     @swagger_auto_schema(operation_id="PUT /user/edit/")
@@ -85,6 +85,17 @@ class editView(APIView):
             setattr(user, field, body[field])
         user.save()
         return JsonResponse(model_to_dict(user))
+
+
+class SDUserLogoutView(APIView):
+    """ logout user by removing the refresh token in the cookie """
+    #permission_classes = (AllowAny,)
+
+    @swagger_auto_schema(operation_id="PPST /user/logout/")
+    def post(self, request):
+        res = JsonResponse({})
+        res.delete_cookie('refresh_token')
+        return res
 
 
 class NearbyRestaurantsView(APIView):

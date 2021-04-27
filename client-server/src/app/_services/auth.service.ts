@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, EMPTY } from 'rxjs';
 import { catchError, switchMap, finalize } from 'rxjs/operators';
 import { TokenStorageService } from './token-storage.service';
 
@@ -16,9 +16,9 @@ const httpOptions = {
 })
 export class AuthService {
 
-  loginStatus:boolean = false;
+  loginStatus: boolean = false;
 
-  ip:any;
+  ip: any;
 
   constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) {
     // Sets loginStatus to true if auth-token and auth-user keys are set and present
@@ -31,7 +31,7 @@ export class AuthService {
    * Sets loginStatus to status (true if user's logged in; false otherwise)
    * @param status - the login status of user
    */
-  updateLoginStatus(status:boolean){
+  updateLoginStatus(status: boolean) {
     this.loginStatus = status;
   }
 
@@ -39,7 +39,7 @@ export class AuthService {
    * Retrieves value of loginStatus
    * @returns boolean (loginStatus)
    */
-  isLoggedIn(){
+  isLoggedIn() {
     return this.loginStatus;
   }
 
@@ -53,7 +53,7 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
 
     // get client ip address and pass it to backend (along with the credentials)
-    return this.http.get<{ip:string}>('https://jsonip.com').pipe(
+    return this.http.get<{ ip: string }>('https://jsonip.com').pipe(
       switchMap(data => {
         this.ip = data.ip;
         return this.http.post(AUTH_API + 'signin/', JSON.stringify({
@@ -69,6 +69,26 @@ export class AuthService {
           password,
           'ip': this.ip,
         }), httpOptions);
+      }),
+    );
+  }
+
+  /**
+   * log out a user
+   * 
+   * @returns the Observable from the logout request
+   */
+  logout(): Observable<any> {
+    this.loginStatus = false;
+    return this.http.post(AUTH_API + 'logout/', JSON.stringify({
+    }), httpOptions).pipe(
+      switchMap(data => {
+        this.tokenStorage.signOut();
+        return EMPTY;
+      }),
+      catchError(error => {
+        this.ip = '';
+        return EMPTY;
       }),
     );
   }
@@ -98,7 +118,7 @@ export class AuthService {
    * @param email - user's email
    * @returns the Observable from password reset request
    */
-  resetPasswordEmail(email: string): Observable<any>{
+  resetPasswordEmail(email: string): Observable<any> {
     return this.http.post(AUTH_API + 'password_reset/', JSON.stringify({
       email
     }), httpOptions);
@@ -110,7 +130,7 @@ export class AuthService {
    * @param email - user's email
    * @returns the Observable from resend verification email request
    */
-  resendVerificationEmail(email: string): Observable<any>{
+  resendVerificationEmail(email: string): Observable<any> {
     return this.http.post(AUTH_API + 'resend_verification_email/', JSON.stringify({
       email
     }), httpOptions);
