@@ -3,14 +3,15 @@
     <div class="header-text" fxLayout="column" fxLayoutAlign="center center">
       <div class="title-text">
         <img
-        class="header-logo"
-        src="/assets/images/find_dining_logo.png"
-        alt="Find Dining logo"
-        />
+          class="header-logo"
+          src="/assets/images/find_dining_logo.png"
+          alt="Find Dining logo"
+          />
 
         <div class="title" tabindex="0" style="text-align: center;">
-          <span class="title-font find">FIND </span> 
-          <span class="title-font dining">DINING </span> <br class="title-break-2" />
+          <span class="title-font find">FIND </span>
+          <span class="title-font dining">DINING </span> <br
+            class="title-break-2" />
           <span class="title-font scarborough">SCARBOROUGH</span>
         </div>
       </div>
@@ -109,7 +110,7 @@
 </div>
 
 <div class="local-restaurants" *ngIf="restaurants.length> 0">
-  <b>Discover Local Favourites</b>
+  <b tabindex="0">Discover Local Favourites</b>
   <div class="restaurant-carousel">
     <ivy-carousel
       style="max-width: fit-content; margin: auto"
@@ -136,12 +137,12 @@
             />
         </div>
         <div class="col" id="info-col2">
-          <p>
+          <p tabindex="0">
             <b>{{ spotlight.name }}</b> | {{ spotlightCuisines }} |
             {{ spotlight.years }} year<span *ngIf="spotlight.years> 1">s</span>
             in business
           </p>
-          <p class="bio">
+          <p class="bio" tabindex="0">
             {{ spotlightStory }}
             <a
               class="continue-link"

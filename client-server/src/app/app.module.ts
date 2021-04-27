@@ -84,6 +84,7 @@ import { ArticleCommonCardComponent } from './components/article-common-card/art
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
 import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
 import { AccountRemovalInstructionComponent } from './pages/account-removal-instruction/account-removal-instruction.component';
+import { SafeHtmlPipe } from './_helpers/safe-html.pipe';
 
 
 
@@ -133,6 +134,7 @@ import { AccountRemovalInstructionComponent } from './pages/account-removal-inst
     ThankyouPageComponent,
     ContactUsComponent,
     AccountRemovalInstructionComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,

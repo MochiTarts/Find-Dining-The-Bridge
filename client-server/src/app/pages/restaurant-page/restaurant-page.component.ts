@@ -234,7 +234,7 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   gotoRestaurant() {
-    this.router.navigate(['/all-listings'], { queryParams: {GEO_location: this.restaurantDetails.GEO_location} }).then(() => {
+    this.router.navigate(['/all-listings'], { queryParams: { GEO_location: this.restaurantDetails.GEO_location } }).then(() => {
       this.reload();
     })
   }
@@ -307,7 +307,11 @@ export class RestaurantPageComponent implements OnInit {
   }
 
   openExternalMenu() {
-    window.open(this.restaurantDetails.full_menu_url, '_blank')
+    let menu_url = this.restaurantDetails.full_menu_url;
+    if (!(menu_url.startsWith('https://') || menu_url.startsWith('http://'))) {
+      menu_url = 'https://' + menu_url;
+    }
+    window.open(menu_url, '_blank')
   }
 
   reload() {
