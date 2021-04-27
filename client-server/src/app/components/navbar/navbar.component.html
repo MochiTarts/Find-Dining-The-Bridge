@@ -144,8 +144,7 @@
       <li class="nav-item" data-toggle="collapse"
         data-target=".navbar-collapse.show" tabindex="0"
         (keyup.enter)="onLoginRegisterClicked()">
-        <a routerLink="/authentication" routerLinkActive="active"
-          class="nav-link" (click)="onLoginRegisterClicked()" id="login/logout">
+        <a class="nav-link" (click)="onLoginRegisterClicked()" id="login/logout">
           {{ !authService.isLoggedIn() ? 'Log In / Register' : 'Log Out' }}
         </a>
       </li>
