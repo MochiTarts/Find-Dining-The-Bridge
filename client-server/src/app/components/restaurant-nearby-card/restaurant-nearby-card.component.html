@@ -5,20 +5,19 @@
   (click)="gotoRestaurant()"
   (touchend)="gotoRestaurant()"
   placement="bottom"
-  ngbTooltip="Visit Restaurant Page"
->
+  ngbTooltip="Visit Restaurant Page">
   <div class="img-container">
     <img
-        src="{{ restaurant.imgUrl }}"
-        class="card-img-top"
-        alt="restaurant logo"
+      src="{{ restaurant.imgUrl }}"
+      class="card-img-top"
+      alt="logo of {{ restaurant.name }}, click to visit restaurant page"
       />
-      <div class="overlay">
-        <div class="text">
-          {{ restaurant.name }}
-          <br><br>
-          {{ restaurant.cuisinePrice }}
-        </div>
+    <div class="overlay">
+      <div class="text">
+        {{ restaurant.name }}
+        <br><br>
+        {{ restaurant.cuisinePrice }}
       </div>
+    </div>
   </div>
 </a>
