@@ -25,6 +25,7 @@ import { ResourcesComponent } from './pages/resources/resources.component';
 import { NewsletterSignupComponent } from './pages/newsletter-signup/newsletter-signup.component';
 import { ThankyouPageComponent } from './pages/thankyou-page/thankyou-page.component';
 import { ContactUsComponent } from './pages/contact-us/contact-us.component';
+import { AccountRemovalInstructionComponent } from './pages/account-removal-instruction/account-removal-instruction.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuard] },
   { path: 'restaurant-setup', component: RestaurantSetupComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'terms-of-service', component: TermsOfServiceComponent },
+  { path: 'account-removal-instruction', component: AccountRemovalInstructionComponent },
   { path: 'restaurant', component: RestaurantPageComponent },
   { path: 'edit-posts', component: EditPostsComponent, canActivate: [AuthGuard, ROGuard] },
   { path: 'menu-edit', component: MenuEditComponent, canActivate: [AuthGuard, ROGuard] },
