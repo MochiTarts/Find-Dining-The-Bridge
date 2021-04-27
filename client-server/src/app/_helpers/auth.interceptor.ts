@@ -2,7 +2,7 @@ import { HTTP_INTERCEPTORS, HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
 import { Injectable } from '@angular/core';
 
 import { TokenStorageService } from '../_services/token-storage.service';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, EMPTY } from 'rxjs';
 import { catchError, switchMap, filter, take, finalize, } from 'rxjs/operators';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
@@ -43,8 +43,12 @@ export class AuthInterceptor implements HttpInterceptor {
         var err = error.error;
         // log user out if error message/error code indicates a need to reject the request
         if (err && (err.detail == "Token is invalid or expired" || (LOGOUT_CODES.includes(err.code)))) {
-          this.logout();
-          window.location.reload();
+          if (JSON.stringify(user) != '{}'){
+            this.logout();
+            window.location.reload();
+          }
+          // prevent inf loop when user is already logged out
+          return EMPTY;
           //return throwError(error);
         } else if (!user || (user && !user.role)) {
           // propogate error for error catching and displays
@@ -63,7 +67,7 @@ export class AuthInterceptor implements HttpInterceptor {
    * Logs the user out
    */
   private logout(): void {
-    this.tokenStorage.signOut();
+    this.authService.logout();
   }
 
   /**

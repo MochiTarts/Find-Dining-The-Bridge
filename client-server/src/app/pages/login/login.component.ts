@@ -125,7 +125,11 @@ export class LoginComponent implements OnInit {
       default:
         tabIndex = 0;
     }
-    this.tabGroup.selectedIndex = tabIndex;
+    // only when not logged in we have access to the tabGroup and 
+    // need to switch tabs
+    if (!this.authService.isLoggedIn()){
+      this.tabGroup.selectedIndex = tabIndex;
+    }
   }
 
   ngOnInit(): void {
@@ -164,7 +168,6 @@ export class LoginComponent implements OnInit {
                 this.loginRedirect();
               }, err => {
                 //console.log(err);
-                this.authService.updateLoginStatus(false);
                 this.isLoggedIn = false;
                 var verifyEmailInfoMessage = 'Please activate your account by verifying your email before you try to login. Email verification is required for us to authenticate you.';
 
@@ -179,7 +182,7 @@ export class LoginComponent implements OnInit {
                   //console.log(this.loginErrorMessage);
                 }
                 this.isLoginFailed = true;
-                this.tokenStorage.signOut();
+                this.authService.logout();
                 // manually trigger change detection to have error messages render
                 this.ref.detectChanges();
                 //throw err;
@@ -196,23 +199,21 @@ export class LoginComponent implements OnInit {
                 this.role = this.tokenStorage.getUser().role;
                 this.loginRedirect();
               }, err => {
-                this.authService.updateLoginStatus(false);
                 this.isLoggedIn = false;
                 if (err.error) {
                   this.loginErrorMessage = err.error.message;
                   //console.log(this.loginErrorMessage);
                 }
                 this.isLoginFailed = true;
-                this.tokenStorage.signOut();
+                this.authService.logout();
                 // manually trigger change detection to have error messages render
                 this.ref.detectChanges();
               })
               break;
             default:
               // console.log('unrecognized provider: ' + user.provider);
-              this.authService.updateLoginStatus(false);
               this.isLoggedIn = false;
-              this.tokenStorage.signOut();
+              this.authService.logout();
               this.reloadPage();
           }
         }

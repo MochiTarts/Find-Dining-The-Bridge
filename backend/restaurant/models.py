@@ -86,6 +86,14 @@ restaurant_editable = [
     "restaurant_video_desc",
     "phone_ext"]
 
+allowed_image_types = (
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif')
+
+allowed_video_types = ('video/mp4')
+
 User = get_user_model()
 
 
@@ -414,6 +422,13 @@ class PendingFood(models.Model):
         media_type = form_data.get('media_type')
         save_location = form_data.get('save_location')
         media_file = form_file['media_file']
+
+        if media_type != MediaType.IMAGE.name:
+            raise ValidationError(
+                "Disallowed media_type for dish image upload", code='invalid_input')
+        if media_file.content_type not in allowed_image_types:
+            raise ValidationError(
+                "Mime type not allowed for image upload", code='invalid_mime_type')
 
         file_path = upload(media_file, IMAGE)
 
@@ -1014,10 +1029,19 @@ class PendingRestaurant(models.Model):
                     file_path.remove('/')
 
                 for image in media_files_list:
+                    if image.content_type not in allowed_image_types:
+                        raise ValidationError(
+                            "Mime type not allowed for image upload",
+                            code='invalid_mime_type')
                     file_path.append(upload(image, IMAGE))
+
                 file_path = json.dumps(file_path)
             else:
                 media_file = form_file['media_file']
+                if media_file.content_type not in allowed_image_types:
+                    raise ValidationError(
+                        "Mime type not allowed for image upload",
+                        code='invalid_mime_type')
                 file_path = upload(media_file, IMAGE)
         else:
             if save_location != 'restaurant_video_url':
@@ -1034,6 +1058,10 @@ class PendingRestaurant(models.Model):
                 file_path = media_link
             else:
                 media_file = form_file['media_file']
+                if media_file.content_type not in allowed_video_types:
+                    raise ValidationError(
+                        "Mime type not allowed for video upload",
+                        code='invalid_mime_type')
                 file_path = upload(media_file, VIDEO)
 
         approved_restaurant = Restaurant.objects.filter(
