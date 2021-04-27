@@ -1,39 +1,88 @@
 <div class="header-img">
   <div class="header-container">
     <div class="header-text" fxLayout="column" fxLayoutAlign="center center">
-      <h1 class="title" tabindex="0">
-        Supporting <br class="title-break" /> Scarborough <br class="title-break-2" /> Restaurants
-      </h1>
-      <div class="desc-overlay row">
+      <!-- <h1 class="title" tabindex="0">
+        Supporting <br class="title-break" />
+        Scarborough <br class="title-break-2" />
+        Restaurants
+      </h1> -->
+      <img
+        class="header-title"
+        src="/assets/images/find_dining_logo_name_row.png"
+        alt="Find Dining logo"
+        />
+      <div class="header-content description" tabindex="0">
+        Find Dining is a Scarborough based program that celebrates our
+        community's rich, cultural diversity through food. We aim to highlight
+        local and independent restaurants from an array of cuisines.<br /><br
+          />
+        Using our online platforms, our team helps Scarborough residents and
+        visitors to Find Dining, from neighbourhood favourites to new and
+        hidden gems. Additionally, we help uplift and support our community's
+        restaurants through promotions, programs and workshops.<br /><br />
+        Find Dining is supported by the City of Toronto, in partnership with
+        the University of Toronto Scarborough and Centennial College.
+      </div>
+      <!-- <div class="desc-overlay row">
         <div class="col-md-4">
-          <img class="header-logo" src="/assets/images/find_dining_logo.png" alt="Find Dining logo" />
+          <img
+            class="header-logo"
+            src="/assets/images/find_dining_logo.png"
+            alt="Find Dining logo"
+            />
         </div>
         <div class="col-md-8 header-content description" tabindex="0">
-          Find Dining is a Scarborough based program that celebrates our community's rich, cultural diversity through food. We aim to highlight local and independent restaurants from an array of cuisines.<br/><br/>
-          Using our online platforms, our team helps Scarborough residents and visitors to Find Dining, from neighbourhood favourites to new and hidden gems. Additionally, we help uplift and support our community's restaurants through promotions, programs and workshops.<br/><br/>
-          Find Dining is supported by the City of Toronto, in partnership with the University of Toronto Scarborough and Centennial College.
+          Find Dining is a Scarborough based program that celebrates our
+          community's rich, cultural diversity through food. We aim to highlight
+          local and independent restaurants from an array of cuisines.<br /><br
+            />
+          Using our online platforms, our team helps Scarborough residents and
+          visitors to Find Dining, from neighbourhood favourites to new and
+          hidden gems. Additionally, we help uplift and support our community's
+          restaurants through promotions, programs and workshops.<br /><br />
+          Find Dining is supported by the City of Toronto, in partnership with
+          the University of Toronto Scarborough and Centennial College.
         </div>
-      </div>
+      </div> -->
     </div>
 
-    <div class="search-bar-container" fxLayout="column" fxLayoutAlign="center center">
+    <div
+      class="search-bar-container"
+      fxLayout="column"
+      fxLayoutAlign="center center">
       <div class="input-group">
         <div class="input-group-prepend">
           <fa-icon [icon]="faMapMarkerAlt" class="input-group-text"></fa-icon>
         </div>
-        <input id="location" type="text" class="form-control" placeholder="Scarborough Bluffs, Scarborough, ON" [(ngModel)]="location" (keyup.enter)="onEnter()" aria-label="location input box">
+        <input
+          id="location"
+          type="text"
+          class="form-control"
+          placeholder="Scarborough Bluffs, Scarborough, ON"
+          [(ngModel)]="location"
+          (keyup.enter)="onEnter()"
+          aria-label="location input box"
+          />
         <div class="input-group-prepend">
           <span class="input-group-text">Find</span>
         </div>
-        <input id="find" type="text" class="form-control" placeholder="delivery, takeout, pizza, noodles" [(ngModel)]="find" (keyup.enter)="onEnter()" aria-label="search criteria input box">
+        <input
+          id="find"
+          type="text"
+          class="form-control"
+          placeholder="delivery, takeout, pizza, noodles"
+          [(ngModel)]="find"
+          (keyup.enter)="onEnter()"
+          aria-label="search criteria input box"
+          />
         <div class="input-group-append">
           <button
             class="btn-primary"
             type="button"
             [routerLink]="['/all-listings']"
-            [queryParams]="{location: location, find: find}"
-          >
-            <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go Find Dining</span>
+            [queryParams]="{ location: location, find: find }">
+            <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go
+              Find Dining</span>
           </button>
         </div>
       </div>
@@ -43,35 +92,32 @@
         id="search-btn"
         type="button"
         [routerLink]="['/all-listings']"
-        [queryParams]="{location: location, find: find}"
-      >
-        <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go Find Dining</span>
+        [queryParams]="{ location: location, find: find }">
+        <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go Find
+          Dining</span>
       </button>
     </div>
   </div>
 </div>
 
-<div class="local-restaurants" *ngIf="restaurants.length > 0">
+<div class="local-restaurants" *ngIf="restaurants.length> 0">
   <b>Discover Local Favourites</b>
   <div class="restaurant-carousel">
     <ivy-carousel
-      style="max-width: fit-content; margin: auto;"
+      style="max-width: fit-content; margin: auto"
       class="arrow-outside-carousel"
       [images]="restaurants"
       [margin]="5"
       [arrowsOutside]="arrowsOutside"
       [borderRadius]="20"
       [cellWidth]="200"
-      [height]="150"
-    ></ivy-carousel>
+      [height]="150"></ivy-carousel>
   </div>
 </div>
 
 <div class="bg2" *ngIf="spotlight">
   <div class="res-spotlight">
-    <div class="title-2" tabindex="0">
-      Restaurant Spotlight
-    </div>
+    <div class="title-2" tabindex="0">Restaurant Spotlight</div>
     <div class="infoCard">
       <div class="row" id="info-row">
         <div class="logo col-12 col-md-4" id="info-col1">
@@ -79,13 +125,21 @@
             src="{{ spotlight.logo_url }}"
             alt="logo of {{ spotlight.name }}"
             class="logo-img"
-          />
+            />
         </div>
         <div class="col" id="info-col2">
-          <p><b>{{ spotlight.name }}</b> | {{ spotlightCuisines }} | {{ spotlight.years }} year<span *ngIf="spotlight.years > 1">s</span> in business</p>
+          <p>
+            <b>{{ spotlight.name }}</b> | {{ spotlightCuisines }} |
+            {{ spotlight.years }} year<span *ngIf="spotlight.years> 1">s</span>
+            in business
+          </p>
           <p class="bio">
             {{ spotlightStory }}
-            <a class="continue-link" [routerLink]="['/restaurant']" [queryParams]="{restaurantId: spotlight._id}" target="_blank">
+            <a
+              class="continue-link"
+              [routerLink]="['/restaurant']"
+              [queryParams]="{ restaurantId: spotlight._id }"
+              target="_blank">
               Continue reading
             </a>
           </p>
@@ -98,16 +152,16 @@
 <!-- part 4 -->
 <div class="box-2">
   <div>
-    <div class="title-2" tabindex="0">
-      For Restaurants
-    </div>
+    <div class="title-2" tabindex="0">For Restaurants</div>
     <div class="subtitle-2" tabindex="0">
       What does Find Dining Scarborough offer for restaurant owners?
     </div>
   </div>
   <div class="flex-container-2">
     <div class="flex-item-2" tabindex="0">
-      <app-info-card [imgUrl]="'assets/images/home/connect.png'" [title]="'CONNECT'"></app-info-card>
+      <app-info-card
+        [imgUrl]="'assets/images/home/connect.png'"
+        [title]="'CONNECT'"></app-info-card>
       <p class="info-description">
         Connect your business with an online
         <strong>community</strong>
@@ -117,7 +171,9 @@
       </p>
     </div>
     <div class="flex-item-2" tabindex="0">
-      <app-info-card [imgUrl]="'assets/images/home/celebrate.png'" [title]="'CELEBRATE'"></app-info-card>
+      <app-info-card
+        [imgUrl]="'assets/images/home/celebrate.png'"
+        [title]="'CELEBRATE'"></app-info-card>
       <p class="info-description">
         Celebrate your unique
         <strong>history</strong> and
@@ -125,7 +181,9 @@
       </p>
     </div>
     <div class="flex-item-2" tabindex="0">
-      <app-info-card [imgUrl]="'assets/images/home/promote.png'" [title]="'PROMOTE'"></app-info-card>
+      <app-info-card
+        [imgUrl]="'assets/images/home/promote.png'"
+        [title]="'PROMOTE'"></app-info-card>
       <p class="info-description">
         Promote your restaurant through our
         <strong>FREE</strong> platform
@@ -134,28 +192,92 @@
   </div>
 </div>
 
-<hr id="get_started">
+<!-- part 5 -->
+<div class="box-2">
+  <div class="title-2" tabindex="0">How to Get Started</div>
+  <div class="flex-container-3">
+    <app-info-card
+      class="flex-item-3"
+      [imgUrl]="'assets/images/home/signup.png'"
+      [title]="'SIGN UP'"
+      [description]="'Register your restaurant to the Find Dining
+      platform'" tabindex="0"></app-info-card>
+    <app-info-card
+      class="flex-item-3"
+      [imgUrl]="'assets/images/home/email_update.png'"
+      [title]="'EMAIL
+      UPDATES'"
+      [description]="'Monitor your emails for launch updates'"
+      tabindex="0"></app-info-card>
+    <app-info-card
+      class="flex-item-3"
+      [imgUrl]="'assets/images/home/complete_profile.png'"
+      [title]="'COMPLETE PROFILE'"
+      [description]="'Complete any outstanding sections within your
+      profile'" tabindex="0"></app-info-card>
+    <app-info-card
+      class="flex-item-3"
+      [imgUrl]="'assets/images/home/share.png'"
+      [title]="'SHARE'"
+      [description]="'Share your profile with a community of your
+      peers'" tabindex="0"></app-info-card>
+  </div>
+  <button type="button" class="register-btn" (click)="gotoRegister()">
+    Register Now
+  </button>
+</div>
+
+<br />
+<hr id="get_started" />
 <br />
 
-<!-- part 5 -->
 <div class="box-3">
-  <div class="title-2" tabindex="0">
-    How to Get Started
+  <div>
+    <div class="title-2" tabindex="0">For Customers</div>
+    <div class="subtitle-2" tabindex="0">
+      What does Find Dining Scarborough offer customers?
+    </div>
   </div>
   <div class="flex-container-3">
-    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/signup.png'" [title]="'SIGN UP'"
-      [description]="'Register your restaurant to the Find Dining platform'" tabindex="0"></app-info-card>
-    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/email_update.png'" [title]="'EMAIL UPDATES'"
-      [description]="'Monitor your emails for launch updates'" tabindex="0"></app-info-card>
-    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/complete_profile.png'" [title]="'COMPLETE PROFILE'"
-      [description]="'Complete any outstanding sections within your profile'" tabindex="0"></app-info-card>
-    <app-info-card class="flex-item-3" [imgUrl]="'assets/images/home/share.png'" [title]="'SHARE'"
-      [description]="'Share your profile with a community of your peers'" tabindex="0"></app-info-card>
+    <div class="flex-item-3" tabindex="0">
+      <app-info-card
+        [imgUrl]="'assets/images/home/discover.png'"
+        [title]="'DISCOVER'"></app-info-card>
+      <p class="info-description">
+        Discover and learn about the restaurants in your
+        <strong>community</strong>
+      </p>
+    </div>
+    <div class="flex-item-3" tabindex="0">
+      <app-info-card
+        [imgUrl]="'assets/images/home/support.png'"
+        [title]="'SUPPORT'"></app-info-card>
+      <p class="info-description">
+        Support
+        <strong>local</strong> restaurants
+      </p>
+    </div>
+    <div class="flex-item-3" tabindex="0">
+      <app-info-card
+        [imgUrl]="'assets/images/home/promotions.png'"
+        [title]="'PROMOTIONS'"></app-info-card>
+      <p class="info-description">
+        Receive
+        <strong>exclusive promotions</strong> for Scarborough restaurants
+      </p>
+    </div>
   </div>
-  <button type="button" class="register-btn" (click)="gotoRegister()">Register Now</button>
+  <button type="button" class="register-btn" (click)="gotoRegister()">
+    Sign Up
+  </button>
+
 </div>
+
+
 
 <!--<div class="bg2" style="padding: 10px;"></div>-->
 
 <!-- Subscriber Profile Form -->
-<app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form>
+<app-subscriber-profile-form
+  #userInfo
+  role="form"></app-subscriber-profile-form>
