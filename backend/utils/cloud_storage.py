@@ -42,22 +42,25 @@ def upload(file, content_type=None):
     if content_type == VIDEO:
         name = generate_video_name()
     else:
-        name = generate_name()
+        file_type = file.content_type.split('/')[1]
+        name = generate_name(file_type)
     blob = bucket.blob(name)
     blob.upload_from_file(file)
     return API + bucket_path + '/' + name
 
 
-def generate_name():
+def generate_name(file_type):
     """ Generate a randomized filename
     for image files
 
+    :param file_type: the extension of the image file
+    :type file_type: str
     :return: the generated filename
     :rtype: str
     """
     letters = string.ascii_lowercase
     name = 'FILE-' + (''.join(random.choice(letters) for i in range(10))) + '-' + \
-           str(datetime.datetime.now()) + '.png'
+           str(datetime.datetime.now()) + '.' + file_type
     return name
 
 
@@ -78,7 +81,7 @@ def delete(file_path):
     """ delete object from bucket if it is not a default
 
     :param file_path: the url to the file in google cloud bucket
-    :type: str
+    :type file_path: str
     """
 
     if 'default-assets' in file_path:

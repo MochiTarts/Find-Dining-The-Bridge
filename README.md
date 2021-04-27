@@ -72,6 +72,8 @@ Install virtualenv somewhere in your Find-Dining-Revamp project local repo and a
 
 Activate the virtualenv for this project.
 
+Set environment variables from .env file.
+
 Install project dependencies (if first-time setup or new dependencies were added):
 ```
 $ cd backend
@@ -221,6 +223,8 @@ Make sure you've already set up the Django project following the ['Run Django Ba
 
 Activate your virtualenv.
 
+Set environment variables from .env file.
+
 Run Django development server.
 ```
 $ cd backend
@@ -314,7 +318,7 @@ to add you as an owner of the project
 
 <br/>
 
-Dockerhub Organization: findiningutsc
+Dockerhub Organization: finddiningutsc
 ```
 You can view the latest image tags of docker images that were built and pushed by
 either the Github workflow or yourself

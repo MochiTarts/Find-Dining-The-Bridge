@@ -222,11 +222,7 @@ export class NavbarComponent implements OnInit {
    * Logs user out
    */
   logout(): void {
-    this.authService.logout().subscribe(data=>{
-      this.router.navigate(['/']).then(() => {
-        window.location.reload()
-      });
-    });
+    this.authService.logout().subscribe(()=>{});
   }
 
 }

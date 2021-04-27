@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, EMPTY } from 'rxjs';
 import { catchError, switchMap, finalize } from 'rxjs/operators';
 import { TokenStorageService } from './token-storage.service';
+import { Router } from '@angular/router';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -20,7 +21,11 @@ export class AuthService {
 
   ip: any;
 
-  constructor(private http: HttpClient, private tokenStorage: TokenStorageService,) {
+  constructor(
+    private http: HttpClient,
+    private tokenStorage: TokenStorageService,
+    private router: Router,
+  ) {
     // Sets loginStatus to true if auth-token and auth-user keys are set and present
     if (window.sessionStorage.getItem(TOKEN_KEY) && window.sessionStorage.getItem(USER_KEY)) {
       this.loginStatus = true;
@@ -84,6 +89,9 @@ export class AuthService {
     }), httpOptions).pipe(
       switchMap(data => {
         this.tokenStorage.signOut();
+        this.router.navigate(['/']).then(() => {
+          this.reload();
+        })
         return EMPTY;
       }),
       catchError(error => {
@@ -189,6 +197,13 @@ export class AuthService {
    */
   facebookAuth(id: string, authToken: string, role: string): Observable<any> {
     return this.http.post(AUTH_API + 'facebook/', JSON.stringify({ 'id': id, 'authToken': authToken, 'role': role }), httpOptions);
+  }
+
+  reload() {
+    let currentUrl = this.router.url;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate([currentUrl]);
   }
 
 }
