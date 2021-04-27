@@ -173,7 +173,7 @@ Services for making http requests to backend.
 ```
 Auth guards for page protection and http interceptor.
 ```
-- src/app/_guards/
+- src/app/_helpers/
   - auth.guard.ts (guards against non logged-in users)
   - auth.interceptor.ts (sends access token in http requests and refreshes token if
     expired)
