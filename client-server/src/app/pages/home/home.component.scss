@@ -430,7 +430,8 @@ hr {
   position: relative;
   width: 90%;
   background-color: rgb(219, 219, 219);
-  margin: auto;
+  // margin: auto;
+  margin-top: 50px;
   @media screen and (max-width: 486px) {
     width: 100%;
     margin: 50px 0px;
@@ -477,7 +478,9 @@ hr {
 
 .register-btn {
   margin: 5px 10px;
-  padding: 7px 20px;
+  // padding: 7px 20px;
+  padding: 7px 0px;
+  width: 150px;
   font-size: 16px;
   border-radius: 5px;
   border-width: 1px;
