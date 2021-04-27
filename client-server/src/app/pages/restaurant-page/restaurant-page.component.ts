@@ -433,9 +433,9 @@ export class RestaurantPageComponent implements OnInit {
             this.modalRef.close();
             alert("Changes to restaurant are now saved as draft");
             this.reload();
-          }, (error) => {
-            alert(error.error.detail);
           });
+        }, (error) => {
+          alert(error.error.detail);
         });
       } else {
         alert("Please ensure all fields are entered in correctly");
