@@ -7,7 +7,8 @@
     <div class="card infoCard">
       <div class="row" id="info-row">
         <div class="logo col-12 col-md-4" id="info-col1">
-          <img src="{{ restaurantDetails.logo_url }}" alt="logo" class="logo-img" />
+          <img src="{{ restaurantDetails.logo_url }}" alt="logo"
+            class="logo-img" />
         </div>
 
         <div class="col">
@@ -15,19 +16,24 @@
           <div class="row flex-nowrap">
             <div class="col details1">
               <p>
-                <span *ngIf="cuisineList">{{ cuisineList | titlecase }}</span><span *ngIf="pricepoint"> - {{ pricepoint | titlecase }}</span>
+                <span *ngIf="cuisineList">{{ cuisineList | titlecase }}</span><span
+                  *ngIf="pricepoint"> - {{ pricepoint | titlecase }}</span>
               </p>
               <p *ngIf="expandService">
-                {{ serviceList }} <span (click)="expandService = false" style="color: gray; cursor: pointer;">show less...</span>
+                {{ serviceList }} <span (click)="expandService= false"
+                  style="color: gray; cursor: pointer;">show less...</span>
               </p>
               <p *ngIf="!expandService">
-                {{ firstFourServices }} <span *ngIf="serviceCount > 4" (click)="expandService = true" style="color: gray; cursor: pointer;">show more...</span>
+                {{ firstFourServices }} <span *ngIf="serviceCount> 4"
+                  (click)="expandService = true" style="color: gray; cursor:
+                  pointer;">show more...</span>
               </p>
-              <p *ngIf="restaurantDetails.payment_methods.length > 0">
+              <p *ngIf="restaurantDetails.payment_methods.length> 0">
                 {{ paymentList }}
               </p>
               <p>
-                {{ restaurantDetails.years }} year<span *ngIf="restaurantDetails.years > 1">s</span> in business
+                {{ restaurantDetails.years }} year<span
+                  *ngIf="restaurantDetails.years> 1">s</span> in business
               </p>
             </div>
 
@@ -39,9 +45,9 @@
                   [queryParams]="{GEO_location: restaurantDetails.GEO_location}"
                   placement="bottom"
                   ngbTooltip="Visit Restaurant Page"
-                  style="color: black; word-break: break-all;"
-                >
-                  {{ restaurantDetails.address }} <br> Scarborough, ON {{ restaurantDetails.postalCode }}
+                  style="color: black; word-break: break-all;">
+                  {{ restaurantDetails.address }} <br> Scarborough, ON {{
+                  restaurantDetails.postalCode }}
                 </a>
               </p>
 
@@ -49,7 +55,8 @@
                 <fa-icon class="contact-icon" [icon]="faPhone"></fa-icon>
                 <a>
                   {{ displayed_phone }}
-                  <span *ngIf="restaurantDetails.phone_ext"> Ext.{{ restaurantDetails.phone_ext }}</span>
+                  <span *ngIf="restaurantDetails.phone_ext"> Ext.{{
+                    restaurantDetails.phone_ext }}</span>
                 </a>
               </p>
 
@@ -71,15 +78,15 @@
         class="btn editRestaurant"
         (click)="editRestaurant()"
         placement="top" ngbTooltip="Update Restaurant Info"
-        aria-label="Edit Restaurant Profile"
-      >
+        aria-label="Edit Restaurant Profile">
         <fa-icon [icon]="faEdit"></fa-icon>
         <b>EDIT RESTAURANT PROFILE</b>
       </button>
     </div>
   </div>
 
-  <div *ngIf="restaurantDetails.sysAdminComments && !isQueryRestaurant" fxLayoutAlign="center center">
+  <div *ngIf="restaurantDetails.sysAdminComments && !isQueryRestaurant"
+    fxLayoutAlign="center center">
     <ngb-alert [dismissible]="false">
       <b>System Admin Comments: </b>{{ restaurantDetails.sysAdminComments }}
     </ngb-alert>
@@ -93,32 +100,39 @@
             <p class="tab-info-left section_p">{{ restaurantDetails.bio }}</p>
             <div class="tab-info-left section_p" style="margin-top: 25px;">
               <b>Restaurant Owners: </b><br />
-              <div *ngFor="let owner of restaurantDetails.owner_first_name; let i=index;">
+              <div *ngFor="let owner of restaurantDetails.owner_first_name; let
+                i=index;">
                 <div>
-                  {{ restaurantDetails.owner_first_name[i] + ' ' + restaurantDetails.owner_last_name[i] }}
-                  <span *ngIf="restaurantDetails.owner_preferred_name[i]">( {{ restaurantDetails.owner_preferred_name[i] }} )</span>
+                  {{ restaurantDetails.owner_first_name[i] + ' ' +
+                  restaurantDetails.owner_last_name[i] }}
+                  <span *ngIf="restaurantDetails.owner_preferred_name[i]">( {{
+                    restaurantDetails.owner_preferred_name[i] }} )</span>
                 </div>
               </div>
             </div>
-            <div *ngIf="restaurantDetails.owner_story && restaurantDetails.owner_story != restaurantDetails.bio" class="tab-info-left section_p" style="margin-top: 25px;">
+            <div *ngIf="restaurantDetails.owner_story &&
+              restaurantDetails.owner_story != restaurantDetails.bio"
+              class="tab-info-left section_p" style="margin-top: 25px;">
               <b>Owner Story: </b><br />
               <p>{{ restaurantDetails.owner_story }}</p>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url != 'https://storage.googleapis.com/default-assets/cover.jpg'">
+            <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url
+              != 'https://storage.googleapis.com/default-assets/cover.jpg'">
               <img
                 src="{{ restaurantDetails.cover_photo_url }}"
                 width="100%"
                 alt="Story photo"
-              />
+                />
             </div>
-            <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url == 'https://storage.googleapis.com/default-assets/cover.jpg'">
+            <div class="tab-info-right" *ngIf="restaurantDetails.cover_photo_url
+              == 'https://storage.googleapis.com/default-assets/cover.jpg'">
               <img
                 src="/assets/images/find_dining_logo.png"
                 width="70%"
                 alt="Story photo"
-              />
+                />
             </div>
           </div>
         </div>
@@ -131,8 +145,7 @@
           (click)="openEditModal(storyImageModal)"
           placement="bottom"
           ngbTooltip="Upload an Image for Our Story"
-          aria-label="Upload an Image for Our Story"
-        >
+          aria-label="Upload an Image for Our Story">
           <fa-icon [icon]="faEdit"></fa-icon>
           <b>UPLOAD IMAGE</b>
         </button>
@@ -140,16 +153,20 @@
     </mat-tab>
 
     <mat-tab label="Menu">
-      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px" style="margin-top: 25px;">
-        <ngb-alert *ngIf="restaurantMenu.length == 0 && !restaurantDetails.full_menu_url" [dismissible]="false">
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="5px"
+        style="margin-top: 25px;">
+        <ngb-alert *ngIf="restaurantMenu.length == 0 &&
+          !restaurantDetails.full_menu_url" [dismissible]="false">
           Menu currently empty! Please check again at a later time.
         </ngb-alert>
 
-        <div fxLayout="row" fxLayoutAlign="center center" *ngIf="restaurantDetails.full_menu_url">
-          <button class="btn" (click)="openExternalMenu()" placement="top" ngbTooltip="View Full Menu">
+        <div fxLayout="row" fxLayoutAlign="center center"
+          *ngIf="restaurantDetails.full_menu_url">
+          <button class="btn" (click)="openExternalMenu()" placement="top"
+            ngbTooltip="View Full Menu">
             <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
               <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
-              <div>Click Here for Full Menu</div>
+              <b>Click Here for Full Menu</b>
             </div>
           </button>
         </div>
@@ -165,13 +182,13 @@
                 [arrowsTheme]="dark"
                 [borderRadius]="20"
                 [cellWidth]="312"
-                [height]="312"
-              ></ivy-carousel>
+                [height]="312"></ivy-carousel>
             </div>
           </div>
         </div>
 
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px" style="padding-bottom: 50px;">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px"
+          style="padding-bottom: 50px;">
           <div style="text-align: center;">
             <button
               *ngIf="role == 'RO' && !isQueryRestaurant"
@@ -179,8 +196,7 @@
               (click)="editMenu()"
               placement="bottom"
               ngbTooltip="Update Your Menu"
-              aria-label="Update Your Menu"
-            >
+              aria-label="Update Your Menu">
               <fa-icon [icon]="faEdit"></fa-icon>
               <b>EDIT MENU</b>
             </button>
@@ -192,8 +208,7 @@
               class="btn editBtn"
               (click)="openEditModal(fullMenuModal)"
               placement="bottom"
-              ngbTooltip="Add/Update URL of Your Full Menu"
-            >
+              ngbTooltip="Add/Update URL of Your Full Menu">
               <fa-icon [icon]="faEdit"></fa-icon>
               <b>EDIT FULL MENU URL</b>
             </button>
@@ -212,10 +227,12 @@
                 <p class="section_p">{{ restaurantDetails.open_hours }}</p>
               </div>
               <div>
-                <p class="section_p" *ngIf="paymentList">Accepted {{ paymentList }}</p>
+                <p class="section_p" *ngIf="paymentList">Accepted {{ paymentList
+                  }}</p>
               </div>
               <div *ngIf="restaurantDetails.web_url">
-                <a class="section_p web_url" href="{{ restaurantDetails.web_url }}" target="_blank">{{ restaurantDetails.web_url }}</a>
+                <a class="section_p web_url" href="{{ restaurantDetails.web_url
+                  }}" target="_blank">{{ restaurantDetails.web_url }}</a>
               </div>
             </div>
 
@@ -224,33 +241,33 @@
                 *ngIf="restaurantDetails.web_url != ''"
                 href="{{ restaurantDetails.web_url }}"
                 target="_blank"
-                aria-label="View our Website"
-              >
-                <fa-icon class="contact-icon" [icon]="faShareAlt" placement="bottom" ngbTooltip="View our Website"></fa-icon>
+                aria-label="View our Website">
+                <fa-icon class="contact-icon" [icon]="faShareAlt"
+                  placement="bottom" ngbTooltip="View our Website"></fa-icon>
               </a>
               <a
                 *ngIf="restaurantDetails.facebook != ''"
                 href="{{ restaurantDetails.facebook }}"
                 target="_blank"
-                aria-label="View our Facebook"
-              >
-                <fa-icon class="contact-icon" [icon]="faFacebookF" placement="bottom" ngbTooltip="View our Facebook"></fa-icon>
+                aria-label="View our Facebook">
+                <fa-icon class="contact-icon" [icon]="faFacebookF"
+                  placement="bottom" ngbTooltip="View our Facebook"></fa-icon>
               </a>
               <a
                 *ngIf="restaurantDetails.twitter != ''"
                 href="{{ restaurantDetails.twitter }}"
                 target="_blank"
-                aria-label="View our Twitter"
-              >
-                <fa-icon class="contact-icon" [icon]="faTwitter" placement="bottom" ngbTooltip="View our Twitter"></fa-icon>
+                aria-label="View our Twitter">
+                <fa-icon class="contact-icon" [icon]="faTwitter"
+                  placement="bottom" ngbTooltip="View our Twitter"></fa-icon>
               </a>
               <a
                 *ngIf="restaurantDetails.instagram != ''"
                 href="{{ restaurantDetails.instagram }}"
                 target="_blank"
-                aria-label="View our Instagram"
-              >
-                <fa-icon class="contact-icon" [icon]="faInstagram" placement="bottom" ngbTooltip="View our Instagram"></fa-icon>
+                aria-label="View our Instagram">
+                <fa-icon class="contact-icon" [icon]="faInstagram"
+                  placement="bottom" ngbTooltip="View our Instagram"></fa-icon>
               </a>
             </div>
 
@@ -262,19 +279,20 @@
             <div class="tab-info-right tab-detail-right">
               <ngb-alert
                 *ngIf="restaurantDetails.deliveryDetails.length == 0
-                        && restaurantDetails.dineinPickupDetails.length == 0
-                        && restaurantDetails.locationNotes.length == 0"
-                [dismissible]="false"
-              >
+                && restaurantDetails.dineinPickupDetails.length == 0
+                && restaurantDetails.locationNotes.length == 0"
+                [dismissible]="false">
                 No updates available. Please check again at a later time.
               </ngb-alert>
 
-              <div *ngIf="restaurantDetails.deliveryDetails" class="sub_section">
+              <div *ngIf="restaurantDetails.deliveryDetails"
+                class="sub_section">
                 <h1 class="section-title">Delivery Details</h1>
                 <p class="section_p">{{ restaurantDetails.deliveryDetails }}</p>
               </div>
 
-              <div *ngIf="restaurantDetails.dineinPickupDetails" class="sub_section">
+              <div *ngIf="restaurantDetails.dineinPickupDetails"
+                class="sub_section">
                 <h1 class="section-title">Dine-in / Pick-up Details</h1>
                 <p class="section_p">{{ restaurantDetails.dineinPickupDetails }}</p>
               </div>
@@ -292,11 +310,13 @@
 
     <mat-tab label="Photo & Videos">
       <div fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="5px">
-        <ngb-alert *ngIf="restaurantDetails.restaurant_image_url[0] == '/' && restaurantDetails.restaurant_video_url == '/'" [dismissible]="false">
+        <ngb-alert *ngIf="restaurantDetails.restaurant_image_url[0] == '/' &&
+          restaurantDetails.restaurant_video_url == '/'" [dismissible]="false">
           Restaurant media currently empty! Please check again at a later time.
         </ngb-alert>
 
-        <div class="tab-info" *ngIf="restaurantDetails.restaurant_image_url[0] != '/'">
+        <div class="tab-info" *ngIf="restaurantDetails.restaurant_image_url[0]
+          != '/'">
           <app-carousel-with-thumbnail
             [autoPlayDuration]="5000"
             animation="slide"
@@ -304,29 +324,28 @@
             [isThumbnailsVisible]="true"
             [slides]="slides"
             [slideTemplateRef]="slide"
-            [thumbnailTemplateRef]="thumbnail"
-          ></app-carousel-with-thumbnail>
+            [thumbnailTemplateRef]="thumbnail"></app-carousel-with-thumbnail>
           <ng-template #slide let-slide>
             <div [ngStyle]="{
-                'background-size': 'contain',
-                'background-image': 'url(' + slide.url + ')',
-                'background-repeat': 'no-repeat',
-                'background-position': 'center center',
-                'background-color': 'white',
-                'width': '100%',
-                'height': '100%'
+              'background-size': 'contain',
+              'background-image': 'url(' + slide.url + ')',
+              'background-repeat': 'no-repeat',
+              'background-position': 'center center',
+              'background-color': 'white',
+              'width': '100%',
+              'height': '100%'
               }">
             </div>
           </ng-template>
           <ng-template #thumbnail let-slide>
-              <div [ngStyle]="{
-                  'background-size': 'cover',
-                  'background-image': 'url(' + slide.url + ')',
-                  'background-repeat': 'no-repeat',
-                  'background-position': 'center center',
-                  'width': '100%',
-                  'height': '100%'
-                }"></div>
+            <div [ngStyle]="{
+              'background-size': 'cover',
+              'background-image': 'url(' + slide.url + ')',
+              'background-repeat': 'no-repeat',
+              'background-position': 'center center',
+              'width': '100%',
+              'height': '100%'
+              }"></div>
           </ng-template>
 
         </div>
@@ -336,20 +355,23 @@
             <b>EDIT RESTAURANT IMAGES</b>
           </button>
         </div>-->
-
-        <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_url != '/' && videoId == undefined">
+        <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_url !=
+          '/' && videoId == undefined">
           <video width="100%" controls>
-            <source src="{{ restaurantDetails.restaurant_video_url }}" type="video/mp4">
+            <source src="{{ restaurantDetails.restaurant_video_url }}"
+              type="video/mp4">
             Your browser does not support the video.
           </video>
         </div>
 
         <div #youtubeContainer class="tab-info" *ngIf="videoId != undefined">
-          <youtube-player videoId="{{ videoId }}" [width]="youtubeContainer.offsetWidth"></youtube-player>
+          <youtube-player videoId="{{ videoId }}"
+            [width]="youtubeContainer.offsetWidth"></youtube-player>
         </div>
 
         <div class="tab-info" *ngIf="restaurantDetails.restaurant_video_desc">
-          <p class="section_p"><b>Video Description: </b>{{ restaurantDetails.restaurant_video_desc }}</p>
+          <p class="section_p"><b>Video Description: </b>{{
+            restaurantDetails.restaurant_video_desc }}</p>
         </div>
 
         <!--<div style="text-align: center; padding-bottom: 50px;">
@@ -358,17 +380,20 @@
             <b>EDIT RESTAURANT VIDEO</b>
           </button>
         </div>-->
-
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px" style="padding-bottom: 50px;" *ngIf="role == 'RO' && !isQueryRestaurant">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px"
+          style="padding-bottom: 50px;" *ngIf="role == 'RO' &&
+          !isQueryRestaurant">
           <div style="text-align: center;">
-            <button class="btn editBtn" (click)="openEditModal(imageModal)" placement="bottom" ngbTooltip="Update Your Restaurant Image">
+            <button class="btn editBtn" (click)="openEditModal(imageModal)"
+              placement="bottom" ngbTooltip="Update Your Restaurant Image">
               <fa-icon [icon]="faEdit"></fa-icon>
               <b>EDIT RESTAURANT IMAGES</b>
             </button>
           </div>
 
           <div style="text-align: center;">
-            <button class="btn editBtn" (click)="openEditModal(videoModal)" placement="bottom" ngbTooltip="Update Your Restaurant Video">
+            <button class="btn editBtn" (click)="openEditModal(videoModal)"
+              placement="bottom" ngbTooltip="Update Your Restaurant Video">
               <fa-icon [icon]="faEdit"></fa-icon>
               <b>EDIT RESTAURANT VIDEO</b>
             </button>
@@ -387,7 +412,7 @@
 
   <div class="nearby" *ngIf="role == 'BU' || role == 'RO' && queryParam">
     <p class="nearby_text">Nearby Restaurants</p>
-    <div class="row  justify-content-center">
+    <div class="row justify-content-center">
       <app-restaurant-nearby-card
         *ngFor="let restaurant of nearbyRestaurants"
         [restaurant]="restaurant">
@@ -404,8 +429,7 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -420,7 +444,7 @@
             id="cover"
             (change)="onStoryImgSelect($event)"
             accept="image/*"
-          />
+            />
         </div>
       </div>
     </form>
@@ -430,7 +454,8 @@
       <button class="btn saveBtn skip" (click)="modal.dismiss('Cross click')">
         CANCEL
       </button>
-      <button class="btn saveBtn" type="submit" (click)="onSubmitStoryImg()" [disabled]="!newFile">
+      <button class="btn saveBtn" type="submit" (click)="onSubmitStoryImg()"
+        [disabled]="!newFile">
         CONFIRM
       </button>
     </div>
@@ -444,8 +469,7 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -459,13 +483,11 @@
             id="full_menu_url"
             placeholder="Copy and paste your full menu link here"
             rows="2"
-            value="{{ restaurantDetails.full_menu_url }}"
-          ></textarea>
+            value="{{ restaurantDetails.full_menu_url }}"></textarea>
           <app-dynamic-label class="error-label"
             [name]="'errorMenuLink'"
             [message]="validator.errors['full_menu_url']"
-            tabindex="0"
-          ></app-dynamic-label>
+            tabindex="0"></app-dynamic-label>
         </div>
       </div>
     </form>
@@ -489,13 +511,13 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="uploadVideoForm" (ngSubmit)="onSubmitVideo()" role="form">
+    <form [formGroup]="uploadVideoForm" (ngSubmit)="onSubmitVideo()"
+      role="form">
       <div class="row">
         <div class="form-group col-md-12">
           <label for="upload_method">Upload Method<app-required-star></app-required-star></label>
@@ -505,8 +527,7 @@
             class="form-control"
             (change)="updateUploadMethod()"
             formControlName="upload_method"
-            aria-required="true"
-          >
+            aria-required="true">
             <option selected disabled hidden>Choose a method to upload video...</option>
             <option>YouTube video link</option>
             <option>Upload .mp4 video file</option>
@@ -521,13 +542,11 @@
             id="youtube_link"
             placeholder="Copy and paste the YouTube link here"
             rows="2"
-            [value]="videoId ? restaurantDetails.restaurant_video_url : ''"
-          ></textarea>
+            [value]="videoId ? restaurantDetails.restaurant_video_url : ''"></textarea>
           <app-dynamic-label class="error-label"
             [name]="'errorLink'"
             [message]="validator.errors['link']"
-            tabindex="validator.errors['link'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['link'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
       <div class="row" *ngIf="uploadMethod == 'Upload .mp4 video file'">
@@ -540,7 +559,7 @@
             class="form-control"
             (change)="onVideoFileSelect($event)"
             accept="video/*"
-          />
+            />
         </div>
       </div>
       <div class="row" *ngIf="uploadMethod">
@@ -550,13 +569,11 @@
             class="form-control"
             id="video_desc"
             rows="7"
-            [value]="restaurantDetails.restaurant_video_desc"
-          ></textarea>
+            [value]="restaurantDetails.restaurant_video_desc"></textarea>
           <app-dynamic-label class="error-label"
             [name]="'errorVideoDesc'"
             [message]="draftValidator.errors['restaurant_video_desc']"
-            tabindex="draftValidator.errors['restaurant_video_desc'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="draftValidator.errors['restaurant_video_desc'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
     </form>
@@ -570,8 +587,8 @@
         class="btn saveBtn"
         type="submit"
         (click)="onSubmitVideo()"
-        [disabled]="uploadMethod == '' || (uploadMethod == 'Upload .mp4 video file' && !submitVideoAllowed)"
-      >
+        [disabled]="uploadMethod == '' || (uploadMethod == 'Upload .mp4 video
+        file' && !submitVideoAllowed)">
         CONFIRM
       </button>
     </div>
@@ -585,8 +602,7 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -601,8 +617,7 @@
             class="form-control"
             (change)="updateAddOrRemove()"
             formControlName="add_or_remove"
-            aria-required="true"
-          >
+            aria-required="true">
             <option selected disabled hidden>Choose a method to modify images...</option>
             <option>Upload new images</option>
             <option>Delete from existing images</option>
@@ -610,7 +625,7 @@
         </div>
       </div>
       <div class="row" *ngIf="addOrRemove == 'Upload new images'">
-        <div class="form-group col-md-12" >
+        <div class="form-group col-md-12">
           <label for="images">Upload restaurant images:</label>
           <input
             class="form-control"
@@ -620,7 +635,7 @@
             (change)="onImageFileSelect($event)"
             accept="image/*"
             multiple
-          />
+            />
         </div>
       </div>
       <div class="row" *ngIf="addOrRemove == 'Delete from existing images'">
@@ -629,8 +644,7 @@
             type="button"
             class="close"
             aria-label="Close"
-            (click)="deleteImage(img)"
-          >
+            (click)="deleteImage(img)">
             <span aria-hidden="true">&times;</span>
           </button>
           <img
@@ -638,7 +652,7 @@
             src="{{ img }}"
             class="grid-image"
             alt="restaurant image"
-          />
+            />
         </div>
       </div>
     </form>
@@ -652,8 +666,8 @@
         class="btn saveBtn"
         type="submit"
         (click)="onSubmitImage(); modal.dismiss('Cross click')"
-        [disabled]="addOrRemove == '' || (addOrRemove == 'Upload new images' && !newFile)"
-      >
+        [disabled]="addOrRemove == '' || (addOrRemove == 'Upload new images' &&
+        !newFile)">
         CONFIRM
       </button>
     </div>
