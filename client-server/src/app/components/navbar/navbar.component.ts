@@ -51,9 +51,9 @@ export class NavbarComponent implements OnInit {
       }
     } else {
 
-      let isMobile = /mobi/i.test(navigator.userAgent);
-      console.log(isMobile);
-      if (!isMobile){
+      //let isMobile = /mobi/i.test(navigator.userAgent);
+      //console.log(isMobile);
+      //if (!isMobile){
         this.authService.refreshToken().subscribe(
           token => {
                 this.tokenStorage.updateTokenAndUser(token.access);
@@ -73,7 +73,7 @@ export class NavbarComponent implements OnInit {
               // console.log(err);
             }
         );
-      }
+      //}
     }
   }
 

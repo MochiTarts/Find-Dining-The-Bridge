@@ -83,6 +83,7 @@ import { InfoCardComponent } from './components/info-card/info-card.component';
 import { ArticleCommonCardComponent } from './components/article-common-card/article-common-card.component';
 import { FilterdateCardComponent } from './components/filterdate-card/filterdate-card.component';
 import { ArticleHeadlineCardComponent } from './components/article-headline-card/article-headline-card.component';
+import { AccountRemovalInstructionComponent } from './pages/account-removal-instruction/account-removal-instruction.component';
 
 
 
@@ -131,6 +132,7 @@ import { ArticleHeadlineCardComponent } from './components/article-headline-card
     NewsletterSignupComponent,
     ThankyouPageComponent,
     ContactUsComponent,
+    AccountRemovalInstructionComponent,
   ],
   imports: [
     BrowserModule,
