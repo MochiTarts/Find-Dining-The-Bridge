@@ -30,6 +30,8 @@ services:
   #       - GOOGLE_OAUTH2_PRIVATE_KEY=${GOOGLE_OAUTH2_PRIVATE_KEY}
   #       - GOOGLE_ANALYTICS_PRIVATE_KEY=${GOOGLE_ANALYTICS_PRIVATE_KEY}
   #       - GOOGLE_ANALYTICS_CLIENT_EMAIL=${GOOGLE_ANALYTICS_CLIENT_EMAIL}
+  #       - ADMIN_EMAIL=${ADMIN_EMAIL}
+  #       - SPREADSHEET_ID=${SPREADSHEET_ID}
   #     dockerfile: Dockerfile
   #   image: finddiningutsc/revamp:latest-server-prod
   #   ports: 
@@ -77,6 +79,9 @@ services:
         - GOOGLE_OAUTH2_PRIVATE_KEY=${GOOGLE_OAUTH2_PRIVATE_KEY}
         - GOOGLE_ANALYTICS_PRIVATE_KEY=${GOOGLE_ANALYTICS_PRIVATE_KEY}
         - GOOGLE_ANALYTICS_CLIENT_EMAIL=${GOOGLE_ANALYTICS_CLIENT_EMAIL}
+        - ADMIN_EMAIL=${ADMIN_EMAIL}
+        - SPREADSHEET_ID=${SPREADSHEET_ID}
+        
       dockerfile: Dockerfile
     image: finddiningutsc/revamp:latest-server-test
     ports: 
@@ -124,6 +129,8 @@ services:
         - GOOGLE_OAUTH2_PRIVATE_KEY=${GOOGLE_OAUTH2_PRIVATE_KEY}
         - GOOGLE_ANALYTICS_PRIVATE_KEY=${GOOGLE_ANALYTICS_PRIVATE_KEY}
         - GOOGLE_ANALYTICS_CLIENT_EMAIL=${GOOGLE_ANALYTICS_CLIENT_EMAIL}
+        - ADMIN_EMAIL=${ADMIN_EMAIL}
+        - SPREADSHEET_ID=${SPREADSHEET_ID}
       dockerfile: Dockerfile
     image: finddiningutsc/revamp:latest-server-uat
     ports: 
