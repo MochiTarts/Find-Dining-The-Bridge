@@ -19,13 +19,26 @@
 [Permissions and Access](#permissions-and-access)  
 [Deploying Changes](#deployment)  
 
-<br/>
-
 ### Contact Info
-minqi.zhang@mail.utoronto.ca - Min Qi Zhang (frontend)  
-isaac.mou@mail.utoronto.ca - Isaac Mou (backend)  
-jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)  
+minqi.zhang@mail.utoronto.ca - Min Qi Zhang (frontend)
+ - majority of frontend pages, components, services, and constants
+ - frontend form validation, mobile-friendly css
+ - AODA compliance specialist
+  
+isaac.mou@mail.utoronto.ca - Isaac Mou (backend)
+- frontend httpinterceptor, frontend auth services, frontend guards
+- backend authentication (login, signup, jwt tokens)
+- backend for news articles, sduser, login_audit
+
+jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
+- admin restaurant graphs, github actions, docker containers
+- backend for subscriber_profile
+- backend settings.py for each environment
+
 zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
+- backend for restaurant, restaurant_owner, newsletter
+- frontend news articles, frontend subscriber_profile, assist with mobile-friendly css and frontend components typescript
+- swagger documentation, compodoc documentation
 
 <br/>
 
@@ -160,7 +173,7 @@ Services for making http requests to backend.
 ```
 Auth guards for page protection and http interceptor.
 ```
-- src/app/_guards/
+- src/app/_helpers/
   - auth.guard.ts (guards against non logged-in users)
   - auth.interceptor.ts (sends access token in http requests and refreshes token if
     expired)

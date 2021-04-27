@@ -261,6 +261,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://localhost:4200",
     "http://localhost:4200",
     "http://127.0.0.1:4200",
 ]
