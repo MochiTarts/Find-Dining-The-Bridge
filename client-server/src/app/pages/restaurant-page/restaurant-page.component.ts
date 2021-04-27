@@ -308,7 +308,7 @@ export class RestaurantPageComponent implements OnInit {
 
   openExternalMenu() {
     let menu_url = this.restaurantDetails.full_menu_url;
-    if (!(menu_url.startsWith('https://') && menu_url.startsWith('http://'))) {
+    if (!(menu_url.startsWith('https://') || menu_url.startsWith('http://'))) {
       menu_url = 'https://' + menu_url;
     }
     window.open(menu_url, '_blank')
