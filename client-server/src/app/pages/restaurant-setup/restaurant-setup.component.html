@@ -1,11 +1,13 @@
 <div class="page-box">
-  <h2 id="res-setup1">{{ profileId ? 'Edit Restaurant Profile' : 'Initial Set Up' }}</h2>
+  <h2 id="res-setup1">{{ profileId ? 'Edit Restaurant Profile' : 'Initial Set
+    Up' }}</h2>
   <p id="res-setup2">
     {{ profileId ? 'Please make corrections as needed and save.' :
-      'Please fill in the form with your restaurant information to set up your page.' }}
+    'Please fill in the form with your restaurant information to set up your
+    page.' }}
   </p>
-  <p style="font-style:italic; color: gray;">
-    All required fields are marked with an asterisk (<span style="color: red;">*</span>)
+  <p style="font-style:italic; color: #757575;">
+    All required fields are marked with an asterisk (<app-required-star></app-required-star>)
   </p>
   <div class="form-box" role="form" aria-labelledby="res-setup1 res-setup2">
     <form [formGroup]="uploadForm">
@@ -14,8 +16,7 @@
           type="button"
           class="btn editPosts"
           (click)="gotoEditPosts()"
-          placement="top" ngbTooltip="Update Restaurant Posts"
-        >
+          placement="top" ngbTooltip="Update Restaurant Posts">
           <fa-icon [icon]="faEdit"></fa-icon>
           <b>EDIT POSTS</b>
         </button>
@@ -29,23 +30,23 @@
             class="form-control"
             id="restaurant-name"
             placeholder="Ex: Dan's Dumplings"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.name : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.name
+            : '' }}"
             aria-required="true"
             required
-            [disabled]="(profileId && restaurantDetails) ? restaurantDetails.approved_once : false"
-          />
+            [disabled]="(profileId && restaurantDetails) ?
+            restaurantDetails.approved_once : false"
+            />
           <app-dynamic-label
             class="error-label"
             [name]="'errorName'"
             [message]="validator.errors['name']"
-            tabindex="validator.errors['name'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['name'] ? 0 : -1"></app-dynamic-label>
           <app-dynamic-label
             class="error-label"
             [name]="'errorName'"
             [message]="validator.errors['name_p']"
-            tabindex="validator.errors['name_p'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['name_p'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-4">
           <label for="years-in-business">Years in Business <app-required-star></app-required-star></label>
@@ -53,64 +54,76 @@
             type="number"
             class="form-control"
             id="years-in-business"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.years : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.years
+            : '' }}"
             aria-required="true"
-          />
+            />
           <app-dynamic-label
             class="error-label"
             [name]="'errorYears'"
             [message]="validator.errors['years']"
-            tabindex="validator.errors['years'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['years'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-md-3">
-          <label for="owner-first-name" class="owner-name-label">Owner First Name <app-required-star></app-required-star></label>
+          <label for="owner-first-name" class="owner-name-label"
+            id="first_name_label">Owner First
+            Name <app-required-star></app-required-star></label>
           <input
             type="text"
             class="form-control"
             id="owner-first-name"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.owner_first_name[0] : '' }}"
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.owner_first_name[0] : '' }}"
             aria-required="true"
             required
-          />
+            />
         </div>
         <div class="form-group col-md-3">
-          <label for="owner-last-name" class="owner-name-label">Owner Last Name <app-required-star></app-required-star></label>
+          <label for="owner-last-name" class="owner-name-label"
+            id="last_name_label">Owner Last Name
+            <app-required-star></app-required-star></label>
           <input
             type="text"
             class="form-control"
             id="owner-last-name"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.owner_last_name[0] : '' }}"
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.owner_last_name[0] : '' }}"
             aria-required="true"
             required
-          />
+            />
         </div>
         <div class="form-group col-md-3">
-          <label for="owner-preferred-name" class="owner-name-label">Owner Preferred Name</label>
+          <label for="owner-preferred-name" class="owner-name-label"
+            id="preferred_name_label">Owner
+            Preferred Name</label>
           <input
             type="text"
             class="form-control"
             id="owner-preferred-name"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.owner_preferred_name[0] : '' }}"
-          />
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.owner_preferred_name[0] : '' }}"
+            />
         </div>
         <div class="form-group col-md-3 add-btn">
-          <button type="button" class="btn-success btn-sm" (click)="addOwner()">Add Owner</button>
+          <button type="button" class="btn-success btn-sm" (click)="addOwner()">Add
+            Owner</button>
         </div>
       </div>
 
       <div formArrayName="owner_names">
-        <div class="row" *ngFor="let item of ownerNames.controls; let nameIndex=index;" [formGroupName]="nameIndex">
-          <div class="form-group col-md-3" >
+        <div class="row" *ngFor="let item of ownerNames.controls; let
+          nameIndex=index;" [formGroupName]="nameIndex">
+          <div class="form-group col-md-3">
             <input
               type="text"
               class="form-control"
               formControlName="first_name"
               aria-required="true"
-            />
+              aria-labelledby="first_name_label"
+              />
           </div>
           <div class="form-group col-md-3">
             <input
@@ -118,18 +131,21 @@
               class="form-control"
               formControlName="last_name"
               aria-required="true"
-            />
+              aria-labelledby="last_name_label"
+              />
           </div>
           <div class="form-group col-md-3">
             <input
               type="text"
               class="form-control"
               formControlName="preferred_name"
-            />
+              aria-labelledby="preferred_name_label"
+              />
           </div>
           <div class="form-group col-md-3">
             <div class="delete-btn">
-              <button type="button" class="btn-danger btn-sm" (click)="deleteOwner(nameIndex)">Delete Owner</button>
+              <button type="button" class="btn-danger btn-sm"
+                (click)="deleteOwner(nameIndex)">Delete Owner</button>
             </div>
           </div>
         </div>
@@ -140,22 +156,22 @@
           <app-dynamic-label class="error-label"
             [name]="'errorOwnerFirstName'"
             [message]="validator.errors['owner_first_name']"
-            tabindex="validator.errors['owner_first_name'] ? 0 : -1" ></app-dynamic-label>
+            tabindex="validator.errors['owner_first_name'] ? 0 : -1"></app-dynamic-label>
           <app-dynamic-label class="error-label"
             [name]="'errorOwnerFirstName'"
             [message]="validator.errors['owner_first_name_p']"
-            tabindex="validator.errors['owner_first_name_p'] ? 0 : -1" ></app-dynamic-label>
+            tabindex="validator.errors['owner_first_name_p'] ? 0 : -1"></app-dynamic-label>
         </div>
 
         <div class="form-group col-md-3">
           <app-dynamic-label class="error-label"
             [name]="'errorOwnerLastName'"
             [message]="validator.errors['owner_last_name']"
-            tabindex="validator.errors['owner_last_name'] ? 0 : -1" ></app-dynamic-label>
+            tabindex="validator.errors['owner_last_name'] ? 0 : -1"></app-dynamic-label>
           <app-dynamic-label class="error-label"
             [name]="'errorOwnerLastName'"
             [message]="validator.errors['owner_last_name_p']"
-            tabindex="validator.errors['owner_last_name_p'] ? 0 : -1" ></app-dynamic-label>
+            tabindex="validator.errors['owner_last_name_p'] ? 0 : -1"></app-dynamic-label>
         </div>
 
         <div class="form-group col-md-3">
@@ -163,103 +179,98 @@
             class="error-label"
             [name]="'errorOwnerPreferredName'"
             [message]="validator.errors['owner_preferred_name']"
-            tabindex="validator.errors['owner_preferred_name'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['owner_preferred_name'] ? 0 : -1"></app-dynamic-label>
           <app-dynamic-label
             class="error-label"
             [name]="'errorOwnerPreferredName'"
             [message]="validator.errors['owner_preferred_name_p']"
-            tabindex="validator.errors['owner_preferred_name_p'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['owner_preferred_name_p'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
 
-      <div class="form-group botton-padding">
+      <div class="form-group">
         <label for="restaurant-address">Street Address 1 <app-required-star></app-required-star></label>
         <input
           type="text"
           class="form-control"
           id="restaurant-address"
-          value="{{ (profileId && restaurantDetails) ? restaurantDetails.address : '' }}"
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.address
+          : '' }}"
           placeholder="Ex: 1234 Address Ave"
           aria-required="true"
-        />
+          />
         <app-dynamic-label
           class="error-label"
           [name]="'errorAddress'"
           [message]="validator.errors['address']"
-          tabindex="validator.errors['address'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['address'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorAddress'"
           [message]="validator.errors['address_p']"
-          tabindex="validator.errors['address_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['address_p'] ? 0 : -1"></app-dynamic-label>
       </div>
 
-      <div class = "form-group botton-padding">
+      <div class="form-group">
         <label for="StreetAdd2">Street Address 2</label>
-          <input
-            type = "text"
-            class="form-control"
-            id="StreetAdd2"
-            value = "{{  (profileId && restaurantDetails) ? restaurantDetails.streetAddress2 : '' }}"
-            placeholder="Ex: 1234 Address Ave"
+        <input
+          type="text"
+          class="form-control"
+          id="StreetAdd2"
+          value="{{ (profileId && restaurantDetails) ?
+          restaurantDetails.streetAddress2 : '' }}"
+          placeholder="Ex: 1234 Address Ave"
           />
-          <app-dynamic-label
-            class="error-label"
-            [name]="'errorAddress2'"
-            [message]="validator.errors['streetAddress2']"
-            tabindex="validator.errors['streetAddress2'] ? 0 : -1"
-          ></app-dynamic-label>
-          <app-dynamic-label
-            class="error-label"
-            [name]="'errorAddress2'"
-            [message]="validator.errors['streetAddress2_p']"
-            tabindex="validator.errors['streetAddress2_p'] ? 0 : -1"
-          ></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorAddress2'"
+          [message]="validator.errors['streetAddress2']"
+          tabindex="validator.errors['streetAddress2'] ? 0 : -1"></app-dynamic-label>
+        <app-dynamic-label
+          class="error-label"
+          [name]="'errorAddress2'"
+          [message]="validator.errors['streetAddress2_p']"
+          tabindex="validator.errors['streetAddress2_p'] ? 0 : -1"></app-dynamic-label>
       </div>
 
       <div class="row">
         <div class="form-group col-md-8">
           <label for="StreetAdd3">Street Address 3</label>
           <input
-            type = "text"
+            type="text"
             class="form-control"
             id="StreetAdd3"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.streetAddress3 : '' }}"
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.streetAddress3 : '' }}"
             placeholder="Ex: 1234 Address Ave"
-          />
+            />
           <app-dynamic-label
             class="error-label"
             [name]="'errorAddress3'"
             [message]="validator.errors['streetAddress3']"
-            tabindex="validator.errors['streetAddress3'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['streetAddress3'] ? 0 : -1"></app-dynamic-label>
           <app-dynamic-label
             class="error-label"
             [name]="'errorAddress3'"
             [message]="validator.errors['streetAddress3_p']"
-            tabindex="validator.errors['streetAddress3_p'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['streetAddress3_p'] ? 0 : -1"></app-dynamic-label>
         </div>
-        <div class = "form-group col-md-4">
+        <div class="form-group col-md-4">
           <label for="PostalCode">Postal Code <app-required-star></app-required-star></label>
           <input
-            type = "text"
+            type="text"
             class="form-control"
             id="PostalCode"
-            value="{{  (profileId && restaurantDetails) ? restaurantDetails.postalCode : '' }}"
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.postalCode : '' }}"
             placeholder="Ex: A1A 1A1"
             aria-required="true"
-          />
+            />
           <app-dynamic-label
             class="error-label"
             [name]="'postalCode'"
             [message]="validator.errors['postalCode']"
-            tabindex="validator.errors['postalCode'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['postalCode'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
 
@@ -271,26 +282,28 @@
             class="form-control"
             id="phone-number"
             placeholder="Ex: 4161234567"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.phone : '' }}"
+            value="{{ (profileId && restaurantDetails) ? restaurantDetails.phone
+            : '' }}"
             aria-required="true"
-          />
+            />
           <app-dynamic-label class="error-label"
-          [name]="'errorPhone'"
-          [message]="validator.errors['phone']"
-          tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
+            [name]="'errorPhone'"
+            [message]="validator.errors['phone']"
+            tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-2">
           <label for="phone-ext">Ext. </label>
           <input
             type="text"
             class="form-control"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.phone_ext : '' }}"
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.phone_ext : '' }}"
             id="phone-ext"
-          />
+            />
           <app-dynamic-label class="error-label"
-          [name]="'errorPhoneExt'"
-          [message]="validator.errors['phone_ext']"
-          tabindex="validator.errors['phone_ext'] ? 0 : -1"></app-dynamic-label>
+            [name]="'errorPhoneExt'"
+            [message]="validator.errors['phone_ext']"
+            tabindex="validator.errors['phone_ext'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-6">
           <label for="restaurant-email">Email Address</label>
@@ -301,13 +314,12 @@
             placeholder="Ex: sample@email.com"
             value="{{ email }}"
             disabled="true"
-          />
+            />
           <app-dynamic-label
             class="error-label"
             [name]="'errorEmail'"
             [message]="validator.errors['email']"
-            tabindex="validator.errors['email'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['email'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
 
@@ -317,9 +329,9 @@
           <select
             id="pricepoint"
             class="form-control"
-            value="{{ (profileId && restaurantDetails) ? getPricepoint() : [] }}"
-            aria-required="true"
-          >
+            value="{{ (profileId && restaurantDetails) ? getPricepoint() : []
+            }}"
+            aria-required="true">
             <option selected disabled hidden>Choose...</option>
             <option>$ (under $10)</option>
             <option>$$ ($11 - $30)</option>
@@ -330,122 +342,117 @@
             class="error-label"
             [name]="'errorPrice'"
             [message]="validator.errors['pricepoint']"
-            tabindex="validator.errors['pricepoint'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['pricepoint'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-8">
           <label for="restaurant-cuisine">Type(s) of Cuisine <app-required-star></app-required-star></label>
           <app-multiselect-checkbox-dropdown
             [list]="cuisineItems"
-            [initialCheckedList]="restaurantDetails ? restaurantDetails.cuisines : []"
-            (shareCheckedList)="updateCuisineList($event)" >
+            [initialCheckedList]="restaurantDetails ? restaurantDetails.cuisines
+            : []"
+            (shareCheckedList)="updateCuisineList($event)">
           </app-multiselect-checkbox-dropdown>
           <app-dynamic-label
             class="error-label"
             [name]="'errorCuisine'"
             [message]="validator.errors['cuisines']"
-            tabindex="validator.errors['cuisines'] ? 0 : -1"
-          ></app-dynamic-label>
+            tabindex="validator.errors['cuisines'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="payment-methods">Accepted Payment Methods <app-required-star></app-required-star></label>
+        <label for="payment-methods">Accepted Payment Methods
+          <app-required-star></app-required-star></label>
         <app-multiselect-checkbox-dropdown
           [list]="paymentItems"
-          [initialCheckedList]="restaurantDetails ? restaurantDetails.payment_methods : []"
-          (shareCheckedList)="updatePaymentList($event)" >
+          [initialCheckedList]="restaurantDetails ?
+          restaurantDetails.payment_methods : []"
+          (shareCheckedList)="updatePaymentList($event)">
         </app-multiselect-checkbox-dropdown>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPayment'"
           [message]="validator.errors['payment_methods']"
-          tabindex="validator.errors['payment_methods'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['payment_methods'] ? 0 : -1"></app-dynamic-label>
       </div>
 
       <div class="form-group">
         <label for="restaurant-service">General Services</label>
         <app-multiselect-checkbox-dropdown
           [list]="serviceItems"
-          [initialCheckedList]="restaurantDetails ? restaurantDetails.offer_options : []"
-          (shareCheckedList)="updateServiceList($event)" >
+          [initialCheckedList]="restaurantDetails ?
+          restaurantDetails.offer_options : []"
+          (shareCheckedList)="updateServiceList($event)">
         </app-multiselect-checkbox-dropdown>
         <app-dynamic-label
           class="error-label"
           [name]="'errorServices'"
           [message]="validator.errors['offer_options']"
-          tabindex="validator.errors['offer_options'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['offer_options'] ? 0 : -1"></app-dynamic-label>
       </div>
 
-      <div class = "form-group botton-padding">
+      <div class="form-group">
         <label for="delivery-details">Delivery Details</label>
         <textarea
           class="form-control"
           id="delivery-details"
           rows="7"
           placeholder="Include any additional delivery details here!"
-          value="{{ (profileId && restaurantDetails) ? restaurantDetails.deliveryDetails : '' }}"
-        ></textarea>
+          value="{{ (profileId && restaurantDetails) ?
+          restaurantDetails.deliveryDetails : '' }}"></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorDeliveryDetails'"
           [message]="validator.errors['deliveryDetails']"
-          tabindex="validator.errors['deliveryDetails'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['deliveryDetails'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorDeliveryDetails'"
           [message]="validator.errors['deliveryDetails_p']"
-          tabindex="validator.errors['deliveryDetails_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['deliveryDetails_p'] ? 0 : -1"></app-dynamic-label>
       </div>
 
-      <div class="form-group botton-padding">
+      <div class="form-group">
         <label for="dinein-pickup-details">Dine-in / Pick-up Details</label>
         <textarea
           class="form-control"
           id="dinein-pickup-details"
           rows="7"
-          value="{{ (profileId && restaurantDetails) ? restaurantDetails.dineinPickupDetails : '' }}"
-          placeholder="Include any additional dine-in / pick-up details here!"
-        ></textarea>
+          value="{{ (profileId && restaurantDetails) ?
+          restaurantDetails.dineinPickupDetails : '' }}"
+          placeholder="Include any additional dine-in / pick-up details here!"></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorDineinPickupDetails'"
           [message]="validator.errors['dineinPickupDetails']"
-          tabindex="validator.errors['dineinPickupDetails'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['dineinPickupDetails'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorDineinPickupDetails'"
           [message]="validator.errors['dineinPickupDetails_p']"
-          tabindex="validator.errors['dineinPickupDetails_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['dineinPickupDetails_p'] ? 0 : -1"></app-dynamic-label>
       </div>
 
-      <div class="form-group botton-padding">
-        <label for="location-Notes">Location Notes</label>
+      <div class="form-group">
+        <label for="location-notes">Location Notes</label>
         <textarea
           class="form-control"
           id="location-notes"
           rows="7"
-          value="{{ (profileId && restaurantDetails) ? restaurantDetails.locationNotes : '' }}"
-          placeholder="Include any extra details about your restaurant's location here!"
-        ></textarea>
+          value="{{ (profileId && restaurantDetails) ?
+          restaurantDetails.locationNotes : '' }}"
+          placeholder="Include any extra details about your restaurant's
+          location here!"></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorLocationNotes'"
           [message]="validator.errors['locationNotes']"
-          tabindex="validator.errors['locationNotes'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['locationNotes'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorLocationNotes'"
           [message]="validator.errors['locationNotes_p']"
-          tabindex="validator.errors['locationNotes_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['locationNotes_p'] ? 0 : -1"></app-dynamic-label>
       </div>
 
       <div class="form-group">
@@ -454,24 +461,24 @@
           class="form-control"
           id="restaurant-bio"
           rows="7"
-          placeholder="Tell customers about the type of dishes offered at your restaurant and unique highlights of your restaurants..."
-          value="{{ (profileId && restaurantDetails) ? restaurantDetails.bio : '' }}"
+          placeholder="Tell customers about the type of dishes offered at your
+          restaurant and unique highlights of your restaurants..."
+          value="{{ (profileId && restaurantDetails) ? restaurantDetails.bio :
+          '' }}"
           aria-required="true"
           required
-          [disabled]="(profileId && restaurantDetails) ? restaurantDetails.approved_once : false"
-        ></textarea>
+          [disabled]="(profileId && restaurantDetails) ?
+          restaurantDetails.approved_once : false"></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorBio'"
           [message]="validator.errors['bio']"
-          tabindex="validator.errors['bio'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['bio'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorBio'"
           [message]="validator.errors['bio_p']"
-          tabindex="validator.errors['bio_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['bio_p'] ? 0 : -1"></app-dynamic-label>
       </div>
 
       <div class="form-group">
@@ -480,33 +487,37 @@
           class="form-control"
           id="open_hours"
           rows="7"
-          value="{{ (profileId && restaurantDetails) ? restaurantDetails.open_hours : '' }}"
+          value="{{ (profileId && restaurantDetails) ?
+          restaurantDetails.open_hours : '' }}"
           aria-required="true"
-          required
-        ></textarea>
+          required></textarea>
         <app-dynamic-label
           class="error-label"
           [name]="'errorOpenHours'"
           [message]="validator.errors['open_hours']"
-          tabindex="validator.errors['open_hours'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['open_hours'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorOpenHours'"
           [message]="validator.errors['open_hours_p']"
-          tabindex="validator.errors['open_hours_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['open_hours_p'] ? 0 : -1"></app-dynamic-label>
       </div>
 
       <div class="row">
         <div class="form-group col-md-6">
-          <label for="website">Website URL</label>
+          <label for="web_url">Website URL</label>
           <input
             type="text"
             class="form-control"
             id="web_url"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.web_url : '' }}"
-          />
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.web_url : '' }}"
+            />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorWebUrl'"
+            [message]="validator.errors['web_url']"
+            tabindex="validator.errors['web_url'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-6">
           <label for="facebook">Facebook URL</label>
@@ -514,8 +525,14 @@
             type="text"
             class="form-control"
             id="facebook"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.facebook : '' }}"
-          />
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.facebook : '' }}"
+            />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorFacebook'"
+            [message]="validator.errors['facebook']"
+            tabindex="validator.errors['facebook'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-6">
           <label for="twitter">Twitter URL</label>
@@ -523,8 +540,14 @@
             type="text"
             class="form-control"
             id="twitter"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.twitter : '' }}"
-          />
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.twitter : '' }}"
+            />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorTwitter'"
+            [message]="validator.errors['twitter']"
+            tabindex="validator.errors['twitter'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="form-group col-md-6">
           <label for="instagram">Instagram URL</label>
@@ -532,8 +555,14 @@
             type="text"
             class="form-control"
             id="instagram"
-            value="{{ (profileId && restaurantDetails) ? restaurantDetails.instagram : '' }}"
-          />
+            value="{{ (profileId && restaurantDetails) ?
+            restaurantDetails.instagram : '' }}"
+            />
+          <app-dynamic-label
+            class="error-label"
+            [name]="'errorInstagram'"
+            [message]="validator.errors['instagram']"
+            tabindex="validator.errors['instagram'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
 
@@ -545,7 +574,7 @@
             name="logo"
             id="logo"
             (change)="onFileSelect($event)"
-          />
+            />
         </div>
       </div>
 
@@ -557,39 +586,42 @@
               type="checkbox"
               formControlName="terms"
               aria-required="true"
-            />
-            I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a></label>
+              />
+            I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms
+              of Service</a></label>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-md-4" *ngIf="profileId">
-          <div class="text-left">
+          <div class="btn-container">
             <button class="btn cancel" type="button" (click)="cancel()">
               CANCEL
             </button>
           </div>
         </div>
         <div class="form-group col-md-6" id="draft-btn">
-          <div class="text-left">
+          <div class="btn-container">
             <button
               class="btn save-next"
               type="button"
-              (click)="!profileId ? setupROProfile('SETUP-DRAFT') : setupROProfile('EDIT-DRAFT')"
-              [disabled]="profileId ? false : !uploadForm.valid"
-            >
+              (click)="!profileId ? setupROProfile('SETUP-DRAFT') :
+              setupROProfile('EDIT-DRAFT')"
+              [disabled]="profileId ? false : !uploadForm.valid">
               SAVE DRAFT
             </button>
+            <div style="color: #EB0000;">You will need to submit again if you
+              change the profile before it is approved.</div>
           </div>
         </div>
         <div class="form-group col-md-6" id="submit-btn">
-          <div class="text-right">
+          <div class="btn-container">
             <button
               type="submit"
               class="btn save-next"
-              (click)="!profileId ? setupROProfile('SETUP-SUBMIT') : setupROProfile('EDIT-SUBMIT')"
-              [disabled]="profileId ? false : !uploadForm.valid"
-            >
+              (click)="!profileId ? setupROProfile('SETUP-SUBMIT') :
+              setupROProfile('EDIT-SUBMIT')"
+              [disabled]="profileId ? false : !uploadForm.valid">
               SUBMIT FOR APPROVAL
             </button>
           </div>

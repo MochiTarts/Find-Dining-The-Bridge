@@ -4,7 +4,7 @@ import { RestaurantService } from '../../_services/restaurant.service';
 import { SpinnerVisibilityService } from 'ng-http-loader';
 import { cuisinesStr } from '../../_constants/cuisines';
 import { servicesStr } from '../../_constants/services';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faArrowCircleLeft, } from '@fortawesome/free-solid-svg-icons';
 import { Title } from '@angular/platform-browser';
 import { UserService } from '../../_services/user.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
@@ -33,6 +33,7 @@ export class FavouritesComponent implements OnInit {
   inputRestaurant: string = '';
 
   faSearch = faSearch;
+  faArrowCircleLeft = faArrowCircleLeft;
   show: number = 3;
 
   constructor(
@@ -115,6 +116,9 @@ export class FavouritesComponent implements OnInit {
     } else {
       this.searchedRestaurants = [];
       let keywords = this.inputRestaurant.toLowerCase().replace(/\,/gi, ' ').split(' ');
+      keywords = keywords.filter((value) => {
+        return value != '';
+      });
 
       for (var i = 0; i < this.allRestaurants.length; i++) {
         var query = this.allRestaurants[i];
@@ -130,6 +134,9 @@ export class FavouritesComponent implements OnInit {
               .toLowerCase()
               .includes(keyword) ||
             query.pricepoint
+              .toLowerCase()
+              .includes(keyword) ||
+            query.bio
               .toLowerCase()
               .includes(keyword)
           ) {
@@ -244,6 +251,13 @@ export class FavouritesComponent implements OnInit {
     } else {
       filters.style.marginRight = "-400px";
     }
+  }
+
+  /**
+   * Redirects to the all-listings page
+   */
+  goBack() {
+    this.router.navigate(['/all-listings']);
   }
 
 }

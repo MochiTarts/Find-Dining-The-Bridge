@@ -2,12 +2,13 @@ import { HTTP_INTERCEPTORS, HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
 import { Injectable } from '@angular/core';
 
 import { TokenStorageService } from '../_services/token-storage.service';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, EMPTY } from 'rxjs';
 import { catchError, switchMap, filter, take, finalize, } from 'rxjs/operators';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
 
 const TOKEN_HEADER_KEY = 'Authorization';
+const LOGOUT_CODES = ['user_blocked', 'user_disabled', 'no_user_found', 'token_mismatch', 'refresh_token_missing', 'no_user_found'];
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -40,24 +41,22 @@ export class AuthInterceptor implements HttpInterceptor {
 
         var user = this.tokenStorage.getUser();
         var err = error.error;
-        if (err && err.detail == "Token is invalid or expired") {
-          this.logout();
-          return throwError(error);
+        // log user out if error message/error code indicates a need to reject the request
+        if (err && (err.detail == "Token is invalid or expired" || (LOGOUT_CODES.includes(err.code)))) {
+          if (JSON.stringify(user) != '{}'){
+            this.logout();
+            window.location.reload();
+          }
+          // prevent inf loop when user is already logged out
+          return EMPTY;
+          //return throwError(error);
         } else if (!user || (user && !user.role)) {
           // propogate error for error catching and displays
           return throwError(error);
         }
         // otherwise refresh the access token using refresh token
         return this.handleTokenError(req, next);
-        // log user out if 400 and error code indicates a need to reject the request
-      } else if (error instanceof HttpErrorResponse && error.status === 400) {
-        if (error.error && ['no_valid_token_in_db', 'no_user_found', 'user_disabled', 'user_blocked'].includes(error.error.code)) {
-          this.logout();
-          return throwError(error);
-          // 400 example: duplicate username/email on signup
-        } else {
-          return throwError(error);
-        }
+
       } else {
         return throwError(error);
       }
@@ -68,7 +67,7 @@ export class AuthInterceptor implements HttpInterceptor {
    * Logs the user out
    */
   private logout(): void {
-    this.tokenStorage.signOut();
+    this.authService.logout();
   }
 
   /**

@@ -148,7 +148,7 @@ export class UserService {
 
   /**
    * Retrieves a list of up to 5 JSON objects, each one contains
-   * the restaurant_id and the distance from the user
+   * the restaurant object and the distance from the user
    * @returns list of JSON objects (max up to 5)
    */
   getNearbyRestaurants(): Observable<any> {

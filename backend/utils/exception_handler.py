@@ -3,8 +3,16 @@ from django.http import JsonResponse
 from django.core.exceptions import MultipleObjectsReturned, ValidationError, ObjectDoesNotExist
 
 from rest_framework.views import exception_handler
-from rest_framework.exceptions import ErrorDetail
-from rest_framework.exceptions import NotFound, NotAuthenticated, PermissionDenied, MethodNotAllowed, ParseError
+from rest_framework.exceptions import (
+    NotFound,
+    ErrorDetail,
+    NotAuthenticated,
+    PermissionDenied,
+    MethodNotAllowed,
+    ParseError,
+    Throttled,
+    )
+#from rest_framework.status import HTTP_429_TOO_MANY_REQUESTS
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
 import jsonschema
@@ -24,6 +32,7 @@ def views_exception_handler(exc, context):
     status_403_exceptions = (PermissionDenied)
     status_404_exceptions = (NotFound)
     status_405_exceptions = (MethodNotAllowed)
+    status_429_exceptions = (Throttled)
     status_500_exceptions = (ValueError)
 
     # checks if the exception is part of the status 400 exceptions tuple
@@ -108,6 +117,17 @@ def views_exception_handler(exc, context):
             "detail": detail
         }
         return JsonResponse(custom_error_response, status=405)
+
+    if isinstance(exc, status_429_exceptions):
+
+        # detail = str(exc)
+
+        custom_error_response = {
+            "status": 429,
+            "code": 'too_many_request',
+            "detail": exc.detail
+        }
+        return JsonResponse(custom_error_response, status=429)
 
     if isinstance(exc, status_500_exceptions):
         if hasattr(exc, 'message'):

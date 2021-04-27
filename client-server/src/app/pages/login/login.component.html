@@ -1,6 +1,6 @@
 <div class="card-container" *ngIf="!isLoggedIn">
   <mat-card class="login-register-container mat-elevation-z8">
-    <img src="assets/images/find_dining_logo_small.png" class="login-image"/>
+    <img src="assets/images/find_dining_logo_small.png" class="login-image" alt="Find Dining logo" />
     <mat-tab-group class="login-register-tabs">
       <mat-tab label="Sign In">
         <mat-card class="login-card mat-elevation-z8">
@@ -41,7 +41,7 @@
                   style="margin-bottom: 10px;"
                   color="seconary"
                   type="button"
-                  *ngIf="recaptchaForm.invalid"
+                  *ngIf="recaptchaForm.invalid && failLoginAttempts > 2"
                   mat-button>
                   <mat-icon matSuffix>check_box_outline_blank</mat-icon>
                   <span style="margin-left: 7px; position: relative; top: 1px;">I am a human</span>
@@ -51,7 +51,7 @@
                 <button
                   style="margin-top: 10px;"
                   color="primary"
-                  [disabled]="recaptchaForm.invalid"
+                  [disabled]="recaptchaForm.invalid && failLoginAttempts > 2"
                   mat-raised-button
                   type="submit">
                   Login
@@ -109,7 +109,7 @@
                   <mat-error *ngIf="username.errors && username.errors.maxlength">Username must be at most 150 characters</mat-error>
                   <mat-error *ngIf="username.errors && username.errors.pattern">Username should not contain spaces or special characters </mat-error>
                 </mat-form-field>
-                
+
                 <mat-form-field *ngIf="role.value">
                   <mat-label>Email</mat-label>
                   <input matInput name="email" [(ngModel)]="signupForm.email" required email #email="ngModel" maxlength="254" autocomplete="email" />
@@ -181,6 +181,7 @@
           href='#'
           class='show_signup'
           (click)="toggleLink();"
+          style="color: #007faa;"
           >
           Didn't receive a verification email?
         </a>

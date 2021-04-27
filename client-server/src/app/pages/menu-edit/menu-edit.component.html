@@ -1,5 +1,5 @@
 <div class="center">
-  <h2 id="editdish-label">Edit Restaurant Menu</h2>
+  <h2 id="edit-dish-label">Edit Restaurant Menu</h2>
   <p>
     Please provide menu items.
   </p>
@@ -16,21 +16,24 @@
     {{ alertMessage }}
   </ngb-alert>
   <div class="dish-container">
-    <div class="category-container" *ngIf="specialDish">
+    <div class="category-container" *ngIf="dishes">
       <h2 class="category-title">Specials</h2>
       <div class="row" style="margin: auto;">
-        <div class="col-md-2 dish-card" *ngFor="let dish of specialDish; let i = index">
-          <div class="card-body" style="width: fit-content; margin-bottom: 25px;">
+        <div class="col-md-2 dish-card" *ngFor="let dish of dishes; let i=
+          index">
+          <div class="card-body" style="width: fit-content; margin-bottom:
+            25px;">
             <app-dish-card [dish]="dish" style="margin: auto;"></app-dish-card>
-            <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="5px" style="margin-top: 5px;">
-              <button class="icon btn" (click)="openDishModal(dishModal, dish, i)" aria-label="Edit dish" >
+            <div fxLayout="row" fxLayoutAlign="none center" fxLayoutGap="5px"
+              style="margin-top: 5px;">
+              <button class="icon btn" (click)="openDishModal(dishModal, dish,
+                i)" aria-label="Edit dish">
                 <fa-icon [icon]="faEdit"></fa-icon>
               </button>
               <button
                 class="icon btn"
                 (click)="openDeleteModal(deleteModal, dish, i)"
-                aria-label="Delete dish"
-              >
+                aria-label="Delete dish">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
@@ -39,7 +42,7 @@
       </div>
     </div>
 
-    <div class="category-container" *ngIf="popularDish">
+    <!-- <div class="category-container" *ngIf="popularDish">
       <h2 class="category-title">Popular Dishes</h2>
       <div class="row" style="margin: auto;">
         <div class="col-md-2 dish-card" *ngFor="let dish of popularDish; let i = index">
@@ -60,7 +63,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <!--<div class="row equal">
     <div *ngFor="let dish of dishes; let i = index" class="col-sm-4 d-flex">
@@ -99,14 +102,13 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="uploadForm" (ngSubmit)="configDish()" class="form-box">
-      <p style="font-style:italic; color: gray;">
+      <p style="font-style:italic; color: #757575;">
         All required fields are marked with an asterisk (<app-required-star></app-required-star>)
       </p>
       <div class="form-group">
@@ -122,10 +124,10 @@
           placeholder="Ex: Spicy Chicken"
           aria-required="true"
           required
-        />
+          />
         <app-dynamic-label class="error-label"
-        [name]="'errorName'"
-        [message]="validator.errors['name']" ></app-dynamic-label>
+          [name]="'errorName'"
+          [message]="validator.errors['name']"></app-dynamic-label>
       </div>
 
       <div class="form-group">
@@ -141,13 +143,13 @@
           placeholder="Ex: 12.99"
           aria-required="true"
           required
-        />
+          />
         <app-dynamic-label class="error-label"
-        [name]="'errorPrice'"
-        [message]="validator.errors['price']" ></app-dynamic-label>
+          [name]="'errorPrice'"
+          [message]="validator.errors['price']"></app-dynamic-label>
       </div>
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="menuCategory">
           Menu Category <app-required-star></app-required-star>
         </label>
@@ -165,10 +167,9 @@
         <app-dynamic-label class="error-label"
         [name]="'errorCategory'"
         [message]="validator.errors['menuCategory']" ></app-dynamic-label>
-      </div>
-
+      </div> -->
       <div class="form-group">
-        <label for="dishInfo">
+        <label for="description">
           Dish Information <app-required-star></app-required-star>
         </label>
         <textarea
@@ -179,11 +180,10 @@
           rows="4"
           placeholder="Tell customers the story of your dish..."
           aria-required="true"
-          required
-        ></textarea>
+          required></textarea>
         <app-dynamic-label class="error-label"
-        [name]="'errorDescription'"
-        [message]="validator.errors['description']" ></app-dynamic-label>
+          [name]="'errorDescription'"
+          [message]="validator.errors['description']"></app-dynamic-label>
       </div>
 
       <div class="row">
@@ -194,7 +194,7 @@
             name="dish"
             id="dish"
             (change)="onFileSelect($event)"
-          />
+            />
         </div>
       </div>
     </form>
@@ -218,8 +218,7 @@
       type="button"
       class="close"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    >
+      (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>

@@ -12,9 +12,11 @@ from django.conf import settings
 from django.db.models import Q
 from django import forms
 
+from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
+from sduser.utils import send_email_verification
 from sduser.validators import validate_signup_user
-
-from smtplib import SMTPException
+from server.throttling import LoginThrottle
+from sduser import swagger
 
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -25,15 +27,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, Toke
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 from rest_framework.decorators import api_view, permission_classes
 
-from login_audit.models import AuditEntry, get_client_http_accept, get_client_path_info, get_client_user_agent
-from sduser.utils import send_email_verification
-
+from smtplib import SMTPException
 import json
 import jwt
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from sduser import swagger
 
 
 UserModel = get_user_model()
@@ -49,7 +48,7 @@ class EmailBackend(ModelBackend):
         try:
             user = UserModel.objects.get(
                 Q(username__iexact=username) | Q(email__iexact=username))
-            print(user)
+
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
@@ -140,6 +139,9 @@ def check_user_status(user):
     check on user is_disabled and is_blocked status and
     raise appropriate error with detail messages for login to display
     """
+    if not user:
+        raise PermissionDenied(
+            message="Failed to obtain user", code="no_user_found")
     if user.is_blocked:
         raise AuthenticationFailed(
             'This user has been blocked. If you think this is a mistake, please contact Find Dining team to resolve it',
@@ -200,16 +202,17 @@ class SDUserCookieTokenObtainPairView(TokenObtainPairView):
     """
     Token Obtain Pair View with refresh token stored in the cookie
     """
+    throttle_classes = [LoginThrottle]
 
     def finalize_response(self, request, response, *args, **kwargs):
 
         if hasattr(response, 'data') and response.data.get('refresh'):
-            # 1 day
-            cookie_max_age = 3600 * 24
+
+            cookie_max_age = settings.COOKIE_MAX_AGE
             refresh_token = response.data['refresh']
             # note: setting path='/api/auth/refresh/' won't work
             response.set_cookie('refresh_token', refresh_token,
-                                max_age=cookie_max_age, httponly=True)
+                                max_age=cookie_max_age, httponly=True, samesite='Lax', secure=True)
             del response.data['refresh']
             # decode token to get user info
             payload = jwt_decode(response.data['access'])
@@ -275,7 +278,7 @@ class SDUserCookieTokenRefreshSerializer(TokenRefreshSerializer):
             return super().validate(attrs)
         else:
             raise InvalidToken(
-                'No valid token found in cookie \'refresh_token\'')
+                'No valid token found in cookie \'refresh_token\'', code='refresh_token_missing')
 
 
 def checkUserRefreshToken(user_id, refresh_token):
@@ -283,26 +286,28 @@ def checkUserRefreshToken(user_id, refresh_token):
     check refresh token against the one stored in the db
     """
     if user_id is None:
-        return InvalidToken('No user found who would have possessed this token')
+        return InvalidToken('No user found who would have possessed this token', code='no_user_found')
 
     user = UserModel.objects.get(id=user_id)
     # validate the token against the one stored in the db (user object)
     if not refresh_token or refresh_token != user.refresh_token:
         raise InvalidToken(
-            'Token mismatch: the token stored in cookie does not match the token in database')
+            'Token mismatch: the token stored in cookie does not match the token in database',
+            code='token_mismatch')
 
 
 class SDUserCookieTokenRefreshView(TokenRefreshView):
     """
     Token Refresh View
     """
+    # need to allow this in order to log user in when they open a new tab (only has refresh token in the cookie)
+    permission_classes = (AllowAny,)
 
     def finalize_response(self, request, response, *args, **kwargs):
 
         if response.data.get('refresh'):
 
-            # 1 day
-            cookie_max_age = 3600 * 24
+            cookie_max_age = settings.COOKIE_MAX_AGE
             new_refresh_token = response.data['refresh']
 
             # try:
@@ -310,8 +315,11 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
 
             # prevent anonymous user or disabled user to obtain new access and refresh token
             if user_id is None:
-                return JsonResponse({'message': 'No user found', 'code': 'no_user_found'}, status=400)
-            user = UserModel.objects.get(id=user_id)
+                user = UserModel.objects.filter(refresh_token=request.COOKIES.get('refresh_token')).first()
+                if not user:
+                    return JsonResponse({'message': 'No user found', 'code': 'no_user_found'}, status=400)
+            else:
+                user = UserModel.objects.get(id=user_id)
 
             access_token = response.data.get('access')
             if access_token:
@@ -333,7 +341,7 @@ class SDUserCookieTokenRefreshView(TokenRefreshView):
                 return JsonResponse({'message': 'User has been disabled', 'code': 'user_disabled'}, status=401)
 
             response.set_cookie('refresh_token', new_refresh_token,
-                                max_age=cookie_max_age, httponly=True)
+                                max_age=cookie_max_age, httponly=True, samesite='Lax', secure=True)
             del response.data['refresh']
 
             # store the refresh token inside user object
@@ -362,13 +370,13 @@ def construct_token_response_for_user(user):
     #response['username'] = user.username
     response['access_token'] = str(token.access_token)
     #response['refresh_token'] = str(token)
-    cookie_max_age = 3600 * 24
+    cookie_max_age = settings.COOKIE_MAX_AGE
     # print(dir(token))
     refresh_token = str(token)
     user.refresh_token = refresh_token
     user.save()
     res = Response(response)
     res.set_cookie('refresh_token', refresh_token,
-                   max_age=cookie_max_age, httponly=True)
+                   max_age=cookie_max_age, httponly=True, samesite='Lax', secure=True)
 
     return res

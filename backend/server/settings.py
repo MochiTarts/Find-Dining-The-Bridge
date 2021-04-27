@@ -30,11 +30,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
+INTERNAL_IPS = ['localhost', '127.0.0.1']
+
 # Custom URL for Django views to redirect requests to Angular Routing
 VIEW_REDIRECT_URL = os.environ.get('VIEW_REDIRECT_URL')
 
 if DEBUG:
-    VIEW_REDIRECT_URL = 'http://localhost:4200'
+    VIEW_REDIRECT_URL = 'https://localhost:4200'
 
 
 # Application definition
@@ -65,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'drf_yasg',
     'newsletter',
+    'admin_honeypot',
 
     # 'user.apps.SDUserConfig',
 ]
@@ -145,7 +148,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'Canada/Eastern'
 
 USE_I18N = True
 
@@ -181,7 +185,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '121/minute',
-        'user': '201/minute'
+        'user': '181/minute',
+        'login_hour': '20/hour',
     },
     'EXCEPTION_HANDLER': 'utils.exception_handler.views_exception_handler',
 }
@@ -200,9 +205,38 @@ JWT_AUTH = {
     'JWT_PAYLOAD_HANDLER': 'sduser.backends.jwt_payload_handler',
 }
 '''
-
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+if not DEBUG:
+    # Once you confirm that all assets are served securely on your site (i.e. HSTS didn’t break anything),
+    # it’s a good idea to increase this value so that infrequent visitors will be protected
+    # (31536000 seconds, i.e. 1 year, is common).
+    SECURE_HSTS_SECONDS = 3600
+    # adds the preload directive to the HTTP Strict Transport Security header
+    SECURE_HSTS_PRELOAD = True
+    # set this to false to allow subdomain with invalid SSL for testing
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# custom var for storing cookie max age in seconds
+# currently set to 3 days
+COOKIE_MAX_AGE = 3600 * 24 * 3
+
+# the browser will only load the resource in a frame
+# if the request originated from the same site
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# To prevent the browser from guessing the content type
+# and force it to always use the type provided in the Content-Type header
+# Need to also set this in the front-end Web server if it is the one serving
+# user uploaded files
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# To enable the XSS filter in the browser
+# and force it to always block suspected XSS attacks
+SECURE_BROWSER_XSS_FILTER = True
+
 SECURE_SSL_REDIRECT = os.environ.get('SSL_REDIRECT') == 'True'
 
 if os.environ.get('ALLOWED_HOSTS') != None:
@@ -235,7 +269,11 @@ CORS_ALLOW_CREDENTIALS = True
 #CSRF_COOKIE_DOMAIN = ".localhost"
 SESSION_COOKIE_SAMESITE = None
 
+
 EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
+# for testing purpose, comemnt out the above and
+# uncomment the below, this will output the email in the console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 GMAIL_API_CLIENT_ID = os.environ.get('GMAIL_API_CLIENT_ID')
 GMAIL_API_CLIENT_SECRET = os.environ.get('GMAIL_API_CLIENT_SECRET')
@@ -249,8 +287,8 @@ SIMPLE_JWT = {
     # for testing
     # 'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10),
     # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=60),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=6),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': True,
@@ -339,3 +377,19 @@ GOOGLE_ANALYTICS_CLIENT_EMAIL = os.environ.get('GOOGLE_ANALYTICS_CLIENT_EMAIL')
 # note that the replace is required after reading
 GOOGLE_ANALYTICS_PRIVATE_KEY = os.environ.get(
     'GOOGLE_ANALYTICS_PRIVATE_KEY').replace('\\n', '\n')
+
+# Used to determine whether or not to email site admins on login attempts
+# (on the fake login screen)
+# Set to False for now to avoid getting flooded with notification emails
+ADMIN_HONEYPOT_EMAIL_ADMINS = False
+
+# Custom var for storing the admin email
+INFO_EMAIL = 'info@finddining.ca'
+
+# A list of all the people who get code error notifications
+ADMINS = [('admin', INFO_EMAIL),]
+# Default email address to use for various automated correspondence
+# from the site manager(s)
+DEFAULT_FROM_EMAIL = INFO_EMAIL
+# The email address that error messages come from
+# SERVER_EMAIL = INFO_EMAIL

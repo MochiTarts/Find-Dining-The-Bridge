@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+from sduser.backends import check_user_status
+from restaurant_owner import schemas
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
 from restaurant_owner import swagger
@@ -22,23 +24,6 @@ from drf_yasg.utils import swagger_auto_schema
 from bson import ObjectId
 import json
 
-# jsonschema validation schemas for request bodies
-restaurant_owner_signup_schema = {
-    "properties": {
-        "restaurant_id": {"type": "string"},
-        "consent_status": {"type": "string"},
-    },
-    "required": ["restaurant_id"],
-    "additionalProperties": False
-}
-
-restaurant_owner_edit_schema = {
-    "properties": {
-        "consent_status": {"type": "string"},
-    },
-    "additionalProperties": False
-}
-
 
 class SignUp(APIView):
     """ Restaurant Owner signup view """
@@ -53,12 +38,10 @@ class SignUp(APIView):
         attaches user_id to the corresponding restaurant
         """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        validate(instance=request.data, schema=restaurant_owner_signup_schema)
+        validate(instance=request.data, schema=schemas.restaurant_owner_signup_schema)
         body = request.data
         RestaurantOwner.field_validate(body)
 
@@ -77,9 +60,7 @@ class RestaurantOwnerView(APIView):
     def get(self, request):
         """ Retrieves a restaurant owner profile """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         restaurant_owner = RestaurantOwner.get_by_user_id(user_id=user_id)
@@ -91,12 +72,10 @@ class RestaurantOwnerView(APIView):
     def put(self, request):
         """ Updates a restaurant owner profile """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        validate(instance=request.data, schema=restaurant_owner_edit_schema)
+        validate(instance=request.data, schema=schemas.restaurant_owner_edit_schema)
         body = request.data
         RestaurantOwner.field_validate(body)
         profile = RestaurantOwner.edit_profile(user_id, body)

@@ -4,6 +4,8 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.http import HttpResponse, HttpResponseRedirect
+from django.forms import TextInput, Textarea
+from django.db import models
 
 from utils.cloud_storage import delete
 from utils.geo_controller import geocode
@@ -11,7 +13,7 @@ from utils.model_util import save_and_clean, model_to_json, edit_model
 from utils.admin import InputFilter, OwnerNameFilter, NameFilter, PriceMaxFilter, PriceMinFilter
 
 from restaurant.enum import Status
-from restaurant.forms import RestaurantAdminForm
+from restaurant.forms import RestaurantAdminForm, DishAdminForm
 from restaurant.models import PendingRestaurant, PendingFood, Restaurant, Food, UserFavRestrs, RestaurantPost
 from restaurant.utils import send_approval_email, send_reject_email, send_unpublish_email
 
@@ -36,7 +38,7 @@ def reject_restr(model_admin, request, queryset):
         res_status = res_dict['status']
         # note that if the submission is already rejected then it will not be
         # on the live site
-        if res_status == Status.In_Progress.value or res_status == Status.Pending.value:
+        if res_status == Status.In_Progress.name or res_status == Status.Pending.name:
             count += 1
             restaurant_name = res_dict.get('name', "")
             restaurant_id = res_dict["_id"]
@@ -56,7 +58,7 @@ def reject_restr(model_admin, request, queryset):
             str(count) +
             " restaurant profiles.")
         # change status to reject
-        queryset.update(status=Status.Rejected.value)
+        queryset.update(status=Status.Rejected.name)
     elif count == 1:
         link = reverse(
             "admin:restaurant_pendingrestaurant_change",
@@ -67,7 +69,7 @@ def reject_restr(model_admin, request, queryset):
             restaurant_name)
         messages.success(request, msg)
         # change status to reject
-        queryset.update(status=Status.Rejected.value)
+        queryset.update(status=Status.Rejected.name)
     elif wrong_status:
         messages.success(
             request, "You can only reject 'Pending' or 'In_Progress' restaurants")
@@ -107,8 +109,8 @@ def unpublish_restr(model_admin, request, queryset):
         pendingRestaurant = PendingRestaurant.objects.get(_id=restaurant_id)
         # change approved pendingRestaurant to rejected as the profile is being
         # unpublished
-        if pendingRestaurant.status == Status.Approved.value:
-            pendingRestaurant.status = Status.Rejected.value
+        if pendingRestaurant.status == Status.Approved.name:
+            pendingRestaurant.status = Status.Rejected.name
             pendingRestaurant.save()
         # Remove all user-restaurant favourite relation records
         # that contains the unpublished restaurant
@@ -146,7 +148,7 @@ def approve_restr(model_admin, request, queryset):
         restaurant = Restaurant(**model_to_json(r))
         old_restaurant = Restaurant.objects.filter(_id=r._id).first()
 
-        if r.status == Status.Pending.value:
+        if r.status == Status.Pending.name:
             count += 1
 
             # If there's already an approved restaurant record in Restaurant collection
@@ -163,7 +165,7 @@ def approve_restr(model_admin, request, queryset):
                     delete(old_restaurant.restaurant_video_url)
             edit_model(
                 restaurant, {
-                    "status": Status.Approved.value, "approved_once": True}, [
+                    "status": Status.Approved.name, "approved_once": True}, [
                     "status", "approved_once"])
             save_and_clean(restaurant)
 
@@ -184,7 +186,7 @@ def approve_restr(model_admin, request, queryset):
             "Successfully approved " +
             str(count) +
             " restaurant profiles.")
-        queryset.update(status=Status.Approved.value, approved_once=True)
+        queryset.update(status=Status.Approved.name, approved_once=True)
     elif count == 1:
         link = reverse(
             "admin:restaurant_pendingrestaurant_change",
@@ -194,7 +196,7 @@ def approve_restr(model_admin, request, queryset):
             link,
             restaurant_name)
         messages.success(request, msg)
-        queryset.update(status=Status.Approved.value, approved_once=True)
+        queryset.update(status=Status.Approved.name, approved_once=True)
     elif wrong_status:
         messages.error(
             request, "You can only approve of 'Pending' restaurants")
@@ -222,7 +224,7 @@ def reject_food(model_admin, request, queryset):
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
         # note that if the submission is already rejected then it will not be
         # on the live site
-        if f.status == Status.Pending.value:
+        if f.status == Status.Pending.name:
             count += 1
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name
@@ -232,7 +234,7 @@ def reject_food(model_admin, request, queryset):
         else:
             wrong_status = True
     # change status to reject
-    queryset.update(status=Status.Rejected.value)
+    queryset.update(status=Status.Rejected.name)
     if count > 1:
         messages.success(
             request,
@@ -271,13 +273,13 @@ def unpublish_food(model_admin, request, queryset):
         count += 1
         pendingFood = PendingFood.objects.filter(_id=f._id).first()
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
-        if pendingFood.status == Status.Approved.value:
+        if pendingFood.status == Status.Approved.name:
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name
             food_name = f.name
             email = restr.email
             send_unpublish_email(owner_prefer_names, email, food_name, 'food')
-            pendingFood.status = Status.Rejected.value
+            pendingFood.status = Status.Rejected.name
             save_and_clean(pendingFood)
     queryset.delete()
     if count > 1:
@@ -309,7 +311,7 @@ def approve_food(model_admin, request, queryset):
         food = Food(**model_to_json(f))
         old_food = Food.objects.filter(_id=f._id).first()
         restaurant = PendingRestaurant.objects.filter(_id=f.restaurant_id)
-        if restaurant.exists() and f.status == Status.Pending:
+        if restaurant.exists() and f.status == Status.Pending.name:
             count += 1
             restr = restaurant.first()
             owner_prefer_names = restr.owner_preferred_name
@@ -324,7 +326,7 @@ def approve_food(model_admin, request, queryset):
             if old_food:
                 if old_food.picture != f.picture:
                     delete(old_food.picture)
-            food.status = Status.Approved.value
+            food.status = Status.Approved.name
             save_and_clean(food)
         else:
             wrong_status = True
@@ -334,7 +336,7 @@ def approve_food(model_admin, request, queryset):
             "Successfully approved " +
             str(count) +
             " food profiles.")
-        queryset.update(status=Status.Approved.value)
+        queryset.update(status=Status.Approved.name)
     elif count == 1:
         link = reverse("admin:restaurant_pendingfood_change", args=[f._id])
         msg = format_html(
@@ -342,7 +344,7 @@ def approve_food(model_admin, request, queryset):
             link,
             f.name)
         messages.success(request, msg)
-        queryset.update(status=Status.Approved.value)
+        queryset.update(status=Status.Approved.name)
     elif wrong_status:
         messages.success(
             request, "The restaurant this dish belongs to does not exist, or the dish status if not 'Pending'")
@@ -375,6 +377,7 @@ class PendingRestrAdmin(admin.ModelAdmin):
         'modified_time')
     actions = (approve_restr, reject_restr)
     readonly_fields = ('status', 'GEO_location',)
+    form = RestaurantAdminForm
 
     def save_model(self, request, obj, form, change):
         """
@@ -468,6 +471,7 @@ class PendingFoodAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('restaurant_id', 'status')
     actions = (approve_food, reject_food,)
+    form = DishAdminForm
 
     def save_model(self, request, obj, form, change):
         """
@@ -578,6 +582,7 @@ class RestrAdmin(admin.ModelAdmin):
         'logoUrl')
     actions = (unpublish_restr,)
     readonly_fields = ('status', 'GEO_location',)
+    form = RestaurantAdminForm
     change_list_template = 'restaurant/change_list.html'
     change_form_template = 'restaurant/change_form.html'
 
@@ -603,9 +608,6 @@ class RestrAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
-
-    class Meta:
-        form = RestaurantAdminForm
 
     def get_form(self, request, obj=None, **kwargs):
 
@@ -654,6 +656,7 @@ class FoodAdmin(admin.ModelAdmin):
     )
     readonly_fields = ('restaurant_id', 'status')
     actions = (unpublish_food,)
+    form = DishAdminForm
 
     def response_change(self, request, obj):
         if "_unpublish" in request.POST:

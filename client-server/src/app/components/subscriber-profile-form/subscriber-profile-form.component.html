@@ -6,13 +6,12 @@
       class="close"
       aria-label="Close"
       (click)="modal.dismiss('Cross click')"
-      *ngIf="closeButton"
-    >
+      *ngIf="closeButton">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p style="font-style:italic; color: gray;">
+    <p style="font-style:italic; color: #757575;">
       All required fields are marked with an asterisk (<app-required-star></app-required-star>)
     </p>
     <form [formGroup]="aFormGroup">
@@ -26,20 +25,18 @@
             placeholder="Ex: Jane"
             formControlName="firstname"
             aria-required="true"
-          />
+            />
         </div>
         <app-dynamic-label
           class="error-label"
           [name]="'errorName'"
           [message]="validator.errors['first_name']"
-          tabindex="validator.errors['first_name'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['first_name'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPost'"
           [message]="validator.errors['first_name_p']"
-          tabindex="validator.errors['first_name_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['first_name_p'] ? 0 : -1"></app-dynamic-label>
       </div>
       <div class="form-group">
         <label for="lastname">Last Name <app-required-star></app-required-star></label>
@@ -50,23 +47,24 @@
             placeholder="Ex: Doe"
             formControlName="lastname"
             aria-required="true"
-          />
+            />
         </div>
         <app-dynamic-label
           class="error-label"
           [name]="'errorName'"
           [message]="validator.errors['last_name']"
-          tabindex="validator.errors['last_name'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['last_name'] ? 0 : -1"></app-dynamic-label>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPost'"
           [message]="validator.errors['last_name_p']"
-          tabindex="validator.errors['last_name_p'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['last_name_p'] ? 0 : -1"></app-dynamic-label>
       </div>
       <div class="form-group">
-        <label for="postalcode">Postal Code (A#A #A#) <app-required-star></app-required-star></label>
+        <label for="postalcode" id="postalCode_label">Postal Code (A#A #A#)
+          <app-required-star></app-required-star></label>
+        <p id="postalCode_note" class="note">Postal code is used for identifying
+          the restaurants closest to your location.</p>
         <div class="input-group">
           <input
             id="postalcode"
@@ -74,18 +72,19 @@
             placeholder="Ex: A1A 1A1"
             formControlName="postalcode"
             aria-required="true"
-          />
+            aria-labelledby="postalCode_label postalCode_note"
+            />
         </div>
         <app-dynamic-label
           class="error-label"
           [name]="'errorPostalCode'"
           [message]="validator.errors['postalCode']"
-          tabindex="validator.errors['postalCode'] ? 0 : -1"
-        ></app-dynamic-label>
+          tabindex="validator.errors['postalCode'] ? 0 : -1"></app-dynamic-label>
       </div>
       <div class="form-group row">
         <div class="col">
-          <label for="phone">Phone Number (10 digits no dashes) <app-required-star></app-required-star></label>
+          <label for="phone">Phone Number (10 digits no dashes)
+            <app-required-star></app-required-star></label>
           <div class="input-group">
             <input
               id="phone"
@@ -93,12 +92,12 @@
               placeholder="Ex: 6471234657"
               formControlName="phone"
               aria-required="true"
-            />
+              />
           </div>
           <app-dynamic-label class="error-label"
-          [name]="'errorPhone'"
-          [message]="validator.errors['phone']"
-          tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
+            [name]="'errorPhone'"
+            [message]="validator.errors['phone']"
+            tabindex="validator.errors['phone'] ? 0 : -1"></app-dynamic-label>
         </div>
         <div class="col-md-4">
           <label for="phone-ext">Ext.</label>
@@ -107,38 +106,42 @@
               id="phone-ext"
               class="form-control"
               formControlName="phone_ext"
-            />
+              />
           </div>
           <app-dynamic-label class="error-label"
-          [name]="'errorPhoneExt'"
-          [message]="validator.errors['phone_ext']"
-          tabindex="validator.errors['phone_ext'] ? 0 : -1"></app-dynamic-label>
+            [name]="'errorPhoneExt'"
+            [message]="validator.errors['phone_ext']"
+            tabindex="validator.errors['phone_ext'] ? 0 : -1"></app-dynamic-label>
         </div>
       </div>
       <div *ngIf="profileId == null">
         <div class="form-group">
           <div class="input-group form-check" *ngIf="!closeButton">
-            <label class="form-check-label" for="casl" style="margin-right: 10px;">
+            <label class="form-check-label" for="casl" style="margin-right:
+              10px;">
               <input
                 id="casl"
                 type="checkbox"
                 class="form-check-input"
-              />
-              <b>Please add me to your mailing list so I can receive information on promotions and updates to Find Dining!</b>
+                />
+              <b>Please add me to your mailing list so I can receive information
+                on promotions and updates to Find Dining!</b>
             </label>
           </div>
         </div>
         <div class="form-group">
           <div class="input-group form-check">
-            <label class="form-check-label" for="terms-of-service" style="margin-right: 10px;">
+            <label class="form-check-label" for="terms-of-service"
+              style="margin-right: 10px;">
               <input
                 id="terms-of-service"
                 type="checkbox"
                 formControlName="terms"
                 aria-required="true"
                 class="form-check-input"
-              />
-              I agree to Find Dining <a href="/terms-of-service" target="_blank">Terms of Service</a>
+                />
+              I agree to Find Dining <a href="/terms-of-service"
+                target="_blank">Terms of Service</a>
             </label>
           </div>
         </div>
@@ -147,13 +150,13 @@
         <ngx-recaptcha2
           #captchaElem
           [siteKey]="siteKey"
-          formControlName="recaptcha"
-        ></ngx-recaptcha2>
+          formControlName="recaptcha"></ngx-recaptcha2>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn" (click)="updateProfile()" [disabled]="!aFormGroup.valid">
+    <button type="button" class="btn" (click)="updateProfile()"
+      [disabled]="!aFormGroup.valid">
       Save Profile
     </button>
   </div>

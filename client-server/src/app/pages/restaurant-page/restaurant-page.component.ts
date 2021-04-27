@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { Location } from '@angular/common'
 import {
   faMapMarkerAlt,
   faPhone,
   faEdit,
   faShippingFast,
   faShareAlt,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faArrowCircleLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { faHeart, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faTwitter, faInstagram, faFacebookF } from '@fortawesome/free-brands-svg-icons';
@@ -91,6 +93,7 @@ export class RestaurantPageComponent implements OnInit {
   faEdit = faEdit;
   faShippingFast = faShippingFast;
   faExternalLinkAlt = faExternalLinkAlt;
+  faArrowCircleLeft = faArrowCircleLeft;
 
   slides = [];
   dark = "dark";
@@ -108,6 +111,7 @@ export class RestaurantPageComponent implements OnInit {
     private route: ActivatedRoute,
     private mediaService: MediaService,
     private userService: UserService,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -211,13 +215,8 @@ export class RestaurantPageComponent implements OnInit {
 
     this.getPendingOrApprovedDishes(this.restaurantId).subscribe((data) => {
       this.restaurantMenu = data.Dishes;
-      for (let dish of data.Dishes) {
+      for (let dish of this.restaurantMenu) {
         dish.type = 'dish';
-        if (dish.category == "Popular Dish") {
-          this.popularDish.push(dish)
-        } else if (dish.category == "Special") {
-          this.specialDish.push(dish);
-        }
       }
     }, (error) => {
       this.error = true;
@@ -232,6 +231,12 @@ export class RestaurantPageComponent implements OnInit {
       this.apiLoaded = true;
     }
 
+  }
+
+  gotoRestaurant() {
+    this.router.navigate(['/all-listings'], { queryParams: {GEO_location: this.restaurantDetails.GEO_location} }).then(() => {
+      this.reload();
+    })
   }
 
   /**
@@ -290,6 +295,15 @@ export class RestaurantPageComponent implements OnInit {
    */
   editMenu() {
     this.router.navigate(['/menu-edit']);
+  }
+
+  /**
+   * Redirects to the previous page
+   */
+  goBack() {
+    this.location.back();
+    this.reload();
+    //this.router.navigate(['/all-listings']);
   }
 
   openExternalMenu() {
@@ -362,6 +376,8 @@ export class RestaurantPageComponent implements OnInit {
 
     this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'cover_photo_url', 'False').subscribe((data) => {
       this.reload();
+    }, (error) => {
+      alert(error.error.detail);
     })
     this.modalRef.close();
   }
@@ -418,6 +434,8 @@ export class RestaurantPageComponent implements OnInit {
             alert("Changes to restaurant are now saved as draft");
             this.reload();
           });
+        }, (error) => {
+          alert(error.error.detail);
         });
       } else {
         alert("Please ensure all fields are entered in correctly");
@@ -438,6 +456,8 @@ export class RestaurantPageComponent implements OnInit {
             this.modalRef.close();
             alert("Changes to restaurant are now saved as draft");
             this.reload();
+          }, (error) => {
+            alert(error.error.detail);
           });
         });
       } else {
@@ -457,11 +477,15 @@ export class RestaurantPageComponent implements OnInit {
       }
       this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'restaurant_image_url', 'False').subscribe((data) => {
         this.reload();
+      }, (error) => {
+        alert(error.error.detail);
       });
     } else if (this.addOrRemove == 'Delete from existing images') {
       formData.append('restaurant_images', JSON.stringify(this.imageUrlsToDelete));
       this.mediaService.deleteRestaurantMedia(formData).subscribe(() => {
         this.reload();
+      }, (error) => {
+        alert(error.error.detail);
       });
     }
     this.modalRef.close();
@@ -538,20 +562,19 @@ export class RestaurantPageComponent implements OnInit {
     // }
   }
 
+
   /**
    * Performs action to retrieve the 5 or less nearest restaurants
    */
   getNearbyRestaurants() {
     this.userService.getNearbyRestaurants().subscribe((restaurants) => {
-      for (let restaurant of restaurants) {
-        this.restaurantService.getApprovedRestaurant(restaurant.restaurant).subscribe((data) => {
-          let price = this.getPricepoint(String(data.pricepoint));
-          this.nearbyRestaurants.push({
-            name: data.name,
-            cuisinePrice: data.cuisines[0] + " - " + price,
-            imgUrl: data.logo_url,
-            _id: restaurant.restaurant
-          });
+      for (let entry of restaurants) {
+        let restaurant = entry.restaurant
+        this.nearbyRestaurants.push({
+          name: restaurant.name,
+          cuisinePrice: restaurant.cuisines[0] + " - " + restaurant.pricepoint,
+          imgUrl: restaurant.logo_url,
+          _id: restaurant._id
         })
       }
     });

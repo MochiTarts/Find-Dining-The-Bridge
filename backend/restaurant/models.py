@@ -16,6 +16,7 @@ from utils.validators import (
     validate_postal_code,
     validate_profane_content
 )
+from utils.geo_controller import geocode
 from restaurant.cuisine_dict import load_dict
 from restaurant.utils import send_posts_notify_email
 from restaurant.fields import StringListField, CustomListField
@@ -85,6 +86,14 @@ restaurant_editable = [
     "restaurant_video_desc",
     "phone_ext"]
 
+allowed_image_types = (
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif')
+
+allowed_video_types = ('video/mp4')
+
 User = get_user_model()
 
 
@@ -111,14 +120,28 @@ class Food(models.Model):
 
     @classmethod
     def get_by_restaurant(cls, rest_id):
-        """ Retrieves Restaurant record by its id,
-        given by rest_id param
+        """ Retrieves all the Food records a
+        Restaurant (given its id by rest_id) is
+        associated with
 
         :param rest_id: id of restaurant
         :type rest_id: ObjectId string
-        :return: restaurant data in json
-        :rtype: json
+        :raises: ObjectDoesNotExist if the Restaurant of rest_id does not exist
+        :raises: MultipleObjectsReturned if there are several records of the given rest_id
+        :return: list of Food objects the Restaurant of rest_id
+                is associated with
+        :rtype: list
         """
+        rest_filter = Restaurant.objects.filter(_id=rest_id)
+        if not rest_filter.exists():
+            raise ObjectDoesNotExist(
+                "The Restaurant with _id: " +
+                rest_id +
+                " does not exist")
+        if rest_filter.count() > 1:
+            raise MultipleObjectsReturned(
+                "There are more than one Restaurant with _id: " + rest_id)
+
         return list(Food.objects.filter(restaurant_id=rest_id))
 
 
@@ -400,6 +423,13 @@ class PendingFood(models.Model):
         save_location = form_data.get('save_location')
         media_file = form_file['media_file']
 
+        if media_type != MediaType.IMAGE.name:
+            raise ValidationError(
+                "Disallowed media_type for dish image upload", code='invalid_input')
+        if media_file.content_type not in allowed_image_types:
+            raise ValidationError(
+                "Mime type not allowed for image upload", code='invalid_mime_type')
+
         file_path = upload(media_file, IMAGE)
 
         approved_dish = Food.objects.filter(_id=dish._id).first()
@@ -617,13 +647,16 @@ class PendingRestaurant(models.Model):
         :type restaurant_data: json
         :raises: IntegrityError if the pending restaurant
             already exists in the database
-        :return: restaurant object representing sent data
+        :return: newly created restaurant object
         :rtype: :class:`PendingRestaurant` object
         """
         if cls.objects.filter(email=restaurant_data['email']).exists():
             raise IntegrityError(
                 'Cannot insert pending restaurant object, an object with this email already exists')
-        if 'years' in restaurant_data and restaurant_data['years'] == 0:
+        if 'years' in restaurant_data:
+            if restaurant_data['years'] == 0:
+                restaurant_data['years'] = 1
+        else:
             restaurant_data['years'] = 1
         restaurant = cls(
             **restaurant_data
@@ -656,6 +689,24 @@ class PendingRestaurant(models.Model):
         return restaurant
 
     @classmethod
+    def get_by_owner(cls, owner_user_id):
+        """ Retrieves restaurant by its owner
+
+        :param owner_user_id: user_id of the owner
+        :type owner_user_id: int
+        :raises ObjectDoesNotExist: if restaurant owned by user
+            does not exist
+        :return: PendingRestaurant record owned by user
+        :rtype: :class: `PendingRestaurant`
+        """
+        restaurant = PendingRestaurant.objects.filter(
+            owner_user_id=owner_user_id).first()
+        if not restaurant:
+            raise ObjectDoesNotExist(
+                'No pending restaurant found with owner user id of this: ' + str(owner_user_id))
+        return restaurant
+
+    @classmethod
     def edit_draft(cls, user_id, body):
         """ Edits the PendingRestaurant owned by the user
         of the given user_id and marks the status as 'In_Progress',
@@ -677,7 +728,10 @@ class PendingRestaurant(models.Model):
             raise ObjectDoesNotExist(
                 'restaurant with owner user id ' + str(user_id) + ' does not exist')
 
-        if 'years' in body and body['years'] == 0:
+        if 'years' in body:
+            if body['years'] == 0:
+                body['years'] = 1
+        else:
             body['years'] = 1
         body["status"] = Status.In_Progress.value
         body["modified_time"] = timezone.now()
@@ -753,16 +807,23 @@ class PendingRestaurant(models.Model):
         if 'name' in fields and not fields['name']:
             invalid['Invalid'].append('name')
 
-        if 'address' in fields and not fields['address']:
-            invalid['Invalid'].append('address')
-
-        if 'postalCode' in fields:
-            try:
-                validate_postal_code(fields['postalCode'])
-                if not fields['postalCode']:
-                    invalid['Invalid'].append('postalCode')
-            except ValidationError:
+        if 'address' in fields and 'postalCode' in fields:
+            if not fields['address']:
+                invalid['Invalid'].append('address')
+            if not fields['postalCode']:
                 invalid['Invalid'].append('postalCode')
+            else:
+                try:
+                    validate_postal_code(fields['postalCode'])
+                    geocode(fields['postalCode'])
+                except ValidationError:
+                    invalid['Invalid'].append('postalCode')
+                else:
+                    try:
+                        address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                        geocode(address)
+                    except ValidationError:
+                        invalid['Invalid'].extend(['address', 'postalCode'])
 
         if 'email' in fields:
             try:
@@ -824,16 +885,23 @@ class PendingRestaurant(models.Model):
             else:
                 invalid['Invalid'].append('years')
 
-        if 'address' in fields and not fields['address']:
-            invalid['Invalid'].append('address')
-
-        if 'postalCode' in fields:
-            try:
-                validate_postal_code(fields['postalCode'])
-                if not fields['postalCode']:
-                    invalid['Invalid'].append('postalCode')
-            except ValidationError:
+        if 'address' in fields and 'postalCode' in fields:
+            if not fields['address']:
+                invalid['Invalid'].append('address')
+            if not fields['postalCode']:
                 invalid['Invalid'].append('postalCode')
+            else:
+                try:
+                    validate_postal_code(fields['postalCode'])
+                    geocode(fields['postalCode'])
+                except ValidationError:
+                    invalid['Invalid'].append('postalCode')
+                else:
+                    try:
+                        address = fields['address'] + ', ' + fields['postalCode'] + ', ' + 'Ontario'
+                        geocode(address)
+                    except ValidationError:
+                        invalid['Invalid'].extend(['address', 'postalCode'])
 
         if 'phone' in fields:
             if fields['phone'] is not None:
@@ -961,10 +1029,19 @@ class PendingRestaurant(models.Model):
                     file_path.remove('/')
 
                 for image in media_files_list:
+                    if image.content_type not in allowed_image_types:
+                        raise ValidationError(
+                            "Mime type not allowed for image upload",
+                            code='invalid_mime_type')
                     file_path.append(upload(image, IMAGE))
+
                 file_path = json.dumps(file_path)
             else:
                 media_file = form_file['media_file']
+                if media_file.content_type not in allowed_image_types:
+                    raise ValidationError(
+                        "Mime type not allowed for image upload",
+                        code='invalid_mime_type')
                 file_path = upload(media_file, IMAGE)
         else:
             if save_location != 'restaurant_video_url':
@@ -981,6 +1058,10 @@ class PendingRestaurant(models.Model):
                 file_path = media_link
             else:
                 media_file = form_file['media_file']
+                if media_file.content_type not in allowed_video_types:
+                    raise ValidationError(
+                        "Mime type not allowed for video upload",
+                        code='invalid_mime_type')
                 file_path = upload(media_file, VIDEO)
 
         approved_restaurant = Restaurant.objects.filter(
@@ -1071,7 +1152,7 @@ class UserFavRestrs(models.Model):
         if not restaurant_filter.filter(_id=rest_id).exists():
             raise ObjectDoesNotExist(
                 'The restaurant associated with id ' +
-                restaurant_id +
+                rest_id +
                 ' does not exist')
         if restaurant_filter.count() > 1:
             raise MultipleObjectsReturned(

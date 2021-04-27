@@ -1,6 +1,6 @@
 <p>Hello {{ user.username }},</p>
 <p>Your account for Find Dining has been promoted to have administrative access by a system administrator.</p>
-<p>No action is required. You may now <a href="{{ protocal }}://{{ domain }}/api/admin">log in</a> to the administrative panel using the account registered with this email.</p>
+<p>No action is required. You may now <a href="{{ protocal }}://{{ domain }}{% url 'admin:index' %}">log in</a> to the administrative panel using the account registered with this email.</p>
 
 <p>Thanks,</p>
 <p>Your Find Dining team</p>

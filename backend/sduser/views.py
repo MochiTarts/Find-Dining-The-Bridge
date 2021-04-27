@@ -17,7 +17,7 @@ from utils.math import get_nearby_restaurants
 from sduser import swagger
 from sduser.utils import send_email_password_reset, send_email_deactivate, send_email_verification
 from sduser.forms import SDPasswordChangeForm
-from sduser.backends import construct_token_response_for_user
+from sduser.backends import construct_token_response_for_user, check_user_status
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -53,11 +53,7 @@ class DeactivateView(APIView):
         refresh_token = request.COOKIES.get('refresh_token')
         user_id = request.data.get('id')
         current_user = request.user
-
-        if not current_user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="deactivation_fail")
-
+        check_user_status(current_user)
         if current_user.id is not user_id:
             return JsonResponse({'message': 'deactivation failed: user mismatch!', 'code': 'deactivation_fail'}, status=400)
 
@@ -76,16 +72,14 @@ class DeactivateView(APIView):
             return JsonResponse({'message': ' There is an error sending the notification email. However, this user account has been successfully deactivated. No further action is required.', 'code': 'fail_to_send_email'}, status=503)
 
 
-class editView(APIView):
+class SDUserEditView(APIView):
     """ Edit user """
 
     @swagger_auto_schema(operation_id="PUT /user/edit/")
     def put(self, request):
         body = request.data
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="fail_obtain_user")
+        check_user_status(user)
 
         for field in body:
             setattr(user, field, body[field])
@@ -93,23 +87,29 @@ class editView(APIView):
         return JsonResponse(model_to_dict(user))
 
 
+class SDUserLogoutView(APIView):
+    """ logout user by removing the refresh token in the cookie """
+    #permission_classes = (AllowAny,)
+
+    @swagger_auto_schema(operation_id="PPST /user/logout/")
+    def post(self, request):
+        res = JsonResponse({})
+        res.delete_cookie('refresh_token')
+        return res
+
+
 class NearbyRestaurantsView(APIView):
     """ Get nearby restaurants from a restaurant owner """
-    permission_classes = (AllowAny,)
 
     @swagger_auto_schema(responses=swagger.user_nearby_get_response,
                          operation_id="GET /user/nearby/")
     def get(self, request):
         """ Retrieves the 5 (or less) nearest restaurants from an sduser """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user", code="fail_obtain_user")
-
+        check_user_status(user)
         user_id = user.id
         role = user.role
         nearest = get_nearby_restaurants(user_id, role)
-
         return JsonResponse(nearest, safe=False)
 
 
@@ -147,6 +147,7 @@ class SDUserChangePasswordView(APIView):
         new_password2 = passwords.get('new_password2')
 
         user = request.user
+        check_user_status(user)
 
         # if not user.check_password(old_password):
 
@@ -175,7 +176,8 @@ class SDUserResentVerificationEmailView(APIView):
             user = User.objects.get(email=email)
 
             if user.is_blocked:
-                raise PermissionDenied
+                raise PermissionDenied(
+                    message="This user has been blocked", code="user_blocked")
             # resent verification email for unverified user
             if not user.is_active:
                 send_email_verification(user, request)

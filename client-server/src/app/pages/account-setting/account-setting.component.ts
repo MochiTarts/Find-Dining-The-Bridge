@@ -67,18 +67,18 @@ export class AccountSettingComponent implements OnInit {
     this.userService.deactivateUser(user.user_id).subscribe(data => {
       this.modalRef.close();
       this.reload();
-      this.tokenStorage.signOut();
-      this.authService.updateLoginStatus(false);
-      this.router.navigate(['']);
+      this.authService.logout().subscribe(data => {
+        this.router.navigate(['']);
+      });
     }, err => {
       alert(err.error.message);
       // fail to send email but account is successfully deactivated
       if (err.error.code == 'fail_to_send_email'){
         this.modalRef.close();
         this.reload();
-        this.tokenStorage.signOut();
-        this.authService.updateLoginStatus(false);
-        this.router.navigate(['']);
+        this.authService.logout().subscribe(data => {
+          this.router.navigate(['']);
+        });
       }
       // console.log(err);
     });

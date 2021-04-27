@@ -9,6 +9,8 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from sduser.backends import check_user_status
+from restaurant import schemas
 from restaurant.forms import RestaurantMediaForm, RestaurantImageDeleteForm, FoodMediaForm
 from restaurant.enum import Status, MediaType, RestaurantSaveLocations, FoodSaveLocations
 from restaurant.models import (
@@ -19,7 +21,7 @@ from restaurant.models import (
     UserFavRestrs,
     RestaurantPost
 )
-from google.analytics import get_access_token, get_analytics_data
+from google.analytics import get_analytics_data
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
 
@@ -33,196 +35,6 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from rest_framework.decorators import parser_classes
 from restaurant import swagger
-
-# jsonschema validation schemas for request bodies
-food_insert_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "description": {"type": "string"},
-        "picture": {"type": "string"},
-        "price": {"type": ["string", "number"]},
-        "specials": {"type": "string"},
-        "category": {"type": "string"}
-    },
-    "required": ["name", "description", "price", "specials", "category"],
-    "additionalProperties": False
-}
-
-food_edit_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "description": {"type": "string"},
-        "picture": {"type": "string"},
-        "price": {"type": ["string", "number"]},
-        "specials": {"type": "string"},
-        "category": {"type": "string"}
-    },
-    "additionalProperties": False
-}
-
-restaurant_insert_for_approval_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "years": {"type": "number"},
-        "address": {"type": "string"},
-        "streetAddress2": {"type": "string"},
-        "streetAddress3": {"type": "string"},
-        "postalCode": {"type": "string"},
-
-        "phone": {"type": "number"},
-        "email": {"type": "string"},
-        "cuisines": {"type": "array"},
-        "pricepoint": {"type": "string"},
-
-        "offer_options": {"type": "array"},
-
-        "dineinPickupDetails": {"type": "string"},
-        "deliveryDetails": {"type": "string"},
-        "locationNotes": {"type": "string"},
-
-        "web_url": {"type": "string"},
-        "facebook": {"type": "string"},
-        "twitter": {"type": "string"},
-        "instagram": {"type": "string"},
-        "bio": {"type": "string"},
-        "GEO_location": {"type": "string"},
-        "cover_photo_url": {"type": "string"},
-        "logo_url": {"type": "string"},
-        "restaurant_video_url": {"type": "string"},
-        "restaurant_image_url": {"type": "string"},
-
-        "owner_first_name": {"type": "array"},
-        "owner_last_name": {"type": "array"},
-        "owner_preferred_name": {"type": "array"},
-
-        "sysAdminComments": {"type": "string"},
-        "categories": {"type": "array"},
-        "status": {"type": "string"},
-
-        "open_hours": {"type": "string"},
-        "payment_methods": {"type": "array"},
-
-        "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"},
-        "phone_ext": {"type": "number"}
-    },
-    "required": ["name", "years", "address", "postalCode", "phone", "email", "pricepoint", "offer_options",
-                 "bio", "owner_first_name", "owner_last_name", "open_hours", "payment_methods"],
-    "additionalProperties": False
-}
-
-restaurant_insert_draft_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "years": {"type": "number"},
-        "address": {"type": "string"},
-        "streetAddress2": {"type": "string"},
-        "streetAddress3": {"type": "string"},
-        "postalCode": {"type": "string"},
-
-        "phone": {"type": "number"},
-        "email": {"type": "string"},
-        "cuisines": {"type": "array"},
-        "pricepoint": {"type": "string"},
-
-        "offer_options": {"type": "array"},
-
-        "dineinPickupDetails": {"type": "string"},
-        "deliveryDetails": {"type": "string"},
-        "locationNotes": {"type": "string"},
-
-        "web_url": {"type": "string"},
-        "facebook": {"type": "string"},
-        "twitter": {"type": "string"},
-        "instagram": {"type": "string"},
-        "bio": {"type": "string"},
-        "cover_photo_url": {"type": "string"},
-        "logo_url": {"type": "string"},
-        "restaurant_video_url": {"type": "string"},
-        "restaurant_image_url": {"type": "string"},
-
-        "owner_first_name": {"type": "array"},
-        "owner_last_name": {"type": "array"},
-        "owner_preferred_name": {"type": "array"},
-
-        "sysAdminComments": {"type": "string"},
-        "categories": {"type": "array"},
-        "status": {"type": "string"},
-
-        "open_hours": {"type": "string"},
-        "payment_methods": {"type": "array"},
-
-        "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"},
-        "phone_ext": {"type": "number"}
-    },
-    "required": ["name", "address", "postalCode", "email", "owner_first_name", "owner_last_name"],
-    "additionalProperties": False
-}
-
-restaurant_edit_draft_schema = {
-    "properties": {
-        "name": {"type": "string"},
-        "years": {"type": "number"},
-        "address": {"type": "string"},
-        "streetAddress2": {"type": "string"},
-        "streetAddress3": {"type": "string"},
-        "postalCode": {"type": "string"},
-
-        "phone": {"type": "number"},
-        "email": {"type": "string"},
-        "cuisines": {"type": "array"},
-        "pricepoint": {"type": "string"},
-
-        "offer_options": {"type": "array"},
-
-        "dineinPickupDetails": {"type": "string"},
-        "deliveryDetails": {"type": "string"},
-        "locationNotes": {"type": "string"},
-
-        "web_url": {"type": "string"},
-        "facebook": {"type": "string"},
-        "twitter": {"type": "string"},
-        "instagram": {"type": "string"},
-        "bio": {"type": "string"},
-        "cover_photo_url": {"type": "string"},
-        "logo_url": {"type": "string"},
-        "restaurant_video_url": {"type": "string"},
-        "restaurant_image_url": {"type": "string"},
-
-        "owner_first_name": {"type": "array"},
-        "owner_last_name": {"type": "array"},
-        "owner_preferred_name": {"type": "array"},
-
-        "sysAdminComments": {"type": "string"},
-        "categories": {"type": "array"},
-        "status": {"type": "string"},
-
-        "open_hours": {"type": "string"},
-        "payment_methods": {"type": "array"},
-
-        "full_menu_url": {"type": "string"},
-        "restaurant_video_desc": {"type": "string"},
-        "phone_ext": {"type": "number"}
-    },
-    "required": ["name", "address", "postalCode", "owner_first_name", "owner_last_name"],
-    "additionalProperties": False
-}
-
-user_fav_schema = {
-    "properties": {
-        "restaurant": {"type": "string"}
-    },
-    "required": ["restaurant"],
-    "additionalProperties": False
-}
-
-post_schema = {
-    'properties': {
-        'restaurant_id': {'type': 'string'},
-        'content': {'type': 'string'}
-    }
-}
 
 
 class DishList(APIView):
@@ -253,27 +65,17 @@ class DishRestaurantView(APIView):
 
 class PendingDishView(APIView):
     """ pending dish view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(responses=swagger.dish_pending_get_response,
                          operation_id="GET /dish/pending/")
     def get(self, request):
-        """ Retrieve all dishes from a restaurant """
+        """ Retrieve all dishes from restaurant owned by user """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
         rest_id = restaurant._id
         dishes = PendingFood.get_by_restaurant(rest_id)
         response = {'Dishes': models_to_json(dishes)}
@@ -285,23 +87,14 @@ class PendingDishView(APIView):
     def post(self, request):
         """ Insert dish into database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                detail="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        validate(instance=request.data, schema=food_insert_schema)
+        validate(instance=request.data, schema=schemas.food_insert_edit_schema)
         body = request.data
         PendingFood.field_validate(body)
 
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         rest_id = restaurant._id
         food = PendingFood.add_dish(body, rest_id)
@@ -310,34 +103,25 @@ class PendingDishView(APIView):
 
 class PendingDishModifyDeleteView(APIView):
     """ PendingDish view for updating or deleting """
+    permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.PendingFoodInsertUpdate,
                          responses=swagger.dish_pending_dish_id_put_response,
                          operation_id="PUT /dish/pending/{dish_id}/")
     def put(self, request, dish_id):
-        """ Update Dish data """
+        """ Updates dish data """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data,
-                 schema=food_edit_schema)
+                 schema=schemas.food_insert_edit_schema)
         body = request.data
         PendingFood.field_validate(body)
 
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
-        rest_id = restaurant._id
-        dish = PendingFood.edit_dish(dish_id, body, rest_id)
+        dish = PendingFood.edit_dish(dish_id, body, restaurant._id)
         return JsonResponse(model_to_json(dish))
 
     @swagger_auto_schema(responses=swagger.dish_pending_dish_id_delete_response,
@@ -345,50 +129,18 @@ class PendingDishModifyDeleteView(APIView):
     def delete(self, request, dish_id):
         """ Deletes dish from database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "The restaurant with owner_user_id: " +
-                str(user_id) +
-                " does not exist")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
         deleted_dish = PendingFood.remove_dish(dish_id, restaurant._id)
         return JsonResponse(model_to_json(deleted_dish))
-
-
-def remove_category(category, restaurant):
-    """
-    remove category from restaurant
-    :param category: food category
-    :param restaurant: restaurant document
-    """
-    restaurant.categories.remove(category)
-    restaurant.save(update_fields=['categories'])
-
-
-def category_exists(restaurant_id, category):
-    """
-    check if restaurant still covers category 'category'
-    :param restaurant:referenced restaurant
-    :param category: category
-    :return:boolean
-    """
-    return PendingFood.objects.filter(
-        restaurant_id=restaurant_id,
-        category=category).exists()
 
 
 # get_user_favs_page
 # add_user_fav_page
 class UserFavView(APIView):
     """ user fav view """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(request_body=swagger.UserFavRest,
                          responses=swagger.user_favourite_post_response,
@@ -396,13 +148,10 @@ class UserFavView(APIView):
     def post(self, request):
         """ Add a new user-restaurant-favourite relation """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        validate(instance=request.data, schema=user_fav_schema)
+        validate(instance=request.data, schema=schemas.user_fav_schema)
         body = request.data
         body['user_id'] = user_id
         rest_id = body['restaurant']
@@ -415,10 +164,7 @@ class UserFavView(APIView):
     def get(self, request):
         """ Get all restaurants favourited by a user """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         response = UserFavRestrs.getUserFavourites(user_id)
@@ -427,7 +173,6 @@ class UserFavView(APIView):
 
 class UserFavRestaurantView(APIView):
     """ user fav restaurants view """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(
         responses=swagger.restaurant_rest_id_favourited_users_get_response,
@@ -440,7 +185,6 @@ class UserFavRestaurantView(APIView):
 
 class FavRelationView(APIView):
     """ remove fav relation view """
-    #permission_classes = (AllowAny,)
 
     @swagger_auto_schema(
         responses=swagger.user_favourited_rest_id_delete_response,
@@ -448,10 +192,7 @@ class FavRelationView(APIView):
     def delete(self, request, rest_id):
         """ Remove a new user-restaurant-favourite relation """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         body = {'user_id': user_id, 'restaurant_id': rest_id}
@@ -491,17 +232,10 @@ class PendingRestaurantView(APIView):
     def get(self, request):
         """ Retrieve restaurant from pending collection by the owner's user_id """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise ObjectDoesNotExist(
-                'No pending restaurant found with owner user id of this: ' + str(user_id))
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         restaurant_image_url = ast.literal_eval(
             restaurant.restaurant_image_url)
@@ -537,7 +271,6 @@ class AllRestaurantList(APIView):
 
 class RestaurantDraftView(APIView):
     """ insert restaurant draft view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.PendingRestaurantDraftInsertUpdate,
@@ -546,13 +279,10 @@ class RestaurantDraftView(APIView):
     def post(self, request):
         """ Insert new restaurant as a draft into database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         validate(instance=request.data,
-                 schema=restaurant_insert_draft_schema)
+                 schema=schemas.restaurant_insert_draft_schema)
         body = request.data
         PendingRestaurant.field_validate_draft(body)
         restaurant = PendingRestaurant.insert(body)
@@ -564,14 +294,11 @@ class RestaurantDraftView(APIView):
     def put(self, request):
         """ Edit a restaurant profile and save it as a draft in the database """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data,
-                 schema=restaurant_edit_draft_schema)
+                 schema=schemas.restaurant_edit_draft_schema)
         body = request.data
         PendingRestaurant.field_validate_draft(body)
         restaurant = PendingRestaurant.edit_draft(user_id, body)
@@ -580,7 +307,6 @@ class RestaurantDraftView(APIView):
 
 class RestaurantForApprovalView(APIView):
     """ inser restaurant for approval view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.PendingRestaurantSubmit,
@@ -589,14 +315,11 @@ class RestaurantForApprovalView(APIView):
     def put(self, request):
         """ Insert or update a restaurant record for admin approval """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         validate(instance=request.data,
-                 schema=restaurant_insert_for_approval_schema)
+                 schema=schemas.restaurant_insert_for_approval_schema)
         body = request.data
         PendingRestaurant.field_validate(body)
 
@@ -607,23 +330,6 @@ class RestaurantForApprovalView(APIView):
         else:
             restaurant = PendingRestaurant.edit_approval(user_id, body)
         return JsonResponse(model_to_json(restaurant))
-
-
-def category_is_changed(body):
-    """
-    check whether category was edited
-    :param body: request body for editing
-    :return: boolean
-    """
-    return 'category' in body
-
-
-class AnalyticsAccessTokenView(APIView):
-    """ analytics access token view """
-
-    def get(self, request):
-        """ Get OAuth2 access token for Google Analytics API to make call """
-        return JsonResponse({'token': get_access_token()})
 
 
 class RestaurantAnalyticsDataView(APIView):
@@ -658,7 +364,6 @@ class RestaurantsAnalyticsDataView(APIView):
 
 class PostView(APIView):
     """ Restaurant posts view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
 
     @swagger_auto_schema(request_body=swagger.RestaurantPostInsert,
@@ -667,13 +372,10 @@ class PostView(APIView):
     def post(self, request):
         """ Insert a new post for a restaurant """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        validate(instance=request.data, schema=post_schema)
+        validate(instance=request.data, schema=schemas.post_schema)
         body = request.data
         body['owner_user_id'] = user_id
         RestaurantPost.field_validate(body)
@@ -686,10 +388,8 @@ class PostView(APIView):
     def get(self, request):
         """ Get all posts for a restaurant (for ROs) """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
+
         user_id = user.id
         posts = RestaurantPost.get_by_user_id(user_id)
         return JsonResponse(posts)
@@ -704,10 +404,8 @@ class PostDeleteView(APIView):
     def delete(self, request, post_id):
         """ Deletes a single restaurant post """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
+
         post_deleted = RestaurantPost.remove_post(post_id)
         return JsonResponse({"Deleted post": model_to_json(post_deleted)})
 
@@ -727,7 +425,6 @@ class PublicPostView(APIView):
 
 class RestaurantMediaView(APIView):
     """ Restaurant media (image/video) view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
     parser_classes = (MultiPartParser,)
 
@@ -737,17 +434,10 @@ class RestaurantMediaView(APIView):
     def put(self, request):
         """ For inserting or updating restaurant media """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "Could not find restaurant owned by this user")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         form = RestaurantMediaForm(request.data, request.FILES)
         if not form.is_valid():
@@ -764,17 +454,10 @@ class RestaurantMediaView(APIView):
         """ For removing image(s) from the restaurant_image_url field
         and Google Cloud bucket """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
-        restaurant = PendingRestaurant.objects.filter(
-            owner_user_id=user_id).first()
-        if not restaurant:
-            raise IntegrityError(
-                "Could not find restaurant owned by this user")
+        restaurant = PendingRestaurant.get_by_owner(user_id)
 
         form = RestaurantImageDeleteForm(request.data, request.FILES)
         if not form.is_valid():
@@ -786,7 +469,6 @@ class RestaurantMediaView(APIView):
 
 class DishMediaView(APIView):
     """ Dish media (image) view """
-    #permission_classes = (AllowAny,)
     permission_classes = [ROPermission]
     parser_classes = (MultiPartParser,)
 
@@ -796,10 +478,7 @@ class DishMediaView(APIView):
     def put(self, request, dish_id):
         """ For inserting or updating restaurant media """
         user = request.user
-        if not user:
-            raise PermissionDenied(
-                message="Failed to obtain user",
-                code="fail_obtain_user")
+        check_user_status(user)
 
         user_id = user.id
         dish = PendingFood.objects.filter(_id=dish_id).first()

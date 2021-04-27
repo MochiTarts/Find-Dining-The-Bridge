@@ -424,6 +424,8 @@ export class RestaurantSetupComponent implements OnInit {
                   if (this.newImage) {
                     this.onSubmit(option).subscribe(() => {
                       this.newImage = false;
+                    }, (error) => {
+                      alert(error.error.detail);
                     })
                   }
                   this.tokenStorage.updateTokenAndUser(token.access);
@@ -439,6 +441,8 @@ export class RestaurantSetupComponent implements OnInit {
             if (this.newImage) {
               this.onSubmit(option).subscribe(() => {
                 this.newImage = false;
+              }, (error) => {
+                alert(error.error.detail);
               })
             }
             this.router.navigate(['/restaurant']).then(() => {
@@ -447,6 +451,10 @@ export class RestaurantSetupComponent implements OnInit {
             });
           }
 
+        }
+      }, (error) => {
+        if (formValidation.isInvalidResponse(error.error.detail)) {
+          formValidation.HandleInvalid(error.error.detail, (key) => this.validator.setError(key));
         }
       });
 

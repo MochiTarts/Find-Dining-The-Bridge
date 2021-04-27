@@ -133,7 +133,7 @@ def send_email_password_reset(user, request=None, site=None):
               recipient_list=[user.email], html_message=message, fail_silently=False)
 
 
-def get_domain_and_protocal(request, site, django_template=False):
+def get_domain_and_protocal(request, site=None, django_template=False):
     if site is not None:
         domain = site
     else:

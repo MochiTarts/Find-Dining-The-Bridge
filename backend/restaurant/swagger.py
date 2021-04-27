@@ -230,6 +230,7 @@ user_favourite_post_response = {
                     "owner_user_id": 8,
                     "payment_methods": "['Credit', 'Cash']",
                     "phone": 1231231234,
+                    "phone_ext": 1200,
                     "postalCode": "M1C 1A4",
                     "pricepoint": "EXHIGH",
                     "restaurant_image_url": "[\"/\"]",
@@ -307,6 +308,7 @@ user_favourite_get_response = {
                     "owner_user_id": 1,
                     "payment_methods": "['Credit', 'Debit', 'Cash']",
                     "phone": 1234567890,
+                    "phone_ext": 1200,
                     "postalCode": "A1A 1A1",
                     "pricepoint": "MID",
                     "restaurant_image_url": "[\"https://storage.googleapis.com/dev-scdining/FILE-kiuawtkbba-2021-03-29 19:34:08.553788.png\", \"https://storage.googleapis.com/dev-scdining/FILE-ntwwpkpvtk-2021-03-29 19:34:09.507364.png\", \"https://storage.googleapis.com/dev-scdining/FILE-koeriryyrd-2021-03-29 19:34:10.012326.png\"]",
@@ -318,7 +320,7 @@ user_favourite_get_response = {
                     "sysAdminComments": "",
                     "twitter": "",
                     "web_url": "",
-                    "years": 0
+                    "years": 1
                 }
             ]
         }
@@ -404,6 +406,7 @@ restaurant_approved_rest_id_get_response = {
                 "owner_user_id": 8,
                 "payment_methods": "['Credit', 'Cash']",
                 "phone": 1231231234,
+                "phone_ext": 1200,
                 "postalCode": "M1C 1A4",
                 "pricepoint": "EXHIGH",
                 "restaurant_image_url": "[\"/\"]",
@@ -457,6 +460,7 @@ restaurant_pending_get_response = {
                 "owner_user_id": 1,
                 "payment_methods": "['Credit', 'Debit', 'Cash']",
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "A1A 1A1",
                 "pricepoint": "MID",
                 "restaurant_image_url": "[\"https://storage.googleapis.com/dev-scdining/FILE-kiuawtkbba-2021-03-29 19:34:08.553788.png\", \"https://storage.googleapis.com/dev-scdining/FILE-ntwwpkpvtk-2021-03-29 19:34:09.507364.png\", \"https://storage.googleapis.com/dev-scdining/FILE-koeriryyrd-2021-03-29 19:34:10.012326.png\"]",
@@ -468,7 +472,7 @@ restaurant_pending_get_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -518,6 +522,7 @@ restaurant_all_get_response = {
                             "Cash"
                         ],
                         "phone": 1234567890,
+                        "phone_ext": 1200,
                         "postalCode": "A1A 1A1",
                         "pricepoint": "MID",
                         "restaurant_image_url": [
@@ -533,7 +538,7 @@ restaurant_all_get_response = {
                         "sysAdminComments": "",
                         "twitter": "",
                         "web_url": "",
-                        "years": 0
+                        "years": 1
                     },
                     {
                         "GEO_location": "{'lat': 43.7825084, 'lng': -79.1853174}",
@@ -578,6 +583,7 @@ restaurant_all_get_response = {
                             "Cash"
                         ],
                         "phone": 1231231234,
+                        "phone_ext": 1200,
                         "postalCode": "M1C 1A4",
                         "pricepoint": "EXHIGH",
                         "restaurant_image_url": [
@@ -636,6 +642,7 @@ restaurant_all_get_response = {
                             "Cash"
                         ],
                         "phone": 1231231234,
+                        "phone_ext": 1200,
                         "postalCode": "M1C 1A4",
                         "pricepoint": "EXHIGH",
                         "restaurant_image_url": [
@@ -667,6 +674,7 @@ class PendingRestaurantDraftInsertUpdate(serializers.Serializer):
     postalCode = serializers.CharField(max_length=7)
 
     phone = serializers.IntegerField(required=False)
+    phone_ext = serializers.IntegerField(required=False)
     email = serializers.EmailField()
     pricepoint = serializers.ChoiceField(
         required=False, choices=Prices.choices())
@@ -726,6 +734,7 @@ restaurant_draft_post_response = {
                 "owner_user_id": 1,
                 "payment_methods": "['']",
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "A1A 1A1",
                 "pricepoint": "",
                 "restaurant_image_url": "['']",
@@ -737,7 +746,7 @@ restaurant_draft_post_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -773,6 +782,7 @@ restaurant_draft_put_response = {
                 "owner_user_id": 1,
                 "payment_methods": "['']",
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "A1A 1A1",
                 "pricepoint": "",
                 "restaurant_image_url": "['']",
@@ -784,7 +794,7 @@ restaurant_draft_put_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "https://website.com",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -800,6 +810,7 @@ class PendingRestaurantSubmit(serializers.Serializer):
     postalCode = serializers.CharField(max_length=7)
 
     phone = serializers.IntegerField()
+    phone_ext = serializers.IntegerField(required=False)
     email = serializers.EmailField()
     pricepoint = serializers.ChoiceField(choices=Prices.choices())
     cuisines = serializers.ListField(required=False)
@@ -857,6 +868,7 @@ restaurant_submit_put_response = {
                 "owner_user_id": 1,
                 "payment_methods": "['Credit', 'Debit', 'Cash']",
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "A1A 1A1",
                 "pricepoint": "MID",
                 "restaurant_image_url": "['']",
@@ -868,7 +880,7 @@ restaurant_submit_put_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -988,6 +1000,7 @@ restaurant_media_put_response = {
                     "Cash"
                 ],
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "A1A 1A1",
                 "pricepoint": "MID",
                 "restaurant_image_url": [
@@ -1003,7 +1016,7 @@ restaurant_media_put_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )
@@ -1056,6 +1069,7 @@ restaurant_media_delete_response = {
                     "Cash"
                 ],
                 "phone": 1234567890,
+                "phone_ext": 1200,
                 "postalCode": "A1A 1A1",
                 "pricepoint": "MID",
                 "restaurant_image_url": [
@@ -1069,7 +1083,7 @@ restaurant_media_delete_response = {
                 "sysAdminComments": "",
                 "twitter": "",
                 "web_url": "",
-                "years": 0
+                "years": 1
             }
         }
     )

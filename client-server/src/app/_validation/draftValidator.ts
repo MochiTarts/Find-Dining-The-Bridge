@@ -26,6 +26,10 @@ export class draftValidator extends formValidator {
       'owner_preferred_name': '',
       'open_hours': '',
       'payment_methods': '',
+      'web_url': '',
+      'facebook': '',
+      'twitter': '',
+      'instagram': '',
 
       // for profanity filter
       'name_p': '',
@@ -46,7 +50,7 @@ export class draftValidator extends formValidator {
 
   errors = {}
 
-  linkerror: string = "link does not exist.";
+  linkerror: string = "This link is invalid.";
   profaneError: string = "This field contains profane content.";
 
   errorStrings = {
@@ -71,6 +75,10 @@ export class draftValidator extends formValidator {
     'owner_preferred_name': "Owner Preferred Name cannot be empty.",
     'open_hours': 'Open Hours is required.',
     'payment_methods': 'Invalid Payment Method, please select at least one method.',
+    'web_url': this.linkerror,
+    'facebook': this.linkerror,
+    'twitter': this.linkerror,
+    'instagram': this.linkerror,
 
     // for profanity filter
     'name_p': this.profaneError,
