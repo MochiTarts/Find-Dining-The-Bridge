@@ -1031,18 +1031,23 @@ class PendingRestaurant(models.Model):
 
             if save_location == RestaurantSaveLocations.restaurant_image_url.name:
                 media_files_list = form_file.getlist('media_file')
+                image_captions_list = ast.literal_eval(form_data.get('image_captions'))
                 file_path = restaurant.restaurant_image_url
                 if '/' in file_path:
-                    file_path.remove('/')
+                    file_path.clear()
 
+                i = 0
                 for image in media_files_list:
                     if image.content_type not in allowed_image_types:
                         raise ValidationError(
                             "Mime type not allowed for image upload",
                             code='invalid_mime_type')
-                    file_path.append(upload(image, IMAGE))
-
-                #file_path = json.dumps(file_path)
+                    image_to_add = {
+                        'image': upload(image, IMAGE),
+                        'caption': image_captions_list[i]
+                    }
+                    file_path.append(image_to_add)
+                    i += 1
             else:
                 media_file = form_file['media_file']
                 if media_file.content_type not in allowed_image_types:
@@ -1104,11 +1109,12 @@ class PendingRestaurant(models.Model):
         restaurant_images = form_data.get('restaurant_images')
         file_path = []
         old_file_path = restaurant.restaurant_image_url
-        for image_url in old_file_path:
+        for image in old_file_path:
+            image_url = image['image']
             if image_url in restaurant_images:
                 delete(image_url)
             else:
-                file_path.append(image_url)
+                file_path.append(image)
 
         file_path = file_path if file_path else ['/']
         approved_restaurant = Restaurant.objects.filter(

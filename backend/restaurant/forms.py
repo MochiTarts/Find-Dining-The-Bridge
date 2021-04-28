@@ -48,6 +48,7 @@ class RestaurantMediaForm(forms.Form):
     save_location = forms.ChoiceField(
         choices=RestaurantSaveLocations.choices(), required=True)
     media_file = forms.FileField(required=False)
+    image_captions = forms.CharField(required=False)
     media_link = forms.CharField(required=False)
     submit_for_approval = forms.ChoiceField(
         choices=(('True', 'True'), ('False', 'False')))
