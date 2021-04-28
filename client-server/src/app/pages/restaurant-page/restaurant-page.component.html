@@ -99,15 +99,15 @@
           <div class="col-md-8">
             <p class="tab-info-left section_p">{{ restaurantDetails.bio }}</p>
             <div class="tab-info-left section_p" style="margin-top: 25px;">
-              <b>Restaurant Owners: </b><br />
+              <p><b>Restaurant Owners: </b></p>
               <div *ngFor="let owner of restaurantDetails.owner_first_name; let
                 i=index;">
-                <div>
+                <p>
                   {{ restaurantDetails.owner_first_name[i] + ' ' +
                   restaurantDetails.owner_last_name[i] }}
                   <span *ngIf="restaurantDetails.owner_preferred_name[i]">( {{
                     restaurantDetails.owner_preferred_name[i] }} )</span>
-                </div>
+                </p>
               </div>
             </div>
             <div *ngIf="restaurantDetails.owner_story &&
@@ -230,10 +230,10 @@
                 <p class="section_p" *ngIf="paymentList">Accepted {{ paymentList
                   }}</p>
               </div>
-              <div *ngIf="restaurantDetails.web_url">
+              <p *ngIf="restaurantDetails.web_url">
                 <a class="section_p web_url" href="{{ restaurantDetails.web_url
                   }}" target="_blank">{{ restaurantDetails.web_url }}</a>
-              </div>
+              </p>
             </div>
 
             <div class="row tab-info-left" style="margin-top: 10px;">

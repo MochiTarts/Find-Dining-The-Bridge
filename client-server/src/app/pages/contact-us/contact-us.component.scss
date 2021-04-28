@@ -5,16 +5,18 @@
   height: 100%;
   min-height: 500px;
   max-height: 700px;
-  background-image: url("/assets/images/landing_4.png");
+  background-image: url("/assets/images/landing_4_cropped.png");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   position: relative;
   overflow: hidden;
   @media screen and (max-width: 700px) {
     height: 100%;
   }
 }
+
+
 
 .form {
   background-color: white;
