@@ -179,8 +179,8 @@ post_schema = {
 image_captions_schema = {
     'properties': {
         'image': {'type': 'string'},
-        'captions': {'type': 'string'}
+        'caption': {'type': 'string'}
     },
-    'required': ['image', 'captions'],
+    'required': ['image', 'caption'],
     'additionalProperties': False
 }

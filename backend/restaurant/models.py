@@ -1140,11 +1140,11 @@ class PendingRestaurant(models.Model):
         :rtype: :class: `PendingRestaurant`
         """
         image = body['image']
-        captions = body['captions']
+        caption = body['caption']
         rest_images = restaurant.restaurant_image_url
         for img in rest_images:
             if image == img['image']:
-                img['captions'] = captions
+                img['caption'] = caption
         
         setattr(restaurant, 'restaurant_image_url', rest_images)
         approved_restaurant = Restaurant.objects.filter(
