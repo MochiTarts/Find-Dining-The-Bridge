@@ -1,11 +1,11 @@
-<div *ngIf="dish">
+<div *ngIf="dish" tabindex="0">
   <div class="card cardBox">
     <div *ngIf="dish.picture" class="img-container">
       <img
         src="{{ dish.picture }}"
         class="card-img-top"
         alt="{{ dish.name }}"
-        />
+      />
       <div class="overlay">
         <div class="text">{{ dish.description }}</div>
       </div>
@@ -15,7 +15,7 @@
         src="../../../assets/images/find_dining_logo.png"
         class="card-img-top"
         alt="{{ dish.name }}"
-        />
+      />
     </div>
     <div class="card-body">
       <div class="row">
@@ -28,7 +28,8 @@
           (click)="openDish(content)"
           (touchend)="openDish(content)"
           placement="top"
-          ngbTooltip="View Dish Details">
+          ngbTooltip="View Dish Details"
+        >
           View dish
         </button>
       </div>
@@ -42,7 +43,8 @@
         type="button"
         class="close"
         aria-label="Close"
-        (click)="modal.dismiss('Cross click')">
+        (click)="modal.dismiss('Cross click')"
+      >
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -50,8 +52,11 @@
       <div class="row" id="row-modal">
         <div *ngIf="dish.picture">
           <div class="col-md-4" id="col-img">
-            <img class="dish-img" src="{{ dish.picture }}" alt="{{ dish.name }}"
-              />
+            <img
+              class="dish-img"
+              src="{{ dish.picture }}"
+              alt="{{ dish.name }}"
+            />
           </div>
         </div>
         <div *ngIf="!dish.picture">
@@ -60,7 +65,7 @@
               class="dish-img"
               src="../../../assets/images/find_dining_logo.png"
               alt="{{ dish.name }}"
-              />
+            />
           </div>
         </div>
         <div class="col-md-8" id="col-body">

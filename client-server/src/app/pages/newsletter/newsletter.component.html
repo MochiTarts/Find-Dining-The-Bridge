@@ -1,21 +1,20 @@
-<div class="setting-page">
-    <h2>Subscribe/Unsubscribe to our notifications</h2>
+<div class="setting-page" tabindex="0">
+  <h2>Subscribe/Unsubscribe to our notifications</h2>
 
-    <p *ngIf="role && !subscribed">
-      You are unsubscribed.<br><br>
-      Click the button below to subscribe.<br>
-      <button class="btn btn-primary" (click)="subscribeNewsletter()">
-        Subscribe
-      </button>
-    </p>
+  <p *ngIf="role && !subscribed">
+    You are unsubscribed.<br><br>
+    Click the button below to subscribe.<br>
+    <button class="btn btn-primary" (click)="subscribeNewsletter()">
+      Subscribe
+    </button>
+  </p>
 
-    <p *ngIf="role && subscribed">
-      You are subscribed! You will receive emails regarding important updates about Find Dining or Restaurant promotions.<br><br>
-      Click the button below to unsubscribe.<br>
-      <button class="btn btn-primary" (click)="unsubscribeNewsletter()">
-        Unsubscribe
-      </button>
-    </p>
-
-
+  <p *ngIf="role && subscribed">
+    You are subscribed! You will receive emails regarding important updates
+    about Find Dining or Restaurant promotions.<br><br>
+    Click the button below to unsubscribe.<br>
+    <button class="btn btn-primary" (click)="unsubscribeNewsletter()">
+      Unsubscribe
+    </button>
+  </p>
 </div>
