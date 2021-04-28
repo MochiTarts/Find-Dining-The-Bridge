@@ -25,6 +25,14 @@ class RestaurantAdminForm(ModelForm):
                   'facebook', 'twitter', 'instagram', 'bio', 'GEO_location', 'cover_photo_url', 'logo_url',
                   'restaurant_image_url', 'open_hours', 'sysAdminComments', 'payment_methods', 'full_menu_url', )
         widgets = {
+            'owner_first_name': forms.TextInput(attrs={'size': 100}),
+            'owner_last_name': forms.TextInput(attrs={'size': 100}),
+            'owner_preferred_name': forms.TextInput(attrs={'size': 100}),
+            'categories': forms.TextInput(attrs={'size': 100}),
+            'cuisines': forms.TextInput(attrs={'size': 200}),
+            'offer_options': forms.TextInput(attrs={'size': 200}),
+            'restaurant_image_url': forms.TextInput(attrs={'size': 200}),
+            'locationNotes': forms.Textarea(attrs={'rows': 8, 'cols': 99}),
             'sysAdminComments': forms.Textarea(attrs={'rows': 8, 'cols': 99})
         }
 
