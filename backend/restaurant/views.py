@@ -445,6 +445,24 @@ class RestaurantMediaView(APIView):
         return JsonResponse(model_to_json(restaurant))
 
 
+class RestaurantMultiImageCaptions(APIView):
+    """ Restaurant view for modifying multi-image captions """
+    permission_classes = [ROPermission]
+
+    def put(self, request):
+        """ For updating existing image caption for a restaurant """
+        user = request.user
+        check_user_status(user)
+
+        user_id = user.id
+        body = request.data
+        validate(instance=body, schema=schemas.image_captions_schema)
+        restaurant = PendingRestaurant.get_by_owner(user_id)
+
+        restaurant = PendingRestaurant.update_image_captions(restaurant, body)
+        return JsonResponse(model_to_json(restaurant))
+
+
 class DishMediaView(APIView):
     """ Dish media (image) view """
     permission_classes = [ROPermission]

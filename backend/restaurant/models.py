@@ -1126,6 +1126,35 @@ class PendingRestaurant(models.Model):
 
         return save_and_clean(restaurant)
 
+    @classmethod
+    def update_image_captions(self, restaurant, body):
+        """[summary]
+
+        :param restaurant: the PendingRestaurant object to be updated
+        :type restaurant: :class: `PendingRestaurant`
+        :param body: the dict containing the image url and it's updated captions
+        :type body: :class: `dict`
+        :raises ObjectDoesNotExist: if the image url does not exist in the
+            restaurant's list of images
+        :return: the updated PendingRestaurant object
+        :rtype: :class: `PendingRestaurant`
+        """
+        image = body['image']
+        captions = body['captions']
+        rest_images = restaurant.restaurant_image_url
+        for img in rest_images:
+            if image == img['image']:
+                img['captions'] = captions
+        
+        setattr(restaurant, 'restaurant_image_url', rest_images)
+        approved_restaurant = Restaurant.objects.filter(
+            _id=restaurant._id).first()
+        if approved_restaurant:
+            setattr(approved_restaurant, 'restaurant_image_url', rest_images)
+            save_and_clean(approved_restaurant)
+
+        return save_and_clean(restaurant)
+
 
 class UserFavRestrs(models.Model):
     """ Model for displaying user-restaurant-favourite relation """

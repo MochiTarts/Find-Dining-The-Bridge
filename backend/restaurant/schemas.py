@@ -175,3 +175,12 @@ post_schema = {
         'content': {'type': 'string'}
     }
 }
+
+image_captions_schema = {
+    'properties': {
+        'image': {'type': 'string'},
+        'captions': {'type': 'string'}
+    },
+    'required': ['image', 'captions'],
+    'additionalProperties': False
+}
