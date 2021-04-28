@@ -14,6 +14,15 @@ export class RestaurantService {
 
   constructor(private http: HttpClient) { }
 
+  getAddressFromCoord(lat: string, lng: string): Observable<any> {
+    const endpoint = RO_ENDPOINT + '/reverse_geocode/';
+    var params = {
+      lat: lat,
+      lng: lng
+    };
+    return this.http.get(endpoint, {params: params});
+  }
+
   /**
    * Retrieves all restaurants that are approved
    * @returns List of all approved restaurants
