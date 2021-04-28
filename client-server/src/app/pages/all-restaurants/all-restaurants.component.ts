@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { ContentObserver } from '@angular/cdk/observers';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class AllRestaurantsComponent implements OnInit {
   cuisineFilterRestaurants: any[];
   serviceFilterRestaurants: any[];
   searchedRestaurants: any[];
+  locationRestaurants: any[];
 
   restaurants: any[] = [];
   dishes: any[];
@@ -97,6 +99,7 @@ export class AllRestaurantsComponent implements OnInit {
       if (this.location) {
         this.getGeoCode(this.location).subscribe((data) => {
           let selectedLocation = data["features"][0];
+          console.log(selectedLocation)
           selectedPostion = {
             coords: {
               longitude: selectedLocation.center[0],
@@ -106,14 +109,17 @@ export class AllRestaurantsComponent implements OnInit {
 
           this.addDistance(selectedPostion);
           this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
-          console.log(this.restaurants);
+          //console.log(this.restaurants);
           this.allRestaurants = this.restaurants;
           this.initializeRestaurants();
+          this.searchLocation();
 
           if (this.inputRestaurant) {
             this.searchRestaurants();
           }
         });
+      } else if (this.inputRestaurant) {
+        this.searchRestaurants();
       } else {
         navigator.geolocation.getCurrentPosition((position) => {
           selectedPostion = position;
@@ -150,6 +156,7 @@ export class AllRestaurantsComponent implements OnInit {
     this.cuisineFilterRestaurants = this.allRestaurants;
     this.serviceFilterRestaurants = this.allRestaurants;
     this.searchedRestaurants = this.allRestaurants;
+    this.locationRestaurants = this.allRestaurants;
   }
 
   /**
@@ -200,7 +207,8 @@ export class AllRestaurantsComponent implements OnInit {
       if (this.deliveryFilterRestaurants.includes(current)
         && this.cuisineFilterRestaurants.includes(current)
         && this.serviceFilterRestaurants.includes(current)
-        && this.searchedRestaurants.includes(current)) {
+        && this.searchedRestaurants.includes(current)
+        && this.locationRestaurants.includes(current)) {
         this.restaurants.push(current);
       }
     }
@@ -371,6 +379,27 @@ export class AllRestaurantsComponent implements OnInit {
         if (list[3] == true && query.price > 60) {
           this.dishes.push(query);
         }
+      }
+    }
+  }
+
+  searchLocation() {
+    if (!this.location) {
+      this.locationRestaurants = this.allRestaurants;
+    } else {
+      this.locationRestaurants = [];
+      for (let restaurant of this.allRestaurants) {
+        var coord = JSON.parse(restaurant.GEO_location.replace(/\'/g, '"'));
+        var lat = coord.lat;
+        var lng = coord.lng;
+        this.restaurantService.getAddressFromCoord(lat, lng).subscribe((data) => {
+          var address = data.address.toLowerCase();
+          this.location = this.location.toLowerCase();
+          if (address.includes(this.location)) {
+            this.locationRestaurants.push(restaurant);
+          }
+          this.updateRestarants();
+        });
       }
     }
   }
