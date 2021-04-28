@@ -24,6 +24,7 @@ from restaurant.models import (
 from google.analytics import get_analytics_data
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
+from utils.geo_controller import reverse_geocode
 
 from jsonschema import validate
 from bson import ObjectId
@@ -211,15 +212,7 @@ class RestaurantView(APIView):
     def get(self, request, rest_id):
         """ Retrieve approved restaurant by id """
         restaurant = Restaurant.get(rest_id)
-        restaurant_image_url = ast.literal_eval(
-            restaurant.restaurant_image_url)
-        offer_options = ast.literal_eval(restaurant.offer_options)
-        payment_methods = ast.literal_eval(restaurant.payment_methods)
-
         restaurant = model_to_json(restaurant)
-        restaurant['restaurant_image_url'] = restaurant_image_url
-        restaurant['offer_options'] = offer_options
-        restaurant['payment_methods'] = payment_methods
         return JsonResponse(restaurant)
 
 
@@ -237,15 +230,7 @@ class PendingRestaurantView(APIView):
         user_id = user.id
         restaurant = PendingRestaurant.get_by_owner(user_id)
 
-        restaurant_image_url = ast.literal_eval(
-            restaurant.restaurant_image_url)
-        offer_options = ast.literal_eval(restaurant.offer_options)
-        payment_methods = ast.literal_eval(restaurant.payment_methods)
-
         restaurant = model_to_json(restaurant)
-        restaurant['restaurant_image_url'] = restaurant_image_url
-        restaurant['offer_options'] = offer_options
-        restaurant['payment_methods'] = payment_methods
         return JsonResponse(restaurant)
 
 
@@ -258,13 +243,6 @@ class AllRestaurantList(APIView):
     def get(self, request):
         """ Retrieve all approved restaurants """
         restaurants = models_to_json(list(Restaurant.objects.all()))
-        for restaurant in restaurants:
-            restaurant['restaurant_image_url'] = ast.literal_eval(
-                restaurant['restaurant_image_url'])
-            restaurant['offer_options'] = ast.literal_eval(
-                restaurant['offer_options'])
-            restaurant['payment_methods'] = ast.literal_eval(
-                restaurant['payment_methods'])
         response = {'Restaurants': restaurants}
         return JsonResponse(response)
 
@@ -467,6 +445,27 @@ class RestaurantMediaView(APIView):
         return JsonResponse(model_to_json(restaurant))
 
 
+class RestaurantMultiImageCaptions(APIView):
+    """ Restaurant view for modifying multi-image captions """
+    permission_classes = [ROPermission]
+
+    @swagger_auto_schema(request_body=swagger.RestaurantMultiImageCaptionsInsert,
+        responses=swagger.restaurant_multi_image_captions_response,
+        operation_id='PUT /restaurant/image_captions/')
+    def put(self, request):
+        """ For updating existing image caption for a restaurant """
+        user = request.user
+        check_user_status(user)
+
+        user_id = user.id
+        body = request.data
+        validate(instance=body, schema=schemas.image_captions_schema)
+        restaurant = PendingRestaurant.get_by_owner(user_id)
+
+        restaurant = PendingRestaurant.update_image_captions(restaurant, body)
+        return JsonResponse(model_to_json(restaurant))
+
+
 class DishMediaView(APIView):
     """ Dish media (image) view """
     permission_classes = [ROPermission]
@@ -491,3 +490,15 @@ class DishMediaView(APIView):
 
         dish = PendingFood.upload_media(dish, request.data, request.FILES)
         return JsonResponse(model_to_json(dish))
+
+
+class ReverseGeocodeView(APIView):
+    """ Retrieve address from coordinates (of restaurant) """
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        """ For reverse geocoding the lat lng coordinates """
+        lat = request.GET['lat']
+        lng = request.GET['lng']
+        address = reverse_geocode((lat, lng))
+        return JsonResponse({'address': address})

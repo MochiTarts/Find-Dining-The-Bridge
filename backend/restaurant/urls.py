@@ -22,4 +22,6 @@ urlpatterns = [
     path('public/post/<str:rest_id>/', views.PublicPostView.as_view(),
          name='restaurant_public_post'),
     path('media/', views.RestaurantMediaView.as_view(), name='restaurant_media'),
+    path('image_captions/', views.RestaurantMultiImageCaptions.as_view(), name='restaurant_image_captions'),
+    path('reverse_geocode/', views.ReverseGeocodeView.as_view(), name='reverse_geocode'),
 ]

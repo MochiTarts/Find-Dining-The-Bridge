@@ -1,51 +1,44 @@
 <div class="setting-page">
-  <h2>Account Settings</h2>
+  <h2 tabindex="0">Account Settings</h2>
 
   <button
-  *ngIf="!isThirdParty"
-  class="btn change-password"
-  (click)="changePassword.open(false)"
->
-  Change Password
-</button>
+    *ngIf="!isThirdParty"
+    class="btn change-password"
+    (click)="changePassword.open(false)">
+    Change Password
+  </button>
 
   <button
     class="btn deactivate"
-    (click)="openConfirmModal(confirmDeact)"
-  >
+    (click)="openConfirmModal(confirmDeact)">
     Deactivate Account
   </button>
   <app-password-change-form #changePassword role="form"></app-password-change-form>
-
   <ng-template #confirmDeact let-modal>
     <div class="modal-header">
       <h2 class="modal-title" id="modal-profile-title">Confirm Deactivation</h2>
       <button
-      type="button"
-      class="close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-      >
-      <span aria-hidden="true">&times;</span>
-    </button>
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div class="modal-body">
       <p>Are you sure?</p>
       <button
         type="button"
         class="btn"
-        (click)="deactivateAccount(); reload();"
-      >
+        (click)="deactivateAccount(); reload();">
         Yes
       </button>
       <button
         type="button"
         class="btn"
-        (click)="modal.dismiss()"
-      >
+        (click)="modal.dismiss()">
         No
       </button>
     </div>
   </ng-template>
 </div>
-

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 class Article(models.Model):
     author = models.CharField(max_length=50, blank=True, null=True)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=400)
     content = RichTextField(blank=True, default="")
     thumbnail = models.CharField(max_length=200, blank=True, null=True)
     links = models.CharField(max_length=1000, blank=True, null=True)

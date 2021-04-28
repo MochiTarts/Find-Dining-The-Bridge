@@ -341,7 +341,7 @@ ngb-alert {
   margin: 0;
   font-weight: 500;
   color: $navigation-color;
-  padding-left: 1rem;
+  //padding-left: 1rem;
   padding-bottom: 0.1rem;
 }
 
@@ -349,6 +349,10 @@ ngb-alert {
   line-height: 22px;
   white-space: pre-wrap;
   color: $navigation-color;
+}
+
+p {
+  font-size: 17px;
 }
 
 .sub_section {

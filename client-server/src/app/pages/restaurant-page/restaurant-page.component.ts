@@ -204,8 +204,8 @@ export class RestaurantPageComponent implements OnInit {
         add_or_remove: ['Choose a method to modify images...'],
       });
 
-      for (let url of this.restaurantDetails.restaurant_image_url) {
-        this.slides.push({ url: url.replace(' ', '%20') });
+      for (let item of this.restaurantDetails.restaurant_image_url) {
+        this.slides.push({ url: item.image.replace(' ', '%20') });
       }
 
       this.videoId = this.getVideoId(this.restaurantDetails.restaurant_video_url);
@@ -476,9 +476,12 @@ export class RestaurantPageComponent implements OnInit {
   onSubmitImage() {
     const formData = new FormData();
     if (this.addOrRemove == 'Upload new images') {
+      let captions = [];
       for (let i = 0; i < this.uploadImageForm.get('file').value.length; i++) {
         formData.append('media_file', this.uploadImageForm.get('file').value[i]);
+        captions.push('');
       }
+      formData.append('image_captions', JSON.stringify(captions));
       this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'restaurant_image_url', 'False').subscribe((data) => {
         this.reload();
       }, (error) => {
@@ -509,7 +512,7 @@ export class RestaurantPageComponent implements OnInit {
   updateAddOrRemove() {
     this.addOrRemove = (<HTMLInputElement>document.getElementById('add_or_remove')).value;
     if (this.addOrRemove == 'Delete from existing images') {
-      this.imageUrls = Object.assign([], this.restaurantDetails.restaurant_image_url);
+      this.imageUrls = Object.assign([], this.restaurantDetails.restaurant_image_url.map((item) => item.image));
       this.imageUrlsToDelete = [];
     }
   }

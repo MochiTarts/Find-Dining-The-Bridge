@@ -1,20 +1,20 @@
 <div class="card cardBox">
   <div class="row">
-    <div class="col-md-3" style="min-width: 140px;">
+    <div class="col-md-3" style="min-width: 140px;" tabindex="0">
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <div *ngIf="restaurant.logo_url">
           <img
             src="{{ restaurant.logo_url }}"
             class="card-img"
             alt="logo of {{ restaurant.name }}"
-          />
+            />
         </div>
         <div *ngIf="!restaurant.logo_url">
           <img
             src="../../../assets/images/find_dining_logo.png"
             class="card-img"
             alt="default logo"
-          />
+            />
         </div>
 
         <div class="card-title-mobile-wrapper">
@@ -26,7 +26,7 @@
     </div>
 
     <div class="col">
-      <div class="card-body">
+      <div class="card-body" tabindex="0">
         <h2 class="card-title">{{ restaurant.name | titlecase }}</h2>
         <p class="card-text">
           {{ cuisineList | titlecase }} •
@@ -50,28 +50,25 @@
           <div class="btn-container">
             <div *ngIf="role && pagePath=='/all-listings'" class="buttons">
               <button
-              class="btn" (click)="addFavourite(restaurant._id)"
-              placement="top" ngbTooltip="Add Restaurant as Favourite"
-              [disabled]="favourited"
-              >
+                class="btn" (click)="addFavourite(restaurant._id)"
+                placement="top" ngbTooltip="Add Restaurant as Favourite"
+                [disabled]="favourited">
                 Add Favourite
               </button>
             </div>
             <div *ngIf="role && pagePath=='/favourites'" class="buttons">
               <button
-              class="btn" (click)="remove(restaurant._id)"
-              placement="top" ngbTooltip="Remove Restaurant as Favourite"
-              >
+                class="btn" (click)="remove(restaurant._id)"
+                placement="top" ngbTooltip="Remove Restaurant as Favourite">
                 Remove Favourite
               </button>
             </div>
             <div class="buttons">
               <button
-              class="btn"
-              [routerLink]="['/restaurant']"
-              [queryParams]="{restaurantId: restaurant._id}"
-              placement="top" ngbTooltip="Visit Restaurant Page"
-              >
+                class="btn"
+                [routerLink]="['/restaurant']"
+                [queryParams]="{restaurantId: restaurant._id}"
+                placement="top" ngbTooltip="Visit Restaurant Page">
                 View Restaurant
               </button>
             </div>
