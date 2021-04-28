@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   onEnter() {
     this.router.navigate(['/all-listings'],
-      { queryParams: {location: this.location, find: this.find}});
+      { queryParams: { location: this.location, find: this.find } });
   }
 
   gotoRegister(): void {
@@ -111,20 +111,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
         });
       }
 
-      // Pick a random restaurant for spotlight
-      this.spotlight = data.Restaurants[0];
+      if (data.Restaurants.length > 0) {
+        // Pick a random restaurant for spotlight
+        this.spotlight = data.Restaurants[0];
 
-      // Set spotlight story and only display first 500 characters
-      this.spotlightStory = this.spotlight.bio;
-      if (this.spotlightStory.length > 500) {
-        var str = this.spotlightStory.substr(0, 498);
-        var wordIndex = str.lastIndexOf(" ");
-        this.spotlightStory = str.substr(0, wordIndex) + '...';
+        // Set spotlight story and only display first 500 characters
+        this.spotlightStory = this.spotlight.bio;
+        if (this.spotlightStory.length > 500) {
+          var str = this.spotlightStory.substr(0, 498);
+          var wordIndex = str.lastIndexOf(" ");
+          this.spotlightStory = str.substr(0, wordIndex) + '...';
+        }
+
+        // Format the cuisines
+        let re = /\,/gi;
+        this.spotlightCuisines = this.spotlight.cuisines.toString().replace(re, ", ");
       }
 
-      // Format the cuisines
-      let re = /\,/gi;
-      this.spotlightCuisines = this.spotlight.cuisines.toString().replace(re, ", ");
     });
   }
 
