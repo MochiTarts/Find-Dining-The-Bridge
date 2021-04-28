@@ -22,11 +22,11 @@ export class RestaurantNearbyCardComponent implements OnInit {
   }
 
   gotoRestaurant() {
-    //const url = this.router.createUrlTree(['/restaurant'], { queryParams: { restaurantId: this.restaurant._id } });
-    this.router.navigate(['/restaurant'], { queryParams: { restaurantId: this.restaurant._id } }).then(() => {
-      this.reload();
-    })
-    //window.open(url.toString(), '_self');
+    const url = this.router.createUrlTree(['/restaurant'], { queryParams: { restaurantId: this.restaurant._id } });
+    window.open(url.toString(), '_blank');
+    // this.router.navigate(['/restaurant'], { queryParams: { restaurantId: this.restaurant._id } }).then(() => {
+    //   this.reload();
+    // })
   }
 
   reload() {
