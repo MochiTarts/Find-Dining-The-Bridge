@@ -29,7 +29,7 @@ export class ArticleCommonCardComponent implements OnInit {
   }
 
   defaultImg() {
-    this.thumbnail = "../../../assets/images/food/indian.jpg"
+    this.thumbnail = "../../../assets/images/find_dining_logo.png"
   }
 
   /**

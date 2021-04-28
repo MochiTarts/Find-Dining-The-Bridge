@@ -99,11 +99,17 @@ h1, h2, h3, h4, h5, h6 {
 .article-title {
     text-align: center;
     font-size: 30px;
+    line-height: 30px;
+}
+
+.article-title a {
+    color: black;
 }
 
 .article-subtitle {
     text-align: center;
     color: #00a4e5;
+    margin: 0;
 }
 
 .article-content {
@@ -138,7 +144,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .article-container {
     min-height: 620px;
-    padding-right: 10px;
+    //padding-right: 10px;
+    padding: 0 30px;
     opacity: 0;
     display: none;
     -webkit-transition: 1s;

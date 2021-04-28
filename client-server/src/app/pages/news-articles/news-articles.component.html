@@ -72,14 +72,19 @@
                     <div class="btn" (click)="closeArticle()" placement="top" ngbTooltip="Close Article">Close Article
                     </div>
                     <div *ngIf="selectedArticle">
-                        <h1 class="article-title">{{ selectedArticle.title }}</h1>
+                        <h1 class="article-title">
+                            <a href="{{ selectedArticle.links }}" target="_blank" *ngIf="selectedArticle.links">
+                                {{ selectedArticle.title }}
+                            </a>
+                            <div *ngIf="!selectedArticle.links">{{ selectedArticle.title }}</div>
+                        </h1>
                         <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">
                             Last Updated {{ (selectedArticle.created_at) | date:'mediumDate' }}
                         </h3>
                         <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">
                             Last Updated {{ (selectedArticle.modified_at) | date:'mediumDate' }}
                         </h3>
-                        <div class="article-content" [innerHTML]="selectedArticle.content">
+                        <div class="article-content" [innerHTML]="selectedArticle.content | safeHtml">
                         </div>
                     </div>
                 </div>
@@ -132,14 +137,19 @@
                     <div class="btn" (click)="closeArticleMobile()" placement="top" ngbTooltip="Close Current Article">
                         Close Article</div>
                     <div *ngIf="selectedArticle">
-                        <h1 class="article-title">{{ selectedArticle.title }}</h1>
+                        <h1 class="article-title">
+                            <a href="{{ selectedArticle.links }}" target="_blank" *ngIf="selectedArticle.links">
+                                {{ selectedArticle.title }}
+                            </a>
+                            <div *ngIf="!selectedArticle.links">{{ selectedArticle.title }}</div>
+                        </h1>
                         <h3 class="article-subtitle" *ngIf="!selectedArticle.modified_at">
                             Last Updated {{ (selectedArticle.created_at) | date:'mediumDate' }}
                         </h3>
                         <h3 class="article-subtitle" *ngIf="selectedArticle.modified_at">
                             Last Updated {{ (selectedArticle.modified_at) | date:'mediumDate' }}
                         </h3>
-                        <div class="article-content" [innerHTML]="selectedArticle.content"></div>
+                        <div class="article-content" [innerHTML]="selectedArticle.content | safeHtml"></div>
                     </div>
                 </div>
             </div>
