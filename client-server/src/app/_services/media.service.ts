@@ -15,11 +15,12 @@ export class MediaService {
 
   /**
    * Uploads image(s) and/or a video for a given PendingRestaurant
-   * 
+   *
    * @param formData - FormData containing media info
    *                    media_type: value from media_type param
    *                    save_location: value from save_location param
    *                    media_file: FILE (attach your image file(s) or video file here)
+   *                    image_captions: a stringified list of string
    *                    media_link: string (YouTube url)
    *                      - Use media_file if you're going to send a file to upload; leave media_link blank
    *                      - Use media_link if you're going to send a YouTube link; leave media_file blank
@@ -42,7 +43,7 @@ export class MediaService {
 
   /**
    * Deletes image(s) for a PendingRestaurant (associated with restaurant_image_url field)
-   * 
+   *
    * @param formData - FormData containing media info
    *                    restaurant_images: array of string (Array of image urls to remove)
    * @returns JSON object of the updated restaurant record
@@ -58,13 +59,13 @@ export class MediaService {
 
   /**
    * Uploads dish image
-   * 
+   *
    * @param formData - FormData containing media info
    *                    media_type: string ('IMAGE' only)
    *                    media_file: FILE (the image file to be uploaded)
    *                    save_location: string ('picture' only)
    * @param dishId the updated Dish record
-   * @returns 
+   * @returns
    */
   uploadDishMedia(formData, dishId): Observable<any> {
     const endpoint = DISH_MEDIA_ENDPOINT + dishId + '/';
