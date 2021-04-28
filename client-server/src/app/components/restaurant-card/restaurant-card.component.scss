@@ -21,7 +21,8 @@
   width: 120px;
   height: 120px;
   border-radius: 5px;
-  object-fit: cover;
+  object-fit: contain;
+  //object-fit: cover;
 }
 
 .card-body {
