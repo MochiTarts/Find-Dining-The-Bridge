@@ -579,7 +579,7 @@ export class RestaurantPageComponent implements OnInit {
         let restaurant = entry.restaurant
         this.nearbyRestaurants.push({
           name: restaurant.name,
-          cuisinePrice: restaurant.cuisines[0] + " - " + restaurant.pricepoint,
+          cuisinePrice: restaurant.cuisines[0] + " - " + this.getPricepoint(String(restaurant.pricepoint)),
           imgUrl: restaurant.logo_url,
           _id: restaurant._id
         })
