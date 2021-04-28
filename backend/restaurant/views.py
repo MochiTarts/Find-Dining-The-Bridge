@@ -449,6 +449,9 @@ class RestaurantMultiImageCaptions(APIView):
     """ Restaurant view for modifying multi-image captions """
     permission_classes = [ROPermission]
 
+    @swagger_auto_schema(request_body=swagger.RestaurantMultiImageCaptionsInsert,
+        responses=swagger.restaurant_multi_image_captions_response,
+        operation_id='PUT /restaurant/image_captions/')
     def put(self, request):
         """ For updating existing image caption for a restaurant """
         user = request.user

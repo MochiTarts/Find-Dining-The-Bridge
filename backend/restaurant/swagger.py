@@ -1116,3 +1116,78 @@ dish_media_put_response = {
         }
     )
 }
+
+class RestaurantMultiImageCaptionsInsert(serializers.Serializer):
+    image = serializers.CharField()
+    caption = serializers.CharField()
+
+    class Meta:
+        ref_name = None
+
+restaurant_multi_image_captions_response = {
+    "200": openapi.Response(
+        description="custom 200 description",
+        examples={
+            "application/json": {
+                "_id": "6089ba164dedd885f72293ae",
+                "name": "Jenny's Diner",
+                "owner_user_id": 1,
+                "years": 1,
+                "address": "431 Kwapis BLVD",
+                "streetAddress2": "",
+                "streetAddress3": "",
+                "postalCode": "L3X 3H5",
+                "phone": 4166688966,
+                "email": "fanficwriteronthelake@gmail.com",
+                "pricepoint": "LOW",
+                "cuisines": [
+                    "French"
+                ],
+                "offer_options": [
+                    ""
+                ],
+                "dineinPickupDetails": "",
+                "deliveryDetails": "",
+                "locationNotes": "",
+                "web_url": "",
+                "facebook": "",
+                "twitter": "",
+                "instagram": "",
+                "bio": "Story",
+                "GEO_location": "{'lat': 44.0639871, 'lng': -79.4941817}",
+                "cover_photo_url": "https://storage.googleapis.com/default-assets/cover.jpg",
+                "logo_url": "https://storage.googleapis.com/default-assets/logo.jpg",
+                "restaurant_video_url": "/",
+                "restaurant_image_url": [
+                    {
+                        "image": "https://storage.googleapis.com/dev-scdining/FILE-acmfhqzsic-2021-04-28 16:00:33.717123.png",
+                        "caption": "Updated caption"
+                    }
+                ],
+                "owner_first_name": [
+                    "Jenny"
+                ],
+                "owner_last_name": [
+                    "Yu"
+                ],
+                "owner_preferred_name": [
+                    "Jenny"
+                ],
+                "categories": [
+                    "Specials"
+                ],
+                "status": "Pending",
+                "sysAdminComments": "",
+                "open_hours": "Everyday 9-5",
+                "payment_methods": [
+                    "Debit",
+                    "Credit"
+                ],
+                "full_menu_url": "https://www.webtoons.com/en/favorite",
+                "approved_once": False,
+                "restaurant_video_desc": "",
+                "phone_ext": 0
+            }
+        }
+    )
+}
