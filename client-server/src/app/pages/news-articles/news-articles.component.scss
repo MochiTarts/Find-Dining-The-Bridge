@@ -10,6 +10,18 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden;
 }
 
+.icons {
+    color: #0078c2;
+    margin: auto;
+    font-size: 2rem;
+    transition: 0.2s;
+}
+
+.icons:hover {
+    cursor: pointer;
+    color: #00a4e5;
+}
+
 /* HEADER */
 .header-container {
     background-image: url(../../../assets/images/articles_header.png);
@@ -109,7 +121,12 @@ h1, h2, h3, h4, h5, h6 {
 .article-subtitle {
     text-align: center;
     color: #00a4e5;
-    margin: 0;
+    margin: 0 10px;
+    width: fit-content;
+}
+
+.article-subtitle h3 {
+    line-height: 0.5rem;
 }
 
 .article-content {
@@ -150,6 +167,10 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
     -webkit-transition: 1s;
     transition: 1s;
+}
+
+.close-btn-container {
+    margin-bottom: 25px;
 }
 
 .nav-pills {

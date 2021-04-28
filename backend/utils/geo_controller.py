@@ -23,6 +23,15 @@ def geocode(address):
         return results[0]['geometry']['location']
 
 
+def reverse_geocode(coordinates):
+    address = client.reverse_geocode(coordinates)
+    if len(address) == 0:
+        raise ValidationError("No results from given coordinates", code='address_not_found')
+    return address[0]['formatted_address']
+
+#reverse_geocode((44.0639871, -79.4941817))
+
+
 def in_scarborough(coord):
     """
     param: a tuple containing the geographic coordinates

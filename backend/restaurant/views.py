@@ -24,6 +24,7 @@ from restaurant.models import (
 from google.analytics import get_analytics_data
 from utils.model_util import model_to_json, save_and_clean, edit_model, update_model_geo, models_to_json
 from utils.permissions import ROPermission
+from utils.geo_controller import reverse_geocode
 
 from jsonschema import validate
 from bson import ObjectId
@@ -491,3 +492,15 @@ class DishMediaView(APIView):
 
         dish = PendingFood.upload_media(dish, request.data, request.FILES)
         return JsonResponse(model_to_json(dish))
+
+
+class ReverseGeocodeView(APIView):
+    """ Retrieve address from coordinates (of restaurant) """
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        """ For reverse geocoding the lat lng coordinates """
+        lat = request.GET['lat']
+        lng = request.GET['lng']
+        address = reverse_geocode((lat, lng))
+        return JsonResponse({'address': address})
