@@ -449,20 +449,21 @@ class PendingFood(models.Model):
 class Restaurant(models.Model):
     """ Model for Restaurants """
     _id = models.ObjectIdField()
+    name = models.CharField(max_length=30, blank=True, default='')
     owner_user_id = models.IntegerField(blank=True, null=True)
-    name = models.CharField(max_length=30)
-    years = models.IntegerField(null=True)
-    address = models.CharField(max_length=60)
+    years = models.IntegerField(null=True, blank=True, default=0)
+    address = models.CharField(max_length=60, blank=True, default='')
     streetAddress2 = models.CharField(max_length=50, blank=True, default='')
     streetAddress3 = models.CharField(max_length=50, blank=True, default='')
-    postalCode = models.CharField(max_length=7, default='')
+    postalCode = models.CharField(max_length=7, default='', blank=True)
 
-    phone = models.BigIntegerField(null=True)
+    phone = models.BigIntegerField(null=True, blank=True)
     email = models.EmailField(unique=True)
-    pricepoint = models.CharField(max_length=10, choices=Prices.choices())
+    pricepoint = models.CharField(
+        max_length=10, choices=Prices.choices(), blank=True)
     cuisines = CustomListField(default=[], blank=True)
 
-    offer_options = models.TextField(default='[""]')
+    offer_options = CustomListField(default=[], blank=True)
 
     dineinPickupDetails = models.TextField(
         null=True, blank=True, default='', max_length=2000)
@@ -474,16 +475,19 @@ class Restaurant(models.Model):
     facebook = models.CharField(max_length=200, blank=True)
     twitter = models.CharField(max_length=200, blank=True)
     instagram = models.CharField(max_length=200, blank=True)
-    bio = models.TextField(null=True)
-    GEO_location = models.CharField(max_length=200)
+    bio = models.TextField(null=True, blank=True)
+    GEO_location = models.CharField(max_length=200, blank=True)
     cover_photo_url = models.CharField(
         max_length=200,
-        default='https://storage.googleapis.com/default-assets/cover.jpg')
+        default='https://storage.googleapis.com/default-assets/cover.jpg',
+        blank=True)
     logo_url = models.CharField(
         max_length=200,
-        default='https://storage.googleapis.com/default-assets/logo.jpg')
-    restaurant_video_url = models.CharField(max_length=200, default='/')
-    restaurant_image_url = models.TextField(default='["/"]', blank=True)
+        default='https://storage.googleapis.com/default-assets/logo.jpg',
+        blank=True)
+    restaurant_video_url = models.CharField(
+        max_length=200, default='/', blank=True)
+    restaurant_image_url = CustomListField(default=['/'], blank=True)
 
     owner_first_name = CustomListField(default=[], blank=True)
     owner_last_name = CustomListField(default=[], blank=True)
@@ -492,14 +496,17 @@ class Restaurant(models.Model):
     categories = CustomListField(default=[], blank=True)
     status = models.CharField(
         max_length=200,
-        default=Status.Approved.value,
+        default=Status.In_Progress.value,
         choices=Status.choices())
 
     sysAdminComments = models.CharField(
         blank=True, default='', max_length=2000)
 
-    open_hours = models.TextField(default='')
-    payment_methods = models.TextField(default='["/"]')
+    modified_time = models.DateTimeField(
+        editable=False, null=True, default=timezone.now)
+
+    open_hours = models.TextField(default='', blank=True)
+    payment_methods = CustomListField(default=[], blank=True)
 
     full_menu_url = models.CharField(max_length=200, blank=True)
     approved_once = models.BooleanField(default=False, blank=True)
@@ -578,7 +585,7 @@ class PendingRestaurant(models.Model):
         max_length=10, choices=Prices.choices(), blank=True)
     cuisines = CustomListField(default=[], blank=True)
 
-    offer_options = models.TextField(default='[""]', blank=True)
+    offer_options = CustomListField(default=[], blank=True)
 
     dineinPickupDetails = models.TextField(
         null=True, blank=True, default='', max_length=2000)
@@ -602,7 +609,7 @@ class PendingRestaurant(models.Model):
         blank=True)
     restaurant_video_url = models.CharField(
         max_length=200, default='/', blank=True)
-    restaurant_image_url = models.TextField(default='["/"]', blank=True)
+    restaurant_image_url = CustomListField(default=['/'], blank=True)
 
     owner_first_name = CustomListField(default=[], blank=True)
     owner_last_name = CustomListField(default=[], blank=True)
@@ -621,7 +628,7 @@ class PendingRestaurant(models.Model):
         editable=False, null=True, default=timezone.now)
 
     open_hours = models.TextField(default='', blank=True)
-    payment_methods = models.TextField(default='["/"]', blank=True)
+    payment_methods = CustomListField(default=[], blank=True)
 
     full_menu_url = models.CharField(max_length=200, blank=True)
     approved_once = models.BooleanField(default=False, blank=True)
@@ -1024,7 +1031,7 @@ class PendingRestaurant(models.Model):
 
             if save_location == RestaurantSaveLocations.restaurant_image_url.name:
                 media_files_list = form_file.getlist('media_file')
-                file_path = ast.literal_eval(restaurant.restaurant_image_url)
+                file_path = restaurant.restaurant_image_url
                 if '/' in file_path:
                     file_path.remove('/')
 
@@ -1035,7 +1042,7 @@ class PendingRestaurant(models.Model):
                             code='invalid_mime_type')
                     file_path.append(upload(image, IMAGE))
 
-                file_path = json.dumps(file_path)
+                #file_path = json.dumps(file_path)
             else:
                 media_file = form_file['media_file']
                 if media_file.content_type not in allowed_image_types:
@@ -1096,14 +1103,14 @@ class PendingRestaurant(models.Model):
         """
         restaurant_images = form_data.get('restaurant_images')
         file_path = []
-        old_file_path = ast.literal_eval(restaurant.restaurant_image_url)
+        old_file_path = restaurant.restaurant_image_url
         for image_url in old_file_path:
             if image_url in restaurant_images:
                 delete(image_url)
             else:
                 file_path.append(image_url)
 
-        file_path = json.dumps(file_path) if file_path else ['/']
+        file_path = file_path if file_path else ['/']
         approved_restaurant = Restaurant.objects.filter(
             _id=restaurant._id).first()
         setattr(restaurant, 'restaurant_image_url', file_path)
@@ -1201,8 +1208,7 @@ class UserFavRestrs(models.Model):
                 raise ObjectDoesNotExist(
                     'One of the restaurants in the list of favourites does not appear to exist: ' +
                     record.restaurant)
-            restaurant.offer_options = ast.literal_eval(
-                restaurant.offer_options)
+            restaurant.offer_options = restaurant.offer_options
             restaurants.append(model_to_json(restaurant))
 
         return restaurants

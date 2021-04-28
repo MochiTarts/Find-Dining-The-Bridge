@@ -212,15 +212,7 @@ class RestaurantView(APIView):
     def get(self, request, rest_id):
         """ Retrieve approved restaurant by id """
         restaurant = Restaurant.get(rest_id)
-        restaurant_image_url = ast.literal_eval(
-            restaurant.restaurant_image_url)
-        offer_options = ast.literal_eval(restaurant.offer_options)
-        payment_methods = ast.literal_eval(restaurant.payment_methods)
-
         restaurant = model_to_json(restaurant)
-        restaurant['restaurant_image_url'] = restaurant_image_url
-        restaurant['offer_options'] = offer_options
-        restaurant['payment_methods'] = payment_methods
         return JsonResponse(restaurant)
 
 
@@ -238,15 +230,7 @@ class PendingRestaurantView(APIView):
         user_id = user.id
         restaurant = PendingRestaurant.get_by_owner(user_id)
 
-        restaurant_image_url = ast.literal_eval(
-            restaurant.restaurant_image_url)
-        offer_options = ast.literal_eval(restaurant.offer_options)
-        payment_methods = ast.literal_eval(restaurant.payment_methods)
-
         restaurant = model_to_json(restaurant)
-        restaurant['restaurant_image_url'] = restaurant_image_url
-        restaurant['offer_options'] = offer_options
-        restaurant['payment_methods'] = payment_methods
         return JsonResponse(restaurant)
 
 
@@ -259,13 +243,6 @@ class AllRestaurantList(APIView):
     def get(self, request):
         """ Retrieve all approved restaurants """
         restaurants = models_to_json(list(Restaurant.objects.all()))
-        for restaurant in restaurants:
-            restaurant['restaurant_image_url'] = ast.literal_eval(
-                restaurant['restaurant_image_url'])
-            restaurant['offer_options'] = ast.literal_eval(
-                restaurant['offer_options'])
-            restaurant['payment_methods'] = ast.literal_eval(
-                restaurant['payment_methods'])
         response = {'Restaurants': restaurants}
         return JsonResponse(response)
 
