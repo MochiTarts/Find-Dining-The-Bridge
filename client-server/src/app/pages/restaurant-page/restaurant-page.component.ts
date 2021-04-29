@@ -205,7 +205,7 @@ export class RestaurantPageComponent implements OnInit {
       });
 
       for (let item of this.restaurantDetails.restaurant_image_url) {
-        this.slides.push({ url: item.image.replace(' ', '%20') });
+        this.slides.push({ url: item.image.replace(' ', '%20'), caption: item.caption });
       }
 
       this.videoId = this.getVideoId(this.restaurantDetails.restaurant_video_url);
