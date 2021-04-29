@@ -13,7 +13,7 @@
         </span>
       </div>
       <input type="text" class="form-control my-0 py-1 search" placeholder="Search" [(ngModel)]="inputRestaurant"
-        (ngModelChange)="searchRestaurants()" aria-label="search" />
+        (ngModelChange)="searchRestaurants()" aria-label="search" [ngbTypeahead]="search" [resultFormatter]="formatter"/>
     </div>
 
     <button class="btn filter-button" (click)="filterToggle()" placement="top" ngbTooltip="Open Filter Tab">Filter</button>

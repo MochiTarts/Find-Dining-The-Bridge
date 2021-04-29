@@ -2,6 +2,7 @@ from django.conf import settings
 # Module to upload files to the cloud
 from google.oauth2 import service_account
 from google.cloud import storage
+from google.api_core.exceptions import NotFound
 
 import datetime
 import string
@@ -92,6 +93,9 @@ def delete(file_path):
         file_path = file_path.replace(API, '')
         bucket_path = file_path[:file_path.find('/')]
         bucket = client.bucket(bucket_path)
-        bucket.delete_blob(file_path[file_path.find('/') + 1:])
+        try:
+            bucket.delete_blob(file_path[file_path.find('/') + 1:])
+        except NotFound:
+            print('not found')
     else:
         print('cannot parse invalid file')

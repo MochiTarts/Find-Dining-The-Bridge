@@ -121,6 +121,11 @@ export class NewsArticlesComponent implements OnInit {
     setTimeout(() => {
       articleDiv.style.opacity = "1";
     }, 10);
+
+    let el = document.getElementById("article-container");
+    el.scrollIntoView({
+      behavior: 'smooth'
+    });
   }
 
   /**
@@ -156,6 +161,11 @@ export class NewsArticlesComponent implements OnInit {
     setTimeout(() => {
       articleDiv.style.opacity = "1";
     }, 10);
+
+    let el = document.getElementById("article-container-mobile");
+    el.scrollIntoView({
+      behavior: 'smooth'
+    });
   }
 
   /**

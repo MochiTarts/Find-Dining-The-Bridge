@@ -12,9 +12,16 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from 'src/app/_services/token-storage.service';
 import { Title } from '@angular/platform-browser';
 import { RestaurantService } from '../../_services/restaurant.service';
+import { cuisinesStr } from '../../_constants/cuisines';
+import { servicesStr } from '../../_constants/services';
 import { SubscriberProfileFormComponent } from 'src/app/components/subscriber-profile-form/subscriber-profile-form.component';
 import { dollarPricepointsObj } from '../../_constants/pricepoints';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Observable, OperatorFunction } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+
+
+var searchItems = [];
 
 @Component({
   selector: 'app-home',
@@ -100,6 +107,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.restaurantService.listRestaurants().subscribe((data) => {
       // Shuffle the order of restaurants
       this.shuffle(data.Restaurants)
+      searchItems = data.Restaurants.map(function(a) {return a["name"]});
+      searchItems = searchItems.concat(cuisinesStr, servicesStr);
       for (let restaurant of data.Restaurants) {
         let price = this.getPricepoint(String(restaurant.pricepoint));
         this.restaurants.push({
@@ -179,5 +188,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     return list;
   }
+
+  formatter = (result: string) => result.toUpperCase();
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 1 ? []
+        : searchItems.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
 
 }

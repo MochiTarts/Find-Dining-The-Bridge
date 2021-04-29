@@ -10,9 +10,12 @@ import { UserService } from '../../_services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, OperatorFunction } from 'rxjs';
 import { ContentObserver } from '@angular/cdk/observers';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
+
+var searchItems = [];
 
 @Component({
   selector: 'app-all-restaurants',
@@ -93,13 +96,14 @@ export class AllRestaurantsComponent implements OnInit {
     this.restaurantService.listRestaurants().subscribe((data) => {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
+      searchItems = this.allRestaurants.map(function(a) {return a["name"]});
+      searchItems = searchItems.concat(cuisinesStr, servicesStr);
       this.initializeRestaurants();
 
       var selectedPostion: any;
       if (this.location) {
         this.getGeoCode(this.location).subscribe((data) => {
           let selectedLocation = data["features"][0];
-          console.log(selectedLocation)
           selectedPostion = {
             coords: {
               longitude: selectedLocation.center[0],
@@ -473,5 +477,14 @@ export class AllRestaurantsComponent implements OnInit {
       }
     }
   }
+
+  formatter = (result: string) => result.toUpperCase();
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 1 ? []
+        : searchItems.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
 
 }
