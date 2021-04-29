@@ -555,10 +555,12 @@ export class RestaurantPageComponent implements OnInit {
       this.imageUrlsToDelete = [];
     } else if (this.addOrRemove == 'Modify caption for existing images') {
       this.imageCaptionsToModify = [];
-      this.restaurantDetails.restaurant_image_url.forEach(element => {
-        let clone = Object.assign({}, element);
-        this.imageCaptionsToModify.push(clone);
-      });
+      if (this.restaurantDetails.restaurant_image_url[0] != '/') {
+        this.restaurantDetails.restaurant_image_url.forEach(element => {
+          let clone = Object.assign({}, element);
+          this.imageCaptionsToModify.push(clone);
+        });
+      }
     }
   }
 
