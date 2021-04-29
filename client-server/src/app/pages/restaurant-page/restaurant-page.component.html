@@ -2,7 +2,11 @@
   <app-page-error></app-page-error>
 </div>
 
-<div *ngIf="restaurantDetails" role="main" aria-label="restaurant page">
+<div
+  *ngIf="restaurantDetails && !error"
+  role="main"
+  aria-label="restaurant page"
+>
   <div class="header">
     <div class="card infoCard">
       <div class="row" id="info-row" tabindex="0">
@@ -818,6 +822,7 @@
               Choose a method to modify images...
             </option>
             <option>Upload new images</option>
+            <option>Modify caption for existing images</option>
             <option>Delete from existing images</option>
           </select>
         </div>
@@ -835,7 +840,7 @@
             multiple
           />
           <div *ngFor="let url of previewUrls; let i = index">
-            <img [src]="url" width="100" />
+            <img [src]="url" width="100" height="100" />
             <input
               class="form-control"
               type="text"
@@ -845,22 +850,46 @@
           </div>
         </div>
       </div>
+      <div
+        class="col"
+        *ngIf="addOrRemove == 'Modify caption for existing images'"
+      >
+        <div
+          *ngFor="let img of imageCaptionsToModify; let i = index"
+          style="padding: 10px 0px; text-align: center; margin: auto"
+        >
+          <img
+            [src]="img.image"
+            width="150"
+            height="150"
+            style="margin-bottom: 5px"
+          />
+          <textarea
+            class="form-control"
+            type="text"
+            [(ngModel)]="imageCaptionsToModify[i].caption"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
+        </div>
+      </div>
       <div class="row" *ngIf="addOrRemove == 'Delete from existing images'">
         <div *ngFor="let img of imageUrls" style="margin: auto">
-          <button
-            type="button"
-            class="close"
-            aria-label="Close"
-            (click)="deleteImage(img)"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <img
-            (click)="deleteImage(img)"
-            src="{{ img }}"
-            class="grid-image"
-            alt="restaurant image"
-          />
+          <div *ngIf="img">
+            <button
+              type="button"
+              class="close"
+              aria-label="Close"
+              (click)="deleteImage(img)"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <img
+              (click)="deleteImage(img)"
+              src="{{ img }}"
+              class="grid-image"
+              alt="restaurant image"
+            />
+          </div>
         </div>
       </div>
     </form>

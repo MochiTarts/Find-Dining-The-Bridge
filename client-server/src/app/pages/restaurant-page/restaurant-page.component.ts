@@ -22,7 +22,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { MediaService } from '../../_services/media.service';
-import { Observable } from 'rxjs';
+import { concat, Observable } from 'rxjs';
 import { formValidation } from '../../_validation/forms';
 import { UserService } from '../../_services/user.service';
 import { draftValidator } from '../../_validation/draftValidator';
@@ -81,6 +81,7 @@ export class RestaurantPageComponent implements OnInit {
   previewUrls = [];
   captions = [];
   imageUrlsToDelete = [];
+  imageCaptionsToModify = [];
   addOrRemove: string = '';
   submitImageAllowed: boolean = false;
 
@@ -339,6 +340,7 @@ export class RestaurantPageComponent implements OnInit {
     this.newFile = false;
 
     // Reset
+    this.addOrRemove = 'Choose a method to modify images...';
     this.uploadImageForm.get('add_or_remove').setValue('Choose a method to modify images...');
     this.uploadImageForm.get('file').setValue([]);
     this.previewUrls = [];
@@ -513,6 +515,24 @@ export class RestaurantPageComponent implements OnInit {
       }, (error) => {
         alert(error.error.detail);
       });
+    } else if (this.addOrRemove == 'Modify caption for existing images') {
+      this.imageCaptionsToModify = this.imageCaptionsToModify.filter((value, index) => {
+        return value.caption != this.restaurantDetails.restaurant_image_url[index].caption;
+      });
+
+      let observables = this.imageCaptionsToModify.map((value) => {
+        return this.mediaService.updateRestaurantImageCaption(value);
+      });
+
+      let count = 0;
+      concat(...observables).subscribe(() => {
+        count++;
+        if (count == observables.length) {
+          this.reload();
+        }
+      }, (error) => {
+        alert(error.error.detail);
+      })
     }
     this.modalRef.close();
   }
@@ -533,6 +553,12 @@ export class RestaurantPageComponent implements OnInit {
     if (this.addOrRemove == 'Delete from existing images') {
       this.imageUrls = Object.assign([], this.restaurantDetails.restaurant_image_url.map((item) => item.image));
       this.imageUrlsToDelete = [];
+    } else if (this.addOrRemove == 'Modify caption for existing images') {
+      this.imageCaptionsToModify = [];
+      this.restaurantDetails.restaurant_image_url.forEach(element => {
+        let clone = Object.assign({}, element);
+        this.imageCaptionsToModify.push(clone);
+      });
     }
   }
 

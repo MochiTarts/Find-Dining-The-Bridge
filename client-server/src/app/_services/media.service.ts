@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 const AUTH_API = '/api';
 const RO_MEDIA_ENDPOINT = AUTH_API + '/restaurant/media/';
 const DISH_MEDIA_ENDPOINT = AUTH_API + '/dish/media/';
+const IMAGE_CAPTION_ENDPOINT = AUTH_API + '/restaurant/image_captions/'
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,19 @@ export class MediaService {
       body: formData,
     };
     return this.http.delete<any>(endpoint, options);
+  }
+
+  /**
+   * Modify caption for a restaurant image
+   * @param imgCaption - JSON object
+   *                      Required fields:
+   *                        image (string),
+   *                        caption (string)
+   * @returns JSON object of the updated restaurant record
+   */
+  updateRestaurantImageCaption(imgCaption): Observable<any> {
+    const endpoint = IMAGE_CAPTION_ENDPOINT;
+    return this.http.put<any>(endpoint, imgCaption);
   }
 
   /**
