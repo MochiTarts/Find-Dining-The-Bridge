@@ -458,6 +458,7 @@
               }"
             >
               <div
+                *ngIf="slide.caption"
                 style="
                   text-align: center;
                   width: 100%;
@@ -833,6 +834,15 @@
             accept="image/*"
             multiple
           />
+          <div *ngFor="let url of previewUrls; let i = index">
+            <img [src]="url" width="100" />
+            <input
+              class="form-control"
+              type="text"
+              [(ngModel)]="captions[i]"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </div>
         </div>
       </div>
       <div class="row" *ngIf="addOrRemove == 'Delete from existing images'">
