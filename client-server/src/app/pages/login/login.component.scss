@@ -1,5 +1,17 @@
 @import "src/styles";
 
+.tab-label {
+  font-size: 0.5rem;
+}
+
+.login-card h2, .reset-card h2 {
+  font-size: 1.563rem;
+}
+
+.form-label, .alert  {
+  font-size: 1rem;
+}
+
 /* Updated Login Screen */
 .login-image {
   display: block;
@@ -15,8 +27,10 @@
 }
 
 .login-register-container {
-  width: 512px;
-  max-width: 512px;
+  //width: 512px;
+  //max-width: 512px;
+  width: 33rem;
+  max-width: 33rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -30,7 +44,8 @@
 }
 
 .icons {
-  font-size: 30px;
+  //font-size: 30px;
+  font-size: 1.875rem;
   color: black;
 }
 
@@ -55,7 +70,7 @@
 @media screen and (max-width: 525px) {
 
 .login-register-container {
-  width: 280px;
+  width: 100%;
 }
 
 .login-card {
