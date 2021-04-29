@@ -96,7 +96,7 @@ export class AllRestaurantsComponent implements OnInit {
     this.restaurantService.listRestaurants().subscribe((data) => {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
-      searchItems = this.allRestaurants.map(function(a) {return a["name"]});
+      searchItems = this.allRestaurants.map(function(a) {return {name: a['name'], image: a['logo_url']}});
       searchItems = searchItems.concat(cuisinesStr, servicesStr);
       this.initializeRestaurants();
 
@@ -478,13 +478,14 @@ export class AllRestaurantsComponent implements OnInit {
     }
   }
 
-  formatter = (result: string) => result.toUpperCase();
+  formatter = (x) => x.hasOwnProperty('name') ? x.name : x;
   search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      map(term => term.length < 1 ? []
-        : searchItems.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+      map(term => term.length < 2 ? []
+        : searchItems.filter(v => v.hasOwnProperty('name') ? 
+        v.name.toLowerCase().indexOf(term.toLowerCase()) > -1 : v.toLowerCase().indexOf(term.toLowerCase()) > -1))
     )
 
 }

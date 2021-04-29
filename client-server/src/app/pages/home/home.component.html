@@ -9,10 +9,10 @@
           />
 
         <div class="title" tabindex="0" style="text-align: center;">
-          <span class="title-font find">FIND </span>
-          <span class="title-font dining">DINING </span> <br
+          <div class="title-font find">FIND</div>
+          <div class="title-font dining">DINING</div> <br
             class="title-break-2" />
-          <span class="title-font scarborough">SCARBOROUGH</span>
+          <div class="title-font scarborough">SCARBOROUGH</div>
         </div>
       </div>
       <!--<img
@@ -83,14 +83,20 @@
           [(ngModel)]="find"
           (keyup.enter)="onEnter()"
           aria-label="search criteria input box"
-          [ngbTypeahead]="search" [resultFormatter]="formatter"
+          [ngbTypeahead]="search" [inputFormatter]="formatter"
+          [resultTemplate]="rt"
           />
+          <ng-template #rt let-r="result" let-t="term">
+            <img src="{{ r.image }}" *ngIf="r.name" style="width: 6.25rem; margin-right: 0.625rem;"/>
+            <ngb-highlight [result]="r.name" *ngIf="r.name"></ngb-highlight>
+            <ngb-highlight [result]="r" *ngIf="!r.name"></ngb-highlight>
+          </ng-template>
         <div class="input-group-append">
           <button
             class="btn-primary"
             type="button"
             [routerLink]="['/all-listings']"
-            [queryParams]="{ location: location, find: find }">
+            [queryParams]="{ location: location, find: find.name ? find.name : find }">
             <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go
               Find Dining</span>
           </button>
