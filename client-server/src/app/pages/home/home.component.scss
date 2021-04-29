@@ -4,8 +4,10 @@
 .header-img {
   background-image: url("/assets/images/home/cover_4.png");
   width: 100%;
-  height: 600px;
-  background-size: 2100px auto;
+  //height: 600px;
+  height: 37.5rem;
+  //background-size: 2100px auto;
+  background-size: 131.25rem auto;
   background-position: center center;
   background-repeat: no-repeat;
 
@@ -33,14 +35,16 @@
   justify-content: center;
   @media screen and (max-width: 767px) {
     justify-content: center;
-    padding: 50px 0;
+    //padding: 50px 0;
+    padding: 3.125rem 0;
   }
 }
 
 .header-title {
   width: 70%;
   height: auto;
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 
   @media screen and (max-width: 989px) {
     width: 75%;
@@ -51,24 +55,31 @@
   }
 
   @media screen and (max-width: 500px) {
-    margin-bottom: 15px;
+    //margin-bottom: 15px;
+    margin-bottom: 0.938rem;
   }
 }
 
 .header-text {
-  margin-bottom: 30px;
-  padding: 25px 0;
+  //margin-bottom: 30px;
+  margin-bottom: 1.875rem;
+  //padding: 25px 0;
+  padding: 1.563rem 0;
   background-color: rgba(225, 225, 225, 0.7);
   @media screen and (max-width: 500px) {
-    margin-bottom: 15px;
+    //margin-bottom: 15px;
+    margin-bottom: 0.938rem;
   }
 }
 
 .title-text {
   width: 100%;
-  max-width: 1200px;
-  margin-bottom: 15px;
-  padding: 0 10px;
+  //max-width: 1200px;
+  max-width: 75rem;
+  //margin-bottom: 15px;
+  margin-bottom: 0.938rem;
+  //padding: 0 10px;
+  padding: 0 0.625rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -80,7 +91,8 @@
 }
 
 .title {
-  margin-left: 20px;
+  //margin-left: 20px;
+  margin-left: 1.25rem;
   @media screen and (max-width: 500px) {
     margin-left: 0;
   }
@@ -89,7 +101,6 @@
 .find {
   font-weight: bolder;
   color: rgb(70, 70, 71);
-  //color: white;
 }
 
 .dining {
@@ -100,43 +111,42 @@
 .scarborough {
   font-weight: lighter;
   color: rgb(70, 70, 71);
-  //color: white;
 }
 
 .title-font {
-  //top: 150px;
-  //margin-bottom: 30px;
-  font-size: 60px;
+  //font-size: 60px;
+  font-size: 3.75rem;
   text-align: center;
-  //font-weight: bold;
   white-space: nowrap;
-  //color: white;
   font-family: Arial, Helvetica, sans-serif;
   @media screen and (max-width: 1200px) {
-    //line-height: 50px;
-    font-size: 55px;
+    //font-size: 55px;
+    font-size: 3.438rem;
   }
   @media screen and (max-width: 1100px) {
-    //line-height: 45px;
-    font-size: 50px;
+    //font-size: 50px;
+    font-size: 3.125rem;
   }
   @media screen and (max-width: 990px) {
-    //line-height: 35px;
-    font-size: 45px;
+    //font-size: 45px;
+    font-size: 2.813rem;
   }
   @media screen and (max-width: 870px) {
-    line-height: 30px;
-    font-size: 40px;
+    //line-height: 30px;
+    //font-size: 40px;
+    line-height: 1.875rem;
+    font-size: 2.5rem;
   }
   @media screen and (max-width: 500px) {
-    //padding-right: 10px;
-    //padding-left: 10px;
-    font-size: 35px;
-    line-height: 35px;
+    //font-size: 35px;
+    //line-height: 35px;
+    font-size: 2.188rem;
+    line-height: 2.188rem;
     white-space: normal;
   }
   @media screen and (max-width: 300px) {
-    font-size: 30px;
+    //font-size: 30px;
+    font-size: 1.875rem;
   }
 }
 
@@ -158,24 +168,30 @@
 }
 
 .header-logo {
-  width: 90px;
+  //width: 90px;
+  width: 5.625rem;
   height: auto;
 
   @media screen and (max-width: 767px) {
-    width: 70px;
-    margin-bottom: 15px;
+    //width: 70px;
+    //margin-bottom: 15px;
+    width: 4.375rem;
+    margin-bottom: 0.938rem;
   }
 }
 
 .header-content {
-  font-size: 18px;
-  line-height: 22px;
+  //font-size: 18px;
+  font-size: 1.125rem;
+  //line-height: 22px;
+  line-height: 1.375rem;
   text-align: center;
   font-family: "Source Sans Pro", sans-serif;
   //text-shadow: 1px 1px 4px black;
 
   @media screen and (max-width: 500px) {
-    line-height: 18px;
+    //line-height: 18px;
+    line-height: 1.125rem;
     font-size: 0.9rem;
   }
 }
@@ -184,7 +200,8 @@
   width: 100%;
   //background-color: rgba(#56483F, 0.75);
   background-color: rgba(225, 225, 225, 0.7);
-  padding: 25px 0;
+  //padding: 25px 0;
+  padding: 1.563rem 0;
 
   text-align: center;
   margin: auto;
@@ -211,10 +228,6 @@
     //top: 275px;
     width: 85%;
   }
-
-  @media screen and (max-width: 500px) {
-    //top: 250px;
-  }
 }
 
 .search-bar-container {
@@ -226,23 +239,17 @@
 
 .input-group {
   width: 65%;
-  //top: 350px;
 
   @media screen and (max-width: 990px) {
     width: 75%;
   }
 
   @media screen and (max-width: 770px) {
-    //top: 375px;
     width: 80%;
   }
 
   @media screen and (max-width: 650px) {
     width: 90%;
-  }
-
-  @media screen and (max-width: 550px) {
-    //top: 400px;
   }
 
   .input-group-text {
@@ -253,7 +260,8 @@
 
   fa-icon {
     margin: 0px;
-    font-size: 20px;
+    //font-size: 20px;
+    font-size: 1.25rem;
   }
 
   #find {
@@ -279,7 +287,8 @@
   border-radius: 5px;
 
   .search-icons {
-    font-size: 16px;
+    //font-size: 16px;
+    font-size: 1rem;
     color: white;
   }
 }
@@ -310,18 +319,22 @@
 .local-restaurants {
   position: relative;
   text-align: center;
-  font-size: 20px;
+  //font-size: 20px;
+  font-size: 1.25rem;
   color: $navigation-color;
-  padding: 50px;
+  //padding: 50px;
+  padding: 3.125rem;
   font-family: Arial, Helvetica, sans-serif;
 
   @media screen and (max-width: 500px) {
-    font-size: 18px;
+    //font-size: 18px;
+    font-size: 1.125rem;
   }
 }
 
 .restaurant-carousel {
-  padding-top: 25px;
+  //padding-top: 25px;
+  padding-top: 1.563rem;
   //width: 1020px;
   padding-left: 20vw;
   padding-right: 20vw;
@@ -341,33 +354,40 @@
   padding: 5vw;
 
   @media screen and (max-width: 500px) {
-    padding: 5px;
+    //padding: 5px;
+    padding: 0.313rem;
   }
 }
 
 .res-spotlight {
-  margin: 15px 30px;
-  padding: 20px;
+  //margin: 15px 30px;
+  //padding: 20px;
+  margin: 0.938rem 1.875rem;
+  padding: 1.25rem;
   background-color: white;
 
   .title-2 {
     text-align: center;
     margin: auto;
-    padding-top: 20px;
+    //padding-top: 20px;
+    padding-top: 1.25rem;
   }
 
   @media screen and (max-width: 400px) {
-    margin: 15px 0;
+    //margin: 15px 0;
+    margin: 0.938rem 0;
   }
 }
 
 .infoCard {
   width: 90%;
   height: fit-content;
-  padding: 20px;
+  //padding: 20px;
+  padding: 1.25rem;
   margin: auto;
   @media screen and (max-width: 400px) {
-    padding: 20px 0;
+    //padding: 20px 0;
+    padding: 1.25rem 0;
   }
 }
 
@@ -433,39 +453,52 @@
 }
 
 .title-2 {
-  font-size: 50px;
+  //font-size: 50px;
+  font-size: 3.125rem;
   font-weight: bold;
-  margin: 50px 0px 25px 0px;
+  //margin: 50px 0px 25px 0px;
+  margin: 3.125rem 0 1.563rem 0 ;
   color: rgb(77, 77, 77);
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 50px;
+  //line-height: 50px;
+  line-height: 3.125rem;
   @media screen and (max-width: 990px) {
-    font-size: 30px;
-    line-height: 30px;
-    margin: 30px 0px 15px 0px;
+    //font-size: 30px;
+    //line-height: 30px;
+    //margin: 30px 0px 15px 0px;
+    font-size: 1.875rem;
+    line-height: 1.875rem;
+    margin: 1.875rem 0 0.938rem 0;
   }
   @media screen and (max-width: 500px) {
-    font-size: 18px;
-    line-height: 18px;
-    margin: 25px 0px 15px 0px;
+    //font-size: 18px;
+    //line-height: 18px;
+    //margin: 25px 0px 15px 0px;
+    font-size: 1.125rem;
+    line-height: 1.125rem;
+    margin: 1.563rem 0 0.938rem 0;
   }
 }
 
 .subtitle-2 {
   color: rgb(77, 77, 77);
-  font-size: 20px;
+  //font-size: 20px;
+  font-size: 1.25rem;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
-  margin: 10px 10px 15px 10px;
+  //margin: 10px 10px 15px 10px;
+  margin: 0.625rem 0.625rem 0.938rem 0.625rem;
   @media screen and (max-width: 990px) {
-    font-size: 16px;
+    //font-size: 16px;
+    font-size: 1rem;
   }
 }
 
 .flex-container-2 {
   display: flex;
   flex-direction: row;
-  margin: 50px 150px;
+  //margin: 50px 150px;
+  margin: 3.125rem 9.375rem;
 
   @media screen and (max-width: 990px) {
     margin: auto;
@@ -478,10 +511,12 @@
 }
 
 .flex-item-2 {
-  padding: 30px 50px;
+  //padding: 30px 50px;
+  padding: 1.875rem 3.125rem;
   flex: 1;
   @media screen and (max-width: 990px) {
-    padding: 10px 20px;
+    //padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
   }
 }
 
@@ -540,7 +575,9 @@ hr {
   // padding: 7px 20px;
   padding: 7px 0px;
   width: 150px;
-  font-size: 16px;
+  //font-size: 16px;
+  font-size: 1rem;
+
   border-radius: 5px;
   border-width: 1px;
   font-family: Arial, Helvetica, sans-serif;
@@ -549,7 +586,8 @@ hr {
   border: solid 1px $secondary-color;
   font-weight: 600;
   @media screen and (max-width: 990px) {
-    font-size: 14px;
+    //font-size: 14px;
+    font-size: 0.875rem;
   }
 }
 

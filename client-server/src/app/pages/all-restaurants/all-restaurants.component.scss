@@ -6,8 +6,10 @@
 
 .header-title {
   text-align: center;
-  padding: 20px 10px 10px 10px;
-  font-size: 50px;
+  //padding: 20px 10px 10px 10px;
+  padding: 1.25rem 0.625rem 0.625rem 0.625rem;
+  //font-size: 50px;
+  font-size: 3.125rem;
 }
 
 .input-group {
@@ -15,8 +17,9 @@
   align-content: center;
   text-align: center;
   margin: auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  //padding-top: 20px;
+  //padding-bottom: 20px;
+  padding: 1.25rem 0;
 
   @media screen and (max-width: 900px) {
     width: 95%;
@@ -26,19 +29,22 @@
 
 .search-icons {
   color: black;
-  size: 30px;
+  //size: 30px;
+  size: 1.875rem;
 }
 
 .input-group-lg,
 .input-addon {
-  height: 38px;
+  //height: 38px;
+  height: 2.375rem;
   border-radius: 40px;
   // width: 100px;
   align-content: center;
 }
 
 .search {
-  padding: 30px 50px;
+  //padding: 30px 50px;
+  padding: 1.875rem 3.125rem;
   border-radius: 40px;
 }
 
