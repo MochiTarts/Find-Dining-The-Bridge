@@ -5,7 +5,7 @@ fa-icon {
 }
 
 mat-tab-group {
-  margin: 0 20%;
+  margin: 0 20rem;
 
   @media screen and (max-width: 1500px) {
     margin: 0 75px;
@@ -14,6 +14,12 @@ mat-tab-group {
   @media screen and (max-width: 700px) {
     margin: 0;
   }
+}
+
+.content { 
+  .mat-tab-label{
+    font-size: 10px;
+  } 
 }
 
 .header {
@@ -69,13 +75,15 @@ mat-tab-group {
 }
 
 .tab-info-left {
-  margin: 75px 5% 0px 10%;
+  //margin: 75px 5% 0px 10%;
+  margin: 4.688rem 5% 0 10%;
   // padding-top: 75px;
 }
 
 .tab-info-right {
   //margin: 75px 5% 75px 0px;
-  margin: 75px auto;
+  //margin: 75px auto;
+  margin: 4.688rem auto;
   // margin-top: 75px;
 }
 
@@ -91,7 +99,9 @@ mat-tab-group {
 }
 
 ngb-alert {
-  margin: 30px 10%;
+  font-size: 1rem;
+  //margin: 30px 10%;
+  margin: 1.875rem 10%;
 }
 
 .inline {
