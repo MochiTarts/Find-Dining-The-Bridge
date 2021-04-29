@@ -22,7 +22,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
 import { RestaurantService } from '../../_services/restaurant.service';
 import { MediaService } from '../../_services/media.service';
-import { Observable } from 'rxjs';
+import { concat, Observable } from 'rxjs';
 import { formValidation } from '../../_validation/forms';
 import { UserService } from '../../_services/user.service';
 import { draftValidator } from '../../_validation/draftValidator';
@@ -78,7 +78,10 @@ export class RestaurantPageComponent implements OnInit {
   submitVideoAllowed: boolean = false;
 
   imageUrls = [];
+  previewUrls = [];
+  captions = [];
   imageUrlsToDelete = [];
+  imageCaptionsToModify = [];
   addOrRemove: string = '';
   submitImageAllowed: boolean = false;
 
@@ -204,8 +207,10 @@ export class RestaurantPageComponent implements OnInit {
         add_or_remove: ['Choose a method to modify images...'],
       });
 
-      for (let item of this.restaurantDetails.restaurant_image_url) {
-        this.slides.push({ url: item.image.replace(' ', '%20') });
+      if (this.restaurantDetails.restaurant_image_url[0] != "/") {
+        for (let item of this.restaurantDetails.restaurant_image_url) {
+          this.slides.push({ url: item.image.replace(' ', '%20'), caption: item.caption });
+        }
       }
 
       this.videoId = this.getVideoId(this.restaurantDetails.restaurant_video_url);
@@ -333,6 +338,13 @@ export class RestaurantPageComponent implements OnInit {
     this.draftValidator.clearAllErrors();
     this.modalRef = this.modalService.open(content, { size: 's' });
     this.newFile = false;
+
+    // Reset
+    this.addOrRemove = 'Choose a method to modify images...';
+    this.uploadImageForm.get('add_or_remove').setValue('Choose a method to modify images...');
+    this.uploadImageForm.get('file').setValue([]);
+    this.previewUrls = [];
+    this.captions = [];
   }
 
   /**
@@ -364,9 +376,20 @@ export class RestaurantPageComponent implements OnInit {
    * @param event - the object containing the restaurant carousel image files
    */
   onImageFileSelect(event) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files;
-      this.uploadImageForm.get('file').setValue(file);
+    let files = event.target.files;
+
+    if (files.length > 0) {
+      let currentFiles = this.uploadImageForm.get('file').value.length > 0 ? this.uploadImageForm.get('file').value : [];
+      for (let file of files) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (_event) => {
+          this.previewUrls.push(reader.result);
+        }
+        this.captions.push('');
+        currentFiles.push(file);
+      }
+      this.uploadImageForm.get('file').setValue(currentFiles);
       this.newFile = true;
     }
   }
@@ -476,12 +499,10 @@ export class RestaurantPageComponent implements OnInit {
   onSubmitImage() {
     const formData = new FormData();
     if (this.addOrRemove == 'Upload new images') {
-      let captions = [];
       for (let i = 0; i < this.uploadImageForm.get('file').value.length; i++) {
         formData.append('media_file', this.uploadImageForm.get('file').value[i]);
-        captions.push('');
       }
-      formData.append('image_captions', JSON.stringify(captions));
+      formData.append('image_captions', JSON.stringify(this.captions));
       this.mediaService.uploadRestaurantMedia(formData, 'IMAGE', 'restaurant_image_url', 'False').subscribe((data) => {
         this.reload();
       }, (error) => {
@@ -494,6 +515,24 @@ export class RestaurantPageComponent implements OnInit {
       }, (error) => {
         alert(error.error.detail);
       });
+    } else if (this.addOrRemove == 'Modify caption for existing images') {
+      this.imageCaptionsToModify = this.imageCaptionsToModify.filter((value, index) => {
+        return value.caption != this.restaurantDetails.restaurant_image_url[index].caption;
+      });
+
+      let observables = this.imageCaptionsToModify.map((value) => {
+        return this.mediaService.updateRestaurantImageCaption(value);
+      });
+
+      let count = 0;
+      concat(...observables).subscribe(() => {
+        count++;
+        if (count == observables.length) {
+          this.reload();
+        }
+      }, (error) => {
+        alert(error.error.detail);
+      })
     }
     this.modalRef.close();
   }
@@ -514,6 +553,14 @@ export class RestaurantPageComponent implements OnInit {
     if (this.addOrRemove == 'Delete from existing images') {
       this.imageUrls = Object.assign([], this.restaurantDetails.restaurant_image_url.map((item) => item.image));
       this.imageUrlsToDelete = [];
+    } else if (this.addOrRemove == 'Modify caption for existing images') {
+      this.imageCaptionsToModify = [];
+      if (this.restaurantDetails.restaurant_image_url[0] != '/') {
+        this.restaurantDetails.restaurant_image_url.forEach(element => {
+          let clone = Object.assign({}, element);
+          this.imageCaptionsToModify.push(clone);
+        });
+      }
     }
   }
 
