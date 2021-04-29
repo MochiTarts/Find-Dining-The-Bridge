@@ -50,6 +50,9 @@ class AuditEntryAdmin(admin.ModelAdmin):
                 filter = 'username__icontains'
             elif filter == 'ip_address':
                 filter = 'ip_address__icontains'
+            # skip search field if it is enabled, need to handle it if search field is required
+            elif filter == 'q':
+                continue
             kwargs.update({filter: arg})
         # apply filters to the query set
         queryset = all_queryset.filter(**kwargs)

@@ -53,27 +53,34 @@ body {
 
 h2 {
   font-family: "Alegreya Sans SC", sans-serif;
-  font-size: 35px;
+  //font-size: 35px;
+  font-size: 2.188rem;
 }
 
 h5 {
-  font-size: 18px;
+  //font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 500;
 }
 
 p {
-  font-size: 16px;
+  //font-size: 16px;
+  font-size: 1rem;
 }
 
 fa-icon {
   color: white;
-  font-size: 25px;
-  margin: 0 10px;
+  //font-size: 25px;
+  //margin: 0 10px;
+  font-size: 1.563rem;
+  margin: 0 0.625rem;
 }
 
 .btn {
-  height: 35px;
-  margin: 20px;
+  //height: 35px;
+  //margin: 20px;
+  height: 2.188rem;
+  margin: 1.25rem;
   background-color: $secondary-color;
   color: white;
 }

@@ -1,5 +1,6 @@
 .icons {
-    font-size: 25px;
+    //font-size: 25px;
+    font-size: 1.563rem;
     color: gold;
 }
 
@@ -12,6 +13,7 @@ p {
     height: 328px;
     transition: all 0.2s ease-in-out;
     border: none !important;
+    overflow-y: hidden;
 }
 
 .card:hover {

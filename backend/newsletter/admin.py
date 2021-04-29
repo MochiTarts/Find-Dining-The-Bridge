@@ -84,6 +84,9 @@ class NLAuditAdmin(admin.ModelAdmin):
             # need to make sure custom filter keywords have appropriate suffices
             if filter == 'ip':
                 filter = 'ip__icontains'
+            # skip search field if it is enabled, need to handle it if search field is required
+            elif filter == 'q':
+                continue
             kwargs.update({filter: arg})
         # apply filters to the query set
         queryset = all_queryset.filter(**kwargs)

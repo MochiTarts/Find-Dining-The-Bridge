@@ -13,7 +13,14 @@
         </span>
       </div>
       <input type="text" class="form-control my-0 py-1 search" placeholder="Search" [(ngModel)]="inputRestaurant"
-        (ngModelChange)="searchRestaurants()" aria-label="search" />
+        (ngModelChange)="searchRestaurants()" aria-label="search" [ngbTypeahead]="search" [inputFormatter]="formatter"
+        [resultTemplate]="rt"/>
+
+      <ng-template #rt let-r="result" let-t="term">
+        <img src="{{ r.image }}" *ngIf="r.name" style="width: 6.25rem; margin-right: 0.625rem;"/>
+        <ngb-highlight [result]="r.name" *ngIf="r.name"></ngb-highlight>
+        <ngb-highlight [result]="r" *ngIf="!r.name"></ngb-highlight>
+      </ng-template>
     </div>
 
     <button class="btn filter-button" (click)="filterToggle()" placement="top" ngbTooltip="Open Filter Tab">Filter</button>
