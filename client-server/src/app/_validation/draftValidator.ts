@@ -55,7 +55,7 @@ export class draftValidator extends formValidator {
 
   errorStrings = {
     'name': 'Restaurant Name is required, and must be less than 255 characters.',
-    'years': 'Invalid Years in Business, ensure it is a non-negative number.',
+    'years': 'Years in Business must be a non-negative number.  Enter 1 if in business less than one year.',
     'address': 'Invalid Address - ensure the address is in Scarborough.',
     'streetAddress2': 'Invalid Address, must be less than 100 characters.',
     'streetAddress3': 'Invalid Address, must be less than 100 characters.',
