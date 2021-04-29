@@ -1,5 +1,10 @@
 @import "src/styles";
 
+::ng-deep .dropdown-menu {
+  left: "auto";
+  right: "10px";
+}
+
 // part 1
 .header-img {
   background-image: url("/assets/images/home/cover_4.png");

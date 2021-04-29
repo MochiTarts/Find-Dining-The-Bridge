@@ -4,6 +4,8 @@
   height: 50%;
 }
 
+::ng-deep .dropdown-menu { width: 90%; }
+
 .header-title {
   text-align: center;
   //padding: 20px 10px 10px 10px;

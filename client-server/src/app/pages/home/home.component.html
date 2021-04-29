@@ -83,6 +83,7 @@
           [(ngModel)]="find"
           (keyup.enter)="onEnter()"
           aria-label="search criteria input box"
+          [ngbTypeahead]="search" [resultFormatter]="formatter"
           />
         <div class="input-group-append">
           <button
