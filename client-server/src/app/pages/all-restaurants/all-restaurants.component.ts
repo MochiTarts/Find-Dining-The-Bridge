@@ -483,7 +483,7 @@ export class AllRestaurantsComponent implements OnInit {
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      map(term => term.length < 2 ? []
+      map(term => term.length < 1 ? []
         : searchItems.filter(v => v.hasOwnProperty('name') ? 
         v.name.toLowerCase().indexOf(term.toLowerCase()) > -1 : v.toLowerCase().indexOf(term.toLowerCase()) > -1))
     )
