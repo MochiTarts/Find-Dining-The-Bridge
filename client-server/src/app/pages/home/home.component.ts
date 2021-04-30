@@ -202,7 +202,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term.length < 1 ? []
-        : searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) == 0).slice(0, 10))
+        : searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) == 0).
+          concat(searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > 0)).slice(0, 10))
     )
 
 }
