@@ -4,8 +4,8 @@
   //height: 40px;
   height: 2.5rem;
   width: auto;
- // margin-left: 5px;
- margin-left: 0.313rem;
+  // margin-left: 5px;
+  margin-left: 0.313rem;
   cursor: pointer;
 }
 
@@ -49,7 +49,7 @@
 }
 
 .scarborough {
-  font-family: 'Trebuchet MS', sans-serif;
+  font-family: "Trebuchet MS", sans-serif;
   //font-size: 18px;
   font-size: 1.125rem;
   color: rgb(77, 77, 77);
@@ -178,11 +178,6 @@ br {
   margin: 0.438rem 0.625rem;
 }
 
-.icon:hover {
-  cursor: pointer;
-  opacity: 0.5;
-}
-
 .separator {
   //font-size: 20px;
   height: 1.25rem;
@@ -199,4 +194,8 @@ br {
   @media screen and (max-width: 1000px) {
     display: none;
   }
+}
+
+.not-clickable {
+  cursor: default;
 }
