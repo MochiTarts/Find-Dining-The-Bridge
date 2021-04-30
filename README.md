@@ -10,7 +10,7 @@
 [Prerequisites](#prerequisite)  
 [Development Environment](#setup-development-environment)  
   - [Setup](#setup-development-environment)
-  - [Authentication/Django/Security](#authentication/django/security-overview)  
+  - [Authentication/Security](#authentication-and-security-overview)  
   - [Backend Overview](#backend-overview)  
   - [Frontend Overview](#frontend-overview)  
   - [Unit Tests](#running-Django-unit-tests)
@@ -123,7 +123,7 @@ SSL certificates.
 ```
 ![website landing page](https://lh3.googleusercontent.com/pw/ACtC-3c0wp_tfbNzwTKhBP1D9rbh8fK1PkMP2-66hgP6-BjGgiTPFJtyLR6BSOmK9vXa7V7QAYXohmr5RB7r-AmChhxtjYAzIoYxr7jBA63LJe-BqtVXm6Xup5Uq9CBB-dNhcp5tgdik1tgQgZimZlQr_yAB=w1370-h873-no?authuser=0)
 
-### Authentication/Django/Security overview
+### Authentication and Security overview
 ```
 The following videos were recorded at the end of April to help you understand the overall structure of the web app (actually it’s primarily about the backend). Please make sure you have the prerequisites (step 1 and 2) before watching the video so that you can understand the concepts and details as I talk it through. I recommend you to adjust the play speed to be at least 2x as I talked very slowly in the videos.
 ```
