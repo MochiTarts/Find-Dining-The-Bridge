@@ -36,6 +36,7 @@ jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
 - admin restaurant graphs, github actions, docker containers
 - backend for subscriber_profile
 - backend settings.py for each environment
+- mass mailing, GMass, CASL subscriptions
 
 zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
 - backend for restaurant, restaurant_owner, newsletter
@@ -45,7 +46,7 @@ zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
 <br/>
 
 # Project Setup & Overview (Updated Winter 2021)
-``` backend ``` contains the Django app project for creating API endpoints that writes/updates/retrieves/remove content from the MongoDB database, and sends data to the Angular frontend.
+``` backend ``` contains the Django app project for creating API endpoints that writes/updates/retrieves/removes content from the MongoDB database, and sends data to the Angular frontend.
 
 ``` client-server ``` contains the Angular app project for serving static and dynamic content, makes requests to API endpoints defined in Django.
 
@@ -75,6 +76,7 @@ Install virtualenv somewhere in your Find-Dining-Revamp project local repo and a
 Activate the virtualenv for this project.
 
 Set environment variables from .env file.
+(note that you could run a short script or simply add a line in the activation script to automatically set the variables)
 
 Install project dependencies (if first-time setup or new dependencies were added):
 ```
@@ -121,6 +123,8 @@ SSL certificates.
 
 ### Authentication overview
 
+<br/>
+
 ### Backend overview
 Backend settings.
 ```
@@ -138,7 +142,7 @@ Django apps for API CRUD operations.
 Utility function folders.
 ```
 - google/ (google analytics, google sheets for mass mailing)
-- index/ (send mail for verification)
+- index/ (send mail for get involved page or contact us page)
 - oauth2/ (3rd party login and signup)
 - utils/ (many helper functions: validators, exception handler, etc)
 ```
@@ -150,7 +154,7 @@ Admin site specific folders.
 Django served pages folders.
 ```
 - static/ (admin and django served pages static files)
-- templates/ (admin and django served pages HTML files)
+- templates/ (admin and django served or rendered pages - HTML files)
 ```
 
 <br/>
@@ -181,10 +185,9 @@ Auth guards for page protection and http interceptor.
 ```
 - src/app/_helpers/
   - auth.guard.ts (guards against non logged-in users)
-  - auth.interceptor.ts (sends access token in http requests and refreshes token if
-    expired)
+  - auth.interceptor.ts (attach access token on the header in http requests and refreshes token in the cookie)
   - ro.guard.ts (guards against non-RO users)
-  - secure.guard.ts
+  - secure.guard.ts (not being used but simply attempt to refresh for any pages that needs absolute security)
 ```
 Form validators.
 ```
@@ -268,11 +271,12 @@ Compodoc was used to generate Angular documentation
 <br/>
 
 ## Database
-There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers.
+There are four MongoDB databases, the dev database, and the other three each running in a separate MongoDB container on their respective servers.
 ```
-mongodb-test (test.finddining.ca:8443)
-mongodb-uat (uat.finddining.ca:8444)
-mongodb-prod (finddining.ca)
+[Container name]     [Site domain]               [Database name]
+mongodb-test         test.finddining.ca:8443     scdining
+mongodb-uat          uat.finddining.ca:8444      scdining
+mongodb-prod         finddining.ca               scdining
 ```
 
 The .env file will contain the host string, user, and password for the ``` scdining ``` dev database
