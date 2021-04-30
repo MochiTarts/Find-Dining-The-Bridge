@@ -17,6 +17,7 @@
 [Documentation](#documentation)  
 [Database](#database)  
 [Permissions and Access](#permissions-and-access)  
+[AODA](#aoda)  
 [Deploying Changes](#deployment)  
 
 ### Contact Info
@@ -311,10 +312,32 @@ Google Cloud Console (project name: scdining-winter2021)
 Please ask a member of the Find Dining team (that can login with info@finddining.ca)
 to add you as an owner of the project
 ```
+- https://console.cloud.google.com/
 - GCP services being used:
     - Google Cloud Storage (for storing images and videos)
     - Geocoding (for getting latitude, longitude coordinates of a location)
     - Google Analytics (for keeping track of restaurant page traffic)
+<br/>
+
+Google reCaptcha
+```
+Please ask a member of the Find Dining team (that can login with info@finddining.ca)
+to add you as an owner of the project
+```
+- https://www.google.com/recaptcha/admin/
+- 3 reCaptcha keys being used:
+    - sd-frontend-v2
+    - sd-prod-v2
+    - sd-test-v2
+- Demo for adding Google reCaptcha2 to Angular
+    - https://enngage.github.io/ngx-captcha/recaptcha2
+    - Source code of demo: https://github.com/Enngage/ngx-captcha/blob/master/demo/src/re-captcha-2-demo.component.ts
+
+<br/>
+
+MapBox
+- https://www.mapbox.com/
+- The access tokens are accessible by login with email info@finddining.ca
 
 <br/>
 
@@ -329,6 +352,23 @@ either the Github workflow or yourself
     - _finddiningutsc/prod_
 
 <br/>
+
+## AODA
+We must comply AODA for Angular app. Must achieve level AA of WCAG 2.0
+
+https://www.ontario.ca/page/how-make-websites-accessible
+
+Some useful tools:
+- Accessibility Checker:
+    - AccessibilityTestFree https://www.accessibilitytestfree.com/
+    - WAVE https://wave.webaim.org/
+- Contrast Checker:
+    - https://webaim.org/resources/contrastchecker/
+- Screen Reader:
+    - Google Extension https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn?hl=en
+    - JAWS https://support.freedomscientific.com/Downloads/JAWS
+
+<br />
 
 ## Deployment
 Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```.
