@@ -10,7 +10,7 @@
 [Prerequisites](#prerequisite)  
 [Development Environment](#setup-development-environment)  
   - [Setup](#setup-development-environment)
-  - [Authentication](#authentication-overview)  
+  - [Authentication/Security](#authentication-and-security-overview)  
   - [Backend Overview](#backend-overview)  
   - [Frontend Overview](#frontend-overview)  
   - [Unit Tests](#running-Django-unit-tests)
@@ -28,9 +28,11 @@ minqi.zhang@mail.utoronto.ca - Min Qi Zhang (frontend)
  - AODA compliance specialist
   
 isaac.mou@mail.utoronto.ca - Isaac Mou (backend)
-- frontend httpinterceptor, frontend auth services, frontend guards
-- backend authentication (login, signup, jwt tokens)
-- backend for news articles, sduser, login_audit
+- frontend http-interceptor, auth services and guards, login and account setting pages
+- backend authentication and urls (login, signup, jwt tokens)
+- backend for articles, sduser, restaurant_owner, image, oauth2, all the audits/logs
+- backend DRF/JWT/security settings and some utils
+- most of the Django templates
 
 jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
 - admin restaurant graphs, github actions, docker containers
@@ -39,7 +41,7 @@ jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
 - mass mailing, GMass, CASL subscriptions
 
 zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
-- backend for restaurant, restaurant_owner, newsletter
+- backend for restaurant, restaurant_owner, newsletter, test, utils, and exception handling
 - frontend news articles, frontend subscriber_profile, assist with mobile-friendly css and frontend components typescript
 - swagger documentation, compodoc documentation
 
@@ -121,7 +123,25 @@ SSL certificates.
 ```
 ![website landing page](https://lh3.googleusercontent.com/pw/ACtC-3c0wp_tfbNzwTKhBP1D9rbh8fK1PkMP2-66hgP6-BjGgiTPFJtyLR6BSOmK9vXa7V7QAYXohmr5RB7r-AmChhxtjYAzIoYxr7jBA63LJe-BqtVXm6Xup5Uq9CBB-dNhcp5tgdik1tgQgZimZlQr_yAB=w1370-h873-no?authuser=0)
 
-### Authentication overview
+### Authentication and Security overview
+```
+The following videos were recorded at the end of April to help you understand the overall structure of the web app (actually it’s primarily about the backend). Please make sure you have the prerequisites (step 1 and 2) before watching the video so that you can understand the concepts and details as I talk it through. I recommend you to adjust the play speed to be at least 2x as I talked very slowly in the videos.
+```
+JWT Auth
+1. Have some understanding of authentication in general
+2. Have some knowledge of what JWT is
+3. https://www.youtube.com/watch?v=IoZrRndLUgw (concept explained on paper)
+
+More about Auth and security with Django
+1. Understand what Django is
+2. Understand the general structure of our web app (understand how communications were set up between frontend,  backend, and the database)
+3. https://www.youtube.com/watch?v=kfwcViPSpZI (concept explained on paper)
+
+Code Review on Django Customization
+1. Understand the basics of a Django app
+2. Have looked at Django Rest Framework
+3. https://www.youtube.com/watch?v=e3xJ1hX_ytE (insights on the overall backend, explained with code, can also reference the next section - backend overview)
+
 
 <br/>
 
@@ -185,7 +205,7 @@ Auth guards for page protection and http interceptor.
 ```
 - src/app/_helpers/
   - auth.guard.ts (guards against non logged-in users)
-  - auth.interceptor.ts (attach access token on the header in http requests and refreshes token in the cookie)
+  - auth.interceptor.ts (attaches access token on the header in http requests and handles errors to either log usere out or refresh the token and halt the subsequent requests until refreshed)
   - ro.guard.ts (guards against non-RO users)
   - secure.guard.ts (not being used but simply attempt to refresh for any pages that needs absolute security)
 ```
@@ -359,6 +379,19 @@ either the Github workflow or yourself
     - _finddiningutsc/prod_
 
 <br/>
+
+Configuring third party authentication:
+```
+Note that there should not be any submission/approval process required because we are not asking for too sensativie information other than the public profile. Otherwise, depending on the information you need from the user, you will need to submit rationales or alike for approval in order to gain access to them. You can access the configuration page for each third party logins.
+```
+FACEBOOK APP for LOGIN
+ - need to ask a member of the team to add you as administrator (if needed)
+ - https://developers.facebook.com/apps/874417486731218/fb-login/settings/
+ - Make sure the links to privacy policy, terms of service, data deletion instructions, are all correct. And also any other settings. You can check or modify them under Settings -> Basic. Then, you can flip the switch on the top from "In Development" to "Live".
+
+GOOGLE APP for LOGIN
+ - https://console.developers.google.com/apis/credentials/oauthclient/739217804766-54cq902bdq8s7qcghtu7a6b43qel9984.apps.googleusercontent.com?project=scdining-winter2021
+
 
 ## AODA
 We must comply AODA for Angular app. Must achieve level AA of WCAG 2.0
