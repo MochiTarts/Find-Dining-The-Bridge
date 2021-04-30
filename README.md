@@ -36,6 +36,7 @@ jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
 - admin restaurant graphs, github actions, docker containers
 - backend for subscriber_profile
 - backend settings.py for each environment
+- mass mailing, GMass, CASL subscriptions
 
 zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
 - backend for restaurant, restaurant_owner, newsletter
