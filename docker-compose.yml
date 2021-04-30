@@ -104,7 +104,7 @@ services:
       context: ./backend
       args:
         - PORT=8002
-        - DEBUG=False
+        - DEBUG=True
         - SSL_REDIRECT=True
         - ALLOWED_HOSTS=142.1.166.181,finddining-uat.utsc.utoronto.ca,uat.finddining.ca
         - CORS_ALLOWED=https://142.1.166.181,https://finddining-uat.utsc.utoronto.ca,https://uat.finddining.ca,https://jsonip.com

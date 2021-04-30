@@ -10,8 +10,12 @@ import { UserService } from '../../_services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, OperatorFunction } from 'rxjs';
+import { ContentObserver } from '@angular/cdk/observers';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
+
+var searchItems = [];
 
 @Component({
   selector: 'app-all-restaurants',
@@ -30,10 +34,10 @@ export class AllRestaurantsComponent implements OnInit {
   favList: any[] = [];
 
   priceFilterRestaurants: any[];
-  deliveryFilterRestaurants: any[];
   cuisineFilterRestaurants: any[];
   serviceFilterRestaurants: any[];
   searchedRestaurants: any[];
+  locationRestaurants: any[];
 
   restaurants: any[] = [];
   dishes: any[];
@@ -91,6 +95,10 @@ export class AllRestaurantsComponent implements OnInit {
     this.restaurantService.listRestaurants().subscribe((data) => {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
+      searchItems = this.allRestaurants.map(function(a) {return {name: a['name'], image: a['logo_url']}});
+      searchItems = searchItems.concat(
+        cuisinesStr.map(function(a) {return {name: a}}),
+        servicesStr.map(function(a) {return {name: a}}));
       this.initializeRestaurants();
 
       var selectedPostion: any;
@@ -106,14 +114,17 @@ export class AllRestaurantsComponent implements OnInit {
 
           this.addDistance(selectedPostion);
           this.restaurants = this.sortClosestCurrentLoc(this.restaurants);
-          console.log(this.restaurants);
+          //console.log(this.restaurants);
           this.allRestaurants = this.restaurants;
           this.initializeRestaurants();
+          this.searchLocation();
 
           if (this.inputRestaurant) {
             this.searchRestaurants();
           }
         });
+      } else if (this.inputRestaurant) {
+        this.searchRestaurants();
       } else {
         navigator.geolocation.getCurrentPosition((position) => {
           selectedPostion = position;
@@ -146,10 +157,10 @@ export class AllRestaurantsComponent implements OnInit {
   initializeRestaurants() {
     this.restaurants_total = this.allRestaurants.length;
     this.priceFilterRestaurants = this.allRestaurants;
-    this.deliveryFilterRestaurants = this.allRestaurants;
     this.cuisineFilterRestaurants = this.allRestaurants;
     this.serviceFilterRestaurants = this.allRestaurants;
     this.searchedRestaurants = this.allRestaurants;
+    this.locationRestaurants = this.allRestaurants;
   }
 
   /**
@@ -197,10 +208,10 @@ export class AllRestaurantsComponent implements OnInit {
     this.restaurants = [];
     for (var i = 0; i < this.priceFilterRestaurants.length; i++) {
       var current = this.priceFilterRestaurants[i];
-      if (this.deliveryFilterRestaurants.includes(current)
-        && this.cuisineFilterRestaurants.includes(current)
+      if (this.cuisineFilterRestaurants.includes(current)
         && this.serviceFilterRestaurants.includes(current)
-        && this.searchedRestaurants.includes(current)) {
+        && this.searchedRestaurants.includes(current)
+        && this.locationRestaurants.includes(current)) {
         this.restaurants.push(current);
       }
     }
@@ -269,31 +280,6 @@ export class AllRestaurantsComponent implements OnInit {
       }
     }
     this.updateRestarants();
-  }
-
-  filterDeliveryCharges(list) {
-    // const isFalse = (currentValue) => !currentValue;
-
-    // if (list.every(isFalse)) {
-    //   this.deliveryFilterRestaurants = this.allRestaurants;
-    // } else {
-    //   this.deliveryFilterRestaurants = [];
-    //   for (var i = 0; i < this.allRestaurants.length; i++) {
-    //     var query = this.allRestaurants[i];
-    //     if (list[0] == true && query.deliveryFee == '$1 - $2') {
-    //       this.deliveryFilterRestaurants.push(query);
-    //     }
-
-    //     if (list[1] == true && query.deliveryFee == '$2 - $4') {
-    //       this.deliveryFilterRestaurants.push(query);
-    //     }
-
-    //     if (list[2] == true && query.deliveryFee == '$5+') {
-    //       this.deliveryFilterRestaurants.push(query);
-    //     }
-    //   }
-    // }
-    // this.updateRestarants();
   }
 
   /**
@@ -375,6 +361,27 @@ export class AllRestaurantsComponent implements OnInit {
     }
   }
 
+  searchLocation() {
+    if (!this.location) {
+      this.locationRestaurants = this.allRestaurants;
+    } else {
+      this.locationRestaurants = [];
+      for (let restaurant of this.allRestaurants) {
+        var coord = JSON.parse(restaurant.GEO_location.replace(/\'/g, '"'));
+        var lat = coord.lat;
+        var lng = coord.lng;
+        this.restaurantService.getAddressFromCoord(lat, lng).subscribe((data) => {
+          var address = data.address.toLowerCase();
+          this.location = this.location.toLowerCase();
+          if (address.includes(this.location)) {
+            this.locationRestaurants.push(restaurant);
+          }
+          this.updateRestarants();
+        });
+      }
+    }
+  }
+
   /**
    * Updates the list of searchedRestaurants based on search
    * criteria
@@ -444,5 +451,15 @@ export class AllRestaurantsComponent implements OnInit {
       }
     }
   }
+
+  formatter = (x) => x.hasOwnProperty('name') ? x.name : x;
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 1 ? []
+        : searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) == 0).
+          concat(searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > 0)).slice(0, 10))
+    )
 
 }

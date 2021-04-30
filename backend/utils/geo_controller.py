@@ -9,10 +9,13 @@ client = googlemaps.Client(settings.GEOCODE_API_KEY)
 
 
 def geocode(address):
-    """
-    :params-address: address to be geocoded
-    return longitude and latitude of an address
-    raises Value error for no results or multiple results
+    """ Retrieves coordinates from a given address
+
+    :params address: address to be geocoded
+    :type address: str
+    :raises ValidationError: for no results or multiple results
+    :return: longitude and latitude of an address
+    :rtype: dict
     """
     results = client.geocode(address)
     if len(results) == 0:
@@ -21,6 +24,23 @@ def geocode(address):
             code='location_not_exist')
     else:
         return results[0]['geometry']['location']
+
+
+def reverse_geocode(coordinates):
+    """ Retrieves formatted address from coordinates
+
+    :param coordinates: lat, lng of a location
+    :type coordinates: dict
+    :raises ValidationError: if no results come from the
+        given coordinates
+    :return: the formatted address
+    :rtype: str
+    """
+    address = client.reverse_geocode(coordinates)
+    if len(address) == 0:
+        raise ValidationError("No results from given coordinates",
+        code='address_not_found')
+    return address[0]['formatted_address']
 
 
 def in_scarborough(coord):

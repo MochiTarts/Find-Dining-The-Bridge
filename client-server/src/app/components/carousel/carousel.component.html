@@ -47,6 +47,7 @@
         *ngIf="getFile(i) && getFile(i)['image'] && getFile(i)['image']['type'] === 'restaurant'"
         [style.width]="getCellWidth() + 'px'"
         [style.border-radius]="borderRadius + 'px'"
+        [style.border]="'rgb(228, 228, 228) solid 2px'"
       >
         <app-restaurant-nearby-card [restaurant]="getFile(i)['image']"></app-restaurant-nearby-card>
       </div>

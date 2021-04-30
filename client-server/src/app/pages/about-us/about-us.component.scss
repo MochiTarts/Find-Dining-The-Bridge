@@ -17,16 +17,20 @@
 
 .title {
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 35px;
+  //font-size: 35px;
+  font-size: 2.188rem;
 
   @media screen and (max-width: 400px) {
-    font-size: 25px;
-    line-height: 25px;
+    //font-size: 25px;
+    //line-height: 25px;
+    font-size: 1.563rem;
+    line-height: 1.563rem;
   }
 }
 
 .subtitle {
-  padding: 10px 0px;
+  //padding: 10px 0px;
+  padding: 0.625rem 0;
 }
 
 .carousel {
@@ -37,4 +41,9 @@
   @media screen and (max-width: 650px) {
     width: 100%;
   }
+}
+
+app-partner-card {
+  width: 200px;
+  height: 300px;
 }

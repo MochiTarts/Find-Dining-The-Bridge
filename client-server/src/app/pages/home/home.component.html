@@ -1,16 +1,25 @@
 <div class="header-img">
   <div class="header-container">
     <div class="header-text" fxLayout="column" fxLayoutAlign="center center">
-      <!-- <h1 class="title" tabindex="0">
-        Supporting <br class="title-break" />
-        Scarborough <br class="title-break-2" />
-        Restaurants
-      </h1> -->
-      <img
+      <div class="title-text">
+        <img
+          class="header-logo"
+          src="/assets/images/find_dining_logo.png"
+          alt="Find Dining logo"
+          />
+
+        <div class="title" tabindex="0" style="text-align: center;">
+          <div class="title-font find">FIND</div>
+          <div class="title-font dining">DINING</div> <br
+            class="title-break-2" />
+          <div class="title-font scarborough">SCARBOROUGH</div>
+        </div>
+      </div>
+      <!--<img
         class="header-title"
         src="/assets/images/find_dining_logo_name_row.png"
         alt="Find Dining logo"
-        />
+        />-->
       <div class="header-content description" tabindex="0">
         Find Dining is a Scarborough based program that celebrates our
         community's rich, cultural diversity through food. We aim to highlight
@@ -74,13 +83,19 @@
           [(ngModel)]="find"
           (keyup.enter)="onEnter()"
           aria-label="search criteria input box"
+          [ngbTypeahead]="search" [inputFormatter]="formatter"
+          [resultTemplate]="rt"
           />
+          <ng-template #rt let-r="result" let-t="term">
+            <img src="{{ r.image }}" *ngIf="r.image" style="width: 6.25rem; margin-right: 0.625rem;"/>
+            <ngb-highlight [result]="r.name"></ngb-highlight>
+          </ng-template>
         <div class="input-group-append">
           <button
             class="btn-primary"
             type="button"
             [routerLink]="['/all-listings']"
-            [queryParams]="{ location: location, find: find }">
+            [queryParams]="{ location: location, find: find.name }">
             <fa-icon class="search-icons" [icon]="faSearch"></fa-icon><span> Go
               Find Dining</span>
           </button>
@@ -101,7 +116,7 @@
 </div>
 
 <div class="local-restaurants" *ngIf="restaurants.length> 0">
-  <b>Discover Local Favourites</b>
+  <b tabindex="0">Discover Local Favourites</b>
   <div class="restaurant-carousel">
     <ivy-carousel
       style="max-width: fit-content; margin: auto"
@@ -128,12 +143,12 @@
             />
         </div>
         <div class="col" id="info-col2">
-          <p>
+          <p tabindex="0">
             <b>{{ spotlight.name }}</b> | {{ spotlightCuisines }} |
             {{ spotlight.years }} year<span *ngIf="spotlight.years> 1">s</span>
             in business
           </p>
-          <p class="bio">
+          <p class="bio" tabindex="0">
             {{ spotlightStory }}
             <a
               class="continue-link"
@@ -207,7 +222,7 @@
       [imgUrl]="'assets/images/home/email_update.png'"
       [title]="'EMAIL
       UPDATES'"
-      [description]="'Monitor your emails for launch updates'"
+      [description]="'Monitor your emails for registration confirmation'"
       tabindex="0"></app-info-card>
     <app-info-card
       class="flex-item-3"
@@ -275,7 +290,7 @@
 
 
 
-<!--<div class="bg2" style="padding: 10px;"></div>-->
+<div class="bg2" style="padding: 10px;"></div>
 
 <!-- Subscriber Profile Form -->
 <app-subscriber-profile-form

@@ -1,4 +1,4 @@
-<div *ngIf="dish">
+<div *ngIf="dish" tabindex="0">
   <div class="card cardBox">
     <div *ngIf="dish.picture" class="img-container">
       <img
@@ -26,6 +26,7 @@
         <button
           class="btn"
           (click)="openDish(content)"
+          (touchend)="openDish(content)"
           placement="top"
           ngbTooltip="View Dish Details"
         >
@@ -51,7 +52,11 @@
       <div class="row" id="row-modal">
         <div *ngIf="dish.picture">
           <div class="col-md-4" id="col-img">
-            <img class="dish-img" src="{{ dish.picture }}" alt="{{ dish.name }}" />
+            <img
+              class="dish-img"
+              src="{{ dish.picture }}"
+              alt="{{ dish.name }}"
+            />
           </div>
         </div>
         <div *ngIf="!dish.picture">

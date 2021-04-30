@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faStar, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { ArticleService } from '../../_services/article.service';
 import { Title } from '@angular/platform-browser';
 import { TokenStorageService } from '../../_services/token-storage.service';
@@ -44,6 +44,7 @@ export class NewsArticlesComponent implements OnInit {
 
   faSearch = faSearch;
   faStar = faStar;
+  faTimesCircle = faTimesCircle;
 
   selectedArticle: any = Object;
   totalTabs: any[] = [];
@@ -120,6 +121,11 @@ export class NewsArticlesComponent implements OnInit {
     setTimeout(() => {
       articleDiv.style.opacity = "1";
     }, 10);
+
+    let el = document.getElementById("article-container");
+    el.scrollIntoView({
+      behavior: 'smooth'
+    });
   }
 
   /**
@@ -155,6 +161,11 @@ export class NewsArticlesComponent implements OnInit {
     setTimeout(() => {
       articleDiv.style.opacity = "1";
     }, 10);
+
+    let el = document.getElementById("article-container-mobile");
+    el.scrollIntoView({
+      behavior: 'smooth'
+    });
   }
 
   /**

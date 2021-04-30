@@ -8,6 +8,11 @@ import { faSearch, faArrowCircleLeft, } from '@fortawesome/free-solid-svg-icons'
 import { Title } from '@angular/platform-browser';
 import { UserService } from '../../_services/user.service';
 import { TokenStorageService } from '../../_services/token-storage.service';
+import { Observable, OperatorFunction } from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+
+
+var searchItems = [];
 
 @Component({
   selector: 'app-favourites',
@@ -77,7 +82,11 @@ export class FavouritesComponent implements OnInit {
     /* Replace this with method for calling list
        of favourite restaurants by userId */
     this.userService.getFavouriteRestaurants().subscribe((data) => {
-      this.restaurants = data
+      this.restaurants = data;
+      searchItems = data.map(function(a) {return {name: a['name'], image: a['logo_url']}});
+      searchItems = searchItems.concat(
+        cuisinesStr.map(function(a) {return {name: a}}),
+        servicesStr.map(function(a) {return {name: a}}));
       if (this.restaurants != undefined && this.restaurants.length != 0) {
         this.emptyFavourites = false
       }
@@ -259,5 +268,15 @@ export class FavouritesComponent implements OnInit {
   goBack() {
     this.router.navigate(['/all-listings']);
   }
+
+  formatter = (x) => x.hasOwnProperty('name') ? x.name : x;
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 1 ? []
+        : searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) == 0).
+          concat(searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > 0)).slice(0, 10))
+    )
 
 }

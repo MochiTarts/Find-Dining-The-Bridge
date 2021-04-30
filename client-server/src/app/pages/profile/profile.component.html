@@ -22,12 +22,12 @@
 <ng-template #loggedOut>
   Please login.
 </ng-template>-->
-
 <div class="profile-box" role="main" aria-label="profile">
   <div>
-    <div class="row no-gutters content-wrap">
+    <div class="row no-gutters content-wrap" tabindex="0">
       <div class="col-md-12">
-        <h2 class="name">{{ currentUser.first_name }} {{ currentUser.last_name }}</h2>
+        <h2 class="name">{{ currentUser.first_name }} {{ currentUser.last_name
+          }}</h2>
       </div>
       <div class="col-md-12" style="margin-top: 25px;">
         <p><b>Email:</b> {{ currentUser.email }}</p>
@@ -36,15 +36,15 @@
         <p><b>Postal Code:</b> {{ currentUser.postalCode }}</p>
       </div>
       <div class="col-md-12">
-        <p><b>Phone Number:</b> {{ currentUser.phone }} <span *ngIf="currentUser.phone_ext">Ext. {{ currentUser.phone_ext }}</span></p>
+        <p><b>Phone Number:</b> {{ currentUser.phone }} <span
+            *ngIf="currentUser.phone_ext">Ext. {{ currentUser.phone_ext }}</span></p>
       </div>
       <div class="col-md-12 text-center" style="margin-top: 25px;">
         <button
           class="btn edit-profile"
           (click)="openEditModal()"
           placement="top"
-          ngbTooltip="Update Your Info"
-        >
+          ngbTooltip="Update Your Info">
           Edit Profile
         </button>
       </div>
@@ -53,7 +53,6 @@
 </div>
 
 <app-subscriber-profile-form #userInfo role="form"></app-subscriber-profile-form>
-
 <!--
 <h2 class="name">{{ currentUser.username }}</h2>
 <p><b>Email:</b> {{ currentUser.email }}</p>

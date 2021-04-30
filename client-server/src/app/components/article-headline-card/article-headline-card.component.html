@@ -1,10 +1,25 @@
-<div class="card mat-elevation-z8" (click)="openArticle()" placement="top" ngbTooltip="Open Article">
-    <div class="card-body">
-        <h2 class="card-title">{{ article.title }}</h2>
-        <h4 class="card-subtitle text-muted" *ngIf="!article.modified_at">{{ article.created_at | date:'mediumDate' }}</h4>
-        <h4 class="card-subtitle text-muted" *ngIf="article.modified_at">{{ article.modified_at | date:'mediumDate' }}</h4>
-        <p class="card-text">
-            {{ (articleTextPreview.length > 200) ? (articleTextPreview | slice:0:200)+'...':(articleTextPreview) }}
-        </p>
-    </div>
+<div
+  class="card mat-elevation-z8"
+  (click)="openArticle()"
+  (keyup.enter)="openArticle()"
+  placement="top"
+  ngbTooltip="Open Article"
+  tabindex="0"
+>
+  <div class="card-body">
+    <h2 class="card-title">{{ article.title }}</h2>
+    <h4 class="card-subtitle text-muted" *ngIf="!article.modified_at">
+      {{ article.created_at | date: "mediumDate" }}
+    </h4>
+    <h4 class="card-subtitle text-muted" *ngIf="article.modified_at">
+      {{ article.modified_at | date: "mediumDate" }}
+    </h4>
+    <p class="card-text">
+      {{
+        articleTextPreview.length > 200
+          ? (articleTextPreview | slice: 0:200) + "..."
+          : articleTextPreview
+      }}
+    </p>
+  </div>
 </div>

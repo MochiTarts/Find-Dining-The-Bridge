@@ -2,7 +2,7 @@
 
 h1, h2, h3, h4, h5, h6 {
     font-family: Arial, Helvetica, sans-serif;
-    line-height: 50px;
+    line-height: 3.125rem;
 }
 
 .article-body {
@@ -10,17 +10,31 @@ h1, h2, h3, h4, h5, h6 {
     overflow: hidden;
 }
 
+.icons {
+    color: #0078c2;
+    margin: auto;
+    font-size: 2rem;
+    transition: 0.2s;
+}
+
+.icons:hover {
+    cursor: pointer;
+    color: #00a4e5;
+}
+
 /* HEADER */
 .header-container {
     background-image: url(../../../assets/images/articles_header.png);
-    background-position: center -550px;
-    background-size: 2100px auto;
+    background-position: center -34.375rem;
+    //background-size: 2100px auto;
+    background-size: 131.25rem auto;
 	background-repeat: no-repeat;
     overflow: hidden;
 }
 
 .title-row {
-    min-height: 200px;
+    //min-height: 200px;
+    min-height: 12.5rem;
     width: 100%;
     position: relative;
 }
@@ -34,15 +48,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .title-row h1 {
-    font-size: 50px;
+    //font-size: 50px;
+    font-size: 3.125rem;
     font-weight: bolder;
     color: white;
 }
 
 .underline {
     border-bottom: #00a4e5 solid 5px;
-    width: 75px;
-    padding-top: 15px;
+    //width: 75px;
+    //padding-top: 15px;
+    width: 4.688rem;
+    padding-top: 0.938rem;
     margin: auto;
 }
 
@@ -77,14 +94,14 @@ h1, h2, h3, h4, h5, h6 {
 /* DISPLAYED ARTICLES */
 .main-container {
     margin-top: 70px;
-    margin-bottom: 50px;
-    padding: 0px 50px;
+    margin-bottom: 3.125rem;
+    padding: 0px 3.125rem;
     min-height: 300px;
 }
 
 .article-row {
     margin: 0px auto;
-    padding-bottom: 50px;
+    padding-bottom: 3.125rem;
     max-width: 1700px;
 }
 
@@ -98,12 +115,27 @@ h1, h2, h3, h4, h5, h6 {
 
 .article-title {
     text-align: center;
-    font-size: 30px;
+    //font-size: 30px;
+    //line-height: 30px;
+    font-size: 1.875rem;
+    line-height: 1.875rem;
+}
+
+.article-title a {
+    color: black;
 }
 
 .article-subtitle {
     text-align: center;
     color: #00a4e5;
+    padding: 0 10px;
+    width: fit-content;
+    //line-height: 30px;
+    line-height: 1.875rem;
+}
+
+.article-subtitle h3 {
+    line-height: 0.5rem;
 }
 
 .article-content {
@@ -138,11 +170,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .article-container {
     min-height: 620px;
-    padding-right: 10px;
+    //padding-right: 10px;
+    padding: 0 30px;
     opacity: 0;
     display: none;
     -webkit-transition: 1s;
     transition: 1s;
+}
+
+.close-btn-container {
+    margin-bottom: 25px;
 }
 
 .nav-pills {
@@ -181,7 +218,7 @@ h1, h2, h3, h4, h5, h6 {
 .main-container {
     margin-top: 0px;
     margin-bottom: 0px;
-    padding-bottom: 50px;
+    padding-bottom: 3.125rem;
     position: relative;
     min-height: 745px;
 }

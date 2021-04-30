@@ -22,3 +22,5 @@ docutils
 drf-yasg
 python-dateutil==2.8.1
 pytest-django
+beautifulsoup4
+lxml
