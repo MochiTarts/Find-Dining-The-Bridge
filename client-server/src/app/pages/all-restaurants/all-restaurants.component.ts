@@ -34,7 +34,6 @@ export class AllRestaurantsComponent implements OnInit {
   favList: any[] = [];
 
   priceFilterRestaurants: any[];
-  deliveryFilterRestaurants: any[];
   cuisineFilterRestaurants: any[];
   serviceFilterRestaurants: any[];
   searchedRestaurants: any[];
@@ -97,7 +96,9 @@ export class AllRestaurantsComponent implements OnInit {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
       searchItems = this.allRestaurants.map(function(a) {return {name: a['name'], image: a['logo_url']}});
-      searchItems = searchItems.concat(cuisinesStr, servicesStr);
+      searchItems = searchItems.concat(
+        cuisinesStr.map(function(a) {return {name: a}}),
+        servicesStr.map(function(a) {return {name: a}}));
       this.initializeRestaurants();
 
       var selectedPostion: any;
@@ -156,7 +157,6 @@ export class AllRestaurantsComponent implements OnInit {
   initializeRestaurants() {
     this.restaurants_total = this.allRestaurants.length;
     this.priceFilterRestaurants = this.allRestaurants;
-    this.deliveryFilterRestaurants = this.allRestaurants;
     this.cuisineFilterRestaurants = this.allRestaurants;
     this.serviceFilterRestaurants = this.allRestaurants;
     this.searchedRestaurants = this.allRestaurants;
@@ -208,8 +208,7 @@ export class AllRestaurantsComponent implements OnInit {
     this.restaurants = [];
     for (var i = 0; i < this.priceFilterRestaurants.length; i++) {
       var current = this.priceFilterRestaurants[i];
-      if (this.deliveryFilterRestaurants.includes(current)
-        && this.cuisineFilterRestaurants.includes(current)
+      if (this.cuisineFilterRestaurants.includes(current)
         && this.serviceFilterRestaurants.includes(current)
         && this.searchedRestaurants.includes(current)
         && this.locationRestaurants.includes(current)) {
@@ -281,31 +280,6 @@ export class AllRestaurantsComponent implements OnInit {
       }
     }
     this.updateRestarants();
-  }
-
-  filterDeliveryCharges(list) {
-    // const isFalse = (currentValue) => !currentValue;
-
-    // if (list.every(isFalse)) {
-    //   this.deliveryFilterRestaurants = this.allRestaurants;
-    // } else {
-    //   this.deliveryFilterRestaurants = [];
-    //   for (var i = 0; i < this.allRestaurants.length; i++) {
-    //     var query = this.allRestaurants[i];
-    //     if (list[0] == true && query.deliveryFee == '$1 - $2') {
-    //       this.deliveryFilterRestaurants.push(query);
-    //     }
-
-    //     if (list[1] == true && query.deliveryFee == '$2 - $4') {
-    //       this.deliveryFilterRestaurants.push(query);
-    //     }
-
-    //     if (list[2] == true && query.deliveryFee == '$5+') {
-    //       this.deliveryFilterRestaurants.push(query);
-    //     }
-    //   }
-    // }
-    // this.updateRestarants();
   }
 
   /**
@@ -484,8 +458,8 @@ export class AllRestaurantsComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term.length < 1 ? []
-        : searchItems.filter(v => v.hasOwnProperty('name') ? 
-        v.name.toLowerCase().indexOf(term.toLowerCase()) > -1 : v.toLowerCase().indexOf(term.toLowerCase()) > -1))
+        : searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) == 0).
+          concat(searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > 0)).slice(0, 10))
     )
 
 }

@@ -4,33 +4,46 @@
 
 <h2 class="header-title" id="browse-label">Browse</h2>
 
-<mat-tab-group mat-align-tabs="center" role="search" aria-labelledby="browse-label">
-  <mat-tab label="Restaurant" class="restaurant-container">
-    <div class="input-group">
-      <div class="input-group-prepend input-group-lg">
-        <span class="input-group-text input-addon" id="basic-addon1">
-          <fa-icon class="search-icons" [icon]="faSearch"></fa-icon>
-        </span>
-      </div>
-      <input type="text" class="form-control my-0 py-1 search" placeholder="Search" [(ngModel)]="inputRestaurant"
-        (ngModelChange)="searchRestaurants()" aria-label="search" [ngbTypeahead]="search" [inputFormatter]="formatter"
-        [resultTemplate]="rt"/>
-
-      <ng-template #rt let-r="result" let-t="term">
-        <img src="{{ r.image }}" *ngIf="r.name" style="width: 6.25rem; margin-right: 0.625rem;"/>
-        <ngb-highlight [result]="r.name" *ngIf="r.name"></ngb-highlight>
-        <ngb-highlight [result]="r" *ngIf="!r.name"></ngb-highlight>
-      </ng-template>
+<div label="Restaurant" class="restaurant-container">
+  <div class="input-group">
+    <div class="input-group-prepend input-group-lg">
+      <span class="input-group-text input-addon" id="basic-addon1">
+        <fa-icon class="search-icons" [icon]="faSearch"></fa-icon>
+      </span>
     </div>
+    <input type="text" class="form-control my-0 py-1 search" placeholder="Search" [(ngModel)]="inputRestaurant"
+      (ngModelChange)="searchRestaurants()" aria-label="search" [ngbTypeahead]="search" [inputFormatter]="formatter"
+      [resultTemplate]="rt"/>
 
-    <button class="btn filter-button" (click)="filterToggle()" placement="top" ngbTooltip="Open Filter Tab">Filter</button>
+    <ng-template #rt let-r="result" let-t="term">
+      <img src="{{ r.image }}" *ngIf="r.image" style="width: 6.25rem; margin-right: 0.625rem;"/>
+      <ngb-highlight [result]="r.name"></ngb-highlight>
+    </ng-template>
+  </div>
 
-    <div class="filters-mobile mat-elevation-z8" id="filters-mobile" style="margin-right: -400px;">
-      <div fxLayout="column">
+  <button class="btn filter-button" (click)="filterToggle()" placement="top" ngbTooltip="Open Filter Tab">Filter</button>
+
+  <div class="filters-mobile mat-elevation-z8" id="filters-mobile" style="margin-right: -400px;">
+    <div fxLayout="column">
+      <app-filterlist-card [category]="'Price'"
+        [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
+        (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">
+      </app-filterlist-card>
+      <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
+        [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
+      </app-filterlist-card>
+      <app-filterlist-card [category]="'Characteristics'" [subcategories]="allServices"
+        [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
+      </app-filterlist-card>
+    </div>
+  </div>
+
+  <div class="restaruant-listings-box">
+    <div class="row">
+      <div class="col-md-4 filters">
         <app-filterlist-card [category]="'Price'"
           [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
-          (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)">
-        </app-filterlist-card>
+          (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)"></app-filterlist-card>
         <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
           [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
         </app-filterlist-card>
@@ -38,49 +51,30 @@
           [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
         </app-filterlist-card>
       </div>
-    </div>
+      <div class="col-md-8">
+        <div class="restaurant-card-container" fxLayout="column" fxLayoutAlign="space-between">
+          <app-restaurant-card *ngFor="let restaurant of restaurants | slice:0:show"
+            [restaurant]="restaurant" [favList]="favList">
+          </app-restaurant-card>
 
-    <div class="restaruant-listings-box">
-      <div class="row">
-        <div class="col-md-4 filters">
-          <app-filterlist-card [category]="'Price'"
-            [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
-            (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)"></app-filterlist-card>
-          <!-- <app-filterlist-card
-              [category]="'Delivery Charges'"
-              [subcategories]="['$ ($1 - $2)', '$$ ($2 - $4)', '$$$ ($5+)']"
-              [length]="3"
-              (events)="filterDeliveryCharges($event)"
-            ></app-filterlist-card> -->
-          <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
-            [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
-          </app-filterlist-card>
-          <app-filterlist-card [category]="'Characteristics'" [subcategories]="allServices"
-            [length]="allServices.length" (keyup.enter)="filterEnter($event)" (events)="filterService($event)">
-          </app-filterlist-card>
-        </div>
-        <div class="col-md-8">
-          <div class="restaurant-card-container" fxLayout="column" fxLayoutAlign="space-between">
-            <app-restaurant-card *ngFor="let restaurant of restaurants | slice:0:show"
-              [restaurant]="restaurant" [favList]="favList">
-            </app-restaurant-card>
+          <button class="btn show-btn" ngbTooltip="Show More Restaurants" placement="top"
+            *ngIf="restaurants.length > 2 && show < restaurants.length"
+            (click)="show = (((restaurants.length - show) >= 2) ? show + 2 : restaurants.length)">
+            Show More
+          </button>
 
-            <button class="btn show-btn" ngbTooltip="Show More Restaurants" placement="top"
-              *ngIf="restaurants.length > 2 && show < restaurants.length"
-              (click)="show = (((restaurants.length - show) >= 2) ? show + 2 : restaurants.length)">
-              Show More
-            </button>
-
-            <button class="btn show-btn" ngbTooltip="Hide Restaurants" placement="top"
-              *ngIf="show == restaurants.length && restaurants.length > 3"
-              (click)="show = 3">
-              Hide
-            </button>
-          </div>
+          <button class="btn show-btn" ngbTooltip="Hide Restaurants" placement="top"
+            *ngIf="show == restaurants.length && restaurants.length > 3"
+            (click)="show = 3">
+            Hide
+          </button>
         </div>
       </div>
     </div>
-  </mat-tab>
+  </div>
+</div>
+
+<mat-tab-group mat-align-tabs="center" role="search" aria-labelledby="browse-label">
   <!-- <mat-tab label="Dishes">
       <div class="input-group mb-4">
         <div class="input-group-prepend input-group-lg">

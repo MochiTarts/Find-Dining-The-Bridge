@@ -13,4 +13,9 @@ export class PartnerCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  gotoPartnerPage(url: string) {
+    if (url)
+      window.open(url, '_blank');
+  }
+
 }

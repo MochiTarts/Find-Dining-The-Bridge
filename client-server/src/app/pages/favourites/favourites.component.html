@@ -25,17 +25,21 @@
 </div>
 
 <div *ngIf="!emptyFavourites" role="main" aria-labelledby="favourites-label">
-  <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="Restaurants" class="restaurant-container">
+    <div label="Restaurants" class="restaurant-container">
       <div class="input-group">
         <div class="input-group-prepend input-group-lg">
           <span class="input-group-text input-addon" id="basic-addon1">
             <fa-icon class="search-icons" [icon]="faSearch"></fa-icon>
           </span>
         </div>
-        <input type="text" class="form-control my-0 py-1 search"
-          placeholder="Search" [(ngModel)]="inputRestaurant"
-          (ngModelChange)="searchRestaurants()" aria-label="search" />
+        <input type="text" class="form-control my-0 py-1 search" placeholder="Search" [(ngModel)]="inputRestaurant"
+        (ngModelChange)="searchRestaurants()" aria-label="search" [ngbTypeahead]="search" [inputFormatter]="formatter"
+        [resultTemplate]="rt"/>
+    
+        <ng-template #rt let-r="result" let-t="term">
+          <img src="{{ r.image }}" *ngIf="r.image" style="width: 6.25rem; margin-right: 0.625rem;"/>
+          <ngb-highlight [result]="r.name"></ngb-highlight>
+        </ng-template>
       </div>
 
       <button class="btn filter-button" (click)="filterToggle()">Filter</button>
@@ -116,8 +120,7 @@
             </div>
           </div>
         </div>
-      </mat-tab>
-    </mat-tab-group>
+    </div>
   </div>
 
   <div fxLayoutAlign="center center">

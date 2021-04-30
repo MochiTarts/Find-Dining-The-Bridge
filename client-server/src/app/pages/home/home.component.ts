@@ -113,7 +113,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // Shuffle the order of restaurants
       this.shuffle(data.Restaurants)
       searchItems = data.Restaurants.map(function(a) {return {name: a['name'], image: a['logo_url']}});
-      searchItems = searchItems.concat(cuisinesStr, servicesStr);
+      searchItems = searchItems.concat(
+        cuisinesStr.map(function(a) {return {name: a}}),
+        servicesStr.map(function(a) {return {name: a}}));
       for (let restaurant of data.Restaurants) {
         let price = this.getPricepoint(String(restaurant.pricepoint));
         this.restaurants.push({
@@ -200,8 +202,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term.length < 1 ? []
-        : searchItems.filter(v => v.hasOwnProperty('name') ? 
-        v.name.toLowerCase().indexOf(term.toLowerCase()) > -1 : v.toLowerCase().indexOf(term.toLowerCase()) > -1))
+        : searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) == 0).
+          concat(searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > 0)).slice(0, 10))
     )
 
 }
