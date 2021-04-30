@@ -17,9 +17,8 @@
         [resultTemplate]="rt"/>
 
       <ng-template #rt let-r="result" let-t="term">
-        <img src="{{ r.image }}" *ngIf="r.name" style="width: 6.25rem; margin-right: 0.625rem;"/>
-        <ngb-highlight [result]="r.name" *ngIf="r.name"></ngb-highlight>
-        <ngb-highlight [result]="r" *ngIf="!r.name"></ngb-highlight>
+        <img src="{{ r.image }}" *ngIf="r.image" style="width: 6.25rem; margin-right: 0.625rem;"/>
+        <ngb-highlight [result]="r.name"></ngb-highlight>
       </ng-template>
     </div>
 

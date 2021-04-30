@@ -97,7 +97,9 @@ export class AllRestaurantsComponent implements OnInit {
       this.restaurants = data.Restaurants;
       this.allRestaurants = data.Restaurants;
       searchItems = this.allRestaurants.map(function(a) {return {name: a['name'], image: a['logo_url']}});
-      searchItems = searchItems.concat(cuisinesStr, servicesStr);
+      searchItems = searchItems.concat(
+        cuisinesStr.map(function(a) {return {name: a}}),
+        servicesStr.map(function(a) {return {name: a}}));
       this.initializeRestaurants();
 
       var selectedPostion: any;
@@ -484,8 +486,7 @@ export class AllRestaurantsComponent implements OnInit {
       debounceTime(200),
       distinctUntilChanged(),
       map(term => term.length < 1 ? []
-        : searchItems.filter(v => v.hasOwnProperty('name') ? 
-        v.name.toLowerCase().indexOf(term.toLowerCase()) > -1 : v.toLowerCase().indexOf(term.toLowerCase()) > -1))
+        : searchItems.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) == 0).slice(0, 10))
     )
 
 }
