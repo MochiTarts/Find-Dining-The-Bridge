@@ -38,6 +38,7 @@ jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
 - admin restaurant graphs, github actions, docker containers
 - backend for subscriber_profile
 - backend settings.py for each environment
+- mass mailing, GMass, CASL subscriptions
 
 zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
 - backend for restaurant, restaurant_owner, newsletter, test, utils, and exception handling
@@ -141,6 +142,8 @@ Code Review on Django Customization
 2. Have looked at Django Rest Framework
 3. https://www.youtube.com/watch?v=e3xJ1hX_ytE (insights on the overall backend, explained with code, can also reference the next section - backend overview)
 
+
+<br/>
 
 ### Backend overview
 Backend settings.
@@ -288,12 +291,12 @@ Compodoc was used to generate Angular documentation
 <br/>
 
 ## Database
-There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers.
+There are four MongoDB databases, the dev database, and the other three each running in a separate MongoDB container on their respective servers.
 ```
-development (on atlas)
-mongodb-test (test.finddining.ca:8443)
-mongodb-uat (uat.finddining.ca:8444)
-mongodb-prod (finddining.ca)
+[Container name]     [Site domain]               [Database name]
+mongodb-test         test.finddining.ca:8443     scdining
+mongodb-uat          uat.finddining.ca:8444      scdining
+mongodb-prod         finddining.ca               scdining
 ```
 
 The .env file will contain the host string, user, and password for the ``` scdining ``` dev database
