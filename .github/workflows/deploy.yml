@@ -35,11 +35,13 @@ jobs:
       RECAP_PRIV_KEY: ${{ secrets.RECAP_PRIV_KEY_PROD }}
       RECAP_PUB_KEY: ${{ secrets.RECAP_PUB_KEY_PROD }}
       GEOCODE_API_KEY: ${{ secrets.GEOCODE_API_KEY }}
-      GA_VIEW_ID: ${{ secrets.GA_VIEW_ID }}
+      GA_VIEW_ID: ${{ secrets.GA_VIEW_ID_PROD }}
       GOOGLE_OAUTH2_CLIENT_EMAIL: ${{ secrets.GOOGLE_OAUTH2_CLIENT_EMAIL }}
       GOOGLE_OAUTH2_PRIVATE_KEY: ${{ secrets.GOOGLE_OAUTH2_PRIVATE_KEY }}
       GOOGLE_ANALYTICS_PRIVATE_KEY: ${{ secrets.GOOGLE_ANALYTICS_PRIVATE_KEY }}
       GOOGLE_ANALYTICS_CLIENT_EMAIL: ${{ secrets.GOOGLE_ANALYTICS_CLIENT_EMAIL }}
+      ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+      SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
