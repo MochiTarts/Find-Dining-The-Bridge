@@ -35,7 +35,7 @@ jobs:
       RECAP_PRIV_KEY: ${{ secrets.RECAP_PRIV_KEY }}
       RECAP_PUB_KEY: ${{ secrets.RECAP_PUB_KEY }}
       GEOCODE_API_KEY: ${{ secrets.GEOCODE_API_KEY }}
-      GA_VIEW_ID: ${{ secrets.GA_VIEW_ID }}
+      GA_VIEW_ID: ${{ secrets.GA_VIEW_ID_UAT }}
       GOOGLE_OAUTH2_CLIENT_EMAIL: ${{ secrets.GOOGLE_OAUTH2_CLIENT_EMAIL }}
       GOOGLE_OAUTH2_PRIVATE_KEY: ${{ secrets.GOOGLE_OAUTH2_PRIVATE_KEY }}
       GOOGLE_ANALYTICS_PRIVATE_KEY: ${{ secrets.GOOGLE_ANALYTICS_PRIVATE_KEY }}
