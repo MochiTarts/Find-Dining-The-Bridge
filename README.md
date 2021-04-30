@@ -268,11 +268,12 @@ Compodoc was used to generate Angular documentation
 <br/>
 
 ## Database
-There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers.
+There are four MongoDB databases, the dev database, and the other three each running in a separate MongoDB container on their respective servers.
 ```
-mongodb-test (test.finddining.ca:8443)
-mongodb-uat (uat.finddining.ca:8444)
-mongodb-prod (finddining.ca)
+[Container name]     [Site domain]               [Database name]
+mongodb-test         test.finddining.ca:8443     scdining
+mongodb-uat          uat.finddining.ca:8444      scdining
+mongodb-prod         finddining.ca               scdining
 ```
 
 The .env file will contain the host string, user, and password for the ``` scdining ``` dev database
