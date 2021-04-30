@@ -7,12 +7,15 @@
   ngbTooltip="Open Article"
   tabindex="0"
 >
-  <img
-    class="card-img-top"
-    src="{{ thumbnail }}"
-    (error)="defaultImg()"
-    alt="Card image cap"
-  />
+  <div class="img-container">
+    <img
+      class="card-img-top"
+      src="{{ thumbnail }}"
+      (error)="defaultImg()"
+      alt="Card image cap"
+      style="object-fit: contain;"
+    />
+  </div>
   <div class="card-body">
     <h2 class="card-title" *ngIf="!article.modified_at">
       {{ article.created_at | date: "mediumDate" }}
