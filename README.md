@@ -10,6 +10,7 @@
 [Prerequisites](#prerequisite)  
 [Development Environment](#setup-development-environment)  
   - [Setup](#setup-development-environment)
+  - [Authentication](#authentication-overview)  
   - [Backend Overview](#backend-overview)  
   - [Frontend Overview](#frontend-overview)  
   - [Unit Tests](#running-Django-unit-tests)
@@ -116,7 +117,9 @@ Press 'Show Details' then 'Visit this website' on Safari to bypass this.
 Will not occur on test, uat, and production sites due to having verified
 SSL certificates.
 ```
-![website landing page](https://lh3.googleusercontent.com/pw/ACtC-3dc6g85l9iKaMRfcpTIDbtPFlFfMWALLs78jXDMmpbMcHSkAlveOqChkI0HjyvQ2asglpTw6i_pCFFScpNhnwwOXExgKsrd_lKOfba89Srjn9_6JiSVPMNk4ryCSWsFkPAGmvcV2tXAtCKlL_OZtJvf=w1370-h873-no?authuser=0)
+![website landing page](https://lh3.googleusercontent.com/pw/ACtC-3c0wp_tfbNzwTKhBP1D9rbh8fK1PkMP2-66hgP6-BjGgiTPFJtyLR6BSOmK9vXa7V7QAYXohmr5RB7r-AmChhxtjYAzIoYxr7jBA63LJe-BqtVXm6Xup5Uq9CBB-dNhcp5tgdik1tgQgZimZlQr_yAB=w1370-h873-no?authuser=0)
+
+### Authentication overview
 
 ### Backend overview
 Backend settings.
