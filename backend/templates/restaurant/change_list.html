@@ -250,7 +250,9 @@
         }
     }
 
+    //Allows the graphs to be downloaded as a PDF file
     function downloadAll() {
+        //Draw the current graphs into a new canvas
         var barDaily = document.getElementById("daily-chart");
         var barHourly = document.getElementById("hourly-chart");
         var paretoDaily = document.getElementById("top-10-daily-chart");
@@ -265,6 +267,7 @@
         ctx.drawImage(barHourly, 0, 550);
         ctx.drawImage(paretoDaily, -15, 1050);
 
+        //Create a new PDF object and add the canvas into the PDF
         var pdf = new jsPDF({
             orientation: "portrait",
             unit: "pt",

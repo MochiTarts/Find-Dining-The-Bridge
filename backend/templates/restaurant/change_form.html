@@ -123,7 +123,9 @@
         }
     }
 
+    //Allows the graphs to be downloaded as a PDF file
     function downloadAll() {
+        //Draw the current graphs into a new canvas
         var restaurant_name = document.getElementById("restaurant-name").innerHTML;
         var barDaily = document.getElementById("daily-chart");
         var barHourly = document.getElementById("hourly-chart");
@@ -137,6 +139,7 @@
         ctx.drawImage(barDaily, 0, 50);
         ctx.drawImage(barHourly, 0, 550);
 
+        //Create a new PDF object and add the canvas into the PDF
         var pdf = new jsPDF({
             orientation: "portrait",
             unit: "pt",
