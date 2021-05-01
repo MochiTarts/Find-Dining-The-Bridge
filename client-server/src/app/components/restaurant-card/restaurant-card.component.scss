@@ -22,7 +22,7 @@
   height: 120px;
   border-radius: 5px;
   object-fit: contain;
-  //object-fit: cover;
+  cursor: pointer;
 }
 
 .card-body {
@@ -77,95 +77,93 @@
   //gap: 5px;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 @media screen and (max-width: 767px) {
+  .cardBox {
+    max-width: 600px;
+  }
 
-.cardBox {
-  max-width: 600px;
-}
+  .card-body {
+    padding: 0;
+  }
 
-.card-body {
-  padding: 0;
-}
+  .card-title {
+    display: none;
+    width: 100px;
+  }
 
-.card-title {
-  display: none;
-  width: 100px;
-}
+  .card-text {
+    display: none;
+  }
 
-.card-text {
-  display: none;
-}
+  .card-title-mobile-wrapper {
+    display: block;
+    width: 100%;
+  }
 
-.card-title-mobile-wrapper {
-  display: block;
-  width: 100%;
-}
+  .card-title-mobile {
+    line-height: 30px;
+    padding-left: 10px;
+    text-align: center;
+    //word-break: break-all;
+  }
 
-.card-title-mobile {
-  line-height: 30px;
-  padding-left: 10px;
-  text-align: center;
-  //word-break: break-all;
-}
+  .card-text-mobile-wrapper {
+    display: block;
+    width: 65%;
+    padding-top: 10px;
+  }
 
-.card-text-mobile-wrapper {
-  display: block;
-  width: 65%;
-  padding-top: 10px;
-}
+  .card-text-mobile {
+    //font-size: 15px;
+    font-size: 0.938rem;
+    margin: 0;
+    //padding-right: 10px;
+    padding-right: 0.625rem;
+  }
 
-.card-text-mobile {
-  //font-size: 15px;
-  font-size: 0.938rem;
-  margin: 0;
-  //padding-right: 10px;
-  padding-right: 0.625rem;
-}
+  .btn-container {
+    flex-direction: column;
+    align-items: flex-end;
+    //gap: 0;
+  }
 
-.btn-container {
-  flex-direction: column;
-  align-items: flex-end;
-  //gap: 0;
-}
+  .buttons {
+    width: 100%;
+  }
 
-.buttons {
-  width: 100%;
-}
-
-.btn {
-  width: 100%;
-}
-
+  .btn {
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 400px) {
+  .cardBox {
+    margin: 10px 0px;
+  }
 
-.cardBox {
-  margin: 10px 0px;
-}
+  .card-title-mobile {
+    font-size: 9vw;
+  }
 
-.card-title-mobile {
-  font-size: 9vw;
-}
-  
-.card-text-mobile {
-  font-size: 4vw;
-}
+  .card-text-mobile {
+    font-size: 4vw;
+  }
 
-.btn {
-  font-size: 4vw;
-}
-
+  .btn {
+    font-size: 4vw;
+  }
 }
 
 @media screen and (max-width: 332px) {
-  
-.cardBox {
-  width: 100%;
-}
+  .cardBox {
+    width: 100%;
+  }
 
-.card-title-mobile {
-  font-size: 7vw;
-}
-
+  .card-title-mobile {
+    font-size: 7vw;
+  }
 }

@@ -1084,14 +1084,13 @@ class PendingRestaurant(models.Model):
 
     @classmethod
     def update_image_captions(self, restaurant, body):
-        """[summary]
+        """ Updates the caption for an image in the restaurant's
+        list of images from restaurant_image_url field
 
         :param restaurant: the PendingRestaurant object to be updated
         :type restaurant: :class: `PendingRestaurant`
         :param body: the dict containing the image url and it's updated captions
         :type body: :class: `dict`
-        :raises ObjectDoesNotExist: if the image url does not exist in the
-            restaurant's list of images
         :return: the updated PendingRestaurant object
         :rtype: :class: `PendingRestaurant`
         """
@@ -1101,6 +1100,7 @@ class PendingRestaurant(models.Model):
         for img in rest_images:
             if image == img['image']:
                 img['caption'] = caption
+                break
         
         setattr(restaurant, 'restaurant_image_url', rest_images)
         approved_restaurant = Restaurant.objects.filter(

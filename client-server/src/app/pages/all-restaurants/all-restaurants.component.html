@@ -44,12 +44,6 @@
         <app-filterlist-card [category]="'Price'"
           [subcategories]="['$ (under $10)', '$$ ($11 - $30)', '$$$ ($31 - $60)', '$$$$ (over $61)']" [length]="4"
           (keyup.enter)="filterEnter($event)" (events)="filterPricepoint($event)"></app-filterlist-card>
-        <!-- <app-filterlist-card
-            [category]="'Delivery Charges'"
-            [subcategories]="['$ ($1 - $2)', '$$ ($2 - $4)', '$$$ ($5+)']"
-            [length]="3"
-            (events)="filterDeliveryCharges($event)"
-          ></app-filterlist-card> -->
         <app-filterlist-card [category]="'Type of Cuisine'" [subcategories]="allCuisines"
           [length]="allCuisines.length" (keyup.enter)="filterEnter($event)" (events)="filterCuisine($event)">
         </app-filterlist-card>

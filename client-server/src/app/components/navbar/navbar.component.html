@@ -1,6 +1,10 @@
 <nav class="navbar navbar-expand-lg" role="navigation">
-  <img src="assets/images/find_dining_logo.png" class="logo" (click)="home()"
-    alt="Find Dining logo, click to go to home page" />
+  <img
+    src="assets/images/find_dining_logo.png"
+    class="logo"
+    (click)="home()"
+    alt="Find Dining logo, click to go to home page"
+  />
   <p class="word" (click)="home()">
     <span class="find">FIND </span>
     <span class="dining">DINING </span> <br />
@@ -14,30 +18,55 @@
     data-target="#navbarNav"
     aria-controls="navbarNav"
     aria-expanded="false"
-    aria-label="Toggle navigation">
+    aria-label="Toggle navigation"
+  >
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item" data-toggle="collapse"
-        data-target=".navbar-collapse.show" (keyup.enter)="home()" tabindex="0">
-        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{
-          exact: true }" class="nav-link" (click)="home()">
+      <li
+        class="nav-item"
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        (keyup.enter)="home()"
+        tabindex="0"
+      >
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{
+            exact: true
+          }"
+          class="nav-link"
+          (click)="home()"
+        >
           Home
         </a>
       </li>
 
       <li class="nav-item" *ngIf="authService.isLoggedIn()">
         <div ngbDropdown class="d-inline-block">
-          <button class="btn dropdown nav-link" id="dropdownBasic1"
-            ngbDropdownToggle tabindex="0">
+          <button
+            class="btn dropdown nav-link"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+            tabindex="0"
+          >
             User Info
           </button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1"
-            data-toggle="collapse" data-target=".navbar-collapse.show">
-            <button ngbDropdownItem (click)="profile()" tabindex="0"
-              *ngIf="!tokenStorage.RO">
+          <div
+            ngbDropdownMenu
+            aria-labelledby="dropdownBasic1"
+            data-toggle="collapse"
+            data-target=".navbar-collapse.show"
+          >
+            <button
+              ngbDropdownItem
+              (click)="profile()"
+              tabindex="0"
+              *ngIf="!tokenStorage.RO"
+            >
               Profile
             </button>
             <button ngbDropdownItem (click)="favourites()" tabindex="0">
@@ -53,99 +82,173 @@
         </div>
       </li>
 
-      <li class="nav-item" *ngIf="authService.isLoggedIn() &&
-        tokenStorage.RO" data-toggle="collapse"
-        data-target=".navbar-collapse.show" tabindex="0">
-        <a (click)="restaurant()" routerLink="/restaurant"
-          routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link">
+      <li
+        class="nav-item"
+        *ngIf="authService.isLoggedIn() && tokenStorage.RO"
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        tabindex="0"
+      >
+        <a
+          (click)="restaurant()"
+          routerLink="/restaurant"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+        >
           Restaurant Page
         </a>
       </li>
 
-      <li class="nav-item" data-toggle="collapse"
-        data-target=".navbar-collapse.show" tabindex="0"
-        (keyup.enter)="browse()">
-        <a routerLink="/all-listings" routerLinkActive="active" class="nav-link"
-          (click)="browse()">
+      <li
+        class="nav-item"
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        tabindex="0"
+        (keyup.enter)="browse()"
+      >
+        <a
+          routerLink="/all-listings"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="browse()"
+        >
           Browse
         </a>
       </li>
 
-      <li class="nav-item" data-toggle="collapse"
-        data-target=".navbar-collapse.show" tabindex="0"
-        (keyup.enter)="media()">
-        <a routerLink="/media" routerLinkActive="active" (click)="media()"
-          class="nav-link">
+      <li
+        class="nav-item"
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        tabindex="0"
+        (keyup.enter)="media()"
+      >
+        <a
+          routerLink="/media"
+          routerLinkActive="active"
+          (click)="media()"
+          class="nav-link"
+        >
           Media
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="authService.isLoggedIn() &&
-        tokenStorage.RO" data-toggle="collapse"
-        data-target=".navbar-collapse.show" tabindex="0"
-        (keyup.enter)="resources()">
-        <a routerLink="/resources" routerLinkActive="active"
-          (click)="resources()" class="nav-link">
+      <li
+        class="nav-item"
+        *ngIf="authService.isLoggedIn() && tokenStorage.RO"
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        tabindex="0"
+        (keyup.enter)="resources()"
+      >
+        <a
+          routerLink="/resources"
+          routerLinkActive="active"
+          (click)="resources()"
+          class="nav-link"
+        >
           Resources
         </a>
       </li>
 
-      <li class="nav-item" *ngIf="!authService.isLoggedIn()"
-        data-toggle="collapse" data-target=".navbar-collapse.show" tabindex="0"
-        (keyup.enter)="newsletter_signup()">
-        <a routerLink="/newsletter-signup" routerLinkActive="active"
-          (click)="newsletter_signup()" class="nav-link">
+      <li
+        class="nav-item"
+        *ngIf="!authService.isLoggedIn()"
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        tabindex="0"
+        (keyup.enter)="newsletter_signup()"
+      >
+        <a
+          routerLink="/newsletter-signup"
+          routerLinkActive="active"
+          (click)="newsletter_signup()"
+          class="nav-link"
+        >
           Newsletter Sign-Up
         </a>
       </li>
 
-      <li *ngIf="!tokenStorage.RO && authService.isLoggedIn()"
-        class="nav-item">
-        <p class="nav-link address nav-link" *ngIf="this.userAddress"
-          tabindex="0">
+      <li *ngIf="!tokenStorage.RO && authService.isLoggedIn()" class="nav-item">
+        <p
+          class="nav-link address nav-link not-clickable"
+          *ngIf="this.userAddress"
+          tabindex="0"
+        >
           <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>
           {{ this.userAddress }}
         </p>
-        <p class="nav-link address nav-link" *ngIf="!this.userAddress"
-          tabindex="0">
+        <p
+          class="nav-link address nav-link not-clickable"
+          *ngIf="!this.userAddress"
+          tabindex="0"
+        >
           No Address Provided
           <fa-icon class="address-icon icon" [icon]="faMapMarkerAlt"></fa-icon>
         </p>
       </li>
 
-
       <p class="nav-item separator">|</p>
 
-      <li data-toggle="collapse" data-target=".navbar-collapse.show"
-        class="nav-item">
-        <a href="https://www.facebook.com/finddiningscarborough/"
-          target="_blank" tabindex="0">
-          <img src="assets/images/facebook_icon.png" class="icon" alt="Facebook"
-            ngbTooltip="View Find Dining Facebook Page" />
+      <li
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        class="nav-item"
+      >
+        <a
+          href="https://www.facebook.com/finddiningscarborough/"
+          target="_blank"
+          tabindex="0"
+        >
+          <img
+            src="assets/images/facebook_icon.png"
+            class="icon"
+            alt="Facebook"
+            ngbTooltip="View Find Dining Facebook Page"
+          />
         </a>
-        <a href="https://twitter.com/FDscarborough" target="_blank"
-          tabindex="0">
-          <img src="assets/images/twitter_icon.png" class="icon" alt="Twitter"
-            ngbTooltip="View Find Dining Twitter Page" />
+        <a
+          href="https://twitter.com/FDscarborough"
+          target="_blank"
+          tabindex="0"
+        >
+          <img
+            src="assets/images/twitter_icon.png"
+            class="icon"
+            alt="Twitter"
+            ngbTooltip="View Find Dining Twitter Page"
+          />
         </a>
-        <a href="https://www.instagram.com/finddiningscarborough/"
-          target="_blank" tabindex="0">
-          <img src="assets/images/instagram_icon.png" class="icon"
-            alt="Instagram" ngbTooltip="View Find Dining Instagram Page" />
+        <a
+          href="https://www.instagram.com/finddiningscarborough/"
+          target="_blank"
+          tabindex="0"
+        >
+          <img
+            src="assets/images/instagram_icon.png"
+            class="icon"
+            alt="Instagram"
+            ngbTooltip="View Find Dining Instagram Page"
+          />
         </a>
       </li>
 
       <p class="nav-item separator">|</p>
 
-
-
-
-      <li class="nav-item" data-toggle="collapse"
-        data-target=".navbar-collapse.show" tabindex="0"
-        (keyup.enter)="onLoginRegisterClicked()">
-        <a class="nav-link" (click)="onLoginRegisterClicked()" id="login/logout">
-          {{ !authService.isLoggedIn() ? 'Log In / Register' : 'Log Out' }}
+      <li
+        class="nav-item"
+        data-toggle="collapse"
+        data-target=".navbar-collapse.show"
+        tabindex="0"
+        (keyup.enter)="onLoginRegisterClicked()"
+      >
+        <a
+          class="nav-link"
+          (click)="onLoginRegisterClicked()"
+          id="login/logout"
+        >
+          {{ !authService.isLoggedIn() ? "Log In / Register" : "Log Out" }}
         </a>
       </li>
     </ul>

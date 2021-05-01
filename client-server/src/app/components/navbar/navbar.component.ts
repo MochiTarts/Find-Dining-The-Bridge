@@ -54,25 +54,25 @@ export class NavbarComponent implements OnInit {
       //let isMobile = /mobi/i.test(navigator.userAgent);
       //console.log(isMobile);
       //if (!isMobile){
-        this.authService.refreshToken().subscribe(
-          token => {
-                this.tokenStorage.updateTokenAndUser(token.access);
-                var user = this.tokenStorage.getUser();
-                this.role = user.role;
-                this.username = user.username;
-                this.authService.updateLoginStatus(true);
-  
-                if (user.profile_id && this.role == 'BU') {
-                  this.userService.getSubscriberProfile().subscribe((data) => {
-                    this.userAddress = data.postalCode;
-                  });
-                }
-            },
-            // refresh failed
-            err => {
-              // console.log(err);
-            }
-        );
+      this.authService.refreshToken().subscribe(
+        token => {
+          this.tokenStorage.updateTokenAndUser(token.access);
+          var user = this.tokenStorage.getUser();
+          this.role = user.role;
+          this.username = user.username;
+          this.authService.updateLoginStatus(true);
+
+          if (user.profile_id && this.role == 'BU') {
+            this.userService.getSubscriberProfile().subscribe((data) => {
+              this.userAddress = data.postalCode;
+            });
+          }
+        },
+        // refresh failed
+        err => {
+          // console.log(err);
+        }
+      );
       //}
     }
   }
@@ -87,9 +87,7 @@ export class NavbarComponent implements OnInit {
    */
   browse() {
     this.router.navigate(['/all-listings']).then(() => {
-      setTimeout(function () {
-        //window.location.reload();
-      }, 100);
+      this.reload();
     });
   }
 
@@ -222,7 +220,7 @@ export class NavbarComponent implements OnInit {
    * Logs user out
    */
   logout(): void {
-    this.authService.logout().subscribe(()=>{});
+    this.authService.logout().subscribe(() => { });
   }
 
 }

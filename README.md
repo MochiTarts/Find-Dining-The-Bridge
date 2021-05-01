@@ -10,7 +10,7 @@
 [Prerequisites](#prerequisite)  
 [Development Environment](#setup-development-environment)  
   - [Setup](#setup-development-environment)
-  - [Authentication](#authentication-overview)  
+  - [Authentication/Security](#authentication-and-security-overview)  
   - [Backend Overview](#backend-overview)  
   - [Frontend Overview](#frontend-overview)  
   - [Unit Tests](#running-Django-unit-tests)
@@ -18,6 +18,7 @@
 [Documentation](#documentation)  
 [Database](#database)  
 [Permissions and Access](#permissions-and-access)  
+[AODA](#aoda)  
 [Deploying Changes](#deployment)  
 
 ### Contact Info
@@ -27,24 +28,27 @@ minqi.zhang@mail.utoronto.ca - Min Qi Zhang (frontend)
  - AODA compliance specialist
   
 isaac.mou@mail.utoronto.ca - Isaac Mou (backend)
-- frontend httpinterceptor, frontend auth services, frontend guards
-- backend authentication (login, signup, jwt tokens)
-- backend for news articles, sduser, login_audit
+- frontend http-interceptor, auth services and guards, login and account setting pages
+- backend authentication and urls (login, signup, jwt tokens)
+- backend for articles, sduser, restaurant_owner, image, oauth2, all the audits/logs
+- backend DRF/JWT/security settings and some utils
+- most of the Django templates
 
 jayden.tse@mail.utoronto.ca - Jayden Tse (backend/deployment)
 - admin restaurant graphs, github actions, docker containers
 - backend for subscriber_profile
 - backend settings.py for each environment
+- mass mailing, GMass, CASL subscriptions
 
 zi.yu@mail.utoronto.ca - Jenny Yu (backend/frontend)
-- backend for restaurant, restaurant_owner, newsletter
+- backend for restaurant, restaurant_owner, newsletter, test, utils, and exception handling
 - frontend news articles, frontend subscriber_profile, assist with mobile-friendly css and frontend components typescript
 - swagger documentation, compodoc documentation
 
 <br/>
 
 # Project Setup & Overview (Updated Winter 2021)
-``` backend ``` contains the Django app project for creating API endpoints that writes/updates/retrieves/remove content from the MongoDB database, and sends data to the Angular frontend.
+``` backend ``` contains the Django app project for creating API endpoints that writes/updates/retrieves/removes content from the MongoDB database, and sends data to the Angular frontend.
 
 ``` client-server ``` contains the Angular app project for serving static and dynamic content, makes requests to API endpoints defined in Django.
 
@@ -74,6 +78,7 @@ Install virtualenv somewhere in your Find-Dining-Revamp project local repo and a
 Activate the virtualenv for this project.
 
 Set environment variables from .env file.
+(note that you could run a short script or simply add a line in the activation script to automatically set the variables)
 
 Install project dependencies (if first-time setup or new dependencies were added):
 ```
@@ -118,7 +123,27 @@ SSL certificates.
 ```
 ![website landing page](https://lh3.googleusercontent.com/pw/ACtC-3c0wp_tfbNzwTKhBP1D9rbh8fK1PkMP2-66hgP6-BjGgiTPFJtyLR6BSOmK9vXa7V7QAYXohmr5RB7r-AmChhxtjYAzIoYxr7jBA63LJe-BqtVXm6Xup5Uq9CBB-dNhcp5tgdik1tgQgZimZlQr_yAB=w1370-h873-no?authuser=0)
 
-### Authentication overview
+### Authentication and Security overview
+```
+The following videos were recorded at the end of April to help you understand the overall structure of the web app (actually it’s primarily about the backend). Please make sure you have the prerequisites (step 1 and 2) before watching the video so that you can understand the concepts and details as I talk it through. I recommend you to adjust the play speed to be at least 2x as I talked very slowly in the videos.
+```
+JWT Auth
+1. Have some understanding of authentication in general
+2. Have some knowledge of what JWT is
+3. https://www.youtube.com/watch?v=IoZrRndLUgw (concept explained on paper)
+
+More about Auth and security with Django
+1. Understand what Django is
+2. Understand the general structure of our web app (understand how communications were set up between frontend,  backend, and the database)
+3. https://www.youtube.com/watch?v=kfwcViPSpZI (concept explained on paper)
+
+Code Review on Django Customization
+1. Understand the basics of a Django app
+2. Have looked at Django Rest Framework
+3. https://www.youtube.com/watch?v=e3xJ1hX_ytE (insights on the overall backend, explained with code, can also reference the next section - backend overview)
+
+
+<br/>
 
 ### Backend overview
 Backend settings.
@@ -137,7 +162,7 @@ Django apps for API CRUD operations.
 Utility function folders.
 ```
 - google/ (google analytics, google sheets for mass mailing)
-- index/ (send mail for verification)
+- index/ (send mail for get involved page or contact us page)
 - oauth2/ (3rd party login and signup)
 - utils/ (many helper functions: validators, exception handler, etc)
 ```
@@ -149,7 +174,7 @@ Admin site specific folders.
 Django served pages folders.
 ```
 - static/ (admin and django served pages static files)
-- templates/ (admin and django served pages HTML files)
+- templates/ (admin and django served or rendered pages - HTML files)
 ```
 
 <br/>
@@ -180,10 +205,9 @@ Auth guards for page protection and http interceptor.
 ```
 - src/app/_helpers/
   - auth.guard.ts (guards against non logged-in users)
-  - auth.interceptor.ts (sends access token in http requests and refreshes token if
-    expired)
+  - auth.interceptor.ts (attaches access token on the header in http requests and handles errors to either log usere out or refresh the token and halt the subsequent requests until refreshed)
   - ro.guard.ts (guards against non-RO users)
-  - secure.guard.ts
+  - secure.guard.ts (not being used but simply attempt to refresh for any pages that needs absolute security)
 ```
 Form validators.
 ```
@@ -267,11 +291,12 @@ Compodoc was used to generate Angular documentation
 <br/>
 
 ## Database
-There are four MongoDB databases, each one running in a separate MongoDB container on their respective servers.
+There are four MongoDB databases, the dev database, and the other three each running in a separate MongoDB container on their respective servers.
 ```
-mongodb-test (test.finddining.ca:8443)
-mongodb-uat (uat.finddining.ca:8444)
-mongodb-prod (finddining.ca)
+[Container name]     [Site domain]               [Database name]
+mongodb-test         test.finddining.ca:8443     scdining
+mongodb-uat          uat.finddining.ca:8444      scdining
+mongodb-prod         finddining.ca               scdining
 ```
 
 The .env file will contain the host string, user, and password for the ``` scdining ``` dev database
@@ -314,10 +339,32 @@ Google Cloud Console (project name: scdining-winter2021)
 Please ask a member of the Find Dining team (that can login with info@finddining.ca)
 to add you as an owner of the project
 ```
+- https://console.cloud.google.com/
 - GCP services being used:
     - Google Cloud Storage (for storing images and videos)
     - Geocoding (for getting latitude, longitude coordinates of a location)
     - Google Analytics (for keeping track of restaurant page traffic)
+<br/>
+
+Google reCaptcha
+```
+Please ask a member of the Find Dining team (that can login with info@finddining.ca)
+to add you as an owner of the project
+```
+- https://www.google.com/recaptcha/admin/
+- 3 reCaptcha keys being used:
+    - sd-frontend-v2
+    - sd-prod-v2
+    - sd-test-v2
+- Demo for adding Google reCaptcha2 to Angular
+    - https://enngage.github.io/ngx-captcha/recaptcha2
+    - Source code of demo: https://github.com/Enngage/ngx-captcha/blob/master/demo/src/re-captcha-2-demo.component.ts
+
+<br/>
+
+MapBox
+- https://www.mapbox.com/
+- The access tokens are accessible by login with email info@finddining.ca
 
 <br/>
 
@@ -332,6 +379,36 @@ either the Github workflow or yourself
     - _finddiningutsc/prod_
 
 <br/>
+
+Configuring third party authentication:
+```
+Note that there should not be any submission/approval process required because we are not asking for too sensativie information other than the public profile. Otherwise, depending on the information you need from the user, you will need to submit rationales or alike for approval in order to gain access to them. You can access the configuration page for each third party logins.
+```
+FACEBOOK APP for LOGIN
+ - need to ask a member of the team to add you as administrator (if needed)
+ - https://developers.facebook.com/apps/874417486731218/fb-login/settings/
+ - Make sure the links to privacy policy, terms of service, data deletion instructions, are all correct. And also any other settings. You can check or modify them under Settings -> Basic. Then, you can flip the switch on the top from "In Development" to "Live".
+
+GOOGLE APP for LOGIN
+ - https://console.developers.google.com/apis/credentials/oauthclient/739217804766-54cq902bdq8s7qcghtu7a6b43qel9984.apps.googleusercontent.com?project=scdining-winter2021
+
+
+## AODA
+We must comply AODA for Angular app. Must achieve level AA of WCAG 2.0
+
+https://www.ontario.ca/page/how-make-websites-accessible
+
+Some useful tools:
+- Accessibility Checker:
+    - AccessibilityTestFree https://www.accessibilitytestfree.com/
+    - WAVE https://wave.webaim.org/
+- Contrast Checker:
+    - https://webaim.org/resources/contrastchecker/
+- Screen Reader:
+    - Google Extension https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn?hl=en
+    - JAWS https://support.freedomscientific.com/Downloads/JAWS
+
+<br />
 
 ## Deployment
 Github Actions will run the deployment pipeline upon push to one of the three environment branches ``` test, uat, prod ```.

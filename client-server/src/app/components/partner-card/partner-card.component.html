@@ -1,5 +1,5 @@
 <div *ngIf="partner" tabindex="0">
-  <div class="card cardBox">
+  <div class="card cardBox" (click)="gotoPartnerPage(partner.url)">
     <img src="{{ partner.path }}" alt="{{ partner.name }} logo" />
     <p>{{ partner.name }}</p>
   </div>
