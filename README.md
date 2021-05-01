@@ -374,3 +374,53 @@ Docker
 - _Dockerfile_ in server
 - _Dockerfile_ in client-server
 - _docker-compose.yml_ in Find-Dining-Revamp
+
+<br/>
+
+## Mass Emailing - GMass
+GMass is used as the mass emailing service. They have many functions such as:
+- Personalization (input variables)
+- Saved drafts of previous sent emails
+- Track emails (opens/clicks)
+- Auto Follow-up emails after x days and n times
+- Scheduled email
+- Send email or save as drafts
+- Suppress email recipients
+- Gmass Reports
+
+For more information about GMass please visit their website https://www.gmass.co/faq.
+
+GMass takes a list of mailing recipients via Google Spreadsheets in the drive of info@finddining.ca.
+One column must include the **Email** header following with the email of every eligible user.
+Extra columns can be included such as **First Name** and can be used as input variables within the email message.
+
+All functions revolving around the Google Spreadsheets are in *sheetsController.py* in backend/google.
+
+There are 3 buttons to generate the Google Spreadsheets in the admin site under the User section.
+For now, there is the option to populate the spreadsheet with eligible **Basic users**, **Restaurant owners**, and **All users**.
+
+An eligible Basic user must be CASL compliant. That is, they are eligible only if the User has **EXPRESSED**/**IMPLIED** consent.
+If you wish to include Basic users, then their consent status must be checked and updated before populating the spreadsheet.
+
+<br/>
+
+## Google Analytics
+This site allows play with the Core Reporting API to better understand GA https://ga-dev-tools.appspot.com/query-explorer/.
+
+GA can be customized in *analytics.py* in backend/google.
+The function *get_analytics_data* requires two parameters, **restaurant_id** and **format_type**.
+Currently, the function will only return **pageviews**, however the data can be customized as wanted through metrics.
+
+The format_type is an indication of which format is wanted:
+- daily --> Pageviews of every day from the start of this month to today
+- hourly --> Pageviews of every hour of each day from the start of this month to today
+- alltime --> Pageviews of every month from **May 1st 2021** to today
+
+The object returned will be used for Chart.js within the admin templates located in backend/templates.
+Some examples of the templates using GA is *change_form.html* and *change_list.html* in backend/templates/restaurant.
+
+To use Chart.js and create requests, the following scripts are needed:
+```
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
+```
